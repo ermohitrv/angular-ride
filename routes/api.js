@@ -4,6 +4,7 @@ var bodyParser      = require("body-parser");
 var qs              = require('querystring');
 var router          = express.Router();
 var User            = require('../models/user');
+var RpRoutes        = require('../models/rproutes');
 var globalConfig    = require('../config/globals.js');
 var nodemailer      = require("nodemailer");
 
@@ -313,6 +314,74 @@ router.get('/change-password', function(req, res){
         message: "missing parameters", 
         code: 400
     });
+});
+
+/* API endpoint to be used by mobile device for adding route on initialization */
+router.post('/init-add-route', function(req, res){
+    var objRoute = new RpRoutes();
+    
+    var email                = req.body.email;
+    var rproute1_locationLat = req.body.rproute1_locationLat;
+    var rproute1_locationLng = req.body.rproute1_locationLng;
+    
+    var rproute2_locationLat = req.body.rproute2_locationLat;
+    var rproute2_locationLng = req.body.rproute2_locationLng;
+    
+    var rproute3_locationLat = req.body.rproute3_locationLat;
+    var rproute3_locationLng = req.body.rproute3_locationLng;
+    
+    objRoute.email                  = email;
+    
+    objRoute.rproute1.locationLat   = rproute1_locationLat;
+    objRoute.rproute1.locationLng   = rproute1_locationLng;
+    //objRoute.rproute1.invitedFriends.push( { "email":"invite2@gmail.com" } );
+    
+    objRoute.rproute2.locationLat   = rproute2_locationLat;
+    objRoute.rproute2.locationLng   = rproute2_locationLng;
+    //objRoute.rproute2.invitedFriends.push( { "email":"invite2@gmail.com" } );
+    
+    objRoute.rproute3.locationLat   = rproute3_locationLat;
+    objRoute.rproute3.locationLng   = rproute3_locationLng;
+    //objRoute.rproute3.invitedFriends.push( { "email":"invite2@gmail.com" } );
+    
+    objRoute.save(function(err){
+        if (err){
+            res.json({
+                success: false, 
+                data: null, 
+                message: err, 
+                code: 400
+            });
+        }else {
+            res.json({
+                success: true, 
+                data: {
+                    rproute1 : {
+                        locationLat : rproute1_locationLat,
+                        locationLng : rproute1_locationLng,
+                        activeStatus: 'INACTIVE',
+                        invitedFriends: [],
+                    },
+                    rproute2 : {
+                        locationLat : rproute2_locationLat,
+                        locationLng : rproute2_locationLng,
+                        activeStatus: 'INACTIVE',
+                        invitedFriends: [],
+                    },
+                    rproute3 : {
+                        locationLat : rproute2_locationLat,
+                        locationLng : rproute2_locationLng,
+                        activeStatus: 'INACTIVE',
+                        invitedFriends: [],
+                    }
+                }, 
+                message: "routes added successfully", 
+                code: 200
+            });
+        }
+    });
+    
+    
 });
 
 /* API endpoint to be used by mobile device for changing password inside my account section */

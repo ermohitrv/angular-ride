@@ -176,4 +176,34 @@ router.get('/admin', middleware.isAdminLoggedIn, function(req, res){
     res.render('admin-dashboard', { user : req.user,title:'Admin Dashboard' });
 });
 
+
+/* Test */
+router.get('/test', function (req, res) {
+    var RpRoutes = require('../models/rproutes');
+    RpRoutes.find({'email':'mohit1@rvtechnologies.co.in'},function(err,list){
+       res.send(list); 
+    });
+    /*
+    RpRoutes.update({'email':'mohit1@rvtechnologies.co.in'},{
+        $push: { 'rproute1.invitedFriends' : { "email":"invite2@gmail.com"} } 
+    },function(err, status){
+        res.send(err+' done');
+    });
+    */
+    /*
+    var objRoute = new RpRoutes();
+    objRoute.email = "mohit1@rvtechnologies.co.in";
+    objRoute.rproute1.locationLat = "30.7333";
+    objRoute.rproute1.locationLng = "76.7794";
+    objRoute.rproute1.invitedFriends.push( { "email":"invite2@gmail.com" } );
+    objRoute.save(function(err){
+        if (err){
+            res.send(err);
+        }else {
+          res.send('done');
+        }
+    });
+    */
+});  
+
 module.exports = router;
