@@ -1,0 +1,287 @@
+<% layout('layout') -%>
+<section id="profile">
+   <div id="header">
+      <div class="overlay">
+         <div class="container">
+            <ul class="nav navbar-nav navbar-right top-menu">
+               <li id="header_inbox_bar" class="dropdown">
+                  <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                  <i class="fa fa-envelope-o" data-original-title="" title=""></i>
+                  <span class="badge bg-important">5</span>
+                  </a>
+                  <ul class="dropdown-menu extended inbox">
+                     <div class="notify-arrow notify-arrow-red"></div>
+                     <li>
+                        <p class="red">You have 5 new messages</p>
+                     </li>
+                     <li>
+                        <a href="#">
+                            <span class="photo">
+                                <img alt="avatar" src="<%= user.local.profileImage %>">
+                            </span>
+                            <span class="subject">
+                                <span class="from"><%= user.local.firstName+' '+user.local.lastName %></span>
+                                <span class="time">Just now</span>
+                            </span>
+                            <span class="message">Hello, this is an example msg.</span>
+                        </a>
+                     </li>
+                     <li>
+                        <a href="#">
+                        <span class="photo"><img alt="avatar" src="http://bootemplates.com/themes/srikandi/v2/img/avatar-mini.jpg"></span>
+                        <span class="subject">
+                        <span class="from"><%= user.local.firstName+' '+user.local.lastName %></span>
+                        <span class="time">Just now</span>
+                        </span>
+                        <span class="message">
+                        Hello, this is an example msg.
+                        </span>
+                        </a>
+                     </li>
+                     <li>
+                        <a href="#">See all messages</a>
+                     </li>
+                  </ul>
+               </li>
+               <!-- user login dropdown start-->
+               <li class="dropdown">
+                  <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                  <img style="width: 30px;" alt="" src="<%= user.local.profileImage %>">
+                  <span class="username"><%= user.local.firstName+' '+user.local.lastName %></span>
+                  <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                     <div class="log-arrow-up"></div>
+                     <li><a href="/profile"><i class=" fa fa-suitcase" data-original-title="" title=""></i>Profile</a></li>
+                     <li><a href="#"><i class="fa fa-cog" data-original-title="" title=""></i> Settings</a></li>
+                     <li><a href="#"><i class="fa fa-bell-o" data-original-title="" title=""></i> Notification</a></li>
+                     <li><a href="/logout"><i class="fa fa-key" data-original-title="" title=""></i> Log Out</a></li>
+                  </ul>
+               </li>
+            </ul>
+         </div>
+         <nav class="navbar" role="navigation">
+            <div class="container">
+               <!-- Brand and toggle get grouped for better mobile display -->
+               <div class="navbar-header">
+                  <button type="button" class="btn-block btn-drop navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                  <strong>MENU</strong>
+                  </button>
+               </div>
+               <!-- Collect the nav links, forms, and other content for toggling -->
+               <div class="collapse navbar-collapse navbar-ex1-collapse">
+                  <ul class="nav navbar-nav">
+                     <li class="active">
+                        <a href="#">
+                           <div class="text-center">
+                              <i class="fa fa-user" aria-hidden="true"></i><br>
+                              Profile
+                           </div>
+                        </a>
+                     </li>
+                     <li class="dropdown">
+                        <a href="#">
+                           <div class="text-center">
+                              <i class="fa fa-video-camera" aria-hidden="true"></i></i><br>
+                              Video's
+                           </div>
+                        </a>
+                     </li>
+                     <li class="dropdown">
+                        <a href="#">
+                           <div class="text-center">
+                              <i class="fa fa-camera" aria-hidden="true"></i></i><br>
+                              Photo's
+                           </div>
+                        </a>
+                     </li>
+                     <li class="dropdown">
+                        <a href="#">
+                           <div class="text-center">
+                              <i class="fa fa-folder-open fa-3x" data-original-title="" title=""></i><br>
+                              Feeds
+                           </div>
+                        </a>
+                     </li>
+                     <li class="dropdown">
+                        <a href="#">
+                           <div class="text-center">
+                              <i class="fa fa-bell-o" data-original-title="" title=""></i><br>
+                              Alerts
+                           </div>
+                        </a>
+                     </li>
+                     <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                           <div class="text-center">
+                              <i class="fa fa-plus-square fa-3x" data-original-title="" title=""></i><br>
+                              Extras <span class="caret extra"></span>
+                           </div>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                           <li><a href="#"><i class="fa fa-unlock-alt" data-original-title="" title=""></i> Login</a></li>
+                           <li><a href="#"><i class="fa fa-square-o" data-original-title="" title=""></i> Blank Page</a></li>
+                           <li class="divider"></li>
+                           <li><a href="#"><i class="fa fa-thumbs-o-up" data-original-title="" title=""></i> Invoice</a></li>
+                           <li><a href="#"><i class="fa fa-gavel" data-original-title="" title=""></i> Princing Table</a></li>
+                           <li><a href="#"><i class="fa fa-sun-o" data-original-title="" title=""></i> FAQ</a></li>
+                           <li class="divider"></li>
+                           <li><a href="#"><i class="fa fa-plus" data-original-title="" title=""></i> Register</a></li>
+                           <li><a href="#"><i class="fa fa-warning" data-original-title="" title=""></i> 404 Error</a></li>
+                           <li><a href="#"><i class="fa fa-warning" data-original-title="" title=""></i> 500 Error</a></li>
+                        </ul>
+                     </li>
+                  </ul>
+               </div>
+               <!-- /.navbar-collapse -->
+            </div>
+         </nav>
+      </div>
+   </div>
+   <div class="container">
+      <div id="main">
+         <!-- start:breadcrumb -->
+         <ol class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="active">Profile</li>
+         </ol>
+         <!-- end:breadcrumb -->   
+         <div class="row" id="home-content">
+            <div class="col-lg-8">
+               <!-- start:state overview -->
+               <div class="panel data-panel">
+                  <div class="panel-header">
+                     <center>
+                        <a href="#">
+                            <img class="media-object data-profile-pic" src="<%= user.local.profileImage %>">
+                        </a>    
+                     </center>
+                  </div>
+                  <div class="panel-body">
+                     <p>
+                        <a href="#"><%= user.local.firstName+' '+user.local.lastName %></a> has finished a new trick (Backside 50/50) <small class="newsfeed-time">2h</small>
+                     </p>
+                     <div class="embed-container">
+                        <iframe width="560" height="300" src="http://www.youtube.com/embed/oBaF_3JMLSQ?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen=""></iframe>
+                     </div>
+                     <a href="#" class="grey" title="facebook share" onclick="" target="_blank">
+                     <button class="btn btn-sm data-btn btn-fb ">Share</button>
+                     </a>
+                     <a class="grey" href="#" title="twitter share" onclick="" target="_blank">
+                     <button class="btn btn-sm data-btn btn-tw ">Tweet</button>
+                     </a>
+                     <button class="btn btn-sm data-btn btn-comment getComment" data-toggle="collapse" href="#" aria-expanded="false" aria-controls="collapseExample">0 Comment</button>
+                     <div class="pull-right">
+                        <button class="btn btn-sm data-btn btn-like-default likeVideo" data-liked="0" data-trickid="49" data-videoid="22806" data-count="0">
+                        <span class="likeBadge22806">0</span>
+                        </button>
+                        <button class="btn btn-sm data-btn dislikeVideo btn-dislike-default" data-disliked="0" data-trickid="49" data-videoid="22806" data-count="0">
+                        <span class="dislikeBadge22806">0</span>
+                        </button>
+                     </div>
+                     <div class="in" data-notid="440823" data-videoid="22806" id="showComment440823" style="height: auto;">
+                        <div class="comments-well-upper">
+                           <div class="comment-block">
+                              <div class="input-group">
+                                 <input type="hidden" id="mentions440823" value="">
+                                 <input type="text" class="form-control commentarea" id="commentbox440823" data-boxid="440823" placeholder="Add new commnet">
+                                 <span class="input-group-btn">
+                                 <button class="btn btn-primary comment-now" type="button" data-boxid="440823" data-videoid="22806" data-profileid="11607"><i class="fa fa-send-o"></i></button>
+                                 </span>
+                                 <div id="mentionbox440823" class="list-mentions"></div>
+                              </div>
+                              <!-- /input-group -->
+                           </div>
+                           <div class="comment-row" style="display: none;">
+                              <strong class="comment-block">
+                              <a href="javascript:void(0)" class="loadMoreComment lightgray" id="loadMoreComment440823" data-notid="440823" data-videoid="22806">Load more Comments</a>
+                              </strong>
+                           </div>
+                           <div id="listComment440823" class="comments-well"></div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="panel data-panel">
+                  <div class="panel-header">
+                     <center>
+                        <a href="#">
+                        <img class="media-object data-profile-pic" src="<%= user.local.profileImage %>">
+                        </a>    
+                     </center>
+                  </div>
+                  <div class="panel-body">
+                     <p>
+                        <a href="#"><%= user.local.firstName+' '+user.local.lastName %></a> has finished a new trick (Backside 50/50) <small class="newsfeed-time">2h</small>
+                     </p>
+                  </div>
+               </div>
+               <!-- end:timeline -->
+            </div>
+            <div class="col-lg-4">
+               <!-- start:user info -->
+               <div class="panel panel-default">
+                  <div class="panel-heading">
+                     <header class="panel-title">
+                        <div class="text-center">
+                           <strong>Rider</strong>
+                        </div>
+                     </header>
+                  </div>
+                  <div class="panel-body">
+                     <div class="text-center" id="author">
+                        <img src="<%= user.local.profileImage %>">
+                        <h3><%= user.local.firstName+' '+user.local.lastName %></h3>
+                        <small class="label label-warning"><%= user.local.locationCountry %></small>
+                        <p>Aku kie sing sok ngedolke omah-omah kae, yo iso di omongke makelar ngono sih. Tapi makelar nek payu ne akeh yo dadi sugih bro. Tenanan ra ngapusi.</p>
+                        <p class="sosmed-author">
+                           <a href="#"><i class="fa fa-facebook" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook"></i></a>
+                           <a href="#"><i class="fa fa-twitter" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"></i></a>
+                           <a href="#"><i class="fa fa-google-plus" data-toggle="tooltip" data-placement="top" title="" data-original-title="Google Plus"></i></a>
+                           <a href="#"><i class="fa fa-linkedin" data-toggle="tooltip" data-placement="top" title="" data-original-title="Linkedin"></i></a>
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <!-- end:user info -->              
+               <!-- start:user info table -->
+               <section class="panel">
+                  <table class="table table-hover personal-task">
+                     <tbody>
+                        <tr>
+                           <td>
+                              <i class=" fa fa-tasks" data-original-title="" title=""></i>
+                           </td>
+                           <td>New Task Issued</td>
+                           <td> 02</td>
+                        </tr>
+                        <tr>
+                           <td>
+                              <i class="fa fa-exclamation-triangle" data-original-title="" title=""></i>
+                           </td>
+                           <td>Task Pending</td>
+                           <td> 14</td>
+                        </tr>
+                        <tr>
+                           <td>
+                              <i class="fa fa-envelope" data-original-title="" title=""></i>
+                           </td>
+                           <td>Inbox</td>
+                           <td> 45</td>
+                        </tr>
+                        <tr>
+                           <td>
+                              <i class=" fa fa-bell-o" data-original-title="" title=""></i>
+                           </td>
+                           <td>New Notification</td>
+                           <td> 09</td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </section>
+               <!-- end:user info table -->
+            </div>
+         </div>
+      </div>
+   </div>
+</section>

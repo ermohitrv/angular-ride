@@ -1,0 +1,12 @@
+.error {color: #ff0000;}
+.success {color: #ff0000;}
+#signup_form label,#login_form label{color:#fff!important;}
+#signup_form label.error,#login_form label.error{color:#ff0000!important;}
+#footer{padding: 60px 0px 35px}
+#footer p{margin-bottom: 0px;}
+#footer .follow_us{margin-top: 10px;}
+#footer .event{margin-bottom: 0px;}
+#footer .event .date{padding: 6px 10px 6px;}
+#footer .event .date p{font-size: 20px;}
+#footer .event .event_info h6{margin-bottom: 0px;}
+#footer .learn_more{padding: 8px 15px;}

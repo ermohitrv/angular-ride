@@ -1,0 +1,32 @@
+<% if(topArticles.length > 0){ %>
+<!--Top news block-->
+<div class="top_new_narrow_block">
+    <div class="title_full_size_news_on_right">
+        Top News
+    </div>
+    <div class="tiny_images_content">	
+        <% for(var i = 0; i <= 5; i++){ %>
+        <a href="/article/<%= county %>/<%= category %>/<%= topArticles[i].nid %>">		
+            <div class="one_news_small_news">
+                <div class="img_small_news" style="background: url('img/news12.jpg');">
+                </div>								
+                <div class="tiny_news_info">
+                    <div class="date_small_news">
+                        <%= moment(topArticles.publish_date).format('Do MMMM, YYYY') %> 
+                    </div>
+                    <div class="title_tiny_news">
+                            <%- topArticles[i].title %> »
+                    </div>
+                </div>								
+            </div>						
+        </a>		
+        <% } %>
+        <a href="">
+            <div class="text_all_politics">
+                More news »
+            </div>
+        </a>
+    </div>
+</div>
+<!--End of Top News block-->
+<% } %>

@@ -1,0 +1,60 @@
+<div class="header">
+    <div class="header_top">
+        <div class="container">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="callus">CALL 24/7 OR emialus@Bikerriding.COM</div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="follow_us navbar-right">
+                    <p>Follow Us on:</p>
+                    <ul>
+                        <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                        <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                        <li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                        <li><a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="navbar" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand logo" href="/"><img src="/images/logo.png"></a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="right_side">
+                <% if (user !== undefined && user !== null) {  %>
+                <div class="registration">
+                    <a href="/profile">My Account</a>
+                    <a href="/logout">Logout</a>
+                </div>
+                <% }else{ %>
+                <div class="registration">
+                    <a href="/login">Login</a>
+                    <a href="/signup">Sign up</a>
+                </div>
+                <% } %>
+                <div class="countdown">
+                    <img src="/images/countdown.png">
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Gallery</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Testimonials</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+<!--=============================hEADEr eND===============================================-->

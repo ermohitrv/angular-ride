@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" data-ng-app="motorApp">
+<head>
+<% include partial/head.ejs %>
+</head>
+<body <% if(title == "Profile"){ %> class="profile" <% } %> id="motorAppBody" data-ng-controller="menuController">
+    <% if(title == "Profile"){ %>
+        <% include partial/header-profile.ejs %>
+    <% }else{ %>
+        <% include partial/header.ejs %>
+    <% } %>
+<%- body %>
+<% include partial/footer.ejs %>
+</body>
+</html>
