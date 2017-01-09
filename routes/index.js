@@ -82,6 +82,46 @@ router.get('/logout', function(req, res, next){
     });
 });
 
+
+
+// facebook -------------------------------
+
+// send to facebook to do the authentication
+//app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
+router.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
+
+// handle the callback after facebook has authenticated the user
+router.get('/auth/facebook/callback',
+    passport.authenticate('facebook', {
+        successRedirect : '/profile',
+        failureRedirect : '/'
+    }));
+
+// twitter --------------------------------
+
+// send to twitter to do the authentication
+router.get('/auth/twitter', passport.authenticate('twitter', { scope : 'email' }));
+
+// handle the callback after twitter has authenticated the user
+router.get('/auth/twitter/callback',
+    passport.authenticate('twitter', {
+        successRedirect : '/profile',
+        failureRedirect : '/'
+    }));
+
+
+// google ---------------------------------
+
+// send to google to do the authentication
+router.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
+
+// the callback after google has authenticated the user
+router.get('/auth/google/callback',
+    passport.authenticate('google', {
+        successRedirect : '/profile',
+        failureRedirect : '/'
+    }));
+    
 /* Route to create a new password using token */
 router.get('/create-new-password/:token',csrfProtection, function(req, res){
     var token = req.params.token;

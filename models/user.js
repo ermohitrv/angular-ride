@@ -53,24 +53,24 @@ var userSchema = mongoose.Schema({
     pinterestURL:               {type: String, default: ''},
     enableAccount:              {type: Boolean, default: true}, // true: enable, false: disable
 
-//    facebook         : {
-//        id           : String,
-//        token        : String,
-//        email        : String,
-//        name         : String
-//    },
-//    twitter          : {
-//        id           : String,
-//        token        : String,
-//        displayName  : String,
-//        username     : String
-//    },
-//    google           : {
-//        id           : String,
-//        token        : String,
-//        email        : String,
-//        name         : String
-//    }
+    facebook         : {
+        id           : String,
+        token        : String,
+        email        : String,
+        name         : String
+    },
+    twitter          : {
+        id           : String,
+        token        : String,
+        displayName  : String,
+        username     : String
+    },
+    google           : {
+        id           : String,
+        token        : String,
+        email        : String,
+        name         : String
+    }
 
 });
 
