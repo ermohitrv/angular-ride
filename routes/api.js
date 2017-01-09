@@ -49,7 +49,7 @@ router.post('/mylocaction', function(req, res){
     var lng   = req.body.lng;
     
     if( ( email != "" && email != undefined ) && ( lat != "" && lat != undefined ) && ( lng != "" && lng != undefined ) ){
-        User.findOne({ 'local.email' :  email }, function(err, user) {
+        User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function(err, user) {
             if (err){
                 res.json({ 
                     success: false, 
@@ -83,7 +83,7 @@ router.post('/login', function(req, res){
     var email       = req.body.email;
     var password    = req.body.password;
     if( ( email != "" && email != undefined ) && ( password != "" && password != undefined ) ){
-        User.findOne({ 'local.email' :  email }, function(err, user) {
+        User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function(err, user) {
             if (err){
                 res.json({ 
                     success: false, 
@@ -150,11 +150,11 @@ router.post('/login', function(req, res){
 
 /* API endpoint to be used by mobile device for creating new account on site */
 router.post('/signup', function(req, res){
-    var email = req.body.email;
-    console.log('*** email: '+req.body.email);
+    var email = req.body.email.toLowerCase();
+    console.log('*** email: '+email);
     
     if(email != "" && email != undefined){
-        User.findOne({ 'local.email' :  email }, function(err, user) {
+        User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function(err, user) {
             // if there are any errors, return the error
             if (err) {
                 console.log("error caught 1");
@@ -251,7 +251,7 @@ router.post('/forget-password', function(req, res){
         var token = random_token();
         var User = require('../models/user');
         
-        User.findOne({'local.email': email}, function (err, user){
+        User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function (err, user){
             if (user) {
                 User.update(
                     { 'local.email': email },
@@ -393,7 +393,7 @@ router.post('/change-password', function(req, res){
         
         var User = require('../models/user');
         
-        User.findOne({'local.email': email}, function (err, user){
+        User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function (err, user){
             
             if(user) {
                 
