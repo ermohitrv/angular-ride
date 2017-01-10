@@ -198,7 +198,7 @@ module.exports = function(passport) {
                         //localdata
                         'newUser.local.firstName' : profile._json.first_name,
                         'newUser.local.lastName'  : profile._json.last_name,
-                        //newUser.local.gender    : profile._json.gender;
+                        'newUser.local.gender'    : profile._json.gender.toUpperCase(),
                         'newUser.local.profileImage'  : profile._json.picture.data.url,
                         'newUser.local.email'     : profile.emails[0].value,
                         'newUser.facebookURL'     : "https://www.facebook.com/profile.php?id="+profile.id

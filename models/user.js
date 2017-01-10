@@ -22,7 +22,7 @@ var userSchema = mongoose.Schema({
         dob:            {type: String, default: ''},
         userActive:     {type: String, enum: userActive},
         profileImage:   {type: String, default: ''},
-        gender:         {type: String, default: '', enum: genders},
+        gender:         {type: String, enum: genders},
         locationZipcode:{type: String, default: ''},
         locationCity:   {type: String, default: ''},
         locationState:  {type: String, default: ''},
