@@ -186,24 +186,27 @@ module.exports = function(passport) {
                         return done(null, user); // user found, return that user
                     } else {
                         // if there is no user found with that facebook id, create them
-                        var newUser            = new User();
                         console.log('** ** ** profile: '+JSON.stringify(profile));
+                        
+                        var newUser            = new User({
                         // set all of the facebook information in our user model
-                        newUser.facebook.id     = profile.id; // set the users facebook id                   
-                        newUser.facebook.token  = token; // we will save the token that facebook provides to the user                    
-                        newUser.facebook.name   = profile.name.givenName + ' ' + profile.name.familyName; // look at the passport user profile to see how names are returned
-                        newUser.facebook.email  = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
+                        'newUser.facebook.id'     : profile.id, // set the users facebook id                   
+                        'newUser.facebook.token'  : token, // we will save the token that facebook provides to the user                    
+                        'newUser.facebook.name'   : profile.name.givenName + ' ' + profile.name.familyName, // look at the passport user profile to see how names are returned
+                        'newUser.facebook.email'  : profile.emails[0].value, // facebook can return multiple emails so we'll take the first
                         
                         //localdata
-                        newUser.local.firstName = profile._json.first_name;
-                        newUser.local.lastName  = profile._json.last_name;
-                        //newUser.local.gender    = profile._json.gender;
-                        newUser.local.profileImage  = profile._json.picture.data.url;
-                        newUser.local.email     = profile.emails[0].value;
-                        newUser.facebookURL     = "https://www.facebook.com/profile.php?id="+profile.id;
+                        'newUser.local.firstName' : profile._json.first_name,
+                        'newUser.local.lastName'  : profile._json.last_name,
+                        //newUser.local.gender    : profile._json.gender;
+                        'newUser.local.profileImage'  : profile._json.picture.data.url,
+                        'newUser.local.email'     : profile.emails[0].value,
+                        'newUser.facebookURL'     : "https://www.facebook.com/profile.php?id="+profile.id
+                    });
                         // save our user to the database
                         newUser.save(function(err) {
                             if (err)
+                                console.log('error occured while saving: '+err);
                                 throw err;
 
                             // if successful, return the new user
