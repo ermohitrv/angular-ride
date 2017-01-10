@@ -33,8 +33,8 @@ var userSchema = mongoose.Schema({
     },
     
     rideType:           {type: String, default: ''},
-    rideExperience:     {type: String, enum: rideExperience},
-    rideCategory:       {type: String, enum: rideCategory},
+    rideExperience:     {type: String, default: ''},
+    rideCategory:       {type: String, default: ''},
     
     lastActivityTime:   {type: Date, default: Date.now()},
 
