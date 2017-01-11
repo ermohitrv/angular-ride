@@ -380,8 +380,98 @@ router.post('/init-add-route', function(req, res){
             });
         }
     });
+});
+
+
+/* API endpoint to be used by mobile device for iniviting friend for route */
+router.post('/invite-friends-list', function(req, res){
+    var email = req.body.email;
+    var rproute = req.body.rproute;
+    var invitedfriends = req.body.invitedfriends;
     
+    if( ( email != "" && email != undefined ) && ( rproute != "" && rproute != undefined ) && ( invitedfriends != "" && invitedfriends != undefined ) ){
     
+        if(rproute == 1){
+            RpRoutes.update({'email': { $regex : new RegExp(email, "i") } },{
+                $push: {  'rproute1.invitedFriends' : { "email": invitedfriends} } 
+            },function(err, status){
+                if(err){
+                    res.json({ 
+                        success: false, 
+                        data: null, 
+                        message: "error: "+err, 
+                        code: 400
+                    });
+                }else{
+                    res.json({
+                        success: true,
+                        data: {
+                            'email':email,
+                            'invitedfriends':invitedfriends,
+                            'rproute':rproute
+                        }, 
+                        message: "invited friends added to route", 
+                        code: 200
+                    });
+                }
+            });
+        }else if(rproute == 2){
+            RpRoutes.update({'email': { $regex : new RegExp(email, "i") } },{
+                $push: {  'rproute2.invitedFriends' : { "email": invitedfriends} } 
+            },function(err, status){
+                if(err){
+                    res.json({ 
+                        success: false, 
+                        data: null, 
+                        message: "error: "+err, 
+                        code: 400
+                    });
+                }else{
+                    res.json({
+                        success: true,
+                        data: {
+                            'email':email,
+                            'invitedfriends':invitedfriends,
+                            'rproute':rproute
+                        }, 
+                        message: "invited friends added to route", 
+                        code: 200
+                    });
+                }
+            });
+        }else{
+            RpRoutes.update({'email': { $regex : new RegExp(email, "i") } },{
+                $push: {  'rproute3.invitedFriends' : { "email": invitedfriends} } 
+            },function(err, status){
+                if(err){
+                    res.json({ 
+                        success: false, 
+                        data: null, 
+                        message: "error: "+err, 
+                        code: 400
+                    });
+                }else{
+                    res.json({
+                        success: true,
+                        data: {
+                            'email':email,
+                            'invitedfriends':invitedfriends,
+                            'rproute':rproute
+                        }, 
+                        message: "invited friends added to route", 
+                        code: 200
+                    });
+                }
+            });
+        }
+    }else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+    }
 });
 
 /* API endpoint to be used by mobile device for changing password inside my account section */
