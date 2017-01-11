@@ -182,7 +182,7 @@ module.exports = function(passport) {
                         return done(null, user); // user found, return that user
                     } else {
                         // if there is no user found with that facebook id, create them
-                        console.log('** ** ** profile: '+JSON.stringify(profile));
+                        //console.log('** ** ** profile: '+JSON.stringify(profile));
                         
                         var newUser            = new User();
                             // set all of the facebook information in our user model
@@ -199,11 +199,6 @@ module.exports = function(passport) {
                         newUser.local.email    = profile.emails[0].value;
                         newUser.facebookURL    = "https://www.facebook.com/profile.php?id="+profile.id;
                         
-                        console.log('-----------------------');
-                        console.log('-----------------------');
-                        console.log('-----------------------');
-                        
-                        console.log('newUser: '+newUser);
                         // save our user to the database
                         newUser.save(function(err) {
                             if (err){
