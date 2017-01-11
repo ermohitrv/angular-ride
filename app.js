@@ -79,6 +79,7 @@ app.use('/admin', admin);
 app.use('/api', api);
 app.use('/', routes);
 
+mongoose.Promise = global.Promise;
 mongoose.connect(dbConfig.url);
 
 // catch 404 and forward to error handler

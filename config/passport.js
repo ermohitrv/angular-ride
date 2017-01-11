@@ -8,14 +8,10 @@ var flash           = require('connect-flash');
 var User            = require('../models/user');
 var globalConfig    = require('../config/globals.js');
 
-// load the auth variables
-var configAuth = require('./auth');
-
-
 // expose this function to our app using module.exports
 module.exports = function(passport) {
 
-	// =========================================================================
+    // =========================================================================
     // passport session setup ==================================================
     // =========================================================================
     // required for persistent login sessions
@@ -159,9 +155,9 @@ module.exports = function(passport) {
     passport.use(new FacebookStrategy({
 
         // pull in our app id and secret from our auth.js file
-        clientID        : configAuth.facebookAuth.clientID,
-        clientSecret    : configAuth.facebookAuth.clientSecret,
-        callbackURL     : configAuth.facebookAuth.callbackURL,
+        clientID        : globalConfig.facebookAuth.clientID,
+        clientSecret    : globalConfig.facebookAuth.clientSecret,
+        callbackURL     : globalConfig.facebookAuth.callbackURL,
         //passReqToCallback : true,
         profileFields: ['id', 'emails', 'photos','name', 'birthday', 'about', 'gender'] //This
 
@@ -205,10 +201,10 @@ module.exports = function(passport) {
                     });
                         // save our user to the database
                         newUser.save(function(err) {
-                            if (err)
+                            if (err){
                                 console.log('error occured while saving: '+err);
                                 throw err;
-
+                            }
                             // if successful, return the new user
                             return done(null, newUser);
                         });
