@@ -9,6 +9,7 @@ var rproutesSchema = mongoose.Schema({
         creationTime:   {type: Date, default: Date.now()},
         activeStatus:   {type: String, enum: rideStatus, default: 'INACTIVE'},
         invitedFriends: {type : Array, default : [] },
+        isRouteCompleted:{type: String, default: false}
     },
     rproute2:{
         locationLat:    {type: String, default: ''},
@@ -16,6 +17,7 @@ var rproutesSchema = mongoose.Schema({
         creationTime:   {type: Date, default: Date.now()},
         activeStatus:   {type: String, enum: rideStatus, default: 'INACTIVE'},
         invitedFriends: {type : Array, default : [] },
+        isRouteCompleted:{type: String, default: false}
     },
     rproute3:{
         locationLat:    {type: String, default: ''},
@@ -23,6 +25,7 @@ var rproutesSchema = mongoose.Schema({
         creationTime:   {type: Date, default: Date.now()},
         activeStatus:   {type: String, enum: rideStatus, default: 'INACTIVE'},
         invitedFriends: {type : Array, default : [] },
+        isRouteCompleted:{type: String, default: false}
     }
 });
 

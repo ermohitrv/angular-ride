@@ -408,7 +408,8 @@ router.post('/invite-friends-list', function(req, res){
                         data: {
                             'email':email,
                             'invitedfriends':invitedfriends,
-                            'rproute':rproute
+                            'rproute':rproute,
+                            'isRouteCompleted':false
                         }, 
                         message: "invited friends added to route", 
                         code: 200
@@ -432,7 +433,8 @@ router.post('/invite-friends-list', function(req, res){
                         data: {
                             'email':email,
                             'invitedfriends':invitedfriends,
-                            'rproute':rproute
+                            'rproute':rproute,
+                            'isRouteCompleted':false
                         }, 
                         message: "invited friends added to route", 
                         code: 200
@@ -456,7 +458,8 @@ router.post('/invite-friends-list', function(req, res){
                         data: {
                             'email':email,
                             'invitedfriends':invitedfriends,
-                            'rproute':rproute
+                            'rproute':rproute,
+                            'isRouteCompleted':false
                         }, 
                         message: "invited friends added to route", 
                         code: 200
