@@ -83,7 +83,6 @@ router.get('/logout', function(req, res, next){
 });
 
 
-
 // facebook -------------------------------
 
 // send to facebook to do the authentication
@@ -120,7 +119,8 @@ router.get('/auth/google/callback',
     passport.authenticate('google', {
         successRedirect : '/profile',
         failureRedirect : '/'
-    }));
+    })
+);
     
 /* Route to create a new password using token */
 router.get('/create-new-password/:token',csrfProtection, function(req, res){
@@ -216,6 +216,16 @@ router.get('/admin', middleware.isAdminLoggedIn, function(req, res){
     res.render('admin-dashboard', { user : req.user,title:'Admin Dashboard' });
 });
 
+
+// =========================================================================
+// SHOP ROUTES =============================================================
+// =========================================================================
+
+/* Profile route to render logged in user to profile area */
+router.get('/shop', function (req, res) {
+    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+    res.render('shop.ejs', { user: req.user,title:'Shop'});
+});
 
 /* Test */
 router.get('/test', function (req, res) {

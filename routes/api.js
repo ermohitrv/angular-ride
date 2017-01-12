@@ -120,6 +120,8 @@ router.post('/login', function(req, res){
                         data: {
                             firstName       :user.local.firstName,
                             lastName        :user.local.lastName,
+                            email           :user.local.email,
+                            contact         :user.local.contact,
                             profileImage    :user.local.profileImage,
                             rideType        :user.rideType,
                             rideExperience  :user.rideExperience,
