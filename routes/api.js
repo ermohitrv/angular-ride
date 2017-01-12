@@ -562,6 +562,83 @@ router.post('/change-password', function(req, res){
     }
 });
 
+/* API endpoint to be used by mobile device for updating profile details */
+router.post('/update-profile', function(req, res){
+    var email = req.body.email;
+    
+    if( email != "" && email != undefined ){
+        var firstName       = req.body.firstName;
+        var lastName        = req.body.lastName;
+        var contact         = req.body.contact;
+        var dob             = req.body.dob;
+        var profileImage    = req.body.profileImage;
+        var gender          = req.body.gender;
+        var locationZipcode = req.body.locationZipcode;
+        var locationCity    = req.body.locationCity;
+        var locationState   = req.body.locationState;
+        var locationCountry = req.body.locationCountry;
+        
+        var User = require('../models/user');
+        User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function (err, user){
+            if(user) {
+                User.update(
+                    {   'local.email': email },
+                    {   $set: {
+                            'local.firstName': firstName,
+                            'local.lastName': lastName,
+                            'local.contact': contact,
+                            'local.dob': dob,
+                            'local.profileImage':profileImage,
+                            'local.gender':gender,
+                            'local.locationZipcode':locationZipcode,
+                            'local.locationCity':locationCity,
+                            'local.locationState':locationState,
+                            'local.locationCountry':locationCountry
+                        } 
+                    },
+                    {   multi: false },
+                    function(err, results){
+                        if(err){
+                            res.json({
+                                success: false, 
+                                data: null, 
+                                message: "error occured : "+err, 
+                                code: 400
+                            });
+                        }else{
+                            res.json({
+                                success: true, 
+                                data: {
+                                    email:email,
+                                    firstName: firstName,
+                                    lastName: lastName,
+                                    contact: contact,
+                                    dob: dob,
+                                    profileImage:profileImage,
+                                    gender:gender,
+                                    locationZipcode:locationZipcode,
+                                    locationCity:locationCity,
+                                    locationState:locationState,
+                                    locationCountry:locationCountry
+                                }, 
+                                message: "profile updated successfully", 
+                                code: 200
+                            });
+                        }
+                    }
+                );
+            }
+        });
+    }else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+    }
+});
+
 // 32 character random string token
 function random_token(){
   var text = "";
@@ -571,5 +648,4 @@ function random_token(){
       text += possible.charAt(Math.floor(Math.random() * possible.length));
   return text; 
 }
-
 module.exports = router;
