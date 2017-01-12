@@ -1,26 +1,27 @@
 /*Initialized required modules and models*/
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
+var express     = require('express');
+var path        = require('path');
+var favicon     = require('serve-favicon');
+var logger      = require('morgan');
 var cookieParser = require('cookie-parser');
 
-var flash = require('connect-flash');
-var mongoose = require('mongoose');
-var multer = require('multer');
-var engine = require('ejs-locals');
-var debug = require('debug')('Motorcycle:server');
-var passport = require('passport');
+var flash       = require('connect-flash');
+var mongoose    = require('mongoose');
+var multer      = require('multer');
+var engine      = require('ejs-locals');
+var debug       = require('debug')('Motorcycle:server');
+var passport    = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var routes = require('./routes/index');
-var api = require('./routes/api');
-var admin = require('./routes/admin');
-var User = require('./models/user');
-var fs = require('fs.extra');
-var dbConfig        = require('./config/database.js');
-var appConfig       = require('./config/appconfig.js');
+var routes      = require('./routes/index');
+var api         = require('./routes/api');
+var product     = require('./routes/product');
+var admin       = require('./routes/admin');
+var User        = require('./models/user');
+var fs          = require('fs.extra');
+var dbConfig    = require('./config/database.js');
+var appConfig   = require('./config/appconfig.js');
 
-var app = express();
+var app         = express();
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // support json encoded bodies
@@ -76,6 +77,7 @@ app.use('/', express.static(path.join(__dirname, 'public')));
 var cpUpload = upload.fields([{name: 'userPhoto', maxCount: 1}]);
 
 app.use('/admin', admin);
+app.use('/product', product);
 app.use('/api', api);
 app.use('/', routes);
 
@@ -96,7 +98,9 @@ if (app.get('env') === 'development') {
         res.status(err.status || 500);
         res.render('error', {
             message: err.message,
-            error: err
+            error: err,
+            title:'404',
+            user:req.user
         });
     });
 }
@@ -114,7 +118,9 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
         message: err.message,
-        error: {}
+        error: {},
+        title:'404',
+        user:req.user
     });
 });
 

@@ -162,7 +162,7 @@ a:hover {
 }
 .navbar-brand.logo {
 	margin-left: 15px !important;
-	margin-top: 10px;
+	margin-top: 20px;
 }
 /* CUSTOMIZE THE NAVBAR
 --------------------------------------------------*/
@@ -1143,21 +1143,19 @@ div#author a:hover i {
 
 }
 .follow_us p {
-  display: inline-block;
-  float: none;
-  font-size: 12px;
-  vertical-align: middle;
+	display: inline-block;
+	float: none;
+	font-size: 12px;
 }
 .header_top {
-	line-height: 35px;
-}.follow_us li {
-  
-  margin-top: 0;
+	line-height: 40px;
 }
 nav.navbar {
 	margin: 0px;
 }
-
+.navbar-brand.logo {
+	width: 120px;
+}
 .navbar-brand > img {
 	width: 100%;
 }
@@ -1165,7 +1163,7 @@ nav.navbar {
 	display: none;
 }
 .navbar-brand.logo {
-  margin: 10px 15px;width:50px;
+	margin: 15px;
 }
 .navbar-collapse.collapse {
 	float: left;
@@ -1186,10 +1184,8 @@ nav.navbar {
 	width: 100%;
 }
 .follow_us ul {
-  display: inline-block;
-  float: none;
-  margin: 0;
-  vertical-align: middle;
+	display: inline-block;
+	float: none;
 }
 .slide_content {
 	width: auto;
@@ -1264,30 +1260,8 @@ section#copyright {
 .promotional_video .row {
 	margin: 0;
 }
-.navbar-nav > li > a {
-  
-  margin-right: 0;
-
-}.navbar-nav > li:hover > a,.navbar-nav > li > a {
- 
-  border-bottom: medium none;
-
-}#conntdown .team {
-  margin-top: 25px;
-}#conntdown {
- 
-  display: inline-block;
-  float: none;
- 
-}.android_app{
-margin:0px;
-}
 }
  @media (min-width:768px) and (max-width:991px) {
-	 .navbar-brand {
-
-  width: 200px;
-}
 .promotional_video .row {
 	margin: 0;
 }
@@ -1332,18 +1306,8 @@ section#copyright {
 	font-size: 12px;
 }
 }
- @media (max-width:580px) {
-	 
-	 .newsletter_form input[type="email"],.newsletter_form input[type="submit"]{
-		 
-		width:100%; 
-	 }.newsletter_form input[type="submit"]:hover {
-  box-shadow: none;
-}
-	 
- }
- 
- 
+
+
 /******************************************************************cart********************************************/
 .cart_page, .checkout_page {
     float: left;

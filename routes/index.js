@@ -216,7 +216,13 @@ router.get('/admin', middleware.isAdminLoggedIn, function(req, res){
     res.render('admin-dashboard', { user : req.user,title:'Admin Dashboard' });
 });
 
+router.get('/about', function(req, res){ 
+    res.render('about', { user : req.user, title:'About' });
+});
 
+router.get('/contact', function(req, res){ 
+    res.render('contact', { user : req.user, title:'Contact' });
+});
 // =========================================================================
 // SHOP ROUTES =============================================================
 // =========================================================================

@@ -572,13 +572,14 @@ router.post('/update-profile', function(req, res){
         var firstName       = req.body.firstName;
         var lastName        = req.body.lastName;
         var contact         = req.body.contact;
-        var dob             = req.body.dob;
         var profileImage    = req.body.profileImage;
-        var gender          = req.body.gender;
         var locationZipcode = req.body.locationZipcode;
         var locationCity    = req.body.locationCity;
         var locationState   = req.body.locationState;
         var locationCountry = req.body.locationCountry;
+        var rideType        = req.body.rideType;
+        var rideExperience  = req.body.rideExperience;
+        var rideCategory    = req.body.rideCategory;
         
         var User = require('../models/user');
         User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function (err, user){
@@ -589,13 +590,14 @@ router.post('/update-profile', function(req, res){
                             'local.firstName': firstName,
                             'local.lastName': lastName,
                             'local.contact': contact,
-                            'local.dob': dob,
                             'local.profileImage':profileImage,
-                            'local.gender':gender,
                             'local.locationZipcode':locationZipcode,
                             'local.locationCity':locationCity,
                             'local.locationState':locationState,
-                            'local.locationCountry':locationCountry
+                            'local.locationCountry':locationCountry,
+                            'rideType'        :rideType,
+                            'rideExperience'  :rideExperience,
+                            'rideCategory'    :rideCategory
                         } 
                     },
                     {   multi: false },
@@ -615,13 +617,14 @@ router.post('/update-profile', function(req, res){
                                     firstName: firstName,
                                     lastName: lastName,
                                     contact: contact,
-                                    dob: dob,
                                     profileImage:profileImage,
-                                    gender:gender,
                                     locationZipcode:locationZipcode,
                                     locationCity:locationCity,
                                     locationState:locationState,
-                                    locationCountry:locationCountry
+                                    locationCountry:locationCountry,
+                                    rideType        :rideType,
+                                    rideExperience  :rideExperience,
+                                    rideCategory    :rideCategory
                                 }, 
                                 message: "profile updated successfully", 
                                 code: 200
