@@ -564,6 +564,7 @@ router.post('/change-password', function(req, res){
     }
 });
 
+
 /* API endpoint to be used by mobile device for updating profile details */
 router.post('/update-profile', function(req, res){
     var email = req.body.email;
@@ -614,14 +615,14 @@ router.post('/update-profile', function(req, res){
                                 success: true, 
                                 data: {
                                     email:email,
-                                    firstName: firstName,
-                                    lastName: lastName,
-                                    contact: contact,
-                                    profileImage:profileImage,
-                                    locationZipcode:locationZipcode,
-                                    locationCity:locationCity,
-                                    locationState:locationState,
-                                    locationCountry:locationCountry,
+                                    firstName       :firstName,
+                                    lastName        :lastName,
+                                    contact         :contact,
+                                    profileImage    :profileImage,
+                                    locationZipcode :locationZipcode,
+                                    locationCity    :locationCity,
+                                    locationState   :locationState,
+                                    locationCountry :locationCountry,
                                     rideType        :rideType,
                                     rideExperience  :rideExperience,
                                     rideCategory    :rideCategory

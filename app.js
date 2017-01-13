@@ -22,10 +22,10 @@ var dbConfig    = require('./config/database.js');
 var appConfig   = require('./config/appconfig.js');
 
 var app         = express();
-
 var bodyParser = require('body-parser');
+
 app.use(bodyParser.json()); // support json encoded bodies
-app.use(bodyParser.urlencoded({ extended: false })); // support encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -44,7 +44,7 @@ var storage = multer.diskStorage({
         } else {
             extension = 'jpg';
         }
-        cb(null, req.user.local.username + '.' + extension); //Appending .jpg
+        cb(null,  'aaa.' + extension); //Appending .jpg
     }
 });
 var upload = multer({storage: storage});
@@ -75,6 +75,30 @@ app.use('/public', express.static(path.join(__dirname, 'node_modules')));
 app.use('/', express.static(path.join(__dirname, 'public')));
 
 var cpUpload = upload.fields([{name: 'userPhoto', maxCount: 1}]);
+
+app.post('/profileimage', cpUpload, function (req, res, next) {
+    var email = req.body.email;
+    console.log('email: '+email);
+    
+    var fileName = "";
+    if (req.files && req.files != null) {
+        fileName = req.files['userPhoto'][0].filename;
+        //saving into database
+        User.findOne({'local.email': req.user.local.email}, function (err, user) {
+
+            user.local.profileImage = fileName;
+            user.save(function (err) {
+                if (err) {
+                    console.log('File not uploaded, not saved to DB!');
+                } else {
+                    console.log('File uploaded and saved to DB!');
+                }
+            });
+        });
+    } else {
+        res.send('files not found! '+req.files);
+    }
+});
 
 app.use('/admin', admin);
 app.use('/product', product);
