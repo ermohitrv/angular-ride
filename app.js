@@ -20,43 +20,9 @@ var User        = require('./models/user');
 var fs          = require('fs.extra');
 var dbConfig    = require('./config/database.js');
 var appConfig   = require('./config/appconfig.js');
+var formidable  = require('formidable');
 
 var app         = express();
-/*
-var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'public/uploads/')
-    },
-    filename: function (req, file, cb) {
-        var extension;
-
-        console.log('____________ inside storage var ' + JSON.stringify(file));
-        if (file.mimetype == 'image/png') {
-            extension = 'png';
-        } else if (file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
-            extension = 'jpg';
-        } else if (file.mimetype == 'image/gif') {
-            extension = 'gif';
-        } else if (file.mimetype == 'image/bmp') {
-            extension = 'bmp';
-        } else {
-            extension = 'jpg';
-        }
-
-        cb(null, 'abbbb.' + extension); //Appending .jpg
-    }
-});
-var upload = multer({ storage : storage}).single('userPhoto');
-
-app.post('/api/photo',function(req,res){
-    upload(req,res,function(err) {
-        if(err) {
-            return res.end("Error uploading file.");
-        }
-        res.end("File is uploaded");
-    });
-});*/
-
 var bodyParser = require('body-parser');
 
 app.use(bodyParser.json()); // support json encoded bodies

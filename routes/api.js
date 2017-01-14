@@ -6,8 +6,7 @@ var User            = require('../models/user');
 var RpRoutes        = require('../models/rproutes');
 var globalConfig    = require('../config/globals.js');
 var nodemailer      = require("nodemailer");
-var multer          = require('multer');
-
+ 
 /* API endpoint to be used by mobile device to see all users list */
 router.get('/listusers', function(req, res) {
     User.aggregate([{$sort: {'local.username': 1}}], function (err, usersList) {
@@ -564,57 +563,10 @@ router.post('/change-password', function(req, res){
     }
 });
 
-var multer      = require('multer');
-
-router.post('/photo',function(req,res){
-    
-
-    
-    
-    var upload = multer({ storage : storage}).single('userPhoto');
-
-    var email = req.body.email;
-    upload(req,res,function(err) {
-        if(err) {
-            return res.end("Error uploading file.");
-        }
-    });
-    res.end("File is uploaded "+email);
-});
-
-var fileName = "";
-    fileName = new Date().getTime();
-    
-var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'public/uploads/')
-    },
-    filename: function (req, file, cb) {
-        var extension; 
-
-        console.log('____________ inside storage var ' + JSON.stringify(file));
-        if (file.mimetype == 'image/png') {
-            extension = 'png';
-        } else if (file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
-            extension = 'jpg';
-        } else if (file.mimetype == 'image/gif') {
-            extension = 'gif';
-        } else if (file.mimetype == 'image/bmp') {
-            extension = 'bmp';
-        } else {
-            extension = 'jpg';
-        }
-        fileName = fileName+'.' + extension;
-        cb(null, fileName ); //Appending .jpg
-    }
-});
-
-var cpUpload = upload.fields([{ name: 'avatar', maxCount: 1 }, { name: 'gallery', maxCount: 8 }])
-
 /* API endpoint to be used by mobile device for updating profile details */
-router.post('/update-profile',cpUpload, function(req, res){
-    var email = req.body.email;
+router.post('/update-profile', function(req, res){
     
+    var email = req.body.email;
     console.log('**** **** email: '+email);
     
     if( email != "" && email != undefined ){
@@ -634,25 +586,14 @@ router.post('/update-profile',cpUpload, function(req, res){
         var User = require('../models/user');
         User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function (err, user){
             if(user) {
-                
-                
-                if (req.files && req.files != null) {
-                    fileName = req.files['userPhoto'][0].filename;
-                    console.log('fileName if : '+fileName);
-                }else{
-                    console.log('fileName else : '+fileName);
-                }
-                
-                upload(req,res,function(err) {
-                    
-                });
+                 
                 User.update(
                     {   'local.email': email },
                     {   $set: {
                             'local.firstName': firstName,
                             'local.lastName': lastName,
                             'local.contact': contact,
-                            'local.profileImage':fileName,
+                            'local.profileImage':profileImage,
                             'local.locationZipcode':locationZipcode,
                             'local.locationCity':locationCity,
                             'local.locationState':locationState,
@@ -676,11 +617,11 @@ router.post('/update-profile',cpUpload, function(req, res){
                             res.json({
                                 success: true, 
                                 data: {
-                                    email:email,
+                                    email           :email,
                                     firstName       :firstName,
                                     lastName        :lastName,
                                     contact         :contact,
-                                    profileImage    :fileName,
+                                    profileImage    :profileImage,
                                     locationZipcode :locationZipcode,
                                     locationCity    :locationCity,
                                     locationState   :locationState,
