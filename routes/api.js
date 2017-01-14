@@ -567,32 +567,9 @@ router.post('/change-password', function(req, res){
 var multer      = require('multer');
 
 router.post('/photo',function(req,res){
-    var fileName = "";
-    fileName = new Date().getTime();
+    
 
-    var storage = multer.diskStorage({
-        destination: function (req, file, cb) {
-            cb(null, 'public/uploads/')
-        },
-        filename: function (req, file, cb) {
-            var extension; 
-
-            console.log('____________ inside storage var ' + JSON.stringify(file));
-            if (file.mimetype == 'image/png') {
-                extension = 'png';
-            } else if (file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
-                extension = 'jpg';
-            } else if (file.mimetype == 'image/gif') {
-                extension = 'gif';
-            } else if (file.mimetype == 'image/bmp') {
-                extension = 'bmp';
-            } else {
-                extension = 'jpg';
-            }
-            fileName = fileName+'.' + extension;
-            cb(null, fileName ); //Appending .jpg
-        }
-    });
+    
     
     var upload = multer({ storage : storage}).single('userPhoto');
 
@@ -605,8 +582,37 @@ router.post('/photo',function(req,res){
     res.end("File is uploaded "+email);
 });
 
+var fileName = "";
+    fileName = new Date().getTime();
+    
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/uploads/')
+    },
+    filename: function (req, file, cb) {
+        var extension; 
+
+        console.log('____________ inside storage var ' + JSON.stringify(file));
+        if (file.mimetype == 'image/png') {
+            extension = 'png';
+        } else if (file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
+            extension = 'jpg';
+        } else if (file.mimetype == 'image/gif') {
+            extension = 'gif';
+        } else if (file.mimetype == 'image/bmp') {
+            extension = 'bmp';
+        } else {
+            extension = 'jpg';
+        }
+        fileName = fileName+'.' + extension;
+        cb(null, fileName ); //Appending .jpg
+    }
+});
+
+var cpUpload = upload.fields([{ name: 'avatar', maxCount: 1 }, { name: 'gallery', maxCount: 8 }])
+
 /* API endpoint to be used by mobile device for updating profile details */
-router.post('/update-profile', function(req, res){
+router.post('/update-profile',cpUpload, function(req, res){
     var email = req.body.email;
     
     console.log('**** **** email: '+email);
