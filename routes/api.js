@@ -6,6 +6,7 @@ var User            = require('../models/user');
 var RpRoutes        = require('../models/rproutes');
 var globalConfig    = require('../config/globals.js');
 var nodemailer      = require("nodemailer");
+var multer          = require('multer');
 
 /* API endpoint to be used by mobile device to see all users list */
 router.get('/listusers', function(req, res) {
