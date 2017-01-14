@@ -566,12 +566,40 @@ router.post('/change-password', function(req, res){
 var multer      = require('multer');
 
 router.post('/photo',function(req,res){
+    var fileName = "";
+    fileName = new Date().getTime();
+
+    var storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, 'public/uploads/')
+        },
+        filename: function (req, file, cb) {
+            var extension; 
+
+            console.log('____________ inside storage var ' + JSON.stringify(file));
+            if (file.mimetype == 'image/png') {
+                extension = 'png';
+            } else if (file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
+                extension = 'jpg';
+            } else if (file.mimetype == 'image/gif') {
+                extension = 'gif';
+            } else if (file.mimetype == 'image/bmp') {
+                extension = 'bmp';
+            } else {
+                extension = 'jpg';
+            }
+            fileName = fileName+'.' + extension;
+            cb(null, fileName ); //Appending .jpg
+        }
+    });
+    
+    var upload = multer({ storage : storage}).single('userPhoto');
+
     var email = req.body.email;
     upload(req,res,function(err) {
         if(err) {
             return res.end("Error uploading file.");
         }
-        
     });
     res.end("File is uploaded "+email);
 });
@@ -600,34 +628,7 @@ router.post('/update-profile', function(req, res){
         User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function (err, user){
             if(user) {
                 
-                var fileName = "";
-                fileName = new Date().getTime();
-                        
-                var storage = multer.diskStorage({
-                    destination: function (req, file, cb) {
-                        cb(null, 'public/uploads/')
-                    },
-                    filename: function (req, file, cb) {
-                        var extension; 
-
-                        console.log('____________ inside storage var ' + JSON.stringify(file));
-                        if (file.mimetype == 'image/png') {
-                            extension = 'png';
-                        } else if (file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
-                            extension = 'jpg';
-                        } else if (file.mimetype == 'image/gif') {
-                            extension = 'gif';
-                        } else if (file.mimetype == 'image/bmp') {
-                            extension = 'bmp';
-                        } else {
-                            extension = 'jpg';
-                        }
-                        fileName = fileName+'.' + extension;
-                        cb(null, fileName ); //Appending .jpg
-                    }
-                });
-                var upload = multer({ storage : storage}).single('userPhoto');
-
+                
                 if (req.files && req.files != null) {
                     fileName = req.files['userPhoto'][0].filename;
                     console.log('fileName if : '+fileName);
