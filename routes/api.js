@@ -577,7 +577,7 @@ router.post('/photo',function(req,res){
             cb(null, 'public/uploads/')
         },
         filename: function (req, file, cb) {
-            var extension;
+            var extension; 
 
             console.log('____________ inside storage var ' + JSON.stringify(file));
             if (file.mimetype == 'image/png') {
