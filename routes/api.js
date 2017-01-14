@@ -564,12 +564,41 @@ router.post('/change-password', function(req, res){
     }
 });
 
+var multer      = require('multer');
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/uploads/')
+    },
+    filename: function (req, file, cb) {
+        var extension;
+
+        console.log('____________ inside storage var ' + JSON.stringify(file));
+        if (file.mimetype == 'image/png') {
+            extension = 'png';
+        } else if (file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
+            extension = 'jpg';
+        } else if (file.mimetype == 'image/gif') {
+            extension = 'gif';
+        } else if (file.mimetype == 'image/bmp') {
+            extension = 'bmp';
+        } else {
+            extension = 'jpg';
+        }
+
+        cb(null, 'abbbb.' + extension); //Appending .jpg
+    }
+});
+var upload = multer({ storage : storage}).single('userPhoto');
 
 /* API endpoint to be used by mobile device for updating profile details */
 router.post('/update-profile', function(req, res){
     var email = req.body.email;
     
+    console.log('**** **** email: '+email);
+    
     if( email != "" && email != undefined ){
+
         var firstName       = req.body.firstName;
         var lastName        = req.body.lastName;
         var contact         = req.body.contact;
@@ -611,6 +640,9 @@ router.post('/update-profile', function(req, res){
                                 code: 400
                             });
                         }else{
+                            
+                            upload(req,res,function(err) {});
+
                             res.json({
                                 success: true, 
                                 data: {

@@ -10,6 +10,16 @@
                 <div class="alert alert-success text-center"><%= success_loginMessage %></div>
             <% } %>
             <div class="title"><h1><span class="fa fa-sign-in"></span> <%= title %></h1></div>
+            <form id="uploadForm"
+          enctype="multipart/form-data"
+          action="/api/update-profile"
+          method="post">
+      <input type="file" name="userPhoto" />
+      <input type="text" name="email" value="tester4rv@rvtechnologies.co.in"/>
+      <input type="submit" value="Upload Image" name="submit">
+      <span id = "status"></span>
+    </form>
+            
             <form action="/login" method="post" id="login_form">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <div class="form-group">

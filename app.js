@@ -22,17 +22,15 @@ var dbConfig    = require('./config/database.js');
 var appConfig   = require('./config/appconfig.js');
 
 var app         = express();
-var bodyParser = require('body-parser');
-
-app.use(bodyParser.json()); // support json encoded bodies
-app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
-
+/*
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'public/uploads/')
     },
     filename: function (req, file, cb) {
         var extension;
+
+        console.log('____________ inside storage var ' + JSON.stringify(file));
         if (file.mimetype == 'image/png') {
             extension = 'png';
         } else if (file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
@@ -44,10 +42,25 @@ var storage = multer.diskStorage({
         } else {
             extension = 'jpg';
         }
-        cb(null,  'aaa.' + extension); //Appending .jpg
+
+        cb(null, 'abbbb.' + extension); //Appending .jpg
     }
 });
-var upload = multer({storage: storage});
+var upload = multer({ storage : storage}).single('userPhoto');
+
+app.post('/api/photo',function(req,res){
+    upload(req,res,function(err) {
+        if(err) {
+            return res.end("Error uploading file.");
+        }
+        res.end("File is uploaded");
+    });
+});*/
+
+var bodyParser = require('body-parser');
+
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 require('./config/passport')(passport); // pass passport for configuration
 // view engine setup
@@ -74,31 +87,6 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/public', express.static(path.join(__dirname, 'node_modules')));
 app.use('/', express.static(path.join(__dirname, 'public')));
 
-var cpUpload = upload.fields([{name: 'userPhoto', maxCount: 1}]);
-
-app.post('/profileimage', cpUpload, function (req, res, next) {
-    var email = req.body.email;
-    console.log('email: '+email);
-    
-    var fileName = "";
-    if (req.files && req.files != null) {
-        fileName = req.files['userPhoto'][0].filename;
-        //saving into database
-        User.findOne({'local.email': req.user.local.email}, function (err, user) {
-
-            user.local.profileImage = fileName;
-            user.save(function (err) {
-                if (err) {
-                    console.log('File not uploaded, not saved to DB!');
-                } else {
-                    console.log('File uploaded and saved to DB!');
-                }
-            });
-        });
-    } else {
-        res.send('files not found! '+req.files);
-    }
-});
 
 app.use('/admin', admin);
 app.use('/product', product);
