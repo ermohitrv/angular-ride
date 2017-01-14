@@ -1,7 +1,6 @@
 /* Inititalized required modules */
 var express         = require('express');
 var bodyParser      = require("body-parser");
-var qs              = require('querystring');
 var router          = express.Router();
 var User            = require('../models/user');
 var RpRoutes        = require('../models/rproutes');
@@ -570,6 +569,16 @@ router.post('/photo',function(req,res){
     var email = req.body.email;
     console.log('**** **** email: '+email);
     res.json(email);
+});
+
+router.post('/api/photo',function(req,res){
+    var email = req.body.email;
+    upload(req,res,function(err) {
+        if(err) {
+            return res.end("Error uploading file.");
+        }
+        res.end("File is uploaded "+email);
+    });
 });
 
 /* API endpoint to be used by mobile device for updating profile details */
