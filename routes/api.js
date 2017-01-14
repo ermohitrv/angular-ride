@@ -585,8 +585,8 @@ var storage = multer.diskStorage({
         } else {
             extension = 'jpg';
         }
-
-        cb(null, 'abbbb.' + extension); //Appending .jpg
+        var fileName = new Date().getTime();
+        cb(null, fileName+'.' + extension); //Appending .jpg
     }
 });
 var upload = multer({ storage : storage}).single('userPhoto');
@@ -614,13 +614,21 @@ router.post('/update-profile', function(req, res){
         var User = require('../models/user');
         User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function (err, user){
             if(user) {
+                
+                var fileName = "";
+                if (req.files && req.files != null) {
+                    fileName = req.files['userPhoto'][0].filename;
+                    upload(req,res,function(err) {});
+                }else{
+                    fileName = "null";
+                }
                 User.update(
                     {   'local.email': email },
                     {   $set: {
                             'local.firstName': firstName,
                             'local.lastName': lastName,
                             'local.contact': contact,
-                            'local.profileImage':profileImage,
+                            'local.profileImage':fileName,
                             'local.locationZipcode':locationZipcode,
                             'local.locationCity':locationCity,
                             'local.locationState':locationState,
@@ -641,8 +649,6 @@ router.post('/update-profile', function(req, res){
                             });
                         }else{
                             
-                            upload(req,res,function(err) {});
-
                             res.json({
                                 success: true, 
                                 data: {
@@ -650,7 +656,7 @@ router.post('/update-profile', function(req, res){
                                     firstName       :firstName,
                                     lastName        :lastName,
                                     contact         :contact,
-                                    profileImage    :profileImage,
+                                    profileImage    :fileName,
                                     locationZipcode :locationZipcode,
                                     locationCity    :locationCity,
                                     locationState   :locationState,
