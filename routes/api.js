@@ -566,33 +566,37 @@ router.post('/change-password', function(req, res){
 
 var multer      = require('multer');
 
-var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'public/uploads/')
-    },
-    filename: function (req, file, cb) {
-        var extension;
 
-        console.log('____________ inside storage var ' + JSON.stringify(file));
-        if (file.mimetype == 'image/png') {
-            extension = 'png';
-        } else if (file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
-            extension = 'jpg';
-        } else if (file.mimetype == 'image/gif') {
-            extension = 'gif';
-        } else if (file.mimetype == 'image/bmp') {
-            extension = 'bmp';
-        } else {
-            extension = 'jpg';
-        }
-        var fileName = new Date().getTime();
-        cb(null, fileName+'.' + extension); //Appending .jpg
-    }
-});
 var upload = multer({ storage : storage}).single('userPhoto');
 
-router.post('/api/photo',function(req,res){
+router.post('/photo',function(req,res){
     var fileName = "";
+    
+    var storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, 'public/uploads/')
+        },
+        filename: function (req, file, cb) {
+            var extension;
+
+            console.log('____________ inside storage var ' + JSON.stringify(file));
+            if (file.mimetype == 'image/png') {
+                extension = 'png';
+            } else if (file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
+                extension = 'jpg';
+            } else if (file.mimetype == 'image/gif') {
+                extension = 'gif';
+            } else if (file.mimetype == 'image/bmp') {
+                extension = 'bmp';
+            } else {
+                extension = 'jpg';
+            }
+            var uniqueTimeStemp = new Date().getTime();
+            fileName = uniqueTimeStemp+'.' + extension;
+            cb(null, fileName ); //Appending .jpg
+        }
+    });
+
     if (req.files && req.files != null) {
         fileName = req.files['userPhoto'][0].filename;
         console.log('fileName if : '+fileName);
