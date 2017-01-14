@@ -566,9 +566,6 @@ router.post('/change-password', function(req, res){
 
 var multer      = require('multer');
 
-
-
-
 router.post('/photo',function(req,res){
     var email = req.body.email;
     console.log('**** **** email: '+email);

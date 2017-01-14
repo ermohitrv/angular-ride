@@ -60,7 +60,7 @@ app.post('/api/photo',function(req,res){
 var bodyParser = require('body-parser');
 
 app.use(bodyParser.json()); // support json encoded bodies
-app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+app.use(bodyParser.urlencoded({ extended: false })); // support encoded bodies
 
 require('./config/passport')(passport); // pass passport for configuration
 // view engine setup
