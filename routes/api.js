@@ -571,14 +571,15 @@ router.post('/photo',function(req,res){
     res.json(email);
 });
 
-router.post('/api/photo',function(req,res){
+router.post('/photo',function(req,res){
     var email = req.body.email;
     upload(req,res,function(err) {
         if(err) {
             return res.end("Error uploading file.");
         }
-        res.end("File is uploaded "+email);
+        
     });
+    res.end("File is uploaded "+email);
 });
 
 /* API endpoint to be used by mobile device for updating profile details */
