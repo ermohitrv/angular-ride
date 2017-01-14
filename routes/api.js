@@ -567,7 +567,7 @@ router.post('/change-password', function(req, res){
 var multer      = require('multer');
 
 
-var upload = multer({ storage : storage}).single('userPhoto');
+
 
 router.post('/photo',function(req,res){
     var fileName = "";
@@ -596,7 +596,8 @@ router.post('/photo',function(req,res){
             cb(null, fileName ); //Appending .jpg
         }
     });
-
+    var upload = multer({ storage : storage}).single('userPhoto');
+    
     if (req.files && req.files != null) {
         fileName = req.files['userPhoto'][0].filename;
         console.log('fileName if : '+fileName);
