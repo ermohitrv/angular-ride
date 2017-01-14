@@ -567,12 +567,6 @@ var multer      = require('multer');
 
 router.post('/photo',function(req,res){
     var email = req.body.email;
-    console.log('**** **** email: '+email);
-    res.json(email);
-});
-
-router.post('/photo',function(req,res){
-    var email = req.body.email;
     upload(req,res,function(err) {
         if(err) {
             return res.end("Error uploading file.");
