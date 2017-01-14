@@ -591,6 +591,22 @@ var storage = multer.diskStorage({
 });
 var upload = multer({ storage : storage}).single('userPhoto');
 
+router.post('/api/photo',function(req,res){
+    var fileName = "";
+    if (req.files && req.files != null) {
+        fileName = req.files['userPhoto'][0].filename;
+        console.log('fileName if : '+fileName);
+    }else{
+        console.log('fileName else : '+fileName);
+    }
+    upload(req,res,function(err) {
+        if(err) {
+            return res.end(" Error uploading file.");
+        }
+        res.end(" File is uploaded");
+    });
+});
+
 /* API endpoint to be used by mobile device for updating profile details */
 router.post('/update-profile', function(req, res){
     var email = req.body.email;
