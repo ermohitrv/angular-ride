@@ -45,7 +45,7 @@
 function onJoinGroup() {
     // can be: 'desktop' | 'phone' | 'script' | 'tablet' | 'unknown'
     var agentType = 'desktop';
-    var url = 'rideprix://invite?username=<%= username %>';
+    var url = 'rideprix://invite?inviterEmail=<%= email %>';
     switch (agentType) {
         case 'desktop':
             openURLWithFallback(url, '');
@@ -83,7 +83,7 @@ if (document.addEventListener) document.addEventListener("DOMContentLoaded", run
 else if (document.attachEvent) document.attachEvent("onreadystatechange", run);
 else window.onload = run;
 
-window.location = 'rideprix://invite?username=<%= username %>';
+window.location = 'rideprix://invite?inviterEmail=<%= email %>';
 </script>
 <style>
 .stepwizard-step p {
