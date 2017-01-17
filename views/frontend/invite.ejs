@@ -45,10 +45,10 @@
 function onJoinGroup() {
     // can be: 'desktop' | 'phone' | 'script' | 'tablet' | 'unknown'
     var agentType = 'desktop';
-    var url = 'rideprix://chat?code=9LAmcVj66X1EB7oxyakmur';
+    var url = 'rideprix://invite?username=<%= username %>';
     switch (agentType) {
         case 'desktop':
-            openURLWithFallback(url, 'https://web.whatsapp.com/accept?code=9LAmcVj66X1EB7oxyakmur');
+            openURLWithFallback(url, '');
             break;
         case 'phone':
         case 'tablet':
@@ -83,7 +83,7 @@ if (document.addEventListener) document.addEventListener("DOMContentLoaded", run
 else if (document.attachEvent) document.attachEvent("onreadystatechange", run);
 else window.onload = run;
 
-window.location = 'rideprix://chat?code=9LAmcVj66X1EB7oxyakmur';
+window.location = 'rideprix://invite?username=<%= username %>';
 </script>
 <style>
 .stepwizard-step p {
