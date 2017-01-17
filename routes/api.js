@@ -152,7 +152,7 @@ router.post('/login', function(req, res){
 
 /* API endpoint to be used by mobile device for creating new account on site */
 router.post('/signup', function(req, res){
-    var email = req.body.email.toLowerCase();
+    var email = req.body.email;
     console.log('*** email: '+email);
     
     if(email != "" && email != undefined){
@@ -170,7 +170,7 @@ router.post('/signup', function(req, res){
             // check to see if theres already a user with that email
             if (user) {
                 console.log("error caught 2");
-                res.json({ 
+                res.json({
                     success: false, 
                     data: null, 
                     message: globalConfig.emailExists, 
@@ -179,9 +179,8 @@ router.post('/signup', function(req, res){
             }else{
                 // if there is no user with that email
                 // create the user
-                //var username                    = email.substring(0, email.lastIndexOf("@"))+'-'+req.body.lastName;
+                var username                    = email.substring(0, email.lastIndexOf("@"))+'-'+req.body.lastName;
                 var newUser                     = new User();
-                var username                    = req.body.username;
                 var gender                      = req.body.gender;
                 newUser.local.username          = username;
                 newUser.local.email             = email;
