@@ -29,7 +29,7 @@
             </div>
         </div>
         <div class="col-md-12 col-xs-12 text-center">
-            <a href="/api/openapp/<%= username %>" class="btn btn-success btn-md">JOIN ROUTE</a>
+            <a  id="invite-button" class="btn btn-success btn-md">JOIN ROUTE</a>
         </div>
         <br><br><br>
         <div class="col-md-12 col-xs-12 text-center">
@@ -41,6 +41,50 @@
     </div>
     <div class="rider_images"></div>
 </section>
+<script>
+function onJoinGroup() {
+    // can be: 'desktop' | 'phone' | 'script' | 'tablet' | 'unknown'
+    var agentType = 'desktop';
+    var url = 'rideprix://chat?code=9LAmcVj66X1EB7oxyakmur';
+    switch (agentType) {
+        case 'desktop':
+            openURLWithFallback(url, 'https://web.whatsapp.com/accept?code=9LAmcVj66X1EB7oxyakmur');
+            break;
+        case 'phone':
+        case 'tablet':
+            openURLWithFallback(url);
+            break;
+    }
+}
+function openURLWithFallback(url, fallbackUrl) {
+        window.location = url;
+        if (!fallbackUrl) return
+
+        // Mobile detection
+        var now = Date.now();
+        var localAppInstallTimeout = window.setTimeout(function() {
+            if (Date.now() - now > 1250) return;
+            window.location = fallbackUrl;
+        }, 1000);
+
+        // Desktop detection
+        window.addEventListener('blur', function() {
+            window.clearTimeout(localAppInstallTimeout);
+        });
+    }
+
+function run() {
+    var inviteIcon = document.querySelector('#invite-icon');
+    var inviteButton = document.querySelector('#invite-button');
+    inviteIcon.addEventListener('click', onJoinGroup);
+    inviteButton.addEventListener('click', onJoinGroup);
+}
+if (document.addEventListener) document.addEventListener("DOMContentLoaded", run, false);
+else if (document.attachEvent) document.attachEvent("onreadystatechange", run);
+else window.onload = run;
+
+window.location = 'rideprix://chat?code=9LAmcVj66X1EB7oxyakmur';
+</script>
 <style>
 .stepwizard-step p {
     margin-top: 10px;    
