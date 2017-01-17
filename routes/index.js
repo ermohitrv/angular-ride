@@ -172,13 +172,13 @@ router.get('/invite/:username',csrfProtection, function(req, res){
     if(username !="" && username != undefined){
         User.findOne({'local.username': username}, function (err, user) {
             if(user){
-                 res.render('invite.ejs', { user: req.user,title:'Shop'});
+                 res.render('invite.ejs', { user: req.user,title:'Invite',username:username});
             }else{
-                 res.render('invite.ejs', { user: req.user,title:'Shop'});
+                 res.render('invite.ejs', { user: req.user,title:'Invite',username:username});
             }
         });  
     }else{
-        res.render('invite.ejs', { user: req.user,title:'Invite'});
+        res.render('invite.ejs', { user: req.user,title:'Invite',username:username});
     }
 });
 

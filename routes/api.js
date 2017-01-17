@@ -150,6 +150,11 @@ router.post('/login', function(req, res){
     }
 });
 
+router.post('/openapp/:username', function(req, res){
+    var username = req.params.username;
+    res.json({success: true,code: 200,data:{'username':username}});
+});
+
 /* API endpoint to be used by mobile device for creating new account on site */
 router.post('/signup', function(req, res){
     var email = req.body.email;
