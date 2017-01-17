@@ -31,7 +31,10 @@
             <div class="right_side">
                 <% if (user !== undefined && user !== null) {  %>
                 <div class="registration">
-                    <a href="/profile">My Account</a>
+                    <% if (user.local.userLevel == "ADMIN") {  %>
+                        <a href="/admin">Admin Dashboard</a>
+                    <% } %>
+                    <a href="/profile">My Account - <%=user.local.userLevel %></a>
                     <a href="/logout">Logout</a>
                 </div>
                 <% }else{ %>

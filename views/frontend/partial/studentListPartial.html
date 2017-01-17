@@ -1,0 +1,23 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th>NAME</th>
+            <th>ROLL</th>
+            <th>SUBJECT</th>
+            <th>MARK</th>
+            <th>AGE</th>
+            <th>COUNTRY</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr ng-repeat="aStudent in studentList">
+            <td>{{aStudent.name }}</td>
+            <td>{{aStudent.roll }}</td>
+            <td>{{aStudent.subject }}</td>
+            <td>{{aStudent.mark }}</td>
+            <td>{{aStudent.age }}</td>
+            <td>{{aStudent.country }}</td>
+        </tr>
+    </tbody>
+</table>

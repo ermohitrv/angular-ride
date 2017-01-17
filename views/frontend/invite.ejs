@@ -1,0 +1,96 @@
+<% layout('layout') -%>
+<section id="top_rider">
+    <div class="container">
+        <div class="title">
+            <h1>Invite</h1>
+        </div>
+        <p>RidePrix Route Invite</p>
+        <div class="col-md-8 col-xs-12 text-center col-sm-offset-2">
+            <p>Following are steps to join route on RidePrix</p>
+            <div class="process">
+                <div class="process-row">
+                    <div class="process-step">
+                        <button type="button" class="btn btn-default btn-circle" disabled="disabled"><i class="fa fa-user fa-3x"></i></button>
+                        <p><a>Download</a> RidePrix on Mobile</p>
+                    </div>
+                    <div class="process-step">
+                        <button type="button" class="btn btn-default btn-circle" disabled="disabled"><i class="fa fa-comments-o fa-3x"></i></button>
+                        <p>SignUp/Login on RidePrix</p>
+                    </div>
+                    <div class="process-step">
+                        <button type="button" class="btn btn-default btn-circle" disabled="disabled"><i class="fa fa-eur fa-3x"></i></button>
+                        <p>Click Join Route Link</p>
+                    </div> 
+                     <div class="process-step">
+                        <button type="button" class="btn btn-default btn-circle" disabled="disabled"><i class="fa fa-thumbs-up fa-3x"></i></button>
+                        <p>You Joined Route</p>
+                    </div> 
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-xs-12 text-center">
+            <button type="submit" class="btn btn-success btn-md">JOIN ROUTE</button>
+        </div>
+        <br><br><br>
+        <div class="col-md-12 col-xs-12 text-center">
+            <div class="form-group">
+                <p>Don't have RidePrix yet?</p>
+                <a>Download</a>
+            </div>
+        </div>
+    </div>
+    <div class="rider_images"></div>
+</section>
+<style>
+.stepwizard-step p {
+    margin-top: 10px;    
+}
+
+.process-row {
+    display: table-row;
+}
+
+.process {
+    display: table;     
+    width: 100%;
+    position: relative;
+}
+
+.process-step button[disabled] {
+    opacity: 1 !important;
+    filter: alpha(opacity=100) !important;
+}
+
+.process-row:before {
+    top: 25px;
+    bottom: 0;
+    position: absolute;
+    content: " ";
+    width: 100%;
+    height: 1px;
+    background-color: #ccc;
+    z-order: 0;
+    
+}
+
+.process-step {    
+    display: table-cell;
+    text-align: center;
+    position: relative;
+}
+
+.process-step p {
+    margin-top:10px;
+}
+
+.btn-circle {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 12px;
+  line-height: 1.428571429;
+  border-radius: 15px;
+}
+.btn-circle i.fa{font-size: 25px;}
+</style>

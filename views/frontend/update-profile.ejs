@@ -7,10 +7,7 @@
             <% if (error.length > 0) { %>
                 <div class="alert alert-danger"><%= error %></div>
             <% } %>
-            aaa
-            <div ng-view="studenttable"></div>
-            bbb
-            <form action="/signup" class="form-horizontal" method="post" id="signup_form">
+            <form action="" class="form-horizontal" method="post" id="update_profile_form">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <div class="form-group">
                     <div class="col-md-6 col-xs-12">
@@ -22,7 +19,6 @@
                         <input type="text" placeholder="Please enter your last name" class="form-control" name="lastName">
                     </div>
                 </div>
-                
                 <div class="form-group">
                     <div class="col-md-6 col-xs-12">
                         <label>Gender</label>
@@ -321,13 +317,8 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-12 col-xs-12">
-                        <label><input type="checkbox" name="confirm_joining"> By clicking “Join RidePrix” you confirm that you accept our <a class="undrline" target="_blank" href="javascript:;">Terms of Use</a> and <a class="undrline" target="_blank" href="javascript:;">Privacy Policy</a></label>
-                    </div>
-                </div>
-                <div class="form-group">
                     <div class="col-md-12 col-xs-12 text-center">
-                        <button type="submit" class="btn btn-warning btn-lg">Signup</button>
+                        <button type="submit" class="btn btn-warning btn-lg">Update</button>
                     </div>
                 </div>
             </form>

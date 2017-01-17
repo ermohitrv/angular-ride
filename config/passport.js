@@ -116,7 +116,6 @@ module.exports = function(passport) {
             // if there are any errors, return the error before anything else
             
             if (err){
-                
                 return done(err);
             // if no user is found, return the message
             }else if (user == null){
@@ -135,10 +134,11 @@ module.exports = function(passport) {
                 }
                 if(user.local.userLevel === 'ADMIN'){
                     req.session.adminId = user._id;
-                    console.log('____ _ __ _ _ ADMIN :'+req.session.adminId );
+                    //console.log('____ _ __ _ _ ADMIN :'+req.session.adminId );
                 }else{
                     req.session.userId = user._id;
-                    console.log('____ _ __ _ _ userId :'+req.session.userId );
+                    req.session.adminId = null;
+                    //console.log('____ _ __ _ _ userId :'+req.session.userId );
                 }
             }else{
                 console.log('*** *** Error 5 : ');

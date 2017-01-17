@@ -1,9 +1,7 @@
 var loggedInUsers = {};
 module.exports = {
     isLoggedIn: function (req, res, next) {
-        if(req.session.isGuest == true){
-            return next();            
-        }else if (req.isAuthenticated()) {
+        if (req.isAuthenticated()) {
               if(req.user.enableAccount == false){
                 var route_name = req.originalUrl;
                 if(route_name != '/updateprofile'){
@@ -20,14 +18,13 @@ module.exports = {
         res.redirect('/login');
     },
     isAdminLoggedIn: function (req, res, next) {
-        if (req.isAuthenticated() && (req.user.userLevel == "ADMIN")) {
+        if (req.isAuthenticated() && (req.user.local.userLevel == "ADMIN")) {
             var loggedInUser = req.user;
             loggedInUser.lastActivityTime = Date.now();
             loggedInUser[loggedInUser._id] = loggedInUser;
             return next();
         }else{
-            console.log('____ _ __ _ _ level :'+req.user.userLevel);
-            console.log('____ _ __ _ _ level sess :'+req.session.adminId);
+            req.session.adminId = null;
         }
         if( req.session.adminId !== null && req.session.adminId !== undefined ) {
             return next();

@@ -9,6 +9,7 @@ var randomString = function() {
 //var websiteUrl = 'http://localhost:2286';
 var websiteUrl = 'http://www.rideprix.com:2286';
 module.exports = {
+    websiteUrl        : websiteUrl,
     //error messages
     wrongPassword     : 'Oops! Wrong password.',
     noUserFound       : 'No user found.',

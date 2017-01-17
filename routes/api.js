@@ -11,7 +11,7 @@ var nodemailer      = require("nodemailer");
 router.get('/listusers', function(req, res) {
     User.aggregate([{$sort: {'local.username': 1}}], function (err, usersList) {
         if(usersList){
-            res.json({ 
+            res.json({
                 success: true, 
                 data: {
                     users : usersList
@@ -115,7 +115,7 @@ router.post('/login', function(req, res){
                     req.logout();
                 }else{
                     res.json({ 
-                        success: true, 
+                        success: true,
                         data: {
                             firstName       :user.local.firstName,
                             lastName        :user.local.lastName,
@@ -124,7 +124,8 @@ router.post('/login', function(req, res){
                             profileImage    :user.local.profileImage,
                             rideType        :user.rideType,
                             rideExperience  :user.rideExperience,
-                            rideCategory    :user.rideCategory
+                            rideCategory    :user.rideCategory,
+                            rproputeInviteLink:globalConfig.websiteUrl+"/invite/"+user.local.username
                         },
                         message: "success", 
                         code: 200
@@ -354,9 +355,11 @@ router.post('/init-add-route', function(req, res){
                 code: 400
             });
         }else {
+            
             res.json({
                 success: true, 
                 data: {
+                    
                     rproute1 : {
                         locationLat : rproute1_locationLat,
                         locationLng : rproute1_locationLng,

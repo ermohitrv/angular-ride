@@ -1,7 +1,7 @@
 var mongoose                = require('mongoose');
 var bcrypt                  = require('bcrypt-nodejs');
 var genders                 = 'MALE FEMALE OTHER'.split(' ');
-var userLevel               = 'NORMAL MODERATOR ADMIN'.split(' ');
+var userLevel               = 'NORMAL ADMIN'.split(' ');
 var userActive              = 'ACTIVE INACTIVE'.split(' ');
 var featuredMode            = 'true false'.split(' ');
 

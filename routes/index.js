@@ -29,9 +29,20 @@ router.post('/signup', parseForm, csrfProtection, passport.authenticate('local-s
 }));
 
 /* Profile route to render logged in user to profile area */
-router.get('/profile', middleware.isLoggedIn, function (req, res) {
+router.get('/profile', middleware.isLoggedIn, function (req, res){
     res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
     res.render('profile.ejs', {user: req.user,title:'Profile'});
+});
+
+/* Update profile route to render logged in user to update profile area */
+router.get('/update-profile', csrfProtection, middleware.isLoggedIn, function (req, res){
+    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+    res.render('update-profile.ejs',{
+        csrfToken: req.csrfToken(),
+        error : req.flash('error'), 
+        user: req.user,
+        title:'Update Profile'
+    });
 });
 
 /* Route to render user to Go Live page after login process */
@@ -44,7 +55,7 @@ router.get('/loginCheckAdmin', middleware.isLoggedIn, function (req, res) {
     if (req.session.enableaccountId !== undefined && req.session.enableaccountId !== null) {
         res.redirect('/profile');
     }
-    res.redirect(req.session.returnTo || '/user/' + requestUser.local.username);
+    res.redirect(req.session.returnTo || '/profile/');
     delete req.session.returnTo;
 });
 
@@ -151,6 +162,23 @@ router.get('/create-new-password/:token',csrfProtection, function(req, res){
         });  
     }else{
         res.send('forgot-password');
+    }
+});
+
+/* Route to create a new password using token */
+router.get('/invite/:username',csrfProtection, function(req, res){
+    var username = req.params.username;
+    var User = require('../models/user');
+    if(username !="" && username != undefined){
+        User.findOne({'local.username': username}, function (err, user) {
+            if(user){
+                 res.render('invite.ejs', { user: req.user,title:'Shop'});
+            }else{
+                 res.render('invite.ejs', { user: req.user,title:'Shop'});
+            }
+        });  
+    }else{
+        res.render('invite.ejs', { user: req.user,title:'Invite'});
     }
 });
 

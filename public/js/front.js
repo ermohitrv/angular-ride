@@ -1,4 +1,4 @@
-jQuery(document).ready(function(){
+//jQuery(document).ready(function(){
 //    jQuery(document).on('keyup','input#search-box',function(){
 //        $(this).val( $(this).val().replace(/[^ -~]/g, '') );
 //    });
@@ -9,9 +9,17 @@ jQuery(document).ready(function(){
 //        $(this).val( $(this).val().replace(/[^ -~]/g, '') );
 //    });
     
-});
+//});
 jQuery(function() {
-   
+    var d = new Date();
+    var n = d.getFullYear();
+    $("#datepicker").datepicker({
+        minDate: new Date(1910,0,1),
+        maxDate: n,
+        yearRange: '1910:'+n,
+        changeYear: true,
+        changeMonth: true
+    });
     /* ----- Contact form ----- */
     $("#submit_btn").click(function(e) {
         setTimeout(function(){
