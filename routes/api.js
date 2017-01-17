@@ -150,7 +150,7 @@ router.post('/login', function(req, res){
     }
 });
 
-router.post('/openapp/:username', function(req, res){
+router.get('/openapp/:username', function(req, res){
     var username = req.params.username;
     res.json({success: true,code: 200,data:{'username':username}});
 });
