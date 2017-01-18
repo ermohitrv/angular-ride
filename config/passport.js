@@ -185,13 +185,16 @@ module.exports = function(passport) {
                         //console.log('** ** ** profile: '+JSON.stringify(profile));
                         
                         var newUser            = new User();
-                            // set all of the facebook information in our user model
+                        
+                        // set all of the facebook information in our user model
                         newUser.facebook.id = profile.id;
                         newUser.facebook.token = token;
                         newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
                         newUser.facebook.email = profile.emails[0].value;
 
                         //localdata
+                        var username           = profile.emails[0].value.substring(0, profile.emails[0].value.lastIndexOf("@"))+'-'+profile._json.first_name;
+                        newUser.local.username = username;
                         newUser.local.firstName= profile._json.first_name;
                         newUser.local.lastName = profile._json.last_name;
                         newUser.local.gender   = profile._json.gender.toUpperCase();
