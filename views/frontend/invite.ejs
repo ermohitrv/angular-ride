@@ -43,7 +43,6 @@
 </section>
 <script>
 function onJoinGroup() {
-    // can be: 'desktop' | 'phone' | 'script' | 'tablet' | 'unknown'
     var agentType = 'desktop';
     var url = 'rideprix://invite?inviterEmail=<%= email %>';
     switch (agentType) {
@@ -57,33 +56,18 @@ function onJoinGroup() {
     }
 }
 function openURLWithFallback(url, fallbackUrl) {
-        window.location = url;
-        if (!fallbackUrl) return
-
-        // Mobile detection
-        var now = Date.now();
-        var localAppInstallTimeout = window.setTimeout(function() {
-            if (Date.now() - now > 1250) return;
-            window.location = fallbackUrl;
-        }, 1000);
-
-        // Desktop detection
-        window.addEventListener('blur', function() {
-            window.clearTimeout(localAppInstallTimeout);
-        });
-    }
-
-//function run() {
-//    var inviteIcon = document.querySelector('#invite-icon');
-//    var inviteButton = document.querySelector('#invite-button');
-//    inviteIcon.addEventListener('click', onJoinGroup);
-//    inviteButton.addEventListener('click', onJoinGroup);
-//}
-//if (document.addEventListener) document.addEventListener("DOMContentLoaded", run, false);
-//else if (document.attachEvent) document.attachEvent("onreadystatechange", run);
-//else window.onload = run;
-
-window.location = 'rideprix://invite?inviterEmail=<%= email %>';
+    window.location = url;
+    if (!fallbackUrl) return
+    var now = Date.now();
+    var localAppInstallTimeout = window.setTimeout(function() {
+        if (Date.now() - now > 1250) return;
+        window.location = fallbackUrl;
+    }, 1000);
+    window.addEventListener('blur', function() {
+        window.clearTimeout(localAppInstallTimeout);
+    });
+}
+window.location = 'rideprix://invite/<%= email %>';
 </script>
 <style>
 .stepwizard-step p {
