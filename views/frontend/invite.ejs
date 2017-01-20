@@ -73,15 +73,15 @@ function openURLWithFallback(url, fallbackUrl) {
         });
     }
 
-function run() {
-    var inviteIcon = document.querySelector('#invite-icon');
-    var inviteButton = document.querySelector('#invite-button');
-    inviteIcon.addEventListener('click', onJoinGroup);
-    inviteButton.addEventListener('click', onJoinGroup);
-}
-if (document.addEventListener) document.addEventListener("DOMContentLoaded", run, false);
-else if (document.attachEvent) document.attachEvent("onreadystatechange", run);
-else window.onload = run;
+//function run() {
+//    var inviteIcon = document.querySelector('#invite-icon');
+//    var inviteButton = document.querySelector('#invite-button');
+//    inviteIcon.addEventListener('click', onJoinGroup);
+//    inviteButton.addEventListener('click', onJoinGroup);
+//}
+//if (document.addEventListener) document.addEventListener("DOMContentLoaded", run, false);
+//else if (document.attachEvent) document.attachEvent("onreadystatechange", run);
+//else window.onload = run;
 
 window.location = 'rideprix://invite?inviterEmail=<%= email %>';
 </script>

@@ -1,7 +1,8 @@
-  <aside class="main-sidebar">
+<aside class="main-sidebar">
     <section class="sidebar">
       <div class="user-panel">
         <div class="pull-left image">
+            
             <% if (user !== undefined && user !== null) {  %>
                 <img src="<%= user.local.profileImage %>" class="img-circle" alt="User Image">
             <% } %>
@@ -15,8 +16,9 @@
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
       </div>
+        
       <ul class="sidebar-menu">
-        <li class="treeview">
+        <li class="treeview <% if(active == "list-users"){ %> active <% } %>">
           <a href="#">
             <i class="fa fa-dashboard"></i> <span>Users Management</span>
             <span class="pull-right-container">
@@ -24,10 +26,10 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#"><i class="fa fa-circle-o"></i> List Users</a></li>
+            <li <% if(active == "list-users"){ %> class="active" <% } %>><a href="/admin/list-users"><i class="fa fa-circle-o"></i> List Users</a></li>
           </ul>
         </li>
-        <li class="treeview">
+        <li class="treeview <% if(active == "list-products"){ %> active <% } %>">
           <a href="#">
             <i class="fa fa-dashboard"></i> <span>Product Management</span>
             <span class="pull-right-container">
@@ -35,11 +37,11 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#"><i class="fa fa-circle-o"></i> List Products</a></li>
+            <li <% if(active == "list-products"){ %> class="active" <% } %>><a href="/admin/list-products"><i class="fa fa-circle-o"></i> List Products</a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i> Add Product</a></li>
           </ul>
         </li>
-        <li class="treeview">
+        <li class="treeview <% if(active == "list-orders"){ %> active <% } %>">
           <a href="#">
             <i class="fa fa-dashboard"></i> <span>Order Management</span>
             <span class="pull-right-container">
@@ -47,7 +49,7 @@
             </span>
           </a>
           <ul class="active treeview-menu">
-            <li><a href="#"><i class="fa fa-circle-o"></i> List Orders</a></li>
+            <li <% if(active == "list-orders"){ %> class="active" <% } %>><a href="/admin/list-orders"><i class="fa fa-circle-o"></i> List Orders</a></li>
             <li>
                 <a href="#"><i class="fa fa-circle-o"></i>  <span>Brands </span>
                     <span class="pull-right-container">
@@ -55,7 +57,7 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-circle-o"></i>  List Brands</a></li>
+                    <li><a href="/admin/list-brands"><i class="fa fa-circle-o"></i>  List Brands</a></li>
 <!--                    <li><a href="#"><i class="fa fa-circle-o"></i>  Featured Brands</a></li>-->
                     <li><a href="#"><i class="fa fa-circle-o"></i> Add Brand</a></li>
                 </ul>
@@ -70,15 +72,13 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#"><i class="fa fa-circle-o"></i> List Contact Requests</a></li>
-            <li class="treeview"><a href="#"><i class="fa fa-circle-o"></i> List Suggestion
-                </a>
-                
+            <li><a href="/admin/list-contact-requests"><i class="fa fa-circle-o"></i> List Contact Requests</a></li>
+            <li class="treeview">
+                <a href="/admin/list-suggestions"><i class="fa fa-circle-o"></i> List Suggestion</a>
             </li>
           </ul>
         </li>
-        
-        <li class="treeview">
+<!--        <li class="treeview">
           <a href="#">
             <i class="fa fa-share"></i> <span>Multilevel</span>
             <span class="pull-right-container">
@@ -110,7 +110,7 @@
             </li>
             <li><a href="#"><i class="fa fa-circle-o"></i> Level One</a></li>
           </ul>
-        </li>
+        </li>-->
       </ul>
     </section>
-  </aside>
+</aside>

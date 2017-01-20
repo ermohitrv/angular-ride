@@ -1,0 +1,108 @@
+<% layout('layoutAdmin') -%>
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>List Users</h1>
+        <ol class="breadcrumb">
+            <li><a href="/admin"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">List Users</li>
+        </ol>
+    </section>
+    <section class="content" data-ng-controller="adminController">
+        <div class="row " data-ng-init="getUsersList()"> 
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                    </div>
+                    <div class="box-body">
+                        <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                            <div class="row">
+                                <div class="col-sm-6"></div>
+                                <div class="col-sm-6"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h3>
+                                        <div class="pull-left">Users</div>
+                                        <div class="pull-right"><input data-ng-model="search_user.local.username" type="text" class="form-control" placeholder="Search users"></div>
+                                        <div class="clearfix"></div>
+                                    </h3>
+                                <div class="result_del"></div>
+                                <% /* if (message.length > 0) { %>
+                                    <div class="alert alert-danger"><%= message %></div>
+                                <% } %>
+                                <% //if (messageSuccess.length > 0) { %>
+                                    <div class="alert alert-success"><%= messageSuccess %></div>
+                                <% } */%>
+                                    <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
+                                        <thead>
+                                            <tr role="row">
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Name</th>
+                                                <th class="sorting">Username</th>
+                                                <th class="sorting">Email</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Address</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Active / Inactive</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">User Level</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr data-ng-if="usersList.length > 0" data-ng-repeat="user in usersList | filter: search_user | orderBy:'local.username'" id="{{ user._id }}" role="row" class="odd">
+                                                <td>{{ user.local.firstName }} {{ user.local.lastName }}</td>
+                                                <td>
+                                                    <span data-ng-if="user.local.username.length > 0">{{ user.local.username }}</span>
+                                                    <span data-ng-if="user.local.username.length == 0">-</span>
+                                                </td>
+                                                <td>{{ user.local.email }}</td>
+                                                <td>
+                                                    <span data-ng-if="user.local.locationCountry.length > 0">{{ user.local.locationCountry }}</span>
+                                                    <span data-ng-if="user.local.locationState.length > 0">, {{ user.local.locationState }}</span>
+                                                    <span data-ng-if="user.local.locationCity.length > 0">, {{ user.local.locationCity }}</span>
+                                                </td>
+                                                <td><span data-ng-if="user.local.userActive == 'ACTIVE'" class="mk_me_green">{{ user.local.userActive }}</span></td>
+                                                <td>
+                                                    <span data-ng-if="user.local.userLevel.length > 0">{{ user.local.userLevel }}</span>
+                                                    <span data-ng-if="user.local.userLevel.length == 0">-</span>
+                                                </td>
+                                                <td>
+                                                    <a target="_blank" title="View profile" class="btn" href="/profile/{{ user.local.username }}"><i class="fa fa-eye"></i></a>
+                                                    <a title="Update" class="click_me_view btn" href="view-user/{{ user._id }}"><i class="fa fa-pencil"></i></a> 
+                                                    <a data-toggle="modal" data-target="#confirmDelete_{{ user._id }}" title="Delete"  class="" href="javascript:;"><i class="fa fa-remove"></i></a>
+                                                    <div class="modal fade" id="confirmDelete_{{  user._id }}" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                              <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                <h4 class="modal-title">{{ user.local.username }}: Delete user permanently</h4>
+                                                              </div>
+                                                              <div class="modal-body">
+                                                                <p>Are you sure you want to delete this User ?</p>
+                                                              </div>
+                                                              <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                                                <a uid="{{ user._id }}" href="javascript:;" class="btn btn-danger delete_this btn" id="confirm">Delete</a>
+                                                              </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr  data-ng-if="usersList.length <= 0">
+                                                <td colspan="5" style="text-align: center">No Users Found</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                </div>
+                                <div class="col-sm-7">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

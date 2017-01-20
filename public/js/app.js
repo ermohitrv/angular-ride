@@ -1,4 +1,4 @@
-var app = angular.module('ridePrixApp', ['ngSanitize','ui.bootstrap']);
+var app = angular.module('ridePrixApp', ['ngSanitize']);
 
 app.filter('to_trusted', ['$sce', function ($sce) {
     return function (text) {
@@ -51,5 +51,13 @@ app.controller('menuController',['$scope', '$http', function ($scope, $http) {
         
 }]);
 
-
-
+app.controller('adminController',['$scope', '$http', function ($scope, $http) {
+    /*function to list users in admin panel*/
+    $scope.getUsersList = function(){
+        $http.get('/admin/get-users-list').success(function(usersList){
+            $scope.usersList = usersList;
+        }).error(function(){
+            console.log('Oops! Error listing get-users-list');
+        });
+    };
+}]);

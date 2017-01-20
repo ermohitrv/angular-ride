@@ -200,6 +200,9 @@ module.exports = function(passport) {
                         newUser.local.gender   = profile._json.gender.toUpperCase();
                         newUser.local.profileImage = profile._json.picture.data.url;
                         newUser.local.email    = profile.emails[0].value;
+                        newUser.local.userLevel= 'NORMAL';    //default to NORMAL
+                        newUser.local.userActive= 'ACTIVE';    //default to ACTIVE
+                        newUser.local.token    = globalConfig.randomString;
                         newUser.facebookURL    = "https://www.facebook.com/profile.php?id="+profile.id;
                         
                         // save our user to the database
