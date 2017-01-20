@@ -51,4 +51,23 @@ router.get('/get-users-list', middleware.isAdminLoggedIn, function(req, res){
     });
 });
 
+router.post('/delete-user/', middleware.isAdminLoggedIn, function (req, res) {
+    var fs = require('fs.extra');
+    User.findOne({'_id': req.body.uid}, function (err, user) {
+        if (err) {
+            res.send('error');
+        }
+        if (user) {
+            user.remove(function (err) {
+                if (!err) {
+                    fs.unlink('public/uploads/' + user.local.profileImage); // delete user profile image
+                    res.send('success');
+                } else {
+                    res.send('error');
+                }
+            }); // end 
+
+        }
+    });
+});
 module.exports = router;

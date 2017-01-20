@@ -34,6 +34,20 @@ router.get('/profile', middleware.isLoggedIn, function (req, res){
     res.render('profile.ejs', {user: req.user,title:'Profile'});
 });
 
+/* Profile route to render logged in user to profile area */
+router.get('/profile/:username', function (req, res){
+    var username = req.body.username;
+    console.log('username: '+username);
+    User.findOne({'local.username': new RegExp(["^", username, "$"].join(""), "i")}, function (err, user) {
+        if (err) {
+            res.redirect('/');
+        }
+        res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+        //res.render('user-profile.ejs', { user: user, title: username+' Profile' });
+        res.send(user);
+    });
+});
+
 /* Update profile route to render logged in user to update profile area */
 router.get('/update-profile', csrfProtection, middleware.isLoggedIn, function (req, res){
     res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
@@ -241,7 +255,7 @@ router.post('/checkemail', function (req, res) {
 });
 
 router.get('/admin', middleware.isAdminLoggedIn, function(req, res){
-    res.render('admin-dashboard', { user : req.user,title:'Admin Dashboard' });
+    res.render('admin-dashboard', { user : req.user,title:'Admin Dashboard',active:'admin'});
 });
 
 router.get('/about', function(req, res){ 
@@ -255,7 +269,7 @@ router.get('/contact', function(req, res){
 // SHOP ROUTES =============================================================
 // =========================================================================
 
-/* Profile route to render logged in user to profile area */
+/* shop route to render logged in user to shop area */
 router.get('/shop', function (req, res) {
     res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
     res.render('shop.ejs', { user: req.user,title:'Shop'});

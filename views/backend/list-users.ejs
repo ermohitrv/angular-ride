@@ -58,7 +58,9 @@
                                                     <span data-ng-if="user.local.locationState.length > 0">, {{ user.local.locationState }}</span>
                                                     <span data-ng-if="user.local.locationCity.length > 0">, {{ user.local.locationCity }}</span>
                                                 </td>
-                                                <td><span data-ng-if="user.local.userActive == 'ACTIVE'" class="mk_me_green">{{ user.local.userActive }}</span></td>
+                                                <td>
+                                                    <span data-ng-if="user.local.userActive == 'ACTIVE'" class="mk_me_green">{{ user.local.userActive }}</span>
+                                                </td>
                                                 <td>
                                                     <span data-ng-if="user.local.userLevel.length > 0">{{ user.local.userLevel }}</span>
                                                     <span data-ng-if="user.local.userLevel.length == 0">-</span>
