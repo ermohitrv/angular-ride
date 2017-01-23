@@ -342,3 +342,95 @@ jQuery('#change_password_form').validate({
         return false;
     };
 });
+
+/*code to show maps on footer of homepage*/
+var map;
+var markers = [];
+var bounds;
+var points = {};
+function initialize(userData) {
+    var mapOptions = {
+        zoom: 3,
+        center: new google.maps.LatLng(43.16103, -77.61092),
+        scrollwheel: false
+    };
+    map = new google.maps.Map(document.getElementById('map-canvas'),
+            mapOptions);
+    setMarkers(userData);
+}
+
+//            google.maps.event.addDomListener(window, 'load', initialize);
+
+function setMarkers(userData) {
+    console.log(userData);
+    var locations = [{  "lat":"37.958729",
+                        "lon":"58.384617",
+                        "html":"<img src=\"http:\/\/www.zonedinapp.com\/user_images\/1433248606_9.png\"  style=\"height: 35px;width: 35px;float:left; border: 1px solid;\" class=\"img-circle\"><a href=\"history.php?userId=29\"><h5 style=\"margin: 0;padding-left: 40px;\">Boda Martin<\/h5><\/a><small style=\"margin: 0;padding-left: 5px;\">Ashgabat, Turkmenistan<\/small>",
+                        "name":"Boda Martin"
+                    }];
+//    var locations = [{  "lat":"37.958729",
+//                        "lon":"58.384617",
+//                        "html":"<img src=\"http:\/\/www.zonedinapp.com\/user_images\/1433248606_9.png\"  style=\"height: 35px;width: 35px;float:left; border: 1px solid;\" class=\"img-circle\"><a href=\"history.php?userId=29\"><h5 style=\"margin: 0;padding-left: 40px;\">Boda Martin<\/h5><\/a><small style=\"margin: 0;padding-left: 5px;\">Ashgabat, Turkmenistan<\/small>",
+//                        "name":"Boda Martin"
+//                    }];
+    var markersArray = [];
+    var infowindow = new google.maps.InfoWindow({content: "temo"});
+    var i = 0;
+    var icon = new google.maps.MarkerImage("/images/map-pointer.png");
+    $.each(locations, function (index, markerData) {
+        var name = markerData.name;
+        var lat = markerData.lat;
+        var long = markerData.lon;
+        var content = markerData.html;
+        var myLatLng = new google.maps.LatLng(lat, long);
+        points[i] = myLatLng;
+        var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map,
+            title: name,
+            icon: icon
+        });
+        markersArray[i] = marker;
+        google.maps.event.addListener(marker, 'click', function () {
+            infowindow.setContent(content);
+            infowindow.open(map, this);
+        });
+        i++;
+    }
+    );
+}
+
+$(function () {
+    var scope = angular.element(document.getElementById('homeController')).scope();
+    scope.drawUsersMap();
+    
+    scope.$apply(function () {
+        var ss = scope.drawUsersMap();
+        console.log(JSON.stringify(scope.usersList));
+    });
+    var widthScreen = $(document).width();
+    if (widthScreen > 768) {
+        if (window.google && google.maps) {
+            console.log(JSON.stringify(scope.usersList));
+            // Map script is already loaded
+            initializeMap();
+        } else {
+            lazyLoadGoogleMap();
+        }
+    }
+});
+
+function lazyLoadGoogleMap() {
+    console.log('a');
+    $.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=initializeMap")
+        .done(function (script, textStatus) {
+            //alert("Google map script loaded successfully");
+        })
+        .fail(function (jqxhr, settings, ex) {
+            //alert("Could not load Google Map script: " + jqxhr);
+        });
+}
+
+function initializeMap(userData) {
+    initialize(userData);
+}

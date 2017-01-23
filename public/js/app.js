@@ -43,8 +43,31 @@ app.controller('viewController',['$scope', '$http', function ($scope, $http, $lo
 }]);
 
 /********************** chat controller  **********************/
-app.controller('chatController', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
-
+app.controller('homeController', ['$scope', '$http', function ($scope, $http) {
+    /*function to list users homepage */
+    $scope.usersList = [];
+    $scope.drawUsersMap = function(){
+        $http.get('/draw-users-map').success(function(usersList){
+            $scope.usersList = usersList;
+            
+            /*
+            var widthScreen = $(document).width();
+            if (widthScreen > 768) {
+                
+                if (window.google && google.maps) {
+                    // Map script is already loaded
+                    console.log(JSON.stringify(usersList));
+                    initializeMap(usersList);
+                } else {
+                    lazyLoadGoogleMap();
+                    initializeMap(usersList)
+                }
+            }
+*/
+        }).error(function(){
+            console.log('Oops! Error listing get-users-list');
+        });
+    };
 }]);
 /********************** menu controller  **********************/
 app.controller('menuController',['$scope', '$http', function ($scope, $http) {

@@ -254,6 +254,39 @@ router.post('/checkemail', function (req, res) {
     }
 });
 
+/* Route to get all users map data to load on homepage */
+router.get('/draw-users-map', function (req, res) {
+    User.aggregate(
+        [{
+            $match:{'local.userActive':'ACTIVE'}
+        },
+        {
+            $project : {
+                '_id':0,
+                'local.firstName' : 1,
+                'local.lastName' : 1,
+                'local.locationCountry' : 1,
+                'local.locationState' : 1,
+                'local.locationCity' : 1,
+                'local.profileImage' : 1,
+                'local.locationLat'  : 1,
+                'local.locationLng'  : 1,
+            } 
+        }]
+        ,function (err, usersList) {
+        if(usersList){
+            res.json({
+                success: true, 
+                data: {
+                    users : usersList
+                },
+                message: "success", 
+                code: 200
+            });
+        }
+    });
+});
+
 router.get('/admin', middleware.isAdminLoggedIn, function(req, res){
     res.render('admin-dashboard', { user : req.user,title:'Admin Dashboard',active:'admin'});
 });

@@ -2072,3 +2072,10 @@ span.size {
     -ms-transform: scale(1);
     transform: scale(1);
 }
+
+
+
+
+/*  23 Jan Dpk css */
+.navbar-brand.logo{max-width: 200px;}
+
