@@ -12,7 +12,7 @@
 //});
 jQuery(function() {
     
-    $("#header-countdown").countdown("2017/02/01").on('update.countdown', function(event) {
+    $("#header-countdown").countdown("2017/02/05").on('update.countdown', function(event) {
         var $this = $(this).html(event.strftime(''
           + '<span class="bold">%-w</span> week%!w '
           + '<span class="bold">%-d</span> day%!d '
