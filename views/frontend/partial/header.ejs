@@ -2,7 +2,8 @@
     <div class="header_top">
         <div class="container">
             <div class="col-lg-6 col-md-6 col-sm-6">
-                <div class="callus">CALL 24/7 OR rideprix@gmail.com</div>
+<!--                <div class="callus">CALL 24/7 OR rideprix@gmail.com</div>-->
+            <div class="callus" id="header-countdown"></div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6">
                 <div class="follow_us navbar-right">
@@ -30,12 +31,23 @@
             </div>
             <div class="right_side">
                 <% if (user !== undefined && user !== null) {  %>
-                <div class="registration">
-                    <% if (user.local.userLevel == "ADMIN") {  %>
-                        <a href="/admin">Admin Dashboard</a>
-                    <% } %>
-                    <a href="/profile">My Account</a>
-                    <a href="/logout">Logout</a>
+                 <div class="dropdown">
+                  <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                    <img style="width: 30px;" class="img-circle" src="<%= user.local.profileImage %>">
+                    <span class="name"><%= user.local.firstName +' '+ user.local.lastName %></span>
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                     <div class="log-arrow-up"></div>
+                     <% if (user.local.userLevel == "ADMIN") {  %>
+                     <li><a href="/admin"><i class="fa fa-user" data-original-title="" title=""></i> Admin Dashboard</a></li>
+                     <% } %>
+                     <li><a href="/profile"><i class="fa fa-user" data-original-title="" title=""></i> Profile</a></li>
+                     <li><a href="/update-profile"><i class=" fa fa-suitcase" data-original-title="" title="Update Profile"></i>Update Profile</a></li>
+<!--                     <li><a href="#"><i class="fa fa-cog" data-original-title="" title=""></i> Settings</a></li>-->
+<!--                     <li><a href="#"><i class="fa fa-bell-o" data-original-title="" title=""></i> Notification</a></li>-->
+                     <li><a href="/logout"><i class="fa fa-key" data-original-title="" title=""></i> Log Out</a></li>
+                  </ul>
                 </div>
                 <% }else{ %>
                 <div class="registration">

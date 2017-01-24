@@ -83,4 +83,13 @@ app.controller('adminController',['$scope', '$http', function ($scope, $http) {
             console.log('Oops! Error listing get-users-list');
         });
     };
+    
+    /*function to list products in admin panel*/
+    $scope.getProductsList = function(){
+        $http.get('/admin/get-products-list').success(function(productsList){
+            $scope.productsList = productsList;
+        }).error(function(){
+            console.log('Oops! Error listing get-users-list');
+        });
+    };
 }]);

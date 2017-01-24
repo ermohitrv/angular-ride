@@ -11,6 +11,16 @@
     
 //});
 jQuery(function() {
+    
+    $("#header-countdown").countdown("2017/02/01").on('update.countdown', function(event) {
+        var $this = $(this).html(event.strftime(''
+          + '<span class="bold">%-w</span> week%!w '
+          + '<span class="bold">%-d</span> day%!d '
+          + '<span class="bold">%H</span> hr '
+          + '<span class="bold">%M</span> min '
+          + '<span class="bold">%S</span> sec'));
+    });
+  
     var d = new Date();
     var n = d.getFullYear();
     $("#datepicker").datepicker({
@@ -401,13 +411,13 @@ function setMarkers(userData) {
 }
 
 $(function () {
-    var scope = angular.element(document.getElementById('homeController')).scope();
-    scope.drawUsersMap();
+    //var scope = angular.element(document.getElementById('homeController')).scope();
+    //scope.drawUsersMap();
     
-    scope.$apply(function () {
-        var ss = scope.drawUsersMap();
-        console.log(JSON.stringify(scope.usersList));
-    });
+    //scope.$apply(function () {
+    //    var ss = scope.drawUsersMap();
+    //    console.log(JSON.stringify(scope.usersList));
+    //});
     var widthScreen = $(document).width();
     if (widthScreen > 768) {
         if (window.google && google.maps) {

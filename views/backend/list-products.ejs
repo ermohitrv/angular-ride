@@ -4,13 +4,106 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Dashboard
-        <small>Control panel</small>
+        List Products
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Dashboard</li>
       </ol>
+    </section>
+    <section class="content" data-ng-controller="adminController">
+        <div class="row" data-ng-init="getProductsList()"> 
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-body">
+                        <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                            <div class="row">
+                                <div class="col-sm-6"></div>
+                                <div class="col-sm-6"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h3>
+                                        <div class="pull-left">Products</div>
+                                        <div class="pull-right"><input data-ng-model="search_user.product_title" type="text" class="form-control" placeholder="Search product"></div>
+                                        <div class="clearfix"></div>
+                                    </h3>
+                                <div class="result_del"></div>
+                                <% if (message.length > 0) { %>
+                                    <% if (message_type == "success"){ %>
+                                        <div class="alert alert-success"><%= message %></div>
+                                    <% }else{ %>
+                                        <div class="alert alert-danger"><%= message %></div>
+                                    <% } %>
+                                <% } %>
+                                    <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
+                                        <thead>
+                                            <tr role="row">
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Title</th>
+                                                <th class="sorting">Price</th>
+                                                <th class="sorting">Published Status</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Description</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Date Added</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr data-ng-if="productsList.length > 0" data-ng-repeat="product in productsList | filter: search_user | orderBy:'product_added_date'" id="{{ product._id }}" role="row" class="odd">
+                                                <td>{{ product.product_title }}</td>
+                                                <td>
+                                                    <span>${{ product.product_price }}</span>
+                                                </td>
+                                                <td>
+                                                    <span data-ng-if="product.product_published == 'true'" class="mk_me_green">Published</span>
+                                                    <span data-ng-if="product.product_published == 'false'" class="mk_me_red">Draft</span>
+                                                </td>
+                                                <td>
+                                                    <span>{{ product.product_description }}</span>
+                                                </td>
+                                                <td>
+                                                    <span>{{ product.product_added_date }}</span>
+                                                </td>
+                                                <td>
+                                                    <a target="_blank" title="View profile" class="btn" href="/product/{{ product.product_permalink }}"><i class="fa fa-eye"></i></a>
+<!--                                                    <a title="Update" class="click_me_view btn" href="product/{{ product.product_permalink }}"><i class="fa fa-pencil"></i></a> -->
+<!--                                                    <a data-toggle="modal" data-target="#confirmDelete_{{ user._id }}" title="Delete"  class="" href="javascript:;"><i class="fa fa-remove"></i></a>-->
+                                                    <div class="modal fade" id="confirmDelete_{{  user._id }}" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                              <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                <h4 class="modal-title">{{ user.local.username }}: Delete user permanently</h4>
+                                                              </div>
+                                                              <div class="modal-body">
+                                                                <p>Are you sure you want to delete this User ?</p>
+                                                              </div>
+                                                              <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                                                <a uid="{{ user._id }}" href="javascript:;" class="btn btn-danger delete_this btn" id="confirm">Delete</a>
+                                                              </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr  data-ng-if="usersList.length <= 0">
+                                                <td colspan="5" style="text-align: center">No Users Found</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                </div>
+                                <div class="col-sm-7">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
   </div>
   <!-- /.content-wrapper -->

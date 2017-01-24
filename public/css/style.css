@@ -2077,5 +2077,73 @@ span.size {
 
 
 /*  23 Jan Dpk css */
-.navbar-brand.logo{max-width: 200px;}
+.navbar-brand.logo{max-width: 200px;margin-top: 15px;}
+.navbar-collapse.collapse {float: right;clear: none;margin-top: 19px;margin-right: 20px;}
+.navbar{margin: 7px 0 15px 0;}
+#login_form input.form-control{border: 2px solid #eee;}
+.testi_slide ul {
+    list-style: none;
+    text-align: center;
+    padding:0;
+}
+.testi_slide ul li {
+    display: inline-block;
+    padding: 0px 90px;
+    position: relative;
+    top: -130px;
+}
+.testi_slide ul li:first-child {
+    display: block;
+    margin-top: 0px;
+    position: relative;
+    top:0;
+}
+.testi_slide ul li:last-child {
+    top: -90px;
+}
+span.testi_img{    margin-top: 0;}
+.testi_slide ul li span.itemNo {
+    font-size: 24px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: #fff;
+    display: block;
+}
+.testi_slide img{
+    border: 5px solid #ce0000;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+}
 
+
+body.profile a.navbar-brand.logo{    max-width: 200px;}
+.profile nav.navbar {argin: 7px 0 0px 0;}
+.profile .navbar-nav > li > a {padding: 5px 6px 5px;}
+
+.navbar .dropdown {
+    float: right;
+    margin-top: 10px;
+    margin-left: 15px;
+    padding: 5px;
+}
+.navbar .dropdown.open {
+    background: #ce0000;
+    padding: 5px;
+}
+.navbar .dropdown.open a.dropdown-toggle {
+    color: #fff;
+}
+.navbar .dropdown a.dropdown-toggle{color: #000; transition: all .0s;}
+.navbar .dropdown a.dropdown-toggle:active{text-decoration: none}
+.dropdown-menu li a i {margin-right: 5px;}
+
+
+
+
+@media (max-width: 767px){
+.navbar-brand.logo {margin: 18px 15px; width: 100%;}
+.navbar-nav { margin: 0;}
+.testi_slide img{max-width: none;}
+.testi_slide ul li{padding: 0px 0px;}
+}

@@ -46,15 +46,17 @@
                <!-- user login dropdown start-->
                <li class="dropdown">
                   <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                  <img style="width: 30px;" alt="" src="<%= user.local.profileImage %>">
+                  <img style="width: 30px;" class="img-circle" src="<%= user.local.profileImage %>">
                   <span class="username"><%= user.local.firstName+' '+user.local.lastName %></span>
                   <b class="caret"></b>
                   </a>
                   <ul class="dropdown-menu">
                      <div class="log-arrow-up"></div>
+                     <% if (user.local.userLevel == "ADMIN") {  %>
+                     <li><a href="/admin"><i class="fa fa-user" data-original-title="" title=""></i> Admin Dashboard</a></li>
+                     <% } %>
+                     <li><a href="/profile"><i class="fa fa-user" data-original-title="" title=""></i> Profile</a></li>
                      <li><a href="/update-profile"><i class=" fa fa-suitcase" data-original-title="" title="Update Profile"></i>Update Profile</a></li>
-                     <li><a href="#"><i class="fa fa-cog" data-original-title="" title=""></i> Settings</a></li>
-                     <li><a href="#"><i class="fa fa-bell-o" data-original-title="" title=""></i> Notification</a></li>
                      <li><a href="/logout"><i class="fa fa-key" data-original-title="" title=""></i> Log Out</a></li>
                   </ul>
                </li>

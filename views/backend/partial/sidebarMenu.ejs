@@ -29,7 +29,7 @@
             <li <% if(active == "list-users"){ %> class="active" <% } %>><a href="/admin/list-users"><i class="fa fa-circle-o"></i> List Users</a></li>
           </ul>
         </li>
-        <li class="treeview <% if(active == "list-products"){ %> active <% } %>">
+        <li class="treeview <% if(active == "list-products" || active == "add-product"){ %> active <% } %>">
           <a href="#">
             <i class="fa fa-dashboard"></i> <span>Product Management</span>
             <span class="pull-right-container">
@@ -38,7 +38,7 @@
           </a>
           <ul class="treeview-menu">
             <li <% if(active == "list-products"){ %> class="active" <% } %>><a href="/admin/list-products"><i class="fa fa-circle-o"></i> List Products</a></li>
-            <li><a href="#"><i class="fa fa-circle-o"></i> Add Product</a></li>
+            <li <% if(active == "add-product"){ %> class="active" <% } %>><a href="/admin/product/new"><i class="fa fa-circle-o"></i> Add Product</a></li>
           </ul>
         </li>
         <li class="treeview <% if(active == "list-orders"){ %> active <% } %>">
