@@ -255,8 +255,6 @@ router.post('/forget-password', function(req, res){
     
     if(email != "" && email != undefined){
         var token = random_token();
-        var User = require('../models/user');
-        
         User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function (err, user){
             if (user) {
                 User.update(
@@ -492,8 +490,6 @@ router.post('/change-password', function(req, res){
     var oldPassword = req.body.oldpassword;
     if( ( email != "" && email != undefined ) && ( newPassword != "" && newPassword != undefined ) && ( oldPassword != "" && oldPassword != undefined ) ){
         
-        var User = require('../models/user');
-        
         User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function (err, user){
             
             if(user) {
@@ -590,7 +586,6 @@ router.post('/update-profile', function(req, res){
         var rideExperience  = req.body.rideExperience;
         var rideCategory    = req.body.rideCategory;
         
-        var User = require('../models/user');
         User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function (err, user){
             if(user) {
                  
@@ -655,6 +650,40 @@ router.post('/update-profile', function(req, res){
     }
 });
 
+/* API endpoint to be used by mobile device for updating profile details */
+router.post('/search', function(req, res){
+    var name = req.body.name;
+    console.log('**** **** name: '+name);
+    if( name != "" && name != undefined ){
+        
+        User.aggregate([{ $match: { $or: [ {'local.firstName': { $regex : new RegExp(name, "i") }}, {'local.lastName': name}] } } ],function(err, user){
+            if(err){
+                res.json({ 
+                    success: true,
+                    data: null, 
+                    message: "no record found!", 
+                    code: 200
+                });
+            }else{
+                res.json({
+                    success: true,
+                    data: {
+                        user : user
+                    }, 
+                    message: "records found!", 
+                    code: 200
+                });
+            }
+        });
+    }else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+    }
+});
 // 32 character random string token
 function random_token(){
   var text = "";
