@@ -6,7 +6,7 @@ var User            = require('../models/user');
 var RpRoutes        = require('../models/rproutes');
 var globalConfig    = require('../config/globals.js');
 var nodemailer      = require("nodemailer");
- 
+var friends         = require('../models/friends');
 /* API endpoint to be used by mobile device to see all users list */
 router.get('/listusers', function(req, res) {
     User.aggregate([{$sort: {'local.username': 1}}], function (err, usersList) {
@@ -671,6 +671,9 @@ router.post('/search', function(req, res){
                     'local.profileImage' : 1,
                     'local.locationLat'  : 1,
                     'local.locationLng'  : 1,
+                    'rideType'          : 1,
+                    'rideExperience'    : 1,
+                    'rideCategory'      : 1
                 } 
             }
         ],function(err, user){
@@ -701,6 +704,99 @@ router.post('/search', function(req, res){
         });
     }
 });
+
+// save friend request
+router.post('/send-friend-request', function (req, res) {
+    var friendRequestBy = req.body.friendRequestBy; //email
+    var friendRequestTo = req.body.friendRequestTo; //email
+
+    if ((friendRequestBy !== undefined && friendRequestBy !== null) && (friendRequestTo !== undefined && friendRequestTo !== null)) {
+        friends.findOne({'friendRequestSentBy': friendRequestBy, 'friendRequestSentTo': friendRequestTo}, function (err, friendReq) {
+            if (friendReq) {
+                res.json(false);
+            } else {
+                newFriendReq = new friends;
+                newFriendReq.friendRequestSentBy = friendRequestBy;
+                newFriendReq.friendRequestSentTo = friendRequestTo;
+                newFriendReq.save(function (err) {
+                    if (!err) {
+                        res.json({ 
+                            success: true, 
+                            data: {
+                                friendRequestSentBy : friendRequestBy,
+                                friendRequestSentTo: friendRequestBy,
+                                friendRequestStatus: 'pending'
+                            }, 
+                            message: "friend request sent to : "+friendRequestBy, 
+                            code: 400
+                        });
+                    } else {
+                        res.json({ 
+                            success: false, 
+                            data: null, 
+                            message: "error occured : "+err, 
+                            code: 400
+                        });
+                    }
+                });
+            }
+        });
+    }
+});
+
+router.get('/new-friend-request', function(req, res){
+    var email = req.body.email;
+    
+    console.log('**** **** email: '+email);
+    
+    if( email != "" && email != undefined ){
+        friends.aggregate(
+        [
+            {
+                $project : { 
+                    friendRequestSentBy:1,
+                    friendRequestSentTo: 1, 
+                    friendRequestApprovalStatus: 1, 
+                    friendRequestSentByLowercase : { $toLower: '$friendRequestSentBy' } 
+                } 
+            }, 
+            {
+                $sort: {    
+                    friendRequestSentByLowercase: 1
+                }
+            },
+            {
+                $match: {
+                    'friendRequestSentTo': email, 
+                    'friendRequestApprovalStatus': 'pending'
+                }
+            }
+        ], function (err, newFriendReq) {
+
+            res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+
+            res.json({ 
+                success: false, 
+                data: {
+                    friendRequestSentTo : email,
+                    friendRequestApprovalStatus: 'pending'
+                }, 
+                message: "friend request sent to : "+email, 
+                code: 400
+            });
+            //res.render('friends', {user: req.user,visitedUser:null, setActiveMenu: 'new-friend-requests', newFriendReq: newFriendReq, isGuest: req.session.isGuest});
+        });
+    }else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+    }
+
+});
+
 // 32 character random string token
 function random_token(){
   var text = "";
