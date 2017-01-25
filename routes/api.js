@@ -656,7 +656,24 @@ router.post('/search', function(req, res){
     console.log('**** **** name: '+name);
     if( name != "" && name != undefined ){
         
-        User.aggregate([{ $match: { $or: [ {'local.firstName': { $regex : new RegExp(name, "i") }}, {'local.lastName': name}] } } ],function(err, user){
+        User.aggregate([
+            { 
+                $match: { $or: [ {'local.firstName': { $regex : new RegExp(name, "i") }}, {'local.lastName': name}] } 
+            },
+            {
+                $project : {
+                    '_id':0,
+                    'local.firstName' : 1,
+                    'local.lastName' : 1,
+                    'local.locationCountry' : 1,
+                    'local.locationState' : 1,
+                    'local.locationCity' : 1,
+                    'local.profileImage' : 1,
+                    'local.locationLat'  : 1,
+                    'local.locationLng'  : 1,
+                } 
+            }
+        ],function(err, user){
             if(err){
                 res.json({ 
                     success: true,
