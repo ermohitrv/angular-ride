@@ -11,25 +11,27 @@
     
 //});
 jQuery(function() {
-    
-    $("#header-countdown").countdown("2017/02/05").on('update.countdown', function(event) {
-        var $this = $(this).html(event.strftime(''
-          + '<span class="bold">%-w</span> week%!w '
-          + '<span class="bold">%-d</span> day%!d '
-          + '<span class="bold">%H</span> hr '
-          + '<span class="bold">%M</span> min '
-          + '<span class="bold">%S</span> sec'));
+    var remtime1 = parseInt("85999");
+    //alert(remtime);
+    var clock;
+    jQuery(document).ready(function() {
+        var clock1;          
+        clock = jQuery('.clock1').FlipClock({
+            clockFace: 'DailyCounter',
+            autoStart: false,
+            callbacks: {
+                stop: function() {
+                    jQuery('.message').html('The clock has stopped!')
+                }
+            }
+        });
+
+        clock.setTime(remtime1);
+        clock.setCountdown(true);
+        clock.start();
+
     });
-  
-    var d = new Date();
-    var n = d.getFullYear();
-    $("#datepicker").datepicker({
-        minDate: new Date(1910,0,1),
-        maxDate: n,
-        yearRange: '1910:'+n,
-        changeYear: true,
-        changeMonth: true
-    });
+
     /* ----- Contact form ----- */
     $("#submit_btn").click(function(e) {
         setTimeout(function(){
