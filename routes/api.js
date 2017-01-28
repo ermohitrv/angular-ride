@@ -41,6 +41,86 @@ router.get('/mylocaction', function(req, res){
     });
 });
 
+
+/* API endpoint to be used by mobile device to send locaction(lat,lng) on new location */
+router.post('/submit-user-rating', function(req, res){
+    var rating      = req.body.rating;
+    var ratingBy    = req.body.ratingBy;
+    var ratingTo    = req.body.ratingTo;
+    var Userrating  = require('../models/userrating');
+    
+    if( ( rating != "" && rating != undefined ) && ( ratingBy != "" && ratingBy != undefined ) && ( ratingTo != "" && ratingTo != undefined ) ){
+        
+        var usermames = [];
+        usermames[0] = ratingBy;
+        usermames[1] = ratingTo;
+        
+        User.find({ 'local.email': { $in: usermames }},function(err,user){
+            if (!err){
+                var userLength = user.length;
+                if(userLength > 1){
+                    
+                    var newUserRating       = new Userrating();
+                    newUserRating.rating    = rating;
+                    newUserRating.ratingBy  = ratingBy;
+                    newUserRating.ratingTo  = ratingTo;
+                    newUserRating.save(function(err){
+                        
+                        if(err){
+                            res.json({ 
+                                success: false, 
+                                data: null, 
+                                message: "error occured while adding rating, "+err, 
+                                code: 404
+                            });
+                        }else{
+                            res.json({
+                                success: true, 
+                                data: {
+                                    rating : rating,
+                                    ratingBy : ratingBy,
+                                    ratingTo : ratingTo
+                                },
+                                message: "rating updated successfully!", 
+                                code: 200
+                            });
+                        }
+                        
+                    });
+                
+                }else{
+                    
+                    res.json({ 
+                        success: false, 
+                        data: null, 
+                        message: "ratingTo or ratingBy email does not exists in database, please check again!", 
+                        code: 404
+                    });
+                    
+                }
+                
+            }else{
+                res.json({ 
+                    success: false, 
+                    data: null, 
+                    message: err, 
+                    code: 404
+                });
+            }
+        });
+        
+    }else{
+        
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+        
+    }
+});
+
 /* API endpoint to be used by mobile device to send locaction(lat,lng) on new location */
 router.post('/mylocaction', function(req, res){
     var email = req.body.email;
