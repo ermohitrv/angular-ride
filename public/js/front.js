@@ -1,22 +1,18 @@
-//jQuery(document).ready(function(){
-//    jQuery(document).on('keyup','input#search-box',function(){
-//        $(this).val( $(this).val().replace(/[^ -~]/g, '') );
-//    });
-//    jQuery(document).on('keyup','input#email',function(){
-//        $(this).val( $(this).val().replace(/[^ -~]/g, '') );
-//    });
-//    jQuery(document).on('keyup','#signup_form input,#login_form input',function(){
-//        $(this).val( $(this).val().replace(/[^ -~]/g, '') );
-//    });
-    
-//});
 jQuery(function() {
     var remtime1 = parseInt("85999");
-    //alert(remtime);
-    var clock;
+    var clock1,clock2;
     jQuery(document).ready(function() {
-        var clock1;          
-        clock = jQuery('.clock1').FlipClock({
+        clock1 = jQuery('.clock1').FlipClock({
+            clockFace: 'DailyCounter',
+            autoStart: false,
+            callbacks: {
+                stop: function() {
+                    jQuery('.message').html('The clock has stopped!')
+                }
+            }
+        });
+        
+        clock2 = jQuery('.clock2').FlipClock({
             clockFace: 'DailyCounter',
             autoStart: false,
             callbacks: {
@@ -26,9 +22,13 @@ jQuery(function() {
             }
         });
 
-        clock.setTime(remtime1);
-        clock.setCountdown(true);
-        clock.start();
+        clock1.setTime(remtime1);
+        clock1.setCountdown(true);
+        clock1.start();
+        
+        clock2.setTime(remtime1);
+        clock2.setCountdown(true);
+        clock2.start();
 
     });
 
@@ -45,14 +45,7 @@ jQuery(function() {
         $(".btn-pricing").attr('disabled','disabled');
         $(this).text('').append('Redirecting to PayPal <i class="fa fa-spinner fa-spin"></i>');
     });
-//    //signup page
-//    jQuery( "#date_of_birth" ).datepicker({
-//      changeMonth: true,
-//      changeYear: true,
-//      yearRange: "-100:+0",
-//      dateFormat: 'yy-mm-dd'
-//    });
-//    
+
     //social sharing on live now page
     $('.socialShare a').click(function(e) {
         e.preventDefault();
@@ -377,14 +370,9 @@ function setMarkers(userData) {
     console.log(userData);
     var locations = [{  "lat":"37.958729",
                         "lon":"58.384617",
-                        "html":"<img src=\"http:\/\/www.zonedinapp.com\/user_images\/1433248606_9.png\"  style=\"height: 35px;width: 35px;float:left; border: 1px solid;\" class=\"img-circle\"><a href=\"history.php?userId=29\"><h5 style=\"margin: 0;padding-left: 40px;\">Boda Martin<\/h5><\/a><small style=\"margin: 0;padding-left: 5px;\">Ashgabat, Turkmenistan<\/small>",
+                        "html":"<img src=\"http:\/\/placehold.it\/350x150\"  style=\"height: 35px;width: 35px;float:left; border: 1px solid;\" class=\"img-circle\"><a href=\"history.php?userId=29\"><h5 style=\"margin: 0;padding-left: 40px;\">Boda Martin<\/h5><\/a><small style=\"margin: 0;padding-left: 5px;\">Ashgabat, Turkmenistan<\/small>",
                         "name":"Boda Martin"
                     }];
-//    var locations = [{  "lat":"37.958729",
-//                        "lon":"58.384617",
-//                        "html":"<img src=\"http:\/\/www.zonedinapp.com\/user_images\/1433248606_9.png\"  style=\"height: 35px;width: 35px;float:left; border: 1px solid;\" class=\"img-circle\"><a href=\"history.php?userId=29\"><h5 style=\"margin: 0;padding-left: 40px;\">Boda Martin<\/h5><\/a><small style=\"margin: 0;padding-left: 5px;\">Ashgabat, Turkmenistan<\/small>",
-//                        "name":"Boda Martin"
-//                    }];
     var markersArray = [];
     var infowindow = new google.maps.InfoWindow({content: "temo"});
     var i = 0;

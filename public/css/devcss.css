@@ -16,7 +16,7 @@
 .bold{font-weight: bold;font-size: 16px;}
 .testi_slide img{border: 2px solid #ce0000; width: 100px;height: 100px}
 
-.flip-clock-wrapper ul {
+.clock1 ul {
     position: relative;
     float: left;
     margin: 5px;
@@ -29,10 +29,10 @@
     background: #000;
     padding:10px !important;
 }
-.flip-clock-dot{    display: none;}
-.flip-clock-wrapper ul li a div div.inn{font-size: 20px;
+.clock1 .flip-clock-dot{    display: none;}
+.clock1 ul li a div div.inn{font-size: 20px;
     line-height: 30px;}
-.flip-clock-divider .flip-clock-label {
+.clock1 .flip-clock-divider .flip-clock-label {
     position: absolute;
     top: 3.5em;
     right: initial !important;
@@ -40,9 +40,9 @@
     text-shadow: none;
     left: 15px;
 }
-.flip-clock-divider.minutes .flip-clock-label{left: 30px;}
-.flip-clock-divider.seconds .flip-clock-label{left: 29px;}
-.flip-clock-divider{height:50px;}
+.clock1 .flip-clock-divider.minutes .flip-clock-label{left: 30px;}
+.clock1 .flip-clock-divider.seconds .flip-clock-label{left: 29px;}
+.clock1 .flip-clock-divider{height:50px;}
 div#clock-details {display: none;}
 
 
