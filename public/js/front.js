@@ -421,10 +421,11 @@ $(function () {
 });
 
 function lazyLoadGoogleMap() {
-    console.log('a');
-    $.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=initializeMap")
+    $.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=initializeMap&key=AIzaSyBREdCE5tRpk40DfZbqhMpTvbrJu1tnoRI")
+    
         .done(function (script, textStatus) {
             //alert("Google map script loaded successfully");
+            // 
         })
         .fail(function (jqxhr, settings, ex) {
             //alert("Could not load Google Map script: " + jqxhr);
