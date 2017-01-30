@@ -44,6 +44,10 @@
 .clock1 .flip-clock-divider.seconds .flip-clock-label{left: 29px;}
 .clock1 .flip-clock-divider{height:50px;}
 div#clock-details {display: none;}
-
-
-
+.update-profile-page .image-circle {
+    max-width: 50%;
+    margin-bottom: 10px;
+    width: auto;
+}
+.brdr-all{border: 1px solid #bce8f1;}
+.panel-info { border:1px solid #232F40;}

@@ -25,6 +25,31 @@ var formidable  = require('formidable');
 var app         = express();
 var bodyParser = require('body-parser');
 
+//var storage = multer.diskStorage({
+//    destination: function (req, file, cb) {
+//        cb(null, 'public/uploads/')
+//    },
+//    filename: function (req, file, cb) {
+//        var extension;
+//
+//        console.log('____________ inside storage var ' + JSON.stringify(file));
+//        if (file.mimetype == 'image/png') {
+//            extension = 'png';
+//        } else if (file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
+//            extension = 'jpg';
+//        } else if (file.mimetype == 'image/gif') {
+//            extension = 'gif';
+//        } else if (file.mimetype == 'image/bmp') {
+//            extension = 'bmp';
+//        } else {
+//            extension = 'jpg';
+//        }
+//
+//        cb(null, req.user.local.username + '.' + extension); //Appending .jpg
+//    }
+//});
+//var upload = multer({storage: storage});
+
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: false })); // support encoded bodies
 
@@ -52,7 +77,32 @@ app.use(passport.session());
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/public', express.static(path.join(__dirname, 'node_modules')));
 app.use('/', express.static(path.join(__dirname, 'public')));
-
+//
+//
+//var cpUpload = upload.fields([{name: 'userPhoto', maxCount: 1}]);
+//app.post('/profileimage', cpUpload, function (req, res, next) {
+//    
+//    var fileName = "";
+//    if (req.files && req.files != null) {
+//        fileName = req.files['userPhoto'][0].filename;
+//        //saving into database
+//        User.findOne({'local.email': req.user.local.email}, function (err, user) {
+//
+//            user.local.profileImage = fileName;
+//            user.save(function (err) {
+//                if (err) {
+//                    console.log('File not uploaded, not saved to DB!');
+//                } else {
+//                    console.log('File uploaded and saved to DB!');
+//                    req.flash('messageSuccess', 'Your Image uploaded successfully!');
+//                    res.redirect('/update-profile');
+//                }
+//            });
+//        });
+//    } else {
+//        res.redirect('/update-profile');
+//    }
+//});
 
 app.use('/admin', admin);
 app.use('/product', product);

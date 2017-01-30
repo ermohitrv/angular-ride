@@ -49,30 +49,45 @@ app.controller('homeController', ['$scope', '$http', function ($scope, $http) {
     $scope.drawUsersMap = function(){
         $http.get('/draw-users-map').success(function(usersList){
             $scope.usersList = usersList;
-            
-            /*
             var widthScreen = $(document).width();
             if (widthScreen > 768) {
                 
                 if (window.google && google.maps) {
                     // Map script is already loaded
-                    console.log(JSON.stringify(usersList));
                     initializeMap(usersList);
                 } else {
-                    lazyLoadGoogleMap();
-                    initializeMap(usersList)
+                    initializeMap(usersList);
                 }
             }
-*/
         }).error(function(){
             console.log('Oops! Error listing get-users-list');
         });
     };
 }]);
+
 /********************** menu controller  **********************/
 app.controller('menuController',['$scope', '$http', function ($scope, $http) {
         
 }]);
+
+app.controller('profileController',['$scope', '$http', function ($scope, $http) {
+    $scope.renderCountry = function(country){
+        $scope.selectedOption = country;
+    };
+    // enable/disable account
+    $scope.enable_disable_account = function(){
+      var config = {
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/enable-disable-account',config).success(function (response, status, headers, config){
+            console.log(response);
+            
+        }).error(function(err){
+           console.log('Oops! Error occur'+err);
+        });  
+    };
+}]);
+
 
 app.controller('adminController',['$scope', '$http', function ($scope, $http) {
     /*function to list users in admin panel*/

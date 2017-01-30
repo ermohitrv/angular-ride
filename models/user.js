@@ -50,7 +50,6 @@ var userSchema = mongoose.Schema({
     instagramURL:               {type: String, default: ''},
     skypeUsername:              {type: String, default: ''},
     youtubeURL:                 {type: String, default: ''},
-    pinterestURL:               {type: String, default: ''},
     enableAccount:              {type: Boolean, default: true}, // true: enable, false: disable
 
     facebook         : {

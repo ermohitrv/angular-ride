@@ -55,8 +55,170 @@ router.get('/update-profile', csrfProtection, middleware.isLoggedIn, function (r
         csrfToken: req.csrfToken(),
         error : req.flash('error'), 
         user: req.user,
-        title:'Update Profile'
+        title:'Update Profile',
+        message: '', 
+        messageSuccess: ''
     });
+});
+
+
+// enable/disable user account
+router.post('/enable-disable-account', function (req, res) {
+    var bind = {};
+    User.findOne({'local.username': req.user.local.username}, function (err, user) {
+        if (user) {
+            if (user.enableAccount === true) {
+                user.enableAccount = false;
+                bind.enableAccount = false;
+            } else {
+                user.enableAccount = true;
+                bind.enableAccount = true;
+            }
+            user.save(function (err) {
+                if(err){
+                    bind.status = 0;
+                    bind.message = 'Oops! Error occur while updating user account';
+                } else {
+                    bind.message = 'Account was updated successfully';
+                    bind.status = 1;
+                }
+                res.json(bind);
+            });
+        } else {
+            bind.status = 0;
+            bind.message = 'Oops! No user found.';
+            res.json(bind);
+        }
+    });
+});
+
+
+// check old password
+router.get('/check-old-password', function(req, res){
+  if(req.query.old_password != null && req.query.username != null){
+    var User = require('../models/user');
+    User.findOne({ 'local.username': req.query.username }, function(err, user){
+      if(user){
+
+        if( user.validPassword(req.query.old_password) ){
+          res.send('match');
+        }
+        else{
+          res.send('not match');
+        }
+      }
+      else{
+        res.send(' user not found');
+      }
+    });
+  }
+  else{
+    res.send('password or username is null');
+  }
+});
+
+router.post('/change-password', function(req, res){
+    if( req.body.new_password != null ){
+      
+        var User = require('../models/user');
+    
+        User.findOne({ 'local.username': req.body.username }, function(err, user){
+            if(user){
+                user.local.password = user.generateHash(req.body.new_password);
+                user.save(function(err){
+                    if (!err){
+                        html = 'Your password updated successfully!';
+                        var nodemailer = require("nodemailer");
+                        nodemailer.mail({
+                            from   : "RidePrix <no-reply@rideprix.com>",
+                            to     : user.local.email,
+                            subject: "RidePrix password update notification",
+                            html   : html // html body
+                        });
+                        req.flash('messageSuccess', 'Your password updated successfully!');
+                        res.redirect('/update-profile');
+                    }
+                });
+            }else{
+                res.send('Username not found');
+            }
+        });
+    }else{
+        res.send('password is empty');
+    }
+});
+
+router.get('/accountdeactivated', function(req, res){
+    res.render('deactivateaccount', {
+        user: req.user, 
+        title: "Account Deactivated"
+    });  
+});
+
+
+/* Update profile route to render logged in user to update profile area */
+router.post('/update-profile', parseForm, csrfProtection, middleware.isLoggedIn, function (req, res){
+    
+    if (req.body.email != "" && req.body.email != undefined) {
+        User.findOne({'local.email': req.body.email}, function (err, user) {
+            if (!user) {
+                
+                res.redirect('/update-profile');
+                
+            } else {
+            
+                user.local.firstName    = req.body.firstName;
+                user.local.lastName     = req.body.lastName;
+                user.local.dob          = req.body.dob;
+                user.local.gender       = req.body.gender;
+                user.local.locationCity = req.body.city;
+                user.local.locationState = req.body.state;
+                user.local.locationCountry = req.body.country;
+                user.userBio            = req.body.biography;
+                user.facebookURL        = req.body.facebook_url;
+                user.twitterURL         = req.body.twitter_url;
+                user.websiteURL         = req.body.website_url;
+                user.youtubeURL         = req.body.youtube_url;
+                user.instagramURL       = req.body.instagram_username;
+                user.skypeUsername      = req.body.skype_username;
+
+                user.save(function (err) {
+                    if (err) {
+                        
+                        res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+                        res.render('update-profile.ejs', {
+                            user: user, 
+                            message: 'An Error Occured!, '+err, 
+                            messageSuccess: '',
+                            csrfToken: req.csrfToken(),
+                            title:'Update Profile'
+                        });
+                    } else {
+                        
+                        req.flash('messageSuccess', 'Your Information updated successfully!');
+                        res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+                        res.render('update-profile.ejs', {
+                            user: user,
+                            message: '',
+                            csrfToken: req.csrfToken(),
+                            title:'Update Profile',
+                            messageSuccess: req.flash('messageSuccess')
+                        });
+                    }
+                });
+            }
+        });
+    }else{
+        res.send('email: '+req.user.local.email+' ,username: '+req.user.email);
+//        res.render('update-profile.ejs', {
+//            user: req.user, 
+//            message: 'An Error Occured! Outer', 
+//            csrfToken: req.csrfToken(),
+//            title:'Update Profile',
+//            messageSuccess: ''
+//        });
+    }
+    
 });
 
 /* Route to render user to Go Live page after login process */

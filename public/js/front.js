@@ -58,6 +58,9 @@ jQuery(function() {
             ' menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
     });
     
+    $(document).on('click','.enable_disable_account',function(){
+        angular.element(document.getElementById('enable_disable_account')).scope().enable_disable_account();
+    });
 
     /*Form Validations start here :: SignIn Page*/
     jQuery("#login_form").validate({
@@ -367,11 +370,21 @@ function initialize(userData) {
 //            google.maps.event.addDomListener(window, 'load', initialize);
 
 function setMarkers(userData) {
-    console.log(userData);
-    var locations = [{  "lat":"37.958729",
-                        "lon":"58.384617",
-                        "html":"<img src=\"http:\/\/placehold.it\/350x150\"  style=\"height: 35px;width: 35px;float:left; border: 1px solid;\" class=\"img-circle\"><a href=\"history.php?userId=29\"><h5 style=\"margin: 0;padding-left: 40px;\">Boda Martin<\/h5><\/a><small style=\"margin: 0;padding-left: 5px;\">Ashgabat, Turkmenistan<\/small>",
-                        "name":"Boda Martin"
+    //console.log('userData: '+JSON.stringify(userData));
+    var locations = [{  "lat":"57.015727",
+                        "lon":"-106.498029",
+                        "html":"<img src=\"http:\/\/placehold.it\/350x150\"  style=\"height: 35px;width: 35px;float:left; border: 1px solid;\" class=\"img-circle\"><a href=\"history.php?userId=29\"><h5 style=\"margin: 0;padding-left: 40px;\">Paul Joseph<\/h5><\/a><small style=\"margin: 0;padding-left: 5px;\">Canada<\/small>",
+                        "name":"Paul Joseph"
+                    },
+                    {   "lat":"52.015727",
+                        "lon":"-105.498029",
+                        "html":"<img src=\"http:\/\/placehold.it\/350x150\"  style=\"height: 35px;width: 35px;float:left; border: 1px solid;\" class=\"img-circle\"><a href=\"history.php?userId=29\"><h5 style=\"margin: 0;padding-left: 40px;\">Mohit<\/h5><\/a><small style=\"margin: 0;padding-left: 5px;\">Canada<\/small>",
+                        "name":"Mohit"
+                    },
+                    {   "lat":"59.015727",
+                        "lon":"-108.498029",
+                        "html":"<img src=\"http:\/\/placehold.it\/350x150\"  style=\"height: 35px;width: 35px;float:left; border: 1px solid;\" class=\"img-circle\"><a href=\"history.php?userId=29\"><h5 style=\"margin: 0;padding-left: 40px;\">Manjit<\/h5><\/a><small style=\"margin: 0;padding-left: 5px;\">Canada<\/small>",
+                        "name":"Manjit"
                     }];
     var markersArray = [];
     var infowindow = new google.maps.InfoWindow({content: "temo"});
@@ -396,42 +409,10 @@ function setMarkers(userData) {
             infowindow.open(map, this);
         });
         i++;
-    }
-    );
-}
-
-$(function () {
-    //var scope = angular.element(document.getElementById('homeController')).scope();
-    //scope.drawUsersMap();
-    
-    //scope.$apply(function () {
-    //    var ss = scope.drawUsersMap();
-    //    console.log(JSON.stringify(scope.usersList));
-    //});
-    var widthScreen = $(document).width();
-    if (widthScreen > 768) {
-        if (window.google && google.maps) {
-            console.log(JSON.stringify(scope.usersList));
-            // Map script is already loaded
-            initializeMap();
-        } else {
-            lazyLoadGoogleMap();
-        }
-    }
-});
-
-function lazyLoadGoogleMap() {
-    $.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=initializeMap&key=AIzaSyBREdCE5tRpk40DfZbqhMpTvbrJu1tnoRI")
-    
-        .done(function (script, textStatus) {
-            //alert("Google map script loaded successfully");
-            // 
-        })
-        .fail(function (jqxhr, settings, ex) {
-            //alert("Could not load Google Map script: " + jqxhr);
-        });
+    });
 }
 
 function initializeMap(userData) {
+    
     initialize(userData);
 }
