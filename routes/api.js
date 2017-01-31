@@ -734,29 +734,31 @@ router.post('/update-profile', function(req, res){
 router.post('/search', function(req, res){
     var name = req.body.name;
     console.log('**** **** name: '+name);
-    if( name != "" && name != undefined ){
+    
+if( name != "" && name != undefined ){
         
-        User.aggregate([
-            { 
-                $match: { $or: [ {'local.firstName': { $regex : new RegExp(name, "i") }}, {'local.lastName': name}] } 
-            },
-            {
-                $project : {
-                    '_id':0,
-                    'local.firstName' : 1,
-                    'local.lastName' : 1,
-                    'local.locationCountry' : 1,
-                    'local.locationState' : 1,
-                    'local.locationCity' : 1,
-                    'local.profileImage' : 1,
-                    'local.locationLat'  : 1,
-                    'local.locationLng'  : 1,
-                    'rideType'          : 1,
-                    'rideExperience'    : 1,
-                    'rideCategory'      : 1
-                } 
+        User.aggregate({
+            $project:   { 
+                '_id':0,
+                'local.firstName' : 1,
+                'local.lastName' : 1,
+                'local.locationCountry' : 1,
+                'local.locationState' : 1,
+                'local.locationCity' : 1,
+                'local.profileImage' : 1,
+                'local.locationLat'  : 1,
+                'local.locationLng'  : 1,
+                'rideType'          : 1,
+                'rideExperience'    : 1,
+                'rideCategory'      : 1,
+                name: { 
+                    $concat:    ["$local.firstName"," ","$local.lastName"]
+                }
             }
-        ],function(err, user){
+        }, 
+        {
+            $match: { name: { $regex : new RegExp(name, "ig") } }
+        },function(err, user){
             if(err){
                 res.json({ 
                     success: true,
