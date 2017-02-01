@@ -6,8 +6,8 @@ var randomString = function() {
     return result;
 };
 
-//var websiteUrl = 'http://localhost:2286';
-var websiteUrl = 'http://www.rideprix.com:2286';
+var websiteUrl = 'http://localhost:2286';
+//var websiteUrl = 'http://www.rideprix.com:2286';
 module.exports = {
     websiteUrl        : websiteUrl,
     //error messages
@@ -40,5 +40,17 @@ module.exports = {
         'clientSecret'    : 'db55897a815b7d440644efe084d542f9', // your App Secret
         'callbackURL'     : websiteUrl+'/auth/facebook/callback',
         'profileURL'      : 'https://graph.facebook.com/v2.5/me?fields=first_name,last_name,email'
-    }
+    },
+    
+    //shop section configs
+    cart_title              : "ExpressCart",
+    number_products_index   : 8,
+    base_url                : websiteUrl,
+    flat_shipping           : 10.00,
+    free_shipping_amount    : 100.00,
+    paypal_username         : "mrvautin-facilitator_api1.gmail.com",
+    paypal_password         : "1377492083",
+    paypal_signature        : "AFcWxV21C7fd0v3bYYYRCpSSRl31AhW7RF0gpHVXMlD7LmcPrNwnkEWR",
+    paypal_cart_description : "ExpressCart Payment",
+    paypal_currency         : "USD"
 };

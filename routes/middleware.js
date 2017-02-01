@@ -1,3 +1,4 @@
+var globalConfig    = require('../config/globals.js');
 var loggedInUsers = {};
 module.exports = {
     isLoggedIn: function (req, res, next) {
@@ -80,7 +81,6 @@ module.exports = {
     
     update_total_cart_amount : function(req, res){
         var async = require('async');
-        var config = req.config.get('application');
 
         req.session.total_cart_amount = 0;
         async.each(req.session.cart, function(cart_product, callback) {
@@ -89,8 +89,8 @@ module.exports = {
         });
 
         // under the free shipping threshold
-        if(req.session.total_cart_amount < config.free_shipping_amount){
-            req.session.total_cart_amount = req.session.total_cart_amount + config.flat_shipping;
+        if(req.session.total_cart_amount < globalConfig.free_shipping_amount){
+            req.session.total_cart_amount = req.session.total_cart_amount + globalConfig.flat_shipping;
             req.session.shipping_cost_applied = true;
         }else{
             req.session.shipping_cost_applied = false;
@@ -145,17 +145,16 @@ module.exports = {
     },
     
     order_with_paypal : function(req, res){
-        var config = req.config.get('application');
-        var paypal = require('paypal-express-checkout').init(config.paypal_username, config.paypal_password, config.paypal_signature, config.base_url + '/checkout_return', config.base_url + '/checkout_cancel', true);
+        
+        var paypal = require('paypal-express-checkout').init(globalConfig.paypal_username, globalConfig.paypal_password, globalConfig.paypal_signature, globalConfig.base_url + '/checkout_return', globalConfig.base_url + '/checkout_cancel', true);
 
         // place the order with PayPal
-        paypal.pay(req.session.order_id, req.session.total_cart_amount, config.paypal_cart_description, config.paypal_currency, true, function(err, url) {
+        paypal.pay(req.session.order_id, req.session.total_cart_amount, globalConfig.paypal_cart_description, globalConfig.paypal_currency, true, function(err, url) {
             if (err) {
                 console.error(err);
                 // We have an error so we show the checkout with a message
                 res.render('checkout', { 
                     title: "Checkout", 
-                    config: req.config.get('application'),
                     session: req.session,
                     payment_approved: "false",
                     payment_message: err,

@@ -22,6 +22,7 @@ var dbConfig    = require('./config/database.js');
 var appConfig   = require('./config/appconfig.js');
 var formidable  = require('formidable');
 
+var config      = require('config');
 var app         = express();
 var bodyParser = require('body-parser');
 
@@ -103,6 +104,12 @@ app.use('/', express.static(path.join(__dirname, 'public')));
 //        res.redirect('/update-profile');
 //    }
 //});
+
+// Make stuff accessible to our router
+app.use(function (req, res, next) {
+    req.config = config;
+    next();
+});
 
 app.use('/admin', admin);
 app.use('/product', product);

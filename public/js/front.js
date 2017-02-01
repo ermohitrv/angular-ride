@@ -416,3 +416,18 @@ function initializeMap(userData) {
     
     initialize(userData);
 }
+
+// show notification popup
+function show_notification(msg, type, reload_page){
+    // defaults to false
+    reload_page = reload_page || false;
+   
+    $("#notify_message").removeClass();
+    $("#notify_message").addClass('alert-' + type);
+    $("#notify_message").html(msg);
+    $('#notify_message').slideDown(600).delay(1200).slideUp(600, function() {
+        if(reload_page == true){
+            location.reload();
+        }
+    });
+}

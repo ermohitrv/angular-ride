@@ -7,6 +7,7 @@ var RpRoutes        = require('../models/rproutes');
 var globalConfig    = require('../config/globals.js');
 var nodemailer      = require("nodemailer");
 var friends         = require('../models/friends');
+
 /* API endpoint to be used by mobile device to see all users list */
 router.get('/listusers', function(req, res) {
     User.aggregate([{$sort: {'local.username': 1}}], function (err, usersList) {

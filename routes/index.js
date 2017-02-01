@@ -10,6 +10,11 @@ var csrfProtection  = csrf({ cookie: true })
 var parseForm       = bodyParser.urlencoded({ extended: true })
 var middleware      = require('./middleware');
 
+var globalConfig    = require('../config/globals.js');
+
+/*SHOP section required variables */
+var Products = require('../models/products');
+
 /* Route for homepage */
 router.get('/', function(req, res){
     res.render('index', { user : req.user,title:'Homepage' });
@@ -60,7 +65,6 @@ router.get('/update-profile', csrfProtection, middleware.isLoggedIn, function (r
         messageSuccess: ''
     });
 });
-
 
 // enable/disable user account
 router.post('/enable-disable-account', function (req, res) {
@@ -464,11 +468,224 @@ router.get('/contact', function(req, res){
 // SHOP ROUTES =============================================================
 // =========================================================================
 
+
+
 /* shop route to render logged in user to shop area */
 router.get('/shop', function (req, res) {
+    var number_products = globalConfig.number_products_index ? globalConfig.number_products_index : 8;
     res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-    res.render('shop.ejs', { user: req.user,title:'Shop'});
+    Products.find({product_published:'true'}).limit(number_products).exec(function (err, results) {
+        res.render('shop', { 
+            title: 'Shop', 
+            results: results, 
+            user: req.user,
+            session: req.session,
+            message: middleware.clear_session_value(req.session, "message"),
+            message_type: middleware.clear_session_value(req.session, "message_type"),
+            page_url: globalConfig.base_url
+        });
+    });
 });
+
+/* shop route to render cart page */
+router.get('/cart', function(req, res, next) {
+    console.log('session: '+JSON.stringify(req.session));
+    res.render('cart', { 
+        title: 'Cart', 
+        user: req.user,
+        session: req.session,
+        message: middleware.clear_session_value(req.session, "message"),
+        message_type: middleware.clear_session_value(req.session, "message_type"),
+    });
+});
+
+/* shop route to render cart page */
+router.get('/checkout', function(req, res, next) {
+    
+    // if there is no items in the cart then render a failure
+    if(!req.session.cart){
+        req.session.message = "The are no items in your cart. Please add some items before checking out";
+        req.session.message_type = "danger";
+        res.redirect("/cart");
+        return;
+    }
+    
+    // render the checkout
+    res.render('checkout', { 
+        title: 'Checkout', 
+        session: req.session,
+        user: req.user,
+        message: middleware.clear_session_value(req.session, "message"),
+        message_type: middleware.clear_session_value(req.session, "message_type"),
+    });
+});
+
+
+// The homepage of the site
+router.post('/checkout_action', function(req, res, next) {
+    var config = req.config.get('application');
+    var paypal = require('paypal-express-checkout').init(config.paypal_username, config.paypal_password, config.paypal_signature, config.base_url + '/checkout_return', config.base_url + '/checkout_cancel', true);
+    
+    // if there is no items in the cart then render a failure
+    if(!req.session.cart){
+        req.session.message = "The are no items in your cart. Please add some items before checking out";
+        req.session.message_type = "danger";
+        res.redirect("/cart");
+        return;
+    }
+    
+    // new order doc
+    var order_doc = { 
+        order_total: req.session.total_cart_amount,
+        order_email: req.body.ship_email,
+        order_firstname: req.body.ship_firstname,
+        order_lastname: req.body.ship_lastname,
+        order_addr1: req.body.ship_addr1,
+        order_addr2: req.body.ship_addr2,
+        order_country: req.body.ship_country,
+        order_state: req.body.ship_state,
+        order_postcode: req.body.ship_postcode,
+        order_status: "Processing",
+        order_date: new Date(),
+        order_products: req.session.cart
+    };
+	
+    if(req.session.order_id){
+        // we have an order ID (probably from a failed/cancelled payment previosuly) so lets use that.
+        
+        // send the order to Paypal
+        middleware.order_with_paypal(req, res);
+    }else{
+        // no order ID so we create a new one
+        req.db.orders.insert(order_doc, function (err, newDoc) {
+            // set the order ID in the session
+            req.session.order_id = newDoc._id;
+            
+            // send the order to Paypal
+            middleware.order_with_paypal(req, res);
+        });
+    }
+});
+
+// The homepage of the site
+router.get('/checkout_return', function(req, res, next) {
+    var config = req.config.get('application');
+    var paypal = require('paypal-express-checkout').init(config.paypal_username, config.paypal_password, config.paypal_signature, config.base_url + '/checkout_return', config.base_url + '/checkout_cancel', true);
+    
+    paypal.detail(req.query.token, req.query.PayerID, function(err, data, invoiceNumber, price) {
+        // check if payment is approved
+        var payment_approved = false;
+        var order_id = invoiceNumber;
+        var payment_status = data.PAYMENTSTATUS;
+        
+        // fully approved
+        if(data.PAYMENTSTATUS == "Completed"){
+            payment_approved = true;
+            payment_message = "Your payment was successfully completed";
+            
+            // clear the cart
+            if(req.session.cart){
+                req.session.cart = null;
+                req.session.order_id = null;
+                req.session.total_cart_amount = 0;
+            }
+        }
+        
+        // kinda approved..
+        if(data.PAYMENTSTATUS == "Pending"){
+            payment_approved = true;
+            payment_message = "Your payment was successfully completed";
+            payment_status = data.PAYMENTSTATUS + " - Reason: " + data.PENDINGREASON;
+            
+            // clear the cart
+            if(req.session.cart){
+                req.session.cart = null;
+                req.session.order_id = null;
+                req.session.total_cart_amount = 0;
+            }
+        }
+        
+        // set the paymnet message
+        var payment_message = data.PAYMENTSTATUS + " : " + data.REASONCODE;
+        
+        // on Error, set the message and failure
+        if (err) {
+            payment_approved = false;
+            payment_message = "Error: " + err;
+            if(err = "ACK Failure: Payment has already been made for this InvoiceID."){
+                payment_message = "Error: Duplicate invoice payment. Please check you have not been charged and try again.";
+                if(req.session.cart){
+                    req.session.order_id = null;
+                }
+            }
+        }
+        
+        // catch failure returns
+        if(data.ACK == "Failure"){
+            payment_approved = false;
+            payment_message = "Error: " + data.L_LONGMESSAGE0;
+            if(req.session.cart){
+                req.session.order_id = null;
+            }
+        }
+        
+        // update the order status
+        req.db.orders.update({ _id: invoiceNumber}, { $set: { order_status: payment_status} }, { multi: false }, function (err, numReplaced) {
+            req.db.orders.findOne({ _id: invoiceNumber}, function (err, order) {
+                var lunr_doc = {
+                    order_lastname: order.order_lastname,
+                    order_email: order.order_email,
+                    order_postcode: order.order_postcode,
+                    id: order._id
+                }; 
+                
+                // add to lunr index
+                req.orders_index.add(lunr_doc);
+                
+                // show the view
+                res.render('checkout', { 
+                    title: "Checkout result",
+                    user: req.user,
+                    session: req.session,
+                    payment_approved: payment_approved,
+                    payment_message: payment_message
+                });
+            });
+        });
+    });
+});
+
+
+// The homepage of the site
+router.get('/checkout_cancel', function(req, res, next) {
+    var config = req.config.get('application');
+    var paypal = require('paypal-express-checkout').init(config.paypal_username, config.paypal_password, config.paypal_signature, config.base_url + '/checkout_return', config.base_url + '/checkout_cancel', true);
+    
+    paypal.detail(req.query.token, req.query.PayerID, function(err, data, invoiceNumber, price) {
+        // remove the cancelled order
+        req.db.orders.remove({_id: invoiceNumber}, {}, function (err, numRemoved) {	
+            // clear the order_id from the session so the user can checkout again
+            if(req.session.cart){
+                req.session.order_id = null;
+            }
+            
+            var payment_approved = false;
+            var payment_message = "Error: Your order was cancelled";
+            
+            // show the view
+            res.render('checkout', { 
+                title: "Checkout cancelled", 
+                session: req.session,
+                user: req.user,
+                payment_approved: payment_approved,
+                payment_message: payment_message,
+                message: middleware.clear_session_value(req.session, "message"),
+                message_type: middleware.clear_session_value(req.session, "message_type")
+            });
+        });
+    });
+});
+
 
 /* Test */
 router.get('/test', function (req, res) {
