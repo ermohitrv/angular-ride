@@ -126,6 +126,7 @@ app.controller('productController',['$scope', '$http','$sce', function ($scope, 
         };
         $http.post('/product/addtocart',config).success(function (response, status, headers, config){
             $("#cart-badge").text(response.total_cart_items);
+            alert(response.message);
             console.log(response);
             
         }).error(function(err){
