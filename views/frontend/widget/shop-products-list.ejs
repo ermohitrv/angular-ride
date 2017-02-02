@@ -1,0 +1,29 @@
+<% if( results.length > 0 ){ %>
+<% for(var i = 0; i < results.length; i++){ 
+result = results[i];
+%>
+<div class="col-lg-3 col-md-6 col-md-12">
+    <div class="item">
+        <div class="product">
+            <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left"><i class="glyphicon glyphicon-heart"></i> </a>
+            <div class="image">
+                <div class="quickview">
+                    <a data-toggle="modal" class="btn btn-xs btn-quickview" href="/product/<%= result.product_permalink %>" data-target="">Quick View</a>
+                </div>
+                <a href="/product/<%= result.product_permalink %>"><img src="/images/related_product.jpg" alt="img" class="img-responsive"></a>
+            </div>
+            <div class="description">
+                <h4><a href="/product/<%= result.product_permalink %>"><%= result.product_title %></a></h4>
+                <span class="size">XL / XXL / S </span>
+            </div>
+            <div class="price"><span>$<%= result.product_price %></span></div>
+            <div class="action-control">
+                <a class="btn btn-danger"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a>
+            </div>
+        </div>
+    </div>
+</div>
+<% } %>
+<% }else{ %>
+<dic class="alert alert-danger">No Product found in shop!</dic>
+<% } %>

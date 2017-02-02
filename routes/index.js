@@ -464,28 +464,27 @@ router.get('/about', function(req, res){
 router.get('/contact', function(req, res){ 
     res.render('contact', { user : req.user, title:'Contact' });
 });
+
+
 // =========================================================================
 // SHOP ROUTES =============================================================
 // =========================================================================
-
 
 
 /* shop route to render logged in user to shop area */
 router.get('/shop', function (req, res) {
     var number_products = globalConfig.number_products_index ? globalConfig.number_products_index : 8;
     res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-    Products.find({product_published:'true'}).limit(number_products).exec(function (err, results) {
-        res.render('shop', { 
-            title: 'Shop', 
-            results: results, 
-            user: req.user,
-            session: req.session,
-            message: middleware.clear_session_value(req.session, "message"),
-            message_type: middleware.clear_session_value(req.session, "message_type"),
-            page_url: globalConfig.base_url
-        });
+    res.render('shop', {
+        title: 'Shop', 
+        user: req.user,
+        session: req.session,
+        message: middleware.clear_session_value(req.session, "message"),
+        message_type: middleware.clear_session_value(req.session, "message_type"),
+        page_url: globalConfig.base_url
     });
 });
+
 
 /* shop route to render cart page */
 router.get('/cart', function(req, res, next) {
@@ -494,6 +493,8 @@ router.get('/cart', function(req, res, next) {
         title: 'Cart', 
         user: req.user,
         session: req.session,
+        sessionCart: req.session.cart,
+        sessionCartItemsCount: JSON.stringify(req.session.cart_total_items),
         message: middleware.clear_session_value(req.session, "message"),
         message_type: middleware.clear_session_value(req.session, "message_type"),
     });

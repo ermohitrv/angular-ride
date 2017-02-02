@@ -1503,7 +1503,7 @@ button.continue_shoping, button.checkout_btn {
     border: none!important;
 }
 .sp-wrap {
-    display: none;
+    display: inline-block;
     line-height: 0;
     font-size: 0;
     background: #eee;

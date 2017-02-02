@@ -51,3 +51,14 @@ div#clock-details {display: none;}
 }
 .brdr-all{border: 1px solid #bce8f1;}
 .panel-info { border:1px solid #232F40;}
+.cart-icon-top i{position: relative;font-size: 17px;}
+.cart-icon-top #cart-badge {
+    font-size: 14px;
+    background: #696969;
+    color: #fff;
+    padding: 1px 4px;
+    vertical-align: top;
+    position: absolute;
+    top: 0;
+    left: 20px;
+}

@@ -25,73 +25,80 @@ router.get('/:productslug', function (req, res) {
 
 // show an individual product
 router.get('/:id', function(req, res) {
-    
     console.log('id: '+req.params.id);
-    
-    Products.findOne({ product_permalink: req.params.id }, function (err, result) {
-        // render 404 if page is not published
-        if(result == null || result.product_published == "false"){
-            //res.render('error', { message: '404 - Page not found' });
-            res.send('error: '+err);
-        }else{	
-            var images ="";
-            // show the view
-            //middleware.get_images(result._id, req, res, function (images){
-                res.render('product-detail', { 
-                    title: result.product_title, 
-                    result: result,
-                    images: images,
-                    user: req.user,
-                    product_description: result.product_description,
-                    session: req.session,
-                    message: middleware.clear_session_value(req.session, "message"),
-                    message_type: middleware.clear_session_value(req.session, "message_type"),
-                });
-            //});
+    res.render('product-detail', { 
+        title: " Product Detail", 
+        user: req.user,
+        productId : req.params.id,
+        session: req.session
+    });
+});
+
+/* shop route to render products list called by angular function */
+router.get('/shop/products-list', function (req, res){
+    var number_products = globalConfig.number_products_index ? globalConfig.number_products_index : 8;
+    Products.find({product_published:'true'}).limit(number_products).exec(function (err, results) {
+        if(!err){
+            res.render('widget/shop-products-list',{results: results});
+        }else{
+            res.send(err);
         }
     });
 });
 
-/* shop route to render logged in user to shop area */
-router.get('/list-products', function (req, res) {
-    var number_products = globalConfig.number_products_index ? globalConfig.number_products_index : 8;
-    Products.find({product_published:'true'}).limit(number_products).exec(function (err, results) {
-        if(!err){
-            //res.rend()
+/* shop route to render products list called by angular function */
+router.get('/shop/products-detail/:id', function (req, res){
+    console.log('id: '+req.params.id);
+    Products.findOne({ product_permalink: req.params.id }, function (err, result) {
+        if(result == null || result.product_published == "false"){
+            res.send('error product detail page: '+err);
+        }else{	
+            res.header('Content-Type', 'text/html');
+            res.render('widget/product-detail',{
+                title: result.product_title, 
+                result: result,
+                user: req.user,
+                product_description: result.product_description,
+                session: req.session,
+                message: middleware.clear_session_value(req.session, "message"),
+                message_type: middleware.clear_session_value(req.session, "message_type"),
+            });
         }
-        res.json({ 
-            
-            results: results, 
-        });
-        res.json({ 
-            success: false, 
-            data: {
-                friendRequestSentTo : email,
-                friendRequestApprovalStatus: 'pending'
-            }, 
-            message: "friend request sent to : "+email, 
-            code: 400
-        });
+    });
+});
+
+/* shop route to render related products list called by angular function */
+router.get('/shop/related-products-list', function (req, res){
+    res.header('Content-Type', 'text/html');
+    res.render('widget/related-products',{
+        user: req.user,
+        session: req.session,
+        message: middleware.clear_session_value(req.session, "message"),
+        message_type: middleware.clear_session_value(req.session, "message_type"),
     });
 });
 
 // Admin section
 router.post('/addtocart', function(req, res, next) {	
     var _ = require('underscore');
-    var product_quantity = req.body.product_quantity ? parseInt(req.body.product_quantity): 1;
-    
+    var product_qty = req.body.product_quantity;
+    var product_quantity = req.body.product_quantity ? parseInt(product_qty): 1;
+    var product_id = req.body.params.product_id;
     // setup cart object if it doesn't exist
     if(!req.session.cart){
         req.session.cart = {};
     }
     
-    Products.findOne({_id: req.body.product_id}).exec(function (err, product) {
+    console.log('product_quantity: '+product_id);
+    console.log('product_id: '+product_id);
+    
+    Products.findOne({_id: product_id}).exec(function (err, product) {
         if(product){
             var product_price = parseFloat(product.product_price).toFixed(2);
             // if exists we add to the existing value
-            if(req.session.cart[req.body.product_id]){
-                req.session.cart[req.body.product_id]["quantity"] = req.session.cart[req.body.product_id]["quantity"] + product_quantity;
-                req.session.cart[req.body.product_id]["total_item_price"] = product_price * req.session.cart[req.body.product_id]["quantity"];
+            if(req.session.cart[product_id]){
+                req.session.cart[product_id]["quantity"] = req.session.cart[product_id]["quantity"] + product_quantity;
+                req.session.cart[product_id]["total_item_price"] = product_price * req.session.cart[product_id]["quantity"];
             }else{
                 // Doesnt exist so we add to the cart session
                 req.session.cart_total_items = req.session.cart_total_items + product_quantity;
@@ -122,7 +129,7 @@ router.post('/addtocart', function(req, res, next) {
             req.session.cart_total_items = Object.keys(req.session.cart).length;
             res.status(200).json({message: 'Cart successfully updated', "total_cart_items": Object.keys(req.session.cart).length});
         }else{
-            res.status(400).json({message: 'Error updating cart. Please try again.'});
+            res.status(400).json({message: 'Error updating cart. Please try again. '+err});
         }
     });
 });

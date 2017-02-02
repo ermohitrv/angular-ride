@@ -3,15 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/home/user/Desktop/RidePrix/routes/product.js</file>
             <file>file:/home/user/Desktop/RidePrix/public/js/front.js</file>
-            <file>file:/home/user/Desktop/RidePrix/views/frontend/update-profile.ejs</file>
+            <file>file:/home/user/Desktop/RidePrix/views/frontend/product-detail.ejs</file>
+            <file>file:/home/user/Desktop/RidePrix/routes/middleware.js</file>
             <file>file:/home/user/Desktop/RidePrix/routes/index.js</file>
+            <file>file:/home/user/Desktop/RidePrix/views/frontend/shop.ejs</file>
             <file>file:/home/user/Desktop/RidePrix/routes/api.js</file>
-            <file>file:/home/user/Desktop/RidePrix/views/frontend/create-password.ejs</file>
-            <file>file:/home/user/Desktop/RidePrix/public/js/app.js</file>
+            <file>file:/home/user/Desktop/RidePrix/views/frontend/cart.ejs</file>
+            <file>file:/home/user/Desktop/RidePrix/views/frontend/contact.ejs</file>
             <file>file:/home/user/Desktop/RidePrix/app.js</file>
-            <file>file:/home/user/Desktop/RidePrix/models/user.js</file>
-            <file>file:/home/user/Desktop/RidePrix/views/frontend/deactivateaccount.ejs</file>
+            <file>file:/home/user/Desktop/RidePrix/routes/admin.js</file>
+            <file>file:/home/user/Desktop/RidePrix/views/frontend/layout.ejs</file>
         </group>
     </open-files>
 </project-private>
