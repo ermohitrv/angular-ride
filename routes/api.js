@@ -734,15 +734,15 @@ router.post('/update-profile', function(req, res){
 /* API endpoint to be used by mobile device for updating profile details */
 router.post('/search', function(req, res){
     var name = req.body.name;
-    console.log('**** **** name: '+name);
     
-if( name != "" && name != undefined ){
+    if( name != "" && name != undefined ){
         
         User.aggregate({
             $project:   { 
                 '_id':0,
                 'local.firstName' : 1,
                 'local.lastName' : 1,
+                'local.email' : 1,
                 'local.locationCountry' : 1,
                 'local.locationState' : 1,
                 'local.locationCity' : 1,

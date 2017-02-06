@@ -32,6 +32,29 @@ router.get('/list-products', middleware.isAdminLoggedIn, function(req, res){
     });
 });
 
+/* Route for view user details */
+router.get('/view-user/:id', middleware.isAdminLoggedIn, function(req, res){
+    var id = req.params.id;
+    if(id != null && id != ""){
+        res.render('view-user', { 
+            message : req.flash('message'),
+            message_type : req.flash('message_type'),
+            user : req.user,
+            title:'Admin | List Products',
+            active:'view-user'
+        });
+    }else{
+        res.render('list-users', { 
+            message : req.flash('message'),
+            message_type : req.flash('message_type'),
+            user : req.user,
+            title:'Admin | View User',
+            active:'list-users'
+        });
+    }
+    
+});
+
 /* Route for  List Orders */
 router.get('/list-orders', middleware.isAdminLoggedIn, function(req, res){
     res.render('list-orders', { user : req.user, title:'Admin | List Orders',active:'list-orders'});

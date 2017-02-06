@@ -134,7 +134,7 @@ router.post('/change-password', function(req, res){
                         html = 'Your password updated successfully!';
                         var nodemailer = require("nodemailer");
                         nodemailer.mail({
-                            from   : "RidePrix <no-reply@rideprix.com>",
+                            from   : "RidePrix <info@rideprix.com>",
                             to     : user.local.email,
                             subject: "RidePrix password update notification",
                             html   : html // html body
