@@ -32,26 +32,15 @@ router.get('/list-products', middleware.isAdminLoggedIn, function(req, res){
     });
 });
 
-/* Route for view user details */
+/* Route for viewing user details */
 router.get('/view-user/:id', middleware.isAdminLoggedIn, function(req, res){
-    var id = req.params.id;
-    if(id != null && id != ""){
-        res.render('view-user', { 
-            message : req.flash('message'),
-            message_type : req.flash('message_type'),
-            user : req.user,
-            title:'Admin | View User',
-            active:'view-user'
-        });
-    }else{
-        res.render('list-users', { 
-            message : req.flash('message'),
-            message_type : req.flash('message_type'),
-            user : req.user,
-            title:'Admin | List User',
-            active:'list-users'
-        });
-    }
+    var userId = req.params.id;
+    res.render('view-user', { 
+        user : req.user, 
+        userId : userId,
+        title:'Admin | View User',
+        active:'view-user'
+    });
 });
 
 /* Route for  List Orders */
@@ -74,20 +63,33 @@ router.get('/list-suggestions', middleware.isAdminLoggedIn, function(req, res){
 // ======================== ANGULAR RELATED ROUTES =========================
 // =========================================================================
    
-/* Route for list users */
+/* Route for List Suggestions */
 router.get('/get-users-list', middleware.isAdminLoggedIn, function(req, res){
-    User.findOne({ _id: req.params.id }, function (err, result) {
-        if(result == null){
+    User.aggregate([{$sort: {'local.username': 1}}], function (err, usersList) {
+        if(usersList){
+            res.json(usersList);
+        }else{
             res.json({});
-        }else{	
-            res.json(result);
         }
     });
 });
 
 /* Route for viewing user details */
-router.get('/view-user-detail', middleware.isAdminLoggedIn, function(req, res){
-    
+router.post('/view-user-detail', middleware.isAdminLoggedIn, function(req, res){
+    var user_id = req.body.params.user_id;
+    console.log('user_id: '+user_id);
+    if(user_id != ""){
+        User.findOne({_id: user_id},{'_id':0,'local.password' : 0, accountCreationDate:0, lastActivityTime:0 },
+        function (err, user) {
+            if(user){
+                res.render('widget/view-user-detail',{result: user});
+            }else{
+                res.send(err);
+            }
+        });
+    }else{
+        res.json({null:'0'});
+    }
 });
 
 /* Route for List Products */
