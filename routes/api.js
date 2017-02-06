@@ -810,7 +810,7 @@ router.post('/send-friend-request', function (req, res) {
                                 friendRequestSentTo: friendRequestTo,
                                 friendRequestStatus: 'pending'
                             }, 
-                            message: "friend request sent to : "+friendRequestBy, 
+                            message: "friend request sent to : "+friendRequestTo, 
                             code: 400
                         });
                     } else {
