@@ -807,7 +807,7 @@ router.post('/send-friend-request', function (req, res) {
                             success: true, 
                             data: {
                                 friendRequestSentBy : friendRequestBy,
-                                friendRequestSentTo: friendRequestBy,
+                                friendRequestSentTo: friendRequestTo,
                                 friendRequestStatus: 'pending'
                             }, 
                             message: "friend request sent to : "+friendRequestBy, 

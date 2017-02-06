@@ -40,7 +40,7 @@ router.get('/view-user/:id', middleware.isAdminLoggedIn, function(req, res){
             message : req.flash('message'),
             message_type : req.flash('message_type'),
             user : req.user,
-            title:'Admin | List Products',
+            title:'Admin | View User',
             active:'view-user'
         });
     }else{
@@ -48,11 +48,10 @@ router.get('/view-user/:id', middleware.isAdminLoggedIn, function(req, res){
             message : req.flash('message'),
             message_type : req.flash('message_type'),
             user : req.user,
-            title:'Admin | View User',
+            title:'Admin | List User',
             active:'list-users'
         });
     }
-    
 });
 
 /* Route for  List Orders */
@@ -75,15 +74,20 @@ router.get('/list-suggestions', middleware.isAdminLoggedIn, function(req, res){
 // ======================== ANGULAR RELATED ROUTES =========================
 // =========================================================================
    
-/* Route for List Suggestions */
+/* Route for list users */
 router.get('/get-users-list', middleware.isAdminLoggedIn, function(req, res){
-    User.aggregate([{$sort: {'local.username': 1}}], function (err, usersList) {
-        if(usersList){
-            res.json(usersList);
-        }else{
+    User.findOne({ _id: req.params.id }, function (err, result) {
+        if(result == null){
             res.json({});
+        }else{	
+            res.json(result);
         }
     });
+});
+
+/* Route for viewing user details */
+router.get('/view-user-detail', middleware.isAdminLoggedIn, function(req, res){
+    
 });
 
 /* Route for List Products */
