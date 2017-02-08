@@ -148,7 +148,7 @@ app.controller('shopController',['$scope', '$http', function ($scope, $http) {
 }]);
 
 /********************** admin controller  **********************/
-app.controller('adminController',['$scope', '$http', function ($scope, $http) {
+app.controller('adminController',['$scope', '$http','$sce', function ($scope, $http, $sce) {
     /*function to list users in admin panel*/
     $scope.getUsersList = function(){
         $http.get('/admin/get-users-list').success(function(usersList){
@@ -177,9 +177,53 @@ app.controller('adminController',['$scope', '$http', function ($scope, $http) {
             headers : {'Accept' : 'application/json'}
         };
         $http.post('/admin/view-user-detail',config).success(function (response, status, headers, config){
+            var text = $sce.trustAsHtml(response);
+            $scope.enableAccount = "";
             $scope.userDetailView = response;
         }).error(function(err){
            console.log('Oops! Error occur'+err);
         }); 
+    };
+    
+    /*function to view users in admin panel*/
+    $scope.enableDisableUserAccount = function(username){
+        var data = { 
+            username: username
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/admin/enable-disable-user-account',config).success(function (response, status, headers, config){
+            if(response.enableAccount == true){
+                $scope.enableAccount = 'Enabled';
+            }else{
+                $scope.enableAccount = 'Disabled';
+            }
+            
+        }).error(function(err){ 
+           console.log('Oops! Error occur'+err);
+        }); 
+    };
+}]);
+
+app.directive('bindUnsafeHtml', ['$compile', function ($compile) {
+      return function(scope, element, attrs) {
+          scope.$watch(
+            function(scope) {
+              // watch the 'bindUnsafeHtml' expression for changes
+              return scope.$eval(attrs.bindUnsafeHtml);
+            },
+            function(value) {
+              // when the 'bindUnsafeHtml' expression changes
+              // assign it into the current DOM
+              element.html(value);
+              // compile the new DOM and link it to the current
+              // scope.
+              // NOTE: we only compile .childNodes so that
+              // we don't get into infinite loop compiling ourselves
+              $compile(element.contents())(scope);
+            }
+        );
     };
 }]);

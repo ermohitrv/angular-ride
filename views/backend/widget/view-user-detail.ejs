@@ -14,43 +14,27 @@
         <li class="list-group-item">
           <b>Friends</b> <a class="pull-right">0</a>
         </li>
+        <% if(result.local.userLevel != "ADMIN"){ %>
+        <li class="list-group-item enable-disable-user">
+            <b>Account Enable/Disable </b> 
+            <label class="switch1 pull-right">
+                <input <% if(result.enableAccount == true){ %> checked <% } %> type="checkbox" id="checkbox1" user_id="<%= result.local.username %>">
+                <div class="slider1"></div>
+            </label>
+        </li>
+        <% } %>
         <li class="list-group-item">
-            <a href="<%= result.facebookURL %>" class=""><i class="fa fa-facebook-square"></i></a>
-            <a href="<%= result.twitterURL %>" class=""><i class="fa fa-twitter-square"></i></a>
-            <a href="<%= result.youtubeURL %>" class=""><i class="fa fa-youtube-square"></i></a>
-            <a href="<%= result.skypeUsername %>" class=""><i class="fa fa-skype"></i></a>
-            <a href="<%= result.instagramURL %>" class=""><i class="fa fa-instagram"></i></a>
+            <div class="text-center">
+                <a href="<%= result.facebookURL %>" class="btn btn-social-icon btn-facebook"><i class="fa fa-facebook"></i></a>
+                <a href="<%= result.youtubeURL %>" class="btn btn-social-icon btn-instagram"><i class="fa fa-youtube"></i></a>
+                <a href="<%= result.twitterURL %>" class="btn btn-social-icon btn-twitter"><i class="fa fa-twitter"></i></a>
+                <a href="<%= result.instagramURL %>" class="btn btn-social-icon btn-instagram"><i class="fa fa-instagram"></i></a>
+                <a href="<%= result.skypeUsername %>" class="btn btn-social-icon btn-twitter"><i class="fa fa-skype"></i></a>
+            </div>
         </li>
       </ul>
-<!--      <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>-->
     </div>
   </div>
-  <!--div class="box box-primary">
-    <div class="box-header with-border">
-      <h3 class="box-title">About Me</h3>
-    </div>
-    <div class="box-body">
-      <strong><i class="fa fa-book margin-r-5"></i> Education</strong>
-      <p class="text-muted">
-        B.S. in Computer Science from the University of Tennessee at Knoxville
-      </p>
-      <hr>
-      <strong><i class="fa fa-map-marker margin-r-5"></i> Location</strong>
-      <p class="text-muted">Malibu, California</p>
-      <hr>
-      <strong><i class="fa fa-pencil margin-r-5"></i> Skills</strong>
-      <p>
-        <span class="label label-danger">UI Design</span>
-        <span class="label label-success">Coding</span>
-        <span class="label label-info">Javascript</span>
-        <span class="label label-warning">PHP</span>
-        <span class="label label-primary">Node.js</span>
-      </p>
-      <hr>
-      <strong><i class="fa fa-file-text-o margin-r-5"></i> Notes</strong>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
-    </div>
-  </div-->
 </div>
 <div class="col-md-9">
   <div class="nav-tabs-custom">
@@ -81,11 +65,16 @@
         <li class="list-group-item">
           <b>User Active</b> <a class="pull-right"><%= result.local.userActive %></a>
         </li>
+        <li class="list-group-item">
+          <b>Account Enable</b>
+          <a ng-if="enableAccount == ''"  class="pull-right">
+              <% if(result.enableAccount == true){ %> Enabled <% }else{ %> Disabled<% } %>
+          </a>
+          <a ng-if="enableAccount != ''"  class="pull-right" ng-bind="enableAccount"></a>
+        </li>
       </ul>
       </div>
     </div>
   </div>
-</div>
-<style>
-.social-icons-admin fa{font-size: 22px !important;padding: 5px;}
-</style>           
+</div>         
+

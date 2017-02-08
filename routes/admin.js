@@ -92,6 +92,35 @@ router.post('/view-user-detail', middleware.isAdminLoggedIn, function(req, res){
     }
 });
 
+/* Route for enabling and disabling user account */
+router.post('/enable-disable-user-account', middleware.isAdminLoggedIn, function(req, res){
+    var username = req.body.params.username;
+    console.log('username: '+username);
+    if(username != ""){
+        User.findOne({'local.username': username},
+        function (err, user) {
+            if(user){
+                var newStatus = true;
+                if(user.enableAccount == true){
+                    newStatus = false;
+                }
+                user.enableAccount = newStatus;
+                user.save(function (err) {
+                    if (err) {
+                        res.json({'status':false,'enableAccount':newStatus,'message':err});
+                    } else {
+                        res.json({'status':true,'enableAccount':newStatus,'message':'User Information updated successfully!'});
+                    }
+                });
+            }else{
+                res.json({'status':false,'enableAccount':"",'message':err});
+            }
+        });
+    }else{
+        res.json({'status':false,'enableAccount':"",'message':'username is missing'});
+    }
+});
+
 /* Route for List Products */
 router.get('/get-products-list', middleware.isAdminLoggedIn, function(req, res){
     Products.aggregate([{$sort: {'product_added_date': 1}}], function (err, usersList) {
@@ -382,9 +411,12 @@ router.post('/product/insert', middleware.restrict, function(req, res) {
             productObj.product_title = req.body.frm_product_title;
             productObj.product_price = req.body.frm_product_price;
             productObj.product_description = req.body.frm_product_description;
+            productObj.product_short_description = req.body.frm_product_short_description;
             productObj.product_published = req.body.frm_product_published;
             productObj.product_featured = req.body.frm_product_featured;
+            productObj.product_sku = req.body.frm_product_sku;
             productObj.product_added_date = new Date();
+            productObj.product_category = { "category": req.body.frm_product_category};
             
             productObj.save(function (err) {
                 if(err){

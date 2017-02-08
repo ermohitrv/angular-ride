@@ -7,9 +7,14 @@
             <li class="active">View User</li>
         </ol>
     </section>
-    <section class="content" data-ng-controller="adminController">
+    <section class="content" id="adminController" data-ng-controller="adminController">
         <div class="row" data-ng-init="getUserDetail('<%= userId %>')">
-            <div ng-bind-html="userDetailView"></div>
+            <div bind-unsafe-html="userDetailView"></div>
         </div>
     </section>
 </div>
+<script>
+$(document).on('change','#checkbox1',function() {
+    angular.element(document.getElementById('adminController')).scope().enableDisableUserAccount($(this).attr('user_id'));
+});
+</script>

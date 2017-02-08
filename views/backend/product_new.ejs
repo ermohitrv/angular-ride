@@ -30,6 +30,20 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label for="frm_product_published" class="col-sm-2 control-label">Category</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" required id="frm_product_published" name="frm_product_category">
+                                <option value="">Select</option>
+                                <option value="SuperSport">SuperSport</option>
+                                <option value="Cruiser">Cruiser</option>
+                                <option value="Dual">Dual</option>
+                                <option value="Sport">Sport</option>
+                                <option value="Touring">Touring</option>
+                                <option value="Scooter">Scooter</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="frm_product_title" class="col-sm-2 control-label">Product SKU *</label>
                         <div class="col-sm-6">
                             <input type="text" name="frm_product_sku" class="form-control" minlength="5" maxlength="200" value="{{product_sku}}" required/>

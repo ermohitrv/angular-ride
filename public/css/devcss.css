@@ -62,3 +62,61 @@ div#clock-details {display: none;}
     top: 0;
     left: 20px;
 }
+.enable-disable-user .switch1 {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 20px;
+}
+
+.enable-disable-user .switch1 input {display:none;}
+
+.enable-disable-user .slider1 {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.enable-disable-user .slider1:before {
+    position: absolute;
+    content: "ON";
+    height: 14px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    -webkit-transition: .4s;
+    font-size: 10px;
+    transition: .2s;
+    padding-left: 3px;
+    color:#3c8dbc
+}
+
+.enable-disable-user input:checked + .slider1 {
+  background-color: #2196F3;
+}
+
+.enable-disable-user input:focus + .slider1 {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+.enable-disable-user input:checked + .slider1:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.enable-disable-user .slider1.round {
+  border-radius: 34px;
+}
+
+.enable-disable-user .slider1.round:before {
+  border-radius: 50%;
+}
