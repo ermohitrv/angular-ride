@@ -18,63 +18,63 @@
       </div>
         
       <ul class="sidebar-menu">
-        <li class="treeview <% if(active == "list-users"){ %> active <% } %>">
+        <li class="treeview <% if(active == "list-users" || active == "view-user"){ %> active <% } %>">
           <a href="#">
-            <i class="fa fa-dashboard"></i> <span>Users Management</span>
+            <i class="fa fa-users"></i> <span> Users Management</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li <% if(active == "list-users"){ %> class="active" <% } %>><a href="/admin/list-users"><i class="fa fa-circle-o"></i> List Users</a></li>
+            <li <% if(active == "list-users" || active == "view-user"){ %> class="active" <% } %>><a href="/admin/list-users"><i class="fa fa-list"></i> List Users</a></li>
           </ul>
         </li>
         <li class="treeview <% if(active == "list-products" || active == "add-product"){ %> active <% } %>">
           <a href="#">
-            <i class="fa fa-dashboard"></i> <span>Product Management</span>
+            <i class="fa fa-bicycle"></i> <span>Product Management</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li <% if(active == "list-products"){ %> class="active" <% } %>><a href="/admin/list-products"><i class="fa fa-circle-o"></i> List Products</a></li>
-            <li <% if(active == "add-product"){ %> class="active" <% } %>><a href="/admin/product/new"><i class="fa fa-circle-o"></i> Add Product</a></li>
+            <li <% if(active == "list-products"){ %> class="active" <% } %>><a href="/admin/list-products"><i class="fa fa-list"></i> List Products</a></li>
+            <li <% if(active == "add-product"){ %> class="active" <% } %>><a href="/admin/product/new"><i class="fa fa-plus"></i> Add Product</a></li>
           </ul>
         </li>
-        <li class="treeview <% if(active == "list-orders"){ %> active <% } %>">
+        <li class="treeview <% if(active == "list-orders" || active == "add-brand" || active == "list-brands" ){ %> active <% } %>">
           <a href="#">
-            <i class="fa fa-dashboard"></i> <span>Order Management</span>
+            <i class="fa  fa-shopping-cart"></i> <span>Order Management</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="active treeview-menu">
-            <li <% if(active == "list-orders"){ %> class="active" <% } %>><a href="/admin/list-orders"><i class="fa fa-circle-o"></i> List Orders</a></li>
-            <li>
+            <li <% if(active == "list-orders"){ %> class="active" <% } %>><a href="/admin/list-orders"><i class="fa fa-list"></i> List Orders</a></li>
+            <li <% if(active == "list-brands" || active == "add-brand"){ %> class="active" <% } %>>
                 <a href="#"><i class="fa fa-circle-o"></i>  <span>Brands </span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="/admin/list-brands"><i class="fa fa-circle-o"></i>  List Brands</a></li>
+                    <li <% if(active == "list-brands"){ %> class="active" <% } %>><a href="/admin/list-brands"><i class="fa fa-list"></i>  List Brands</a></li>
 <!--                    <li><a href="#"><i class="fa fa-circle-o"></i>  Featured Brands</a></li>-->
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Add Brand</a></li>
+                    <li <% if(active == "add-brand"){ %> class="active" <% } %>><a href="/admin/brand/new"><i class="fa fa-plus"></i> Add Brand</a></li>
                 </ul>
             </li>
           </ul>
         </li>
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-dashboard"></i> <span>Contact/Suggestion</span>
+            <i class="fa fa-flash"></i> <span>Contact/Suggestion</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="/admin/list-contact-requests"><i class="fa fa-circle-o"></i> List Contact Requests</a></li>
+            <li><a href="/admin/list-contact-requests"><i class="fa fa-list"></i> List Contact Requests</a></li>
             <li class="treeview">
-                <a href="/admin/list-suggestions"><i class="fa fa-circle-o"></i> List Suggestion</a>
+                <a href="/admin/list-suggestions"><i class="fa fa-list"></i> List Suggestion</a>
             </li>
           </ul>
         </li>

@@ -3,17 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/user/Desktop/RidePrix/views/backend/list-users.ejs</file>
             <file>file:/home/user/Desktop/RidePrix/routes/product.js</file>
             <file>file:/home/user/Desktop/RidePrix/routes/api.js</file>
-            <file>file:/home/user/Desktop/RidePrix/views/backend/view-user.ejs</file>
-            <file>file:/home/user/Desktop/RidePrix/views/frontend/shop.ejs</file>
-            <file>file:/home/user/Desktop/RidePrix/views/backend/widget/view-user-detail.ejs</file>
+            <file>file:/home/user/Desktop/RidePrix/public/css/devcss.css</file>
             <file>file:/home/user/Desktop/RidePrix/views/backend/product_new.ejs</file>
-            <file>file:/home/user/Desktop/RidePrix/public/js/app.js</file>
             <file>file:/home/user/Desktop/RidePrix/models/products.js</file>
+            <file>file:/home/user/Desktop/RidePrix/models/user.js</file>
             <file>file:/home/user/Desktop/RidePrix/routes/admin.js</file>
-            <file>file:/home/user/Desktop/RidePrix/views/frontend/widget/product-detail.ejs</file>
         </group>
     </open-files>
 </project-private>

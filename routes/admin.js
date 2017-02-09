@@ -14,6 +14,7 @@ var globalConfig    = require('../config/globals');
 
 /*SHOP section required variables */
 var Products = require('../models/products');
+var Brands = require('../models/brands');
 
 
 /* Route for List Users */
@@ -29,6 +30,17 @@ router.get('/list-products', middleware.isAdminLoggedIn, function(req, res){
         user : req.user, 
         title:'Admin | List Products',
         active:'list-products'
+    });
+});
+
+/* Route for List Brands */
+router.get('/list-brands', middleware.isAdminLoggedIn, function(req, res){
+    res.render('list-brands', { 
+        message : req.flash('message'),
+        message_type : req.flash('message_type'),
+        user : req.user, 
+        title:'Admin | List Brands',
+        active:'list-brands'
     });
 });
 
@@ -68,6 +80,17 @@ router.get('/get-users-list', middleware.isAdminLoggedIn, function(req, res){
     User.aggregate([{$sort: {'local.username': 1}}], function (err, usersList) {
         if(usersList){
             res.json(usersList);
+        }else{
+            res.json({});
+        }
+    });
+});
+
+/* Route for List Suggestions */
+router.get('/get-brands-list', middleware.isAdminLoggedIn, function(req, res){
+    Brands.find({'brand_title':{$ne:null}},{_id:0,brand_title:1,brand_description:1,brand_added_date:1},function (err, brandsList) {
+        if(brandsList){
+            res.json(brandsList);
         }else{
             res.json({});
         }
@@ -121,17 +144,29 @@ router.post('/enable-disable-user-account', middleware.isAdminLoggedIn, function
     }
 });
 
-/* Route for List Products */
+/* Route for List Products by Angular */
 router.get('/get-products-list', middleware.isAdminLoggedIn, function(req, res){
-    Products.aggregate([{$sort: {'product_added_date': 1}}], function (err, usersList) {
-        if(usersList){
-            res.json(usersList);
+    Products.aggregate([{$sort: {'product_added_date': 1}}], function (err, productsList) {
+        if(productsList){
+            res.json(productsList);
         }else{
             res.json({});
         }
     });
 });
 
+/* Route for List Brands by Angular */
+router.get('/get-brands-list', middleware.isAdminLoggedIn, function(req, res){
+    Brands.aggregate([{$sort: {'brand_added_date': 1}}], function (err, brandsList) {
+        if(brandsList){
+            res.json(brandsList);
+        }else{
+            res.json({});
+        }
+    });
+});
+
+/* Route delete user by Angular */
 router.post('/delete-user/', middleware.isAdminLoggedIn, function (req, res) {
     var fs = require('fs.extra');
     User.findOne({'_id': req.body.uid}, function (err, user) {
@@ -147,7 +182,6 @@ router.post('/delete-user/', middleware.isAdminLoggedIn, function (req, res) {
                     res.send('error');
                 }
             }); // end 
-
         }
     });
 });
@@ -376,47 +410,69 @@ router.get('/products/filter/:search', middleware.restrict, function(req, res, n
 	});
 });
 
-// insert form
+// insert product form
 router.get('/product/new', middleware.restrict, function(req, res) {
-	res.render('product_new', {
-            title: 'New product', 
-            session: req.session,
-            product_title: middleware.clear_session_value(req.session, "product_title"),
-            product_description: middleware.clear_session_value(req.session, "product_description"),
-            product_price: middleware.clear_session_value(req.session, "product_price"),
-            product_permalink: middleware.clear_session_value(req.session, "product_permalink"),
-            message: middleware.clear_session_value(req.session, "message"),
-            message_type: middleware.clear_session_value(req.session, "message_type"),
-            editor: true,
-            user:req.user,
-            active:'add-product'
-            //helpers: req.handlebars.helpers,
-            //config: req.config.get('application')
-	});
+    res.render('product_new', {
+        title: 'New product', 
+        session: req.session,
+        product_title: middleware.clear_session_value(req.session, "product_title"),
+        product_description: middleware.clear_session_value(req.session, "product_description"),
+        product_price: middleware.clear_session_value(req.session, "product_price"),
+        product_permalink: middleware.clear_session_value(req.session, "product_permalink"),
+        message: middleware.clear_session_value(req.session, "message"),
+        message_type: middleware.clear_session_value(req.session, "message_type"),
+        editor: true,
+        user:req.user,
+        active:'add-product'
+    });
 });
 
 // insert new product form action
 router.post('/product/insert', middleware.restrict, function(req, res) {
+    
+//    console.log('product_category: '+product_category);
+//    console.log('product_brand: '+product_brand);
+//    console.log('product_size: '+product_size);
+    
     Products.count({'product_permalink': req.body.frm_product_permalink}, function (err, product) {
         if(product > 0 && req.body.frm_product_permalink != ""){
 
             req.flash('message', globalConfig.productExists);
             req.flash('message_type','danger');
-                    
             // redirect to insert
             res.redirect('/admin/insert');
         }else{
+            
+            var product_category,product_brand,product_size = ""; 
+            for (var key in req.body) {
+                item = req.body[key];
+                if(key.indexOf('frm_product_category') != -1){
+                    product_category = item;
+                }
+                if(key.indexOf('frm_product_brand') != -1){
+                    product_brand = item;
+                }
+                if(key.indexOf('frm_product_size') != -1){
+                    product_size = item;
+                }
+            }
+            
             var productObj = new Products();
-            productObj.product_permalink = req.body.frm_product_permalink;
-            productObj.product_title = req.body.frm_product_title;
-            productObj.product_price = req.body.frm_product_price;
-            productObj.product_description = req.body.frm_product_description;
+            productObj.product_permalink    = req.body.frm_product_permalink;
+            productObj.product_title        = req.body.frm_product_title;
+            productObj.product_price        = req.body.frm_product_price;
+            productObj.product_description  = req.body.frm_product_description;
             productObj.product_short_description = req.body.frm_product_short_description;
-            productObj.product_published = req.body.frm_product_published;
-            productObj.product_featured = req.body.frm_product_featured;
-            productObj.product_sku = req.body.frm_product_sku;
-            productObj.product_added_date = new Date();
-            productObj.product_category = { "category": req.body.frm_product_category};
+            productObj.product_published    = req.body.frm_product_published;
+            productObj.product_featured     = req.body.frm_product_featured;
+            productObj.product_sku          = req.body.frm_product_sku;
+            productObj.product_added_date   = new Date();
+            productObj.product_rating       = 0;
+            productObj.product_category     = product_category;
+            productObj.product_brand        = product_brand;
+            productObj.product_size         = product_size;
+            
+            console.log('productObj: '+productObj);
             
             productObj.save(function (err) {
                 if(err){
@@ -554,6 +610,54 @@ router.get('/product/delete/:id', middleware.restrict, function(req, res) {
                 res.redirect('/admin/list-products');
             });
   	});
+});
+
+// insert brand form
+router.get('/brand/new', middleware.restrict, function(req, res) {
+    res.render('brand_new', {
+        title: 'New brand', 
+        session: req.session,
+        brand_title: middleware.clear_session_value(req.session, "brand_title"),
+        brand_description: middleware.clear_session_value(req.session, "brand_description"),
+        brand_permalink: middleware.clear_session_value(req.session, "brand_permalink"),
+        message: middleware.clear_session_value(req.session, "message"),
+        message_type: middleware.clear_session_value(req.session, "message_type"),
+        editor: true,
+        user:req.user,
+        active:'add-brand'
+    });
+});
+
+// insert new brand form action
+router.post('/brand/insert', middleware.restrict, function(req, res) {
+    Brands.count({'brand_permalink': req.body.frm_brand_permalink}, function (err, brand) {
+        if(brand > 0 && req.body.frm_brand_permalink != ""){
+            req.flash('message', globalConfig.brandExists);
+            req.flash('message_type','danger');
+            res.redirect('/admin/insert'); // redirect to insert
+        }else{
+            var brandObj                = new Brands();
+            brandObj.brand_title        = req.body.frm_brand_title;
+            brandObj.brand_permalink    = req.body.frm_brand_permalink;
+            brandObj.brand_image        = req.body.frm_brand_image;
+            brandObj.brand_description  = req.body.frm_brand_description;
+            brandObj.brand_added_date   = new Date();
+            
+            console.log('brandObj: '+brandObj);
+            brandObj.save(function (err) {
+                if(err){
+                    console.error("Error inserting document: " + err);
+                    req.flash('message', globalConfig.brandCreateError+' '+err);
+                    req.flash('message_type','danger');
+                    res.redirect('/admin/insert');
+                }else{
+                    req.flash('message', globalConfig.brandCreateSuccess);
+                    req.flash('message_type','success');
+                    res.redirect('/admin/list-brands');
+                }
+            });
+        }
+    });
 });
 
 // users

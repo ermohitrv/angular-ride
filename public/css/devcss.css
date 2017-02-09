@@ -120,3 +120,5 @@ div#clock-details {display: none;}
 .enable-disable-user .slider1.round:before {
   border-radius: 50%;
 }
+.skin-blue .treeview-menu>li.active>a{color: #f39c12!important;}
+.product-title{text-align: left;}

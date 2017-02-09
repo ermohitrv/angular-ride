@@ -6,8 +6,8 @@ var randomString = function() {
     return result;
 };
 
-var websiteUrl = 'http://localhost:2286';
-//var websiteUrl = 'http://www.rideprix.com:2286';
+//var websiteUrl = 'http://localhost:2286';
+var websiteUrl = 'http://www.rideprix.com:2286';
 module.exports = {
     websiteUrl        : websiteUrl,
     //error messages
@@ -30,6 +30,10 @@ module.exports = {
     productCreateSuccess : "New product successfully created",
     productCreateError: "Error occured while creating product!",
     productExists:"Permalink already exists. Pick a new one.",
+    
+    brandCreateSuccess : "New brand successfully created",
+    brandCreateError: "Error occured while creating brand!",
+    brandExists:"Permalink already exists. Pick a new one.",
     
     //signup email message
     signUpEmailMessageHeader: '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700" rel="stylesheet" type="text/css"><title>RidePrix SignUp</title><style type="text/css"> body{ margin:0; padding:0;}</style></head><body><table cellpadding="0" style="border: 1px solid #dcdcdc;max-width:100%;font-family: "Open Sans", sans-serif; width:1200px; margin:0 auto;"><tbody><tr><td><table cellpadding="0" bgcolor="#557da1" width="100%"><tbody><tr><td><h3 style="text-align:center;"><img alt="RidePrix" title="RidePrix" src="'+websiteUrl+'/public/images/resize_logo_full.png"></h3></td></tr></tbody></table></td></tr>',

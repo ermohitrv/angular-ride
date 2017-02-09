@@ -1,6 +1,6 @@
 <% layout('layoutAdmin') -%>
 <!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
+<div class="content-wrapper" data-ng-controller="adminController">
     <section class="content-header">
       <h1>
         Add Product
@@ -10,98 +10,127 @@
         <li class="active">Add Product</li>
       </ol>
     </section>
-    <section class="content">
+    <section class="content" data-ng-init="getBrandsList()">
+        <span class="brandslist" style="display:none;" ng-repeat="item in brandsList | filter:search:true">{{item.brand_title}}{{ $last ? '' : ($index==brandsList.length-2) ? ', ' : ', '}}</span>
         <div class="row">
-        <div class="col-lg-12">
-            <div class="box">
+            <div class="col-lg-12">
+                <div class="box">
                     <div class="box-body">
-            <form method="post" class="form-horizontal" id="insert_form" action="/admin/product/insert" data-toggle="validator">
-                <div class="col-lg-12">
-                    <div class="page-header">
-                        <div class="pull-right">
-                            <button id="frm_edit_product_save" class="btn btn-success" type="submit">Submit <i class="fa fa-plus"></i></button>
-                        </div>
-                        <h2>New product</h2>
-                    </div>
-                    <div class="form-group">
-                        <label for="frm_product_title" class="col-sm-2 control-label">Product title *</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="frm_product_title" class="form-control" minlength="5" maxlength="200" value="{{product_title}}" required/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="frm_product_published" class="col-sm-2 control-label">Category</label>
-                        <div class="col-sm-6">
-                            <select class="form-control" required id="frm_product_published" name="frm_product_category">
-                                <option value="">Select</option>
-                                <option value="SuperSport">SuperSport</option>
-                                <option value="Cruiser">Cruiser</option>
-                                <option value="Dual">Dual</option>
-                                <option value="Sport">Sport</option>
-                                <option value="Touring">Touring</option>
-                                <option value="Scooter">Scooter</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="frm_product_title" class="col-sm-2 control-label">Product SKU *</label>
-                        <div class="col-sm-6">
-                            <input type="text" name="frm_product_sku" class="form-control" minlength="5" maxlength="200" value="{{product_sku}}" required/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="frm_product_price" class="col-sm-2 control-label">Product price *</label>
-                        <div class="col-sm-6">
-                            <div class="input-group">
-                                <span class="input-group-addon">$</span>
-                                <input type="number" name="frm_product_price" class="form-control" value="{{product_price}}" required/>
+                        <form method="post" class="form-horizontal" id="insert_form" action="/admin/product/insert" data-toggle="validator">
+                            <div class="col-lg-12">
+                                <div class="page-header">
+                                    <div class="pull-right">
+                                        <button id="frm_edit_product_save" class="btn btn-success" type="submit">Submit <i class="fa fa-plus"></i></button>
+                                    </div>
+                                    <h2>New product</h2>
+                                </div>
+                                <div class="form-group">
+                                    <label for="frm_product_title" class="col-sm-2 control-label">Product title *</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="frm_product_title" id="frm_product_title" class="form-control" minlength="5" maxlength="200" value="" required/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="frm_product_published" class="col-sm-2 control-label">Category *</label>
+                                    <div class="col-sm-6">
+                                        <div id="magicsuggest-category"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="frm_product_published" class="col-sm-2 control-label">Brand *</label>
+                                    <div class="col-sm-6">
+                                        <div id="magicsuggest-brand"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="frm_product_size" class="col-sm-2 control-label">Size *</label>
+                                    <div class="col-sm-6">
+                                        <div id="magicsuggest-size"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="frm_product_title" class="col-sm-2 control-label">Product SKU *</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="frm_product_sku" class="form-control" minlength="5" maxlength="200" value="" required/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="frm_product_price" class="col-sm-2 control-label">Product price *</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">$</span>
+                                            <input type="number" name="frm_product_price" class="form-control" value="" required/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="frm_product_published" class="col-sm-2 control-label">Status</label>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" id="frm_product_published" name="frm_product_published">
+                                            <option value="true" selected>Published</option>
+                                            <option value="false">Draft</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="frm_product_published" class="col-sm-2 control-label">Featured</label>
+                                    <div class="col-sm-10">
+                                        <input type="checkbox" id="frm_product_featured" name="frm_product_featured">
+                                    </div>
+                                </div>
+                                <div class="form-group" id="editor-wrapper">
+                                    <label for="editor" class="col-sm-2 control-label">Product short description (Markdown) *</label>
+                                    <div class="col-sm-10">
+                                        <textarea id="editor" minlength="2" rows="5" name="frm_product_short_description" class="form-control" required></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="editor-wrapper">
+                                    <label for="editor" class="col-sm-2 control-label">Product description (Markdown) *</label>
+                                    <div class="col-sm-10">
+                                        <textarea id="editor" minlength="5" rows="10" name="frm_product_description" class="form-control" required></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Permalink</label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group" style="width:100%">
+                                            <input type="text"  disabled="disabled" class="form-control" name="frm_product_permalink" id="frm_product_permalink"  placeholder="Permalink for the product" value="">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="frm_product_published" class="col-sm-2 control-label">Status</label>
-                        <div class="col-sm-6">
-                            <select class="form-control" id="frm_product_published" name="frm_product_published">
-                                <option value="true" selected>Published</option>
-                                <option value="false">Draft</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="frm_product_published" class="col-sm-2 control-label">Featured</label>
-                        <div class="col-sm-10">
-                            <input type="checkbox" id="frm_product_featured" {{#ifCond result.product_featured "==" "on"}}checked{{/ifCond}} name="frm_product_featured">
-                        </div>
-                    </div>
-                    <div class="form-group" id="editor-wrapper">
-                        <label for="editor" class="col-sm-2 control-label">Product short description (Markdown) *</label>
-                        <div class="col-sm-10">
-                            <textarea id="editor" minlength="2" rows="5" name="frm_product_short_description" class="form-control" required>{{product_short_description}}</textarea>
-                        </div>
-                    </div>
-                    <div class="form-group" id="editor-wrapper">
-                        <label for="editor" class="col-sm-2 control-label">Product description (Markdown) *</label>
-                        <div class="col-sm-10">
-                            <textarea id="editor" minlength="5" rows="10" name="frm_product_description" class="form-control" required>{{product_description}}</textarea>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">Permalink</label>
-                        <div class="col-sm-10">
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="frm_product_permalink" id="frm_product_permalink" placeholder="Permalink for the article" value={{product_permalink}}>
-                                <span class="input-group-btn">
-                                    <button class="btn btn-success" id="validate_permalink" type="button">Validate</button>
-                                    <button class="btn btn-warning" id="generate_permalink" type="button">Generate</button>
-                                </span>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
-            </form>
-                        </div>
-                </div>
+            </div>
         </div>
-             </div>
     </section>
 </div>
+<script>
+$(function() {
+    var ms_category =  $('#magicsuggest-category').magicSuggest({
+        placeholder: 'Type category name...',
+        name: 'frm_product_category',
+        data: ['SuperSport', 'Cruiser', 'Dual', 'Sport', 'Touring', 'Scooter']
+    });
+    ms_category.setName('frm_product_category');
+    
+    setTimeout(function(){
+        var brandslist = $('.brandslist').text().split(',');
+        var ms_brand =  $('#magicsuggest-brand').magicSuggest({
+            placeholder: 'Type brand name...',
+            name: 'frm_product_brand',
+            data: brandslist
+        });
+        ms_brand.setName('frm_product_brand');
+    },1000);
+    
+    var ms_size =  $('#magicsuggest-size').magicSuggest({
+        placeholder: 'Type size name...',
+        name: 'frm_product_size',
+        data: ['Small', 'Medium', 'Large', 'X-Large', '2X-Large', '3X-Large']
+    });
+    ms_size.setName('frm_product_size');
+});
+</script>

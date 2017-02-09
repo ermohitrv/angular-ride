@@ -100,7 +100,7 @@ app.controller('productController',['$scope', '$http','$sce', function ($scope, 
             var text = $sce.trustAsHtml(view);
             $scope.productDetailView = text;
         }).error(function(){
-            console.log('Oops! Error listing get-users-list');
+            console.log('Oops! Error listing products-detail');
         });
     };
     
@@ -109,7 +109,7 @@ app.controller('productController',['$scope', '$http','$sce', function ($scope, 
         $http.get('/product/shop/related-products-list').success(function(view){
             $scope.relatedProductsView = view;
         }).error(function(){
-            console.log('Oops! Error listing get-users-list');
+            console.log('Oops! Error listing related-products-list');
         });
     };
     
@@ -142,7 +142,7 @@ app.controller('shopController',['$scope', '$http', function ($scope, $http) {
         $http.get('/product/shop/products-list').success(function(view){
             $scope.shopProductsListView = view;
         }).error(function(){
-            console.log('Oops! Error listing get-users-list');
+            console.log('Oops! Error listing products-list');
         });
     };
 }]);
@@ -164,6 +164,15 @@ app.controller('adminController',['$scope', '$http','$sce', function ($scope, $h
             $scope.productsList = productsList;
         }).error(function(){
             console.log('Oops! Error listing get-users-list');
+        });
+    };
+    
+    /*function to list brands in admin panel*/
+    $scope.getBrandsList = function(){
+        $http.get('/admin/get-brands-list').success(function(brandsList){
+            $scope.brandsList = brandsList;
+        }).error(function(){
+            console.log('Oops! Error listing get-brands-list');
         });
     };
     
