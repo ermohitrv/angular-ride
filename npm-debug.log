@@ -1,35 +1,33 @@
 0 info it worked if it ends with ok
-1 verbose cli [ '/home/user/.nvm/versions/node/v6.9.4/bin/node',
-1 verbose cli   '/home/user/.nvm/versions/node/v6.9.4/bin/npm',
-1 verbose cli   'start' ]
-2 info using npm@3.10.10
-3 info using node@v6.9.4
+1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'start' ]
+2 info using npm@4.1.2
+3 info using node@v7.5.0
 4 verbose run-script [ 'prestart', 'start', 'poststart' ]
 5 info lifecycle RidePrix@1.0.0~prestart: RidePrix@1.0.0
 6 silly lifecycle RidePrix@1.0.0~prestart: no script for prestart, continuing
 7 info lifecycle RidePrix@1.0.0~start: RidePrix@1.0.0
 8 verbose lifecycle RidePrix@1.0.0~start: unsafe-perm in lifecycle true
-9 verbose lifecycle RidePrix@1.0.0~start: PATH: /home/user/.nvm/versions/node/v6.9.4/lib/node_modules/npm/bin/node-gyp-bin:/home/user/Desktop/RidePrix/node_modules/.bin:/home/user/.nvm/versions/node/v6.9.4/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
-10 verbose lifecycle RidePrix@1.0.0~start: CWD: /home/user/Desktop/RidePrix
+9 verbose lifecycle RidePrix@1.0.0~start: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/var/www/html/rideprix/node_modules/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin
+10 verbose lifecycle RidePrix@1.0.0~start: CWD: /var/www/html/rideprix
 11 silly lifecycle RidePrix@1.0.0~start: Args: [ '-c', 'node ./app.js' ]
 12 silly lifecycle RidePrix@1.0.0~start: Returned: code: 1  signal: null
 13 info lifecycle RidePrix@1.0.0~start: Failed to exec start script
 14 verbose stack Error: RidePrix@1.0.0 start: `node ./app.js`
 14 verbose stack Exit status 1
-14 verbose stack     at EventEmitter.<anonymous> (/home/user/.nvm/versions/node/v6.9.4/lib/node_modules/npm/lib/utils/lifecycle.js:255:16)
+14 verbose stack     at EventEmitter.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/lifecycle.js:279:16)
 14 verbose stack     at emitTwo (events.js:106:13)
-14 verbose stack     at EventEmitter.emit (events.js:191:7)
-14 verbose stack     at ChildProcess.<anonymous> (/home/user/.nvm/versions/node/v6.9.4/lib/node_modules/npm/lib/utils/spawn.js:40:14)
+14 verbose stack     at EventEmitter.emit (events.js:192:7)
+14 verbose stack     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/spawn.js:40:14)
 14 verbose stack     at emitTwo (events.js:106:13)
-14 verbose stack     at ChildProcess.emit (events.js:191:7)
-14 verbose stack     at maybeClose (internal/child_process.js:877:16)
+14 verbose stack     at ChildProcess.emit (events.js:192:7)
+14 verbose stack     at maybeClose (internal/child_process.js:890:16)
 14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:226:5)
 15 verbose pkgid RidePrix@1.0.0
-16 verbose cwd /home/user/Desktop/RidePrix
-17 error Linux 3.19.0-61-generic
-18 error argv "/home/user/.nvm/versions/node/v6.9.4/bin/node" "/home/user/.nvm/versions/node/v6.9.4/bin/npm" "start"
-19 error node v6.9.4
-20 error npm  v3.10.10
+16 verbose cwd /var/www/html/rideprix
+17 error Linux 3.19.0-25-generic
+18 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "start"
+19 error node v7.5.0
+20 error npm  v4.1.2
 21 error code ELIFECYCLE
 22 error RidePrix@1.0.0 start: `node ./app.js`
 22 error Exit status 1

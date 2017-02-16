@@ -93,7 +93,7 @@
                         <div class="outter">
                             <% if(user.local.profileImage !== undefined && user.local.profileImage !== null && user.local.profileImage !== ""){ %>
                             <img alt="<%= user.local.firstName %>" class="image-circle"
-                                 src="<%= user.local.profileImage %>">
+                                 src="/public/uploads/<%= user.local.profileImage %>">
                             <% }else{ %>
                             <img alt="<%= user.local.firstName %>" class="img-circle" src="images/chill_out.png">
                             <% } %>
@@ -536,7 +536,7 @@
                     <div class="form-group">
                         <div class="col-sm-5">
                             <% if(user.local.profileImage !== undefined && user.local.profileImage !== null && user.local.profileImage !== ""){ %>
-                            <img src="<%= user.local.profileImage %>" class="image-circle">
+                            <img src="/public/uploads/<%= user.local.profileImage %>" class="image-circle">
                             <% } %>
                         </div>
                         <div class="col-sm-7">

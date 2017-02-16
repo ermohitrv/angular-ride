@@ -36,7 +36,7 @@
                 <% if (user !== undefined && user !== null) {  %>
                  <div class="dropdown">
                   <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                    <img style="width: 30px;" class="img-circle" src="<%= user.local.profileImage %>">
+                    <img style="width: 30px;" class="img-circle" src="/public/uploads/<%= user.local.profileImage %>">
                     <span class="name"><%= user.local.firstName +' '+ user.local.lastName %></span>
                     <b class="caret"></b>
                   </a>

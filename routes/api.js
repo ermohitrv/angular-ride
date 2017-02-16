@@ -122,6 +122,89 @@ router.post('/submit-user-rating', function(req, res){
     }
 });
 
+//router.post('/submit-user-rating', function(req, res){
+//    var rating      = req.body.rating;
+//    var ratingBy    = req.body.ratingBy;
+//    var ratingTo    = req.body.ratingTo;
+//    var Userrating  = require('../models/userrating');
+//    
+//    if( ( rating != "" && rating != undefined ) && ( ratingBy != "" && ratingBy != undefined ) && ( ratingTo != "" && ratingTo != undefined ) ){
+//        
+//        var usermames = [];
+//        usermames[0] = ratingBy;
+//        usermames[1] = ratingTo;
+//        
+//        User.find({ 'local.email': { $in: usermames }},function(err,user){
+//            if (!err){
+//                var userLength = user.length;
+//                if(userLength > 1){
+//                UserRating.find({ 'ratingTo': ratingTo, 'ratingBy': ratingBy},function(err,newUserRating){
+//                    if(!userrating){
+//                    var newUserRating       = new Userrating();
+//                    newUserRating.rating    = rating;
+//                    newUserRating.ratingBy  = ratingBy;
+//                    newUserRating.ratingTo  = ratingTo;
+//                    }else{
+//                        newUserRating.rating    = rating;
+//                        newUserRating.ratingBy  = ratingBy;
+//                        newUserRating.ratingTo  = ratingTo;
+//                    }
+//                    newUserRating.save(function(err){
+//                        
+//                        if(err){
+//                            res.json({ 
+//                                success: false, 
+//                                data: null, 
+//                                message: "error occured while adding rating, "+err, 
+//                                code: 404
+//                            });
+//                        }else{
+//                            res.json({
+//                                success: true, 
+//                                data: {
+//                                    rating : rating,
+//                                    ratingBy : ratingBy,
+//                                    ratingTo : ratingTo
+//                                },
+//                                message: "rating updated successfully!", 
+//                                code: 200
+//                            });
+//                        }
+//                        
+//                    });
+//                });
+//                }else{
+//                    
+//                    res.json({ 
+//                        success: false, 
+//                        data: null, 
+//                        message: "ratingTo or ratingBy email does not exists in database, please check again!", 
+//                        code: 404
+//                    });
+//                    
+//                }
+//                
+//            }else{
+//                res.json({ 
+//                    success: false, 
+//                    data: null, 
+//                    message: err, 
+//                    code: 404
+//                });
+//            }
+//        });
+//        
+//    }else{
+//        
+//        res.json({ 
+//            success: false, 
+//            data: null, 
+//            message: "missing parameters", 
+//            code: 400
+//        });
+//        
+//    }
+//});
 /* API endpoint to be used by mobile device to send locaction(lat,lng) on new location */
 router.post('/mylocaction', function(req, res){
     var email = req.body.email;
@@ -649,7 +732,7 @@ router.post('/change-password', function(req, res){
 
 /* API endpoint to be used by mobile device for updating profile details */
 router.post('/update-profile', function(req, res){
-    
+    console.log("sdsdsd");
     var email = req.body.email;
     console.log('**** **** email: '+email);
     
@@ -878,6 +961,76 @@ router.get('/new-friend-request', function(req, res){
         });
     }
 
+});
+
+/* API end point to facebook users  */
+router.get('/facebook-create-user', function (req, res) {
+     //console.log(req.user);
+     //var facebookemail = req.user.facebook.email;
+     var facebook_id =   req.user.facebook.id;
+     var username = req.user.local.username;
+     var profileImage = req.user.local.profileImage;
+     var email = req.user.local.email;
+     
+     console.log(username+" "+email);
+     if(email != "" && email != undefined){
+        User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function(err, user) {
+            // if there are any errors, return the error
+            if (err) {
+                console.log("error caught 1");
+                res.json({ 
+                    success: false, 
+                    data: null, 
+                    message: err, 
+                    code: 400
+                });
+            }
+            else{
+                // if there is no user with that email
+                // create the user
+                var newUser                     = new User();
+                newUser.local.username          = username;
+                newUser.local.email             = email;
+                newUser.local.userLevel         = 'NORMAL';    //default to NORMAL
+                newUser.local.userActive        = 'ACTIVE';    //default to ACTIVE
+                newUser.local.token             = globalConfig.randomString;
+                newUser.local.profileImage      = profileImage;
+                
+        	// save the user
+                newUser.save(function(err){
+                    if (err){
+                        console.log("error caught 3");
+                        res.json({ 
+                            success: false, 
+                            data: null, 
+                            message: err, 
+                            code: 400
+                        });
+                    }else{
+                        res.json({ 
+                            success: true,
+                            data: 
+                                {
+                                    username        :username,
+                                    email           :email,
+                                   
+                                },
+                            message: globalConfig.successRegister, 
+                            code: 200
+                        });
+                    }
+                });
+            }
+        });
+    }else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+    }
+    
 });
 
 // 32 character random string token

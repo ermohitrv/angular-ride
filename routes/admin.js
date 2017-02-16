@@ -15,7 +15,32 @@ var globalConfig    = require('../config/globals');
 /*SHOP section required variables */
 var Products = require('../models/products');
 var Brands = require('../models/brands');
+var multer      = require('multer');
 
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/uploads/')
+    },
+    filename: function (req, file, cb) {
+        var extension;
+
+        console.log('____________ inside storage var ' + JSON.stringify(file));
+        if (file.mimetype == 'image/png') {
+            extension = 'png';
+        } else if (file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
+            extension = 'jpg';
+        } else if (file.mimetype == 'image/gif') {
+            extension = 'gif';
+        } else if (file.mimetype == 'image/bmp') {
+            extension = 'bmp';
+        } else {
+            extension = 'jpg';
+        }
+
+        cb(null, file.originalname); //Appending .jpg
+    }
+});
+var upload = multer({storage: storage});
 
 /* Route for List Users */
 router.get('/list-users', middleware.isAdminLoggedIn, function(req, res){
@@ -426,13 +451,75 @@ router.get('/product/new', middleware.restrict, function(req, res) {
         active:'add-product'
     });
 });
+router.post('/product/removefromcart', function(req, res, next) {	
+    delete req.session.cart[req.body.product_id]; 
+    
+    // update total cart amount
+    middleware.update_total_cart_amount(req, res);
+    res.status(200).json({message: 'Product successfully removed', "total_cart_items": 0});
+});
+
+// Totally empty the cart
+router.post('/product/emptycart', function(req, res, next) {	
+    delete req.session.cart;
+    delete req.session.order_id;
+    
+    // update total cart amount
+    middleware.update_total_cart_amount(req, res);
+    res.status(200).json({message: 'Cart successfully emptied', "total_cart_items": 0});
+});
+
+// Admin section
+router.get('/products/filter/:search', middleware.restrict, function(req, res, next) {
+	var search_term = req.params.search;
+	var products_index = req.products_index;
+
+	// we strip the ID's from the lunr index search
+	var lunr_id_array = new Array();
+	products_index.search(search_term).forEach(function(id) {
+		lunr_id_array.push(id.ref);
+	});
+	
+	// we search on the lunr indexes
+	Products.find({ _id: { $in: lunr_id_array}}, function (err, results) {
+		res.render('products', { 
+			title: 'Results', 
+			"results": results, 
+            config: req.config.get('application'),
+			session: req.session, 
+			search_term: search_term,
+			message: middleware.clear_session_value(req.session, "message"),
+			message_type: middleware.clear_session_value(req.session, "message_type"),
+			helpers: req.handlebars.helpers,
+			show_footer: "show_footer"
+		});
+	});
+});
+
+// insert product form
+router.get('/product/new', middleware.restrict, function(req, res) {
+    res.render('product_new', {
+        title: 'New product', 
+        session: req.session,
+        product_title: middleware.clear_session_value(req.session, "product_title"),
+        product_description: middleware.clear_session_value(req.session, "product_description"),
+        product_price: middleware.clear_session_value(req.session, "product_price"),
+        product_permalink: middleware.clear_session_value(req.session, "product_permalink"),
+        message: middleware.clear_session_value(req.session, "message"),
+        message_type: middleware.clear_session_value(req.session, "message_type"),
+        editor: true,
+        user:req.user,
+        active:'add-product'
+    });
+});
 
 // insert new product form action
-router.post('/product/insert', middleware.restrict, function(req, res) {
+/*router.post('/product/insert',  middleware.restrict, function(req, res) {
+    //console.log('product_category: '+product_category);
+    //console.log('product_brand: '+product_brand);
+    //console.log('product_size: '+product_size);
+  
     
-//    console.log('product_category: '+product_category);
-//    console.log('product_brand: '+product_brand);
-//    console.log('product_size: '+product_size);
     
     Products.count({'product_permalink': req.body.frm_product_permalink}, function (err, product) {
         if(product > 0 && req.body.frm_product_permalink != ""){
@@ -471,6 +558,80 @@ router.post('/product/insert', middleware.restrict, function(req, res) {
             productObj.product_category     = product_category;
             productObj.product_brand        = product_brand;
             productObj.product_size         = product_size;
+            
+            console.log('productObj: '+productObj);
+            
+            productObj.save(function (err) {
+                if(err){
+                    console.error("Error inserting document: " + err);
+                    req.flash('message', globalConfig.productCreateError+' '+err);
+                    req.flash('message_type','danger');
+                    res.redirect('/admin/insert');
+                }else{
+                    req.flash('message', globalConfig.productCreateSuccess);
+                    req.flash('message_type','success');
+                    res.redirect('/admin/list-products');
+                }
+            });
+        }
+    });
+});*/
+
+// insert new product form action
+var cpUpload = upload.fields([{name: 'upload_file', maxCount: 10}]);
+router.post('/product/insert', cpUpload, middleware.restrict, function(req, res) {
+     console.log("**********multiple  images upload**********");
+     console.log(req.files['upload_file']);
+     var imagesarray = req.files['upload_file'];
+     var productimages = [];
+     for(var img=0; img < imagesarray.length; img++){
+           var imgname = imagesarray[img].filename;
+           productimages.push(imgname);
+     }
+     console.log("*****Array images*****");
+     console.log(productimages);
+     //res.send("Multiple files uploaded");
+    //console.log('product_category: '+product_category);
+    //console.log('product_brand: '+product_brand);
+    //console.log('product_size: '+product_size);
+        Products.count({'product_permalink': req.body.frm_product_permalink}, function (err, product) {
+        if(product > 0 && req.body.frm_product_permalink != ""){
+
+            req.flash('message', globalConfig.productExists);
+            req.flash('message_type','danger');
+            // redirect to insert
+            res.redirect('/admin/insert');
+        }else{
+            
+            var product_category,product_brand,product_size = ""; 
+            for (var key in req.body) {
+                item = req.body[key];
+                if(key.indexOf('frm_product_category') != -1){
+                    product_category = item;
+                }
+                if(key.indexOf('frm_product_brand') != -1){
+                    product_brand = item;
+                }
+                if(key.indexOf('frm_product_size') != -1){
+                    product_size = item;
+                }
+            }
+            
+            var productObj = new Products();
+            productObj.product_permalink    = req.body.frm_product_permalink;
+            productObj.product_title        = req.body.frm_product_title;
+            productObj.product_price        = req.body.frm_product_price;
+            productObj.product_description  = req.body.frm_product_description;
+            productObj.product_short_description = req.body.frm_product_short_description;
+            productObj.product_published    = req.body.frm_product_published;
+            productObj.product_featured     = req.body.frm_product_featured;
+            productObj.product_sku          = req.body.frm_product_sku;
+            productObj.product_added_date   = new Date();
+            productObj.product_rating       = 0;
+            productObj.product_category     = product_category;
+            productObj.product_brand        = product_brand;
+            productObj.product_size         = product_size;
+            productObj.product_image        = productimages;
             
             console.log('productObj: '+productObj);
             

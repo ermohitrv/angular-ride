@@ -25,6 +25,8 @@ var formidable  = require('formidable');
 var config      = require('config');
 var app         = express();
 var bodyParser = require('body-parser');
+var csrf        = require('csurf');
+var csrfProtection  = csrf({ cookie: true });
 
 //var storage = multer.diskStorage({
 //    destination: function (req, file, cb) {
@@ -104,6 +106,66 @@ app.use('/', express.static(path.join(__dirname, 'public')));
 //        res.redirect('/update-profile');
 //    }
 //});
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/uploads/')
+    },
+    filename: function (req, file, cb) {
+        var extension;
+
+        console.log('____________ inside storage var ' + JSON.stringify(file));
+        if (file.mimetype == 'image/png') {
+            extension = 'png';
+        } else if (file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
+            extension = 'jpg';
+        } else if (file.mimetype == 'image/gif') {
+            extension = 'gif';
+        } else if (file.mimetype == 'image/bmp') {
+            extension = 'bmp';
+        } else {
+            extension = 'jpg';
+        }
+
+        cb(null, req.user.local.username + '.' + extension); //Appending .jpg
+    }
+});
+var upload = multer({storage: storage});
+var cpUpload = upload.fields([{name: 'userPhoto', maxCount: 1}]);
+app.post('/profileimage', cpUpload, function (req, res, next) {
+    console.log("**********Profile image upload**********");
+    //res.send("profile image uploaded"); 
+   
+    var fileName = "";
+    if (req.files && req.files != null) {
+        fileName = req.files['userPhoto'][0].filename;
+        //saving into database
+        User.findOne({'local.email': req.user.local.email}, function (err, user) {
+
+            user.local.profileImage = fileName;
+            user.save(function (err) {
+                if (err) {
+                    console.log('File not uploaded, not saved to DB!');
+                } else {
+                    console.log('File uploaded and saved to DB!');
+                    req.flash('messageSuccess', 'Your Image uploaded successfully!');
+                    //console.log(req.flash('messageSuccess'));
+                    res.redirect('/update-profile');
+                   
+//                    res.render('update-profile.ejs', {
+//                     csrfToken: req.csrfToken(),
+//                     user: user,
+//                     message: '',
+//                     messageSuccess: 'Your Image uploaded successfully!',
+//                     setActiveMenu:'profile'
+//                     });
+                }
+            });
+        });
+    } else {
+         res.redirect('/update-profile');
+        
+    }
+});
 
 // Make stuff accessible to our router
 app.use(function (req, res, next) {

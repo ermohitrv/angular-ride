@@ -3,13 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/user/Desktop/RidePrix/routes/product.js</file>
-            <file>file:/home/user/Desktop/RidePrix/views/backend/list-products.ejs</file>
-            <file>file:/home/user/Desktop/RidePrix/config/globals.js</file>
-            <file>file:/home/user/Desktop/RidePrix/routes/api.js</file>
-            <file>file:/home/user/Desktop/RidePrix/views/backend/product_new.ejs</file>
-            <file>file:/home/user/Desktop/RidePrix/public/js/app.js</file>
-            <file>file:/home/user/Desktop/RidePrix/routes/admin.js</file>
+            <file>file:/var/www/html/rideprix/views/frontend/signup.ejs</file>
+            <file>file:/var/www/html/rideprix/models/userrating.js</file>
+            <file>file:/var/www/html/rideprix/config/database.js</file>
+            <file>file:/var/www/html/rideprix/routes/api.js</file>
+            <file>file:/var/www/html/rideprix/models/user.js</file>
+            <file>file:/var/www/html/rideprix/config/passport.js</file>
         </group>
     </open-files>
 </project-private>
