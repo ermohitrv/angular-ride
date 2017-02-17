@@ -188,6 +188,7 @@ $(function() {
 //  alert("Uploaded SuccessFully");
 // }); 
 //});
+/* upload multiple files and show in image preview*/
 var upload_array = [];
 function preview_image(myFile) 
 {
@@ -210,18 +211,6 @@ function preview_image(myFile)
 //        
 //  }
   
-//    for(var i=0; i < upload_array.length; i++){
-//        
-//        $('#image_preview').append('<div class="img-wrap"><span class="close">&times;</span><img src="'+URL.createObjectURL(event.target.files[i])+'"></div>');
-//        console.log(upload_array);
-//        $(".close").click(function(){
-//            $(this).parent(".img-wrap").remove();
-//            upload_array.splice(i, 1);
-//            console.log(upload_array);
-//        });
-//    }
-        //var total_files= document.getElementById("upload_file").files;
-       // console.log(total_files);
         var total_file=document.getElementById("upload_file").files.length;
         for(var i=0;i<total_file;i++)
         {

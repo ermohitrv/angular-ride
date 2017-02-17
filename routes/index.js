@@ -717,4 +717,17 @@ router.get('/test', function (req, res) {
     */
 });  
 
+router.get('/classified', function (req, res) {
+   
+    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+    res.render('classified', {
+        title: 'Classified', 
+        user: req.user,
+        session: req.session,
+        message: middleware.clear_session_value(req.session, "message"),
+        message_type: middleware.clear_session_value(req.session, "message_type"),
+        page_url: globalConfig.base_url
+    });
+});
+
 module.exports = router;

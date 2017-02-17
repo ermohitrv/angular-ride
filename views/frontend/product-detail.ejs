@@ -7,7 +7,9 @@
     <div data-ng-init="relatedProducts()" data-ng-bind-html="relatedProductsView"></div>
 </div>
 <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
-<link href="/css/magnify.css" rel="stylesheet" type="text/css">
+<!--<link href="/css/magnify.css" rel="stylesheet" type="text/css">-->
+<link rel="stylesheet" href="//cdn.rawgit.com/thdoan/magnify/master/dist/css/magnify.css">
+<script src="//cdn.rawgit.com/thdoan/magnify/master/dist/js/jquery.magnify.js"></script>
 <style>
 .magnify { width:480px; height:852px; margin:30px auto;}
 h1 { margin-top:150px; text-align:center;}
@@ -18,4 +20,25 @@ $(document).on('click','.product-add-to-cart',function(){
     var quantity_box = $("#quantity_box").val();
     angular.element(this).scope().addToCart(product_id,quantity_box);
 });
+
+$(document).on('click','.smallimageuploaded',function(){
+      var smallimageid = this.id;
+      var smallimgsrc = document.getElementById(smallimageid).src;
+      $('.largeimageuploaded').attr('src',smallimgsrc);
+      $('.largeimageuploaded').attr('data-magnify-src',smallimgsrc);
+});
+
+//
+//$(document).ready(function() {
+// // $('.zoom').magnify();
+//   $('.zoom').magnify({
+//    speed: 200,
+//    src: '/public/images/error_bg.jpg'
+//  });
+//});
+
+$(document).on('click','.zoom',function(){
+   $('.zoom').magnify();
+});
+
 </script>

@@ -2147,3 +2147,19 @@ body.profile a.navbar-brand.logo{    max-width: 200px;}
 .testi_slide img{max-width: none;}
 .testi_slide ul li{padding: 0px 0px;}
 }
+
+.classified_page {
+    background: #fff;
+    border-top: 1px solid #ddd;
+    padding: 60px 0;
+    float: left;
+    width: 100%;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.classified_listing {
+    float: left;
+    width: 100%;
+    font-family: 'Open Sans', sans-serif;
+    position: relative;
+}

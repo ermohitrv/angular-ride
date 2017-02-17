@@ -1,3 +1,4 @@
+
 <div class="container">
     <div class="row transitionfx">
         <div class="col-lg-6 col-md-6 col-sm-6">
@@ -5,7 +6,7 @@
                 <div class="sp-large">
                     <% if(result.product_image[0] != "" ){ %>
                     <a href="#" class="">
-                    <img src="/public/uploads/<%= result.product_image[0] %>" data-magnify-src="large.jpg" class="magnify-image img-responsive" alt="img"></a>
+                    <img src="/public/uploads/<%= result.product_image[0] %>" data-magnify-src="/public/uploads/<%= result.product_image[0] %>" id="large_<%= result.product_image[0] %>"  class="magnify-image img-responsive largeimageuploaded zoom" alt="img"></a>
                     <% } else {%>
                     <a href="#" class="">
                     <img src="/images/product1.jpg" data-magnify-src="large.jpg" class="magnify-image img-responsive" alt="img"></a>
@@ -14,7 +15,7 @@
                 <div class="sp-thumbs sp-tb-active">
                     <% for(var productimg=0; productimg < result.product_image.length; productimg++) { %>
                     <a href="#" class="sp-current">
-                    <img src="/public/uploads/<%= result.product_image[productimg] %>" class="img-responsive" alt="img"></a>
+                    <img src="/public/uploads/<%= result.product_image[productimg] %>" id="small_<%= result.product_image[productimg] %>" class="img-responsive smallimageuploaded"  alt="img"></a>
                     <!-- <a href="#" class="sp-current">
                     <img src="/images/product1.jpg" class="img-responsive" alt="img"></a>
                    <a href="#">
