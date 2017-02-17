@@ -2,6 +2,9 @@
 <!-- Content Wrapper. Contains page content -->
 <script type="text/javascript" src="/public/js/jquery.form.js"></script>
 <style>
+div#image_preview {
+    margin-left:18%;
+}
 #image_preview img {
     float: left;
     width: 100%;
@@ -137,7 +140,7 @@
                                     <label class="col-sm-2 control-label">Upload Files</label>
                                     <div class="col-sm-10">
                                         <div class="input-group" style="width:100%">
-                                        <input type="file" id="upload_file" name="upload_file" onchange="preview_image();" multiple/>                                        </div>
+                                        <input type="file" id="upload_file" name="upload_file" onchange="preview_image(this);" multiple/>                                        </div>
                                     </div>
                                 </div>
                                 
@@ -185,18 +188,61 @@ $(function() {
 //  alert("Uploaded SuccessFully");
 // }); 
 //});
-
-function preview_image() 
+var upload_array = [];
+function preview_image(myFile) 
 {
- var total_file=document.getElementById("upload_file").files.length;
- alert(total_file);
- for(var i=0;i<total_file;i++)
- {
-  $('#image_preview').append('<div class="img-wrap"><span class="close">&times;</span><img src="'+URL.createObjectURL(event.target.files[i])+'"></div>');
-   $(".close").click(function(){
-            $(this).parent(".img-wrap").remove();
-    });
+   var file = myFile.files[0];  
+   var filename = file.name;
+   upload_array.push(filename); 
+   //console.log(upload_array);
+   
+// var total_file=document.getElementById("upload_file").files.length;
+// for(var i=0;i<total_file;i++)
+// {
+//  $('#image_preview').append('<div class="img-wrap"><span class="close">&times;</span><img src="'+URL.createObjectURL(event.target.files[i])+'"></div>');
+//            console.log(upload_array);
+//            alert(i);
+//            $(".close").click(function(){
+//            $(this).parent(".img-wrap").remove();
+//            upload_array.splice(i, 1);
+//            console.log(upload_array);
+//    });
+//        
+//  }
+  
+//    for(var i=0; i < upload_array.length; i++){
+//        
+//        $('#image_preview').append('<div class="img-wrap"><span class="close">&times;</span><img src="'+URL.createObjectURL(event.target.files[i])+'"></div>');
+//        console.log(upload_array);
+//        $(".close").click(function(){
+//            $(this).parent(".img-wrap").remove();
+//            upload_array.splice(i, 1);
+//            console.log(upload_array);
+//        });
+//    }
+        //var total_files= document.getElementById("upload_file").files;
+       // console.log(total_files);
+        var total_file=document.getElementById("upload_file").files.length;
+        for(var i=0;i<total_file;i++)
+        {
+//         $('#image_preview').append('<div class="img-wrap"><span id="'+filename+'"class="close">&times;</span><img src="'+URL.createObjectURL(event.target.files[i])+'"></div>');
+            $('#image_preview').append('<div class="img-wrap"><img src="'+URL.createObjectURL(event.target.files[i])+'"></div>');
+   
+            console.log(upload_array);
+                   
+//                   $(".close").click(function(){
+//                   var imageid = this.id;
+//                   $(this).parent(".img-wrap").remove();
+//                   var index = upload_array.indexOf(imageid);
+//                    if (index > -1) {
+//                         upload_array.splice(index, 1);
+//                    }
+//                  
+//                   console.log(upload_array);
+//           });
+
+        }
         
-  }
+        
 }
 </script>
