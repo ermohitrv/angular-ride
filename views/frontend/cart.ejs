@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12 col-md-12">
-                <table class="table table-hover">
+                <table class="table table-hover" id="producttable">
                     <thead>
                         <tr>
                             <th> Product(<%= sessionCartItemsCount %>) </th>
@@ -15,31 +15,35 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <% var subtotal= 0 ;%>
                         <% if( sessionCartItemsCount !=  undefined && sessionCartItemsCount > 0 ){ %>
-                        <% for(var i = 1; i <= sessionCartItemsCount; i++){ %>
-                        <tr>
+                        <% for(var i = 0; i < productIds.length; i++){ %>
+                        <% var productid = productIds[i]; %>
+                        <%=  sessionCart[productid].product_image %> 
+                        <tr id="productrow_<%= i %>">
                             <td class="col-sm-8 col-md-6">
                                 <div class="media">
-                                    <a class="thumbnail pull-left" href="#"> <img class="media-object" src="images/rider1.jpg" style="width: 72px; height: auto;"> </a>
+                                    <a class="thumbnail pull-left" href="#"> <img class="media-object" src="/public/uploads/<%= sessionCart[productid].product_image[0] %>" style="width: 72px; height: auto;"> </a>
                                     <div class="media-body">
-                                        <h4 class="media-heading"><a href="#"><%= sessionCart[i] %></a></h4>
-                                        <h5 class="media-heading"> by <a href="#">Brand name</a></h5>
-                                        <span>Status: </span><span class="text-success"><strong>In Stock</strong></span>
+                                        <h4 class="media-heading"><a href="#"><%= sessionCart[productid].title %></a></h4>
+<!--                                        <h5 class="media-heading"> by <a href="#"><%= sessionCart[productid].product_brand %></a></h5>
+                                        <span>Status: </span><span class="text-success"><strong>In Stock</strong></span>-->
                                     </div>
                                 </div>
                             </td>
                             <td class="col-sm-1 col-md-1" style="text-align: center">
-                                <input type="email" class="form-control" id="exampleInputEmail1" value="3">
+                                <input type="number" class="form-control quantitybox" id="exampleInputquantity_<%= i %>" value="<%= sessionCart[productid].quantity %>" >
                             </td>
-                            <td class="col-sm-1 col-md-1 text-center"><strong>$4.87</strong></td>
-                            <td class="col-sm-1 col-md-1 text-center"><strong>$14.61</strong></td>
+                            <td class="col-sm-1 col-md-1 text-center">$<strong id="itemprice_<%= i %>"><%= sessionCart[productid].item_price %></strong></td>
+                            <td class="col-sm-1 col-md-1 text-center"><strong id="totalitemprice_<%= i %>">$<%= sessionCart[productid].total_item_price %></strong></td>
                             <td class="col-sm-1 col-md-1">
-                                <button type="button" class="btn btn-danger">
+                                    <button type="button" class="btn btn-danger removeproduct" id="<%= i %>" onclick="deleteRow(this.parentNode.parentNode.rowIndex,'<%= productid %>')">
                                     <span class="glyphicon glyphicon-remove"></span> Remove
                                 </button>
                             </td>
                         </tr>
-                        <% } %>
+                        <% subtotal += sessionCart[productid].total_item_price %>
+                        <% } %> 
                         <% } %>
                     </tbody>
                 </table>
@@ -50,7 +54,7 @@
                             <td>   </td>
                             <td>   </td>
                             <td class="text-center"><h5>Subtotal</h5></td>
-                            <td class="text-right"><h5><strong>$24.59</strong></h5></td>
+                            <td class="text-right"><h5><strong>$<%= subtotal %></strong></h5></td>
                         </tr>
                         <tr>
                             <td>   </td>
@@ -64,12 +68,12 @@
                             <td>   </td>
                             <td>   </td>
                             <td class="text-center"><h3>Total</h3></td>
-                            <td class="text-right"><h3><strong>$31.53</strong></h3></td>
+                            <td class="text-right"><h3><strong>$<%= (subtotal+6.94) %></strong></h3></td>
                         </tr>
                         <tr>
-                            <td><button type="button" class="btn btn-warning continue_shoping">
+                            <td><a href="/shop"><button type="button" class="btn btn-warning continue_shoping">
                                 <span class="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
-                            </button></td>
+                                    </button></a></td>
                             <td>   </td>
                             <td>   </td>
                             <td>
@@ -87,7 +91,7 @@
 </div>
    
  	
-<div class="col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
+<!--<div class="col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
     <h2>Shopping cart</h2>
     <div class="panel panel-default" style="margin-top: 30px;">
         <div class="panel-heading">Cart contents</div>
@@ -166,5 +170,30 @@
             <a href="/checkout" class="btn btn-default">Checkout</a>
         </div>
     </div>
-</div>
+</div>-->
+<script>
+   function deleteRow(i,productid){
+     //alert(productid);
+     //angular.element(this).scope().addToCart(product_id,quantity_box);
+    document.getElementById('producttable').deleteRow(i);
+   }
+
+   $('.quantitybox').change(function(){
+       
+        var quantityid = this.id;
+        var quantityvalue = this.value;
+      
+        var arrayData =  quantityid.split('_');
+        var rowid = arrayData[1];
+        var itemprice = $('#itemprice_'+rowid).text();
+        var totalprice = itemprice * quantityvalue;
+        
+        $('#totalitemprice_'+rowid).text(totalprice);
+        
+        
+       
+       
+   });
+    
+</script>    
          

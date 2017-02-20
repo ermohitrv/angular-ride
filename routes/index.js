@@ -489,11 +489,13 @@ router.get('/shop', function (req, res) {
 /* shop route to render cart page */
 router.get('/cart', function(req, res, next) {
     console.log('session: '+JSON.stringify(req.session));
+    
     res.render('cart', { 
         title: 'Cart', 
         user: req.user,
         session: req.session,
         sessionCart: req.session.cart,
+        productIds : req.session.productids,
         sessionCartItemsCount: JSON.stringify(req.session.cart_total_items),
         message: middleware.clear_session_value(req.session, "message"),
         message_type: middleware.clear_session_value(req.session, "message_type"),

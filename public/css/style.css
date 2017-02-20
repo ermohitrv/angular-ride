@@ -2163,3 +2163,36 @@ body.profile a.navbar-brand.logo{    max-width: 200px;}
     font-family: 'Open Sans', sans-serif;
     position: relative;
 }
+
+#myModal td {
+    border-top: none;
+}
+
+.modalproductimage{
+    float:left;
+    width:50%
+}
+.modalproductimage img{
+    width:100%;
+}
+.modalproductdetails{
+    float:right;
+    width:50%;
+    padding-left:40px
+}
+.continueshoppingmodal button.continue_shoping, button.checkout_btn {
+    font-size: 16px;
+    min-width: 150px !important;
+    padding: 4px 5px !important;
+}
+.continueshoppingmodal .modal-body {
+    position: relative;
+    padding: 5px 0px 0px 15px;
+}
+
+@media (min-width: 768px){
+.modal-dialog {
+    width: 450px;
+    margin: 30px auto;
+}
+}

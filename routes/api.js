@@ -964,14 +964,19 @@ router.get('/new-friend-request', function(req, res){
 });
 
 /* API end point to facebook users  */
-router.get('/facebook-create-user', function (req, res) {
-     //console.log(req.user);
-     //var facebookemail = req.user.facebook.email;
-     var facebook_id =   req.user.facebook.id;
-     var username = req.user.local.username;
-     var profileImage = req.user.local.profileImage;
-     var email = req.user.local.email;
+router.post('/facebook-create-user', function (req, res) {
      
+//      var facebook_id =   req.query.facebook_id;
+//      var username = req.query.username;
+//      var profileImage = req.query.profileImage;
+//      var email = req.query.email;
+     
+      var facebook_id =   req.body.facebook_id;
+      var username = req.body.username;
+      var profileImage = req.body.profileImage;
+      var email = req.body.email;
+      
+      
      console.log(username+" "+email);
      if(email != "" && email != undefined){
         User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function(err, user) {
@@ -995,7 +1000,7 @@ router.get('/facebook-create-user', function (req, res) {
                 newUser.local.userActive        = 'ACTIVE';    //default to ACTIVE
                 newUser.local.token             = globalConfig.randomString;
                 newUser.local.profileImage      = profileImage;
-                
+                newUser.facebook.id             = facebook_id;
         	// save the user
                 newUser.save(function(err){
                     if (err){

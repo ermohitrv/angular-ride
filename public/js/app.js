@@ -125,10 +125,16 @@ app.controller('productController',['$scope', '$http','$sce', function ($scope, 
             headers : {'Accept' : 'application/json'}
         };
         $http.post('/product/addtocart',config).success(function (response, status, headers, config){
-            $("#cart-badge").text(response.total_cart_items);
-            alert(response.message);
-            console.log(response);
             
+            $("#cart-badge").html(response.total_cart_items);
+            //alert(response.message);
+            console.log(response);
+//            $('#addtocart_producttitle').html(response.session.product_title);
+//            $('#addtocart_productquantity').html(response.session.cart_total_items);
+//            $('#addtocart_productprice').html(response.session.price);
+//            $('#addtocart_producttotalitemprice').html(response.session.total_item_price);
+//            $('#addtocart_productimage').attr('src',"/public/uploads/"+response.session.product_image[0]);
+           
         }).error(function(err){
            console.log('Oops! Error occur'+err);
         }); 

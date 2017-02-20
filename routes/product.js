@@ -84,9 +84,12 @@ router.post('/addtocart', function(req, res, next) {
     var product_qty = req.body.product_quantity;
     var product_quantity = req.body.product_quantity ? parseInt(product_qty): 1;
     var product_id = req.body.params.product_id;
+    //var product_id_array = array();
     // setup cart object if it doesn't exist
     if(!req.session.cart){
         req.session.cart = {};
+        req.session.productids = [];
+        
     }
     
     console.log('product_quantity: '+product_id);
@@ -107,7 +110,10 @@ router.post('/addtocart', function(req, res, next) {
                 var product_obj = {};
                 product_obj.title = product.product_title;
                 product_obj.quantity = product_quantity;
+                product_obj.item_price = product_price;
                 product_obj.total_item_price = product_price * product_quantity;
+                product_obj.product_image = product.product_image;
+                product_obj.product_brand = product.product_brand;
                 if(product.product_permalink){
                     product_obj.link = product.product_permalink;
                 }else{
@@ -117,9 +123,13 @@ router.post('/addtocart', function(req, res, next) {
                 // new product id
                 var cart_obj = {};
                 cart_obj[product._id] = product_obj;
-                
+                //cart_obj = product_obj;
                 // merge into the current cart
                 _.extend(req.session.cart, cart_obj);
+                //console.log(cart_obj);
+                
+                  req.session.productids.push(product._id);
+                  console.log(req.session.productids);
             }
             
             // update total cart amount
@@ -127,7 +137,10 @@ router.post('/addtocart', function(req, res, next) {
             
             // update how many products in the shopping cart
             req.session.cart_total_items = Object.keys(req.session.cart).length;
-            res.status(200).json({message: 'Cart successfully updated', "total_cart_items": Object.keys(req.session.cart).length});
+           
+            
+            
+            res.status(200).json({message: 'Cart successfully updated', "total_cart_items": Object.keys(req.session.cart).length,"session":req.session});
         }else{
             res.status(400).json({message: 'Error updating cart. Please try again. '+err});
         }

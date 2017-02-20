@@ -16,6 +16,7 @@ h1 { margin-top:150px; text-align:center;}
 </style>
 <script>
 $(document).on('click','.product-add-to-cart',function(){
+    
     var product_id = $("#product_id").val();
     var quantity_box = $("#quantity_box").val();
     angular.element(this).scope().addToCart(product_id,quantity_box);

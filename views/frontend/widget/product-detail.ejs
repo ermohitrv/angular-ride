@@ -83,7 +83,7 @@
             <div class="cart-actions">
                 <div class="addto row">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <button class="button btn-block btn-cart cart first product-add-to-cart" data-ng-click="addToCart('<%= result._id %>')" type="button">
+                        <button class="button btn-block btn-cart cart first product-add-to-cart" data-ng-click="addToCart('<%= result._id %>')" type="button" data-toggle="modal" data-target="#myModal">
                         Add to Cart
                         </button>
                         <input type="hidden" id="product_id" value="<%= result._id %>">
@@ -168,3 +168,72 @@
         </div>
     </div>
 </div>
+
+<!-- Bootstrap modal -->
+<div id="myModal" class="modal fade continueshoppingmodal" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add to Cart</h4>
+      </div>
+      <div class="modal-body">
+          <label>Product added to cart successfully!</label>
+<!--                    <div  class="modalproductimage">
+                    <img src=""  id="addtocart_productimage" alt="img">
+                    </div>
+                    <div  class="modalproductdetails">
+                       
+                        <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th> Product  : <span id="addtocart_producttitle"></span></th> 
+                                        </tr>
+                                        <tr>
+                                            <th> Quantity : <span id ="addtocart_productquantity"></span></th> 
+                                        </tr>
+                                        <tr>
+                                            <th> Price    : $<span id="addtocart_productprice"></span></th> 
+                                        </tr>
+                                        <tr>
+                                            <th> Total    : $<span id="addtocart_producttotalitemprice"></span></th> 
+                                        </tr>
+                                    </thead>
+                                 
+                            </table>
+                    </div>-->
+                    <div>
+                        <table class="table table-hover">
+                                    <tbody>
+                                        <tr></tr>
+                                        <tr>
+                                            <td><a href="/shop"><button type="button" class="btn btn-warning continue_shoping">
+                                                <span class="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
+                                                    </button></a></td>
+                                            <td>   </td>
+                                            <td>   </td>
+                                            <td>
+                                            </td>
+                                            <td></td>
+                                            <td>
+                                                <a  href="/cart"><button type="button" class="btn btn-success checkout_btn">
+                                                Checkout <span class="glyphicon glyphicon-play"></span>
+                                                </button></a></td>
+                                        </tr>
+                                    </tbody>
+                            </table>
+                    </div>
+
+
+
+        </div>
+<!--      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>-->
+    </div>
+
+  </div>
+</div>
+<!-- end bootstrap modal -->
