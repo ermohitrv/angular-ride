@@ -1018,6 +1018,7 @@ router.post('/facebook-create-user', function (req, res) {
                                 {
                                     username        :username,
                                     email           :email,
+                                    profilepic      :profileImage
                                    
                                 },
                             message: globalConfig.successRegister, 
