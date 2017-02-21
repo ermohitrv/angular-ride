@@ -971,13 +971,14 @@ router.post('/facebook-create-user', function (req, res) {
 //      var profileImage = req.query.profileImage;
 //      var email = req.query.email;
 
-      var facebook_id =   req.body.facebook_id;
-      var username = req.body.username;
-      var profileImage = req.body.profileImage;
-      var email = req.body.email;
+    var facebook_id =   req.body.facebook_id;
+    var username = req.body.username;
+    var profileImage = req.body.profileImage;
+    var email = req.body.email;
       
       
-     console.log(username+" "+email);
+    console.log('case 1 profileImage: '+profileImage);
+     
      if(email != "" && email != undefined){
         User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function(err, user) {
             // if there are any errors, return the error
@@ -993,7 +994,18 @@ router.post('/facebook-create-user', function (req, res) {
             else{
                 
                 if(user){   // if user exist with that email
-                User.update({ 'local.email': { $regex : new RegExp(email, "i") } },{ $set: { 'local.profileImage': profileImage ,'local.username':username,'facebook.id': facebook_id} },{ multi: true },function(err, userinfo){
+                User.update({ 
+                                'local.email': { $regex : new RegExp(email, "i") } 
+                            },
+                            { 
+                                $set:   { 
+                                            'local.profileImage': profileImage ,
+                                            'local.username':username,
+                                            'facebook.id': facebook_id
+                                        } 
+                            },
+                            { multi: true },
+                function(err, userinfo){
 
                      if (err){
                         console.log("error caught 3");
@@ -1004,6 +1016,9 @@ router.post('/facebook-create-user', function (req, res) {
                             code: 400
                         });
                     }else{
+                        
+                        console.log('case 2 profileImage: '+profileImage);
+                        
                         res.json({ 
                             success: true,
                             data: 
@@ -1042,6 +1057,9 @@ router.post('/facebook-create-user', function (req, res) {
                             code: 400
                         });
                     }else{
+                        
+                        console.log('case 3 profileImage: '+profileImage);
+                        
                         res.json({ 
                             success: true,
                             data: 
