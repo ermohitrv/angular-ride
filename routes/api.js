@@ -993,15 +993,9 @@ router.post('/facebook-create-user', function (req, res) {
             else{
                 
                 if(user){   // if user exist with that email
-                    user.local.username          = username;
-                    user.local.email             = email;
-                    user.local.userLevel         = 'NORMAL';    //default to NORMAL
-                    user.local.userActive        = 'ACTIVE';    //default to ACTIVE
-                    user.local.token             = globalConfig.randomString;
-                    user.local.profileImage      = profileImage;
-                    user.facebook.id             = facebook_id;
-                    user.save(function(err){
-                    if (err){
+                User.update({ 'local.email': { $regex : new RegExp(email, "i") } },{ $set: { 'local.profileImage': profileImage ,'local.username':username,'facebook.id': facebook_id} },{ multi: true },function(err, userinfo){
+
+                     if (err){
                         console.log("error caught 3");
                         res.json({ 
                             success: false, 
@@ -1023,7 +1017,8 @@ router.post('/facebook-create-user', function (req, res) {
                             code: 200
                         });
                     }
-                });
+                });    
+
                 }
                 else{ 
                 // if there is no user with that email
