@@ -150,11 +150,6 @@ app.controller('productController',['$scope', '$http','$sce', function ($scope, 
             $("#cart-badge").html(response.total_cart_items);
             //alert(response.message);
             console.log(response);
-//            $('#addtocart_producttitle').html(response.session.product_title);
-//            $('#addtocart_productquantity').html(response.session.cart_total_items);
-//            $('#addtocart_productprice').html(response.session.price);
-//            $('#addtocart_producttotalitemprice').html(response.session.total_item_price);
-//            $('#addtocart_productimage').attr('src',"/public/uploads/"+response.session.product_image[0]);
            
         }).error(function(err){
            console.log('Oops! Error occur'+err);
@@ -183,14 +178,37 @@ app.controller('cartController',['$scope', '$http','$sce', function ($scope, $ht
 }]);
 
 /********************** shop controller  **********************/
-app.controller('shopController',['$scope', '$http', function ($scope, $http) {
+app.controller('shopController',['$scope', '$http', '$sce',function ($scope, $http,$sce) {
     /* function to render all published products into shop section */
     $scope.shopProductsList = function(){
         $http.get('/product/shop/products-list').success(function(view){
-            $scope.shopProductsListView = view;
+            var text = $sce.trustAsHtml(view);
+            $scope.shopProductsListView = text;
+            //$scope.shopProductsListView = view;
         }).error(function(){
             console.log('Oops! Error listing products-list');
         });
+    };
+    
+     $scope.addToCartfromshop = function(productId,quantity_box){
+       
+        var data = { 
+            product_id: productId, 
+            product_quantity: quantity_box
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/product/addtocart',config).success(function (response, status, headers, config){
+           
+            $("#cart-badge").html(response.total_cart_items);
+            //alert(response.message);
+            console.log(response);
+      
+        }).error(function(err){
+           console.log('Oops! Error occur'+err);
+        }); 
     };
 }]);
 

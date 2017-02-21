@@ -167,4 +167,6 @@ router.post('/cartproducts', function(req, res, next) {
         res.status(200).json({"total_cart_items": Object.keys(req.session.cart).length});
 });
 
+
+
 module.exports = router;

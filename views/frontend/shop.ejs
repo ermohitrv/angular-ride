@@ -10,3 +10,12 @@
         </div>
     </div>
 </div>
+<script>
+$(document).on('click','.product-add-to-cart',function(){
+    var prodid = this.id;
+    var product_id = $("#productidgear_"+prodid).val();
+    var quantity_box = $("#quantityboxgear_"+prodid).val();
+    angular.element(this).scope().addToCartfromshop(product_id,quantity_box);
+});
+
+</script>
