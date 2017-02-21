@@ -1,4 +1,9 @@
 <% layout('layout') -%>
+ <% 
+ var productscount = 0;
+ if( sessionCartItemsCount !=  undefined && sessionCartItemsCount > 0 ){ 
+    productscount =  sessionCartItemsCount
+ } %>
 <div class="cart_page" id="cart_checkoutpage" data-ng-controller="cartController">
     <div class="overlay_bg"></div>
     <div class="container">
@@ -7,7 +12,8 @@
                 <table class="table table-hover" id="producttable">
                     <thead>
                         <tr>
-                            <th> Product(<%= sessionCartItemsCount %>) </th>
+                            
+                            <th> Product(<%= productscount %>) </th>
                             <th>Quantity</th>
                             <th class="text-center">Price</th>
                             <th class="text-center">Total</th>
@@ -54,7 +60,7 @@
                             <td>   </td>
                             <td>   </td>
                             <td class="text-center"><h5>Subtotal</h5></td>
-                            <td class="text-right"><h5><strong>$<%= subtotal %></strong></h5></td>
+                            <td class="text-right"><h5>$<strong id="sub_total"><%= subtotal %></strong></h5></td>
                         </tr>
                         <tr>
                             <td>   </td>
@@ -71,7 +77,7 @@
                             <td class="text-right"><h3><strong>$<%= (subtotal+6.94) %></strong></h3></td>
                         </tr>
                         <tr>
-                            <td><a href="/shop"><button type="button" class="btn btn-warning continue_shoping">
+                            <td><a href="/gear"><button type="button" class="btn btn-warning continue_shoping">
                                 <span class="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
                                     </button></a></td>
                             <td>   </td>
@@ -173,24 +179,10 @@
 </div>-->
 <script>
    function deleteRow(i,productid){
-      //alert(productid);
       var $scope = angular.element(document.getElementById("cart_checkoutpage")).scope(); // get scope of cart controller
       console.log($scope);
       $scope.removeFromCart(i,productid);
-     // angular.element(this).scope().removeFromCart(productid);
-      //document.getElementById('producttable').deleteRow(i);
-//         $.ajax({
-//           type: "get",
-//           url: "/product/removefromcart",
-//           data: {
-//                  productid : productid
-//                 },
-//           success: function(data)
-//           {  
-//              alert(data); 
-//           }
-//              
-//         });
+ 
     }
 
    $('.quantitybox').change(function(){
@@ -202,9 +194,12 @@
         var rowid = arrayData[1];
         var itemprice = $('#itemprice_'+rowid).text();
         var totalprice = itemprice * quantityvalue;
+        var subtotalprice = $('#sub_total').text();
         
         $('#totalitemprice_'+rowid).text(totalprice);
-        
+        //alert(subtotalprice);
+        var calsubtotalprice = +subtotalprice + +itemprice;
+        $('#sub_total').text(calsubtotalprice);
         
        
        

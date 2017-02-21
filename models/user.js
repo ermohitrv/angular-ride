@@ -21,7 +21,7 @@ var userSchema = mongoose.Schema({
         userLevel:      {type: String, enum: userLevel},
         dob:            {type: String, default: ''},
         userActive:     {type: String, enum: userActive},
-        profileImage:   {type: String, default: '', maxlength: 250},
+        profileImage:   {type: String, default: '', maxlength: 450},
         gender:         {type: String, enum: genders},
         locationZipcode:{type: String, default: ''},
         locationCity:   {type: String, default: ''},

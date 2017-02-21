@@ -472,11 +472,11 @@ router.get('/contact', function(req, res){
 
 
 /* shop route to render logged in user to shop area */
-router.get('/shop', function (req, res) {
+router.get('/gear', function (req, res) {
     var number_products = globalConfig.number_products_index ? globalConfig.number_products_index : 8;
     res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
     res.render('shop', {
-        title: 'Shop', 
+        title: 'Gear', 
         user: req.user,
         session: req.session,
         message: middleware.clear_session_value(req.session, "message"),

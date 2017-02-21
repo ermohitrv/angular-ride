@@ -147,10 +147,24 @@ router.post('/addtocart', function(req, res, next) {
     });
 });
 
-router.post('/removefromcart', function(req, res, next) {	
-       console.log(req.body.params.productId);
-       console.log(req.session.cart);
-       res.send(true);
+router.get('/removefromcart/:productId', function(req, res, next) {	
+       var productid = req.params.productId
+       delete req.session.cart[productid];
+       delete req.session.productids[productid];
+       var index = req.session.productids.indexOf(productid);
+        if (index > -1) {
+            req.session.productids.splice(index, 1);
+        }
+        req.session.cart_total_items = Object.keys(req.session.cart).length;
+        console.log(req.session.cart);
+        //res.send(true);
+        res.status(200).json({"total_cart_items": Object.keys(req.session.cart).length});
+});
+
+
+router.post('/cartproducts', function(req, res, next) {	    
+        req.session.cart_total_items = Object.keys(req.session.cart).length;
+        res.status(200).json({"total_cart_items": Object.keys(req.session.cart).length});
 });
 
 module.exports = router;

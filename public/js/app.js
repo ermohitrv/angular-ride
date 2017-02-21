@@ -69,27 +69,28 @@ app.controller('homeController', ['$scope', '$http', function ($scope, $http) {
 
 /********************** menu controller  **********************/
 app.controller('menuController',['$scope', '$http', function ($scope, $http) {
-//        $scope.removeFromCart = function(productId){
-//        console.log(productId);
-////        var data = { 
-////            product_id: productId, 
-////           
-////        };
-////        var config = {
-////            params: data,
-////            headers : {'Accept' : 'application/json'}
-////        };
-////        $http.post('/product/removefromcart',config).success(function (response, status, headers, config){
-////            
-////            $("#cart-badge").html(response.total_cart_items);
-////           
-////            console.log(response);
-////
-////           
-////        }).error(function(err){
-////           console.log('Oops! Error occur'+err);
-////        }); 
-//    };
+       
+        $scope.cartProducts = function(){
+            $scope.cartProductsCount = 0;
+            var config = {
+               
+                headers : {'Accept' : 'application/json'}
+            };
+            $http.post('/product/cartproducts',config).success(function (response, status, headers, config){
+            if(response.total_cart_items > 0){
+                $scope.cartProductsCount = response.total_cart_items;
+            }else{
+               
+                $scope.cartProductsCount = 0;
+            }
+                //$("#cart-badge").html(response.total_cart_items);
+                console.log(response);
+
+            }).error(function(err){
+               console.log('Oops! Error occur'+err);
+            }); 
+       };
+    
 }]);
 
 /********************** profile controller  **********************/
@@ -167,27 +168,16 @@ app.controller('productController',['$scope', '$http','$sce', function ($scope, 
 
 app.controller('cartController',['$scope', '$http','$sce', function ($scope, $http, $sce) {
         
+        /* function to remove product from cart */
         $scope.removeFromCart = function(rowid,productId){
         
-        alert("productId: "+productId);
-       
-        var data = { 
-            productId: productId, 
-           
-        };
-        var config = {
-            params: data,
-            headers : {'Accept' : 'application/json'}
-        };
-        $http.post('/product/removefromcart',config).success(function (response, status, headers, config){
-           
-            //console.log(response);
-           document.getElementById('producttable').deleteRow(rowid);
-           
-        }).error(function(err){
-           console.log('Oops! Error occur'+err);
+        $http.get('/product/removefromcart/'+productId).success(function(response){
+           $("#cart-badge").html(response.total_cart_items);
+            $("#cart_checkoutpage").load(location.href + " #cart_checkoutpage");
+        }).error(function(){
+            console.log('Oops! Error listing products-detail');
         });
-        
+      
     };
         
 }]);

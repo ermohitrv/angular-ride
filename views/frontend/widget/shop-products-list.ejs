@@ -22,8 +22,10 @@ result = results[i];
             </div>
             <div class="price"><span>$<%= result.product_price %></span></div>
             <div class="action-control">
-               <a class="btn btn-danger"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a>
-            
+               <!--<a  class="btn btn-danger" data-toggle="modal" data-target="#myModal1"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a>-->
+                <button class="button btn-block btn-cart cart first product-add-to-cart" data-ng-click="addToCart('<%= result._id %>')" type="button" data-toggle="modal" data-target="#myModal">
+                        Add to Cart
+                        </button>
             </div>
         </div>
     </div>
@@ -34,8 +36,9 @@ result = results[i];
 <% } %>
 
 
+
 <!-- Bootstrap modal -->
-<div id="myModal" class="modal fade continueshoppingmodal" role="dialog">
+<div id="myModal1" class="modal fade continueshoppingmodal" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -46,26 +49,28 @@ result = results[i];
       </div>
       <div class="modal-body">
           <label>Product added to cart successfully!</label>
-                <div>
-                <table class="table table-hover">
-                        <tbody>
-                            <tr></tr>
-                            <tr>
-                                <td><a href="/shop"><button type="button" class="btn btn-warning continue_shoping">
-                                    <span class="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
-                                    </button></a>
-                                </td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td><a  href="/cart"><button type="button" class="btn btn-success checkout_btn">
-                                        Checkout <span class="glyphicon glyphicon-play"></span>
-                                </button></a></td>
-                                </tr>
-                        </tbody>
-                    </table>
-                </div>
+
+                    <div>
+                        <table class="table table-hover">
+                                    <tbody>
+                                        <tr></tr>
+                                        <tr>
+                                            <td><a href="/shop"><button type="button" class="btn btn-warning continue_shoping" data-dismiss="modal">
+                                                <span class="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
+                                                    </button></a></td>
+                                            <td>   </td>
+                                            <td>   </td>
+                                            <td>
+                                            </td>
+                                            <td></td>
+                                            <td>
+                                                <a  href="/cart"><button type="button" class="btn btn-success checkout_btn">
+                                                Checkout <span class="glyphicon glyphicon-play"></span>
+                                                </button></a></td>
+                                        </tr>
+                                    </tbody>
+                            </table>
+                    </div>
 
 
 
