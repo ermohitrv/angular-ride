@@ -69,7 +69,27 @@ app.controller('homeController', ['$scope', '$http', function ($scope, $http) {
 
 /********************** menu controller  **********************/
 app.controller('menuController',['$scope', '$http', function ($scope, $http) {
-        
+//        $scope.removeFromCart = function(productId){
+//        console.log(productId);
+////        var data = { 
+////            product_id: productId, 
+////           
+////        };
+////        var config = {
+////            params: data,
+////            headers : {'Accept' : 'application/json'}
+////        };
+////        $http.post('/product/removefromcart',config).success(function (response, status, headers, config){
+////            
+////            $("#cart-badge").html(response.total_cart_items);
+////           
+////            console.log(response);
+////
+////           
+////        }).error(function(err){
+////           console.log('Oops! Error occur'+err);
+////        }); 
+//    };
 }]);
 
 /********************** profile controller  **********************/
@@ -125,7 +145,7 @@ app.controller('productController',['$scope', '$http','$sce', function ($scope, 
             headers : {'Accept' : 'application/json'}
         };
         $http.post('/product/addtocart',config).success(function (response, status, headers, config){
-            
+           
             $("#cart-badge").html(response.total_cart_items);
             //alert(response.message);
             console.log(response);

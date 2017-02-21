@@ -174,9 +174,25 @@
 <script>
    function deleteRow(i,productid){
       //alert(productid);
-     //angular.element(this).scope().addToCart(product_id,quantity_box);
-    document.getElementById('producttable').deleteRow(i);
-   }
+//      var $scope = angular.element(document.getElementById("motorAppBody")).scope(); // get scope of menu controller
+//      console.log($scope);
+//      $scope.removeFromCart(productid);
+      //angular.element(this).scope().removeFromCart(productid);
+      document.getElementById('producttable').deleteRow(i);
+//         $.ajax({
+//           type: "post",
+//           url: "/product/removefromcart",
+//           data: {
+//                  productid : productid
+//                 },
+//           success: function(data)
+//           {  
+//              alert("success"); 
+//           }
+//              
+//         }); 
+    
+    }
 
    $('.quantitybox').change(function(){
        

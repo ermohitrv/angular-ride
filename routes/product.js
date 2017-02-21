@@ -147,4 +147,9 @@ router.post('/addtocart', function(req, res, next) {
     });
 });
 
+router.post('/product/removefromcart', function(req, res, next) {	
+       console.log(req.body.productid);
+       res.send(true);
+});
+
 module.exports = router;
