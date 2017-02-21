@@ -24,6 +24,7 @@ module.exports = {
     
     //success messages
     successRegister   : 'Congrats! You are successfully registered to RidePrix',
+    successUpdate   : 'Congrats! You are successfully updated to RidePrix',
     successImageUpload: 'Your Image uploaded successfully!',
     
     //shop messages 

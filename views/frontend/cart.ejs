@@ -1,5 +1,5 @@
 <% layout('layout') -%>
-<div class="cart_page">
+<div class="cart_page" id="cart_checkoutpage" data-ng-controller="cartController">
     <div class="overlay_bg"></div>
     <div class="container">
         <div class="row">
@@ -19,7 +19,7 @@
                         <% if( sessionCartItemsCount !=  undefined && sessionCartItemsCount > 0 ){ %>
                         <% for(var i = 0; i < productIds.length; i++){ %>
                         <% var productid = productIds[i]; %>
-                        <%=  sessionCart[productid].product_image %> 
+                        
                         <tr id="productrow_<%= i %>">
                             <td class="col-sm-8 col-md-6">
                                 <div class="media">
@@ -174,24 +174,23 @@
 <script>
    function deleteRow(i,productid){
       //alert(productid);
-//      var $scope = angular.element(document.getElementById("motorAppBody")).scope(); // get scope of menu controller
-//      console.log($scope);
-//      $scope.removeFromCart(productid);
-      //angular.element(this).scope().removeFromCart(productid);
-      document.getElementById('producttable').deleteRow(i);
+      var $scope = angular.element(document.getElementById("cart_checkoutpage")).scope(); // get scope of cart controller
+      console.log($scope);
+      $scope.removeFromCart(i,productid);
+     // angular.element(this).scope().removeFromCart(productid);
+      //document.getElementById('producttable').deleteRow(i);
 //         $.ajax({
-//           type: "post",
+//           type: "get",
 //           url: "/product/removefromcart",
 //           data: {
 //                  productid : productid
 //                 },
 //           success: function(data)
 //           {  
-//              alert("success"); 
+//              alert(data); 
 //           }
 //              
-//         }); 
-    
+//         });
     }
 
    $('.quantitybox').change(function(){

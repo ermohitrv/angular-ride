@@ -970,7 +970,7 @@ router.post('/facebook-create-user', function (req, res) {
 //      var username = req.query.username;
 //      var profileImage = req.query.profileImage;
 //      var email = req.query.email;
-     
+
       var facebook_id =   req.body.facebook_id;
       var username = req.body.username;
       var profileImage = req.body.profileImage;
@@ -991,6 +991,41 @@ router.post('/facebook-create-user', function (req, res) {
                 });
             }
             else{
+                
+                if(user){   // if user exist with that email
+                    user.local.username          = username;
+                    user.local.email             = email;
+                    user.local.userLevel         = 'NORMAL';    //default to NORMAL
+                    user.local.userActive        = 'ACTIVE';    //default to ACTIVE
+                    user.local.token             = globalConfig.randomString;
+                    user.local.profileImage      = profileImage;
+                    user.facebook.id             = facebook_id;
+                    user.save(function(err){
+                    if (err){
+                        console.log("error caught 3");
+                        res.json({ 
+                            success: false, 
+                            data: null, 
+                            message: err, 
+                            code: 400
+                        });
+                    }else{
+                        res.json({ 
+                            success: true,
+                            data: 
+                                {
+                                    username        :username,
+                                    email           :email,
+                                    profilepic      :profileImage
+                                   
+                                },
+                            message: globalConfig.successUpdate, 
+                            code: 200
+                        });
+                    }
+                });
+                }
+                else{ 
                 // if there is no user with that email
                 // create the user
                 var newUser                     = new User();
@@ -1026,8 +1061,9 @@ router.post('/facebook-create-user', function (req, res) {
                         });
                     }
                 });
-            }
-        });
+            }   
+        }
+    });
     }else{
         res.json({ 
             success: false, 

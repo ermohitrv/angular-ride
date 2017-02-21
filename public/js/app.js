@@ -159,6 +159,37 @@ app.controller('productController',['$scope', '$http','$sce', function ($scope, 
            console.log('Oops! Error occur'+err);
         }); 
     };
+    
+    
+     
+}]);
+
+
+app.controller('cartController',['$scope', '$http','$sce', function ($scope, $http, $sce) {
+        
+        $scope.removeFromCart = function(rowid,productId){
+        
+        alert("productId: "+productId);
+       
+        var data = { 
+            productId: productId, 
+           
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/product/removefromcart',config).success(function (response, status, headers, config){
+           
+            //console.log(response);
+           document.getElementById('producttable').deleteRow(rowid);
+           
+        }).error(function(err){
+           console.log('Oops! Error occur'+err);
+        });
+        
+    };
+        
 }]);
 
 /********************** shop controller  **********************/
