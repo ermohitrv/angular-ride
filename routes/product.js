@@ -147,6 +147,7 @@ router.post('/addtocart', function(req, res, next) {
     });
 });
 
+/*Remove product from cart*/
 router.get('/removefromcart/:productId', function(req, res, next) {	
        var productid = req.params.productId
        delete req.session.cart[productid];
@@ -161,12 +162,49 @@ router.get('/removefromcart/:productId', function(req, res, next) {
         res.status(200).json({"total_cart_items": Object.keys(req.session.cart).length});
 });
 
-
-router.post('/cartproducts', function(req, res, next) {	    
+/*update product in cart header*/
+router.post('/cartproducts', function(req, res, next) {	   
+     if(!req.session.cart){
+        res.status(200).json({"total_cart_items":'0'});
+    }else{
         req.session.cart_total_items = Object.keys(req.session.cart).length;
         res.status(200).json({"total_cart_items": Object.keys(req.session.cart).length});
+    }    
 });
 
+router.post('/imageresize', function(req, res, next) {	   
+//    var gm = require('../node_modules/gm');
+//    gm('/public/uploads/fb-pc.jpg')
+//    .resize(353, 257)
+//    .autoOrient()
+//    .write(writeStream, function (err) {
+//      if (!err) console.log(' hooray! ');
+//    }); 
+//    var ImageResize = require('../node_modules/node-image-resize'),
+//    fs = require('fs');
+// 
+//    var image = new ImageResize('/public/uploads/fb-pc.jpg');
+//    image.loaded.then(function(){
+//        image.smartResizeDown({
+//            width: 200,
+//            height: 200
+//        }).then(function () {
+//            image.stream(function (err, stdout, stderr) {
+//                var writeStream = fs.createWriteStream('/public/uploads/resized.jpg');
+//                stdout.pipe(writeStream);
+//            });
+//        });
+//    });
+        require('../node_modules/sharp');
+        var transformer = sharp()
+            .resize(500)
+            .on('info', function(info) {
+                console.log('Image height is ' + info.height);
+            });
 
+        readableStream.pipe(transformer).pipe(res);
+    console.log("Image resize");
+    res.status(200).json({"success": "image resize"});
+});
 
 module.exports = router;

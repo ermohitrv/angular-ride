@@ -485,7 +485,7 @@ router.get('/change-password', function(req, res){
 });
 
 /* API endpoint to be used by mobile device for adding route on initialization */
-router.post('/init-add-route', function(req, res){
+/*router.post('/init-add-route', function(req, res){
     var objRoute = new RpRoutes();
     
     var email                = req.body.email;
@@ -550,8 +550,65 @@ router.post('/init-add-route', function(req, res){
             });
         }
     });
-});
+});*/
 
+router.post('/init-add-route', function(req, res){
+    var objRoute = new RpRoutes();
+    
+    var email                = req.body.email;
+    var starting_locationLat = req.body.starting_locationLat;
+    var starting_locationLng = req.body.starting_locationLng;
+    
+    var ending_locationLat   = req.body.ending_locationLat;
+    var ending_locationLng   = req.body.ending_locationLng;
+//    var email                = "preeti_dev@rvtechnologies.co.in";
+//    var starting_locationLat = "starttestlat";
+//    var starting_locationLng = "starttestlng";
+//    
+//    var ending_locationLat   = "endtestlat";
+//    var ending_locationLng   = "endtestlng";
+    
+    
+    objRoute.email                  = email;
+    objRoute.route                  = 1;
+    
+    objRoute.startinglocationLat    = starting_locationLat;
+    objRoute.startinglocationLng    = starting_locationLng;
+    
+    objRoute.endinglocationLat      = ending_locationLat;
+    objRoute.endinglocationLng      = ending_locationLng;
+   
+    objRoute.creationTime           = new Date();
+    //objRoute.rproute1.invitedFriends.push( { "email":"invite2@gmail.com" } );
+     
+    objRoute.save(function(err){
+        if (err){
+            res.json({
+                success: false, 
+                data: null, 
+                message: err, 
+                code: 400
+            });
+        }else {
+            
+            res.json({
+                success: true, 
+                data: {
+                    
+                    rproute1 : {
+                        locationLat : starting_locationLat,
+                        locationLng : starting_locationLng,
+                        activeStatus: 'INACTIVE',
+                        invitedFriends: [],
+                    },
+                    
+                }, 
+                message: "route 1 added successfully", 
+                code: 200
+            });
+        }
+    });
+});
 
 /* API endpoint to be used by mobile device for iniviting friend for route */
 router.post('/invite-friends-list', function(req, res){
@@ -1087,6 +1144,147 @@ router.post('/facebook-create-user', function (req, res) {
     }
     
 });
+
+/* API endpoint to be used by mobile device for rproutes  */
+router.get('/rproutes', function (req, res) {
+    
+       console.log("*******rproutes*********");
+       res.send(true);
+       var email              = req.query.email;
+       var rproute            = req.query.rproute;
+       var numberofRoutes     = req.query.numberofRoutes;
+       var totalDistance      = req.query.totalDistance;
+       var friendsList        = req.query.friendsList;
+       var nailsAt            = req.query.nailsAt;
+       var nailsBy            = req.query.nailsBy;
+       var patchesusedby      = req.query.patchesusedby;
+       var purchasetire       = req.query.purchasetire;
+       var numberofvideos     = req.query.numberofvideos;
+       
+       if(rproute >= 4){
+           var oilthrownAt       = req.query.oilthrownAt;
+           var oilthrownBy       = req.query.oilthrownBy;
+           var wrenchusedBy         = req.query.wrenchusedBy;
+       }
+       if(rproute >= 7){
+           var carthrownAt       = req.query.carthrownAt;
+           var carthrownBy       = req.query.carthrownBy;
+           var towtruckusedBy    = req.query.towtruckusedBy;
+       }
+       if(rproute >= 10){
+           var policecarthrownAt       = req.query.policecarthrownAt;
+           var policecarthrownBy       = req.query.policecarthrownBy;
+           var odometerusedBy         = req.query.odometerusedBy;
+       }
+       
+//        if(email != "" && email != undefined){
+//        User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function(err, user) {
+//            // if there are any errors, return the error
+//            if (err) {
+//                console.log("error caught 1");
+//                res.json({ 
+//                    success: false, 
+//                    data: null, 
+//                    message: err, 
+//                    code: 400
+//                });
+//            }
+//            else{
+//                
+//                if(user){   // if user exist with that email
+//                User.update({ 
+//                                'local.email': { $regex : new RegExp(email, "i") } 
+//                            },
+//                            { 
+//                                $set:   { 
+//                                            'local.profileImage': profileImage ,
+//                                            'local.username':username,
+//                                            'facebook.id': facebook_id
+//                                        } 
+//                            },
+//                            { multi: true },
+//                function(err, userinfo){
+//
+//                     if (err){
+//                        console.log("error caught 3");
+//                        res.json({ 
+//                            success: false, 
+//                            data: null, 
+//                            message: err, 
+//                            code: 400
+//                        });
+//                    }else{
+//                        
+//                        
+//                        res.json({ 
+//                            success: true,
+//                            data: 
+//                                {
+//                                    username        :username,
+//                                    email           :email,
+//                                    profilepic      :profileImage
+//                                   
+//                                },
+//                            message: globalConfig.successUpdate, 
+//                            code: 200
+//                        });
+//                    }
+//                });    
+//
+//                }
+//                else{ 
+//                // if there is no user with that email
+//                // create the user
+//                var newUser                     = new User();
+//                newUser.local.username          = username;
+//                newUser.local.email             = email;
+//                newUser.local.userLevel         = 'NORMAL';    //default to NORMAL
+//                newUser.local.userActive        = 'ACTIVE';    //default to ACTIVE
+//                newUser.local.token             = globalConfig.randomString;
+//                newUser.local.profileImage      = profileImage;
+//                newUser.facebook.id             = facebook_id;
+//        	// save the user
+//                newUser.save(function(err){
+//                    if (err){
+//                        console.log("error caught 3");
+//                        res.json({ 
+//                            success: false, 
+//                            data: null, 
+//                            message: err, 
+//                            code: 400
+//                        });
+//                    }else{
+//                        
+//                        console.log('case 3 profileImage: '+profileImage);
+//                        
+//                        res.json({ 
+//                            success: true,
+//                            data: 
+//                                {
+//                                    username        :username,
+//                                    email           :email,
+//                                    profilepic      :profileImage
+//                                   
+//                                },
+//                            message: globalConfig.successRegister, 
+//                            code: 200
+//                        });
+//                    }
+//                });
+//            }   
+//        }
+//    });
+//    }else{
+//        res.json({ 
+//            success: false, 
+//            data: null, 
+//            message: "missing parameters", 
+//            code: 400
+//        });
+//    }
+       
+});
+
 
 // 32 character random string token
 function random_token(){

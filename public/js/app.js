@@ -84,7 +84,7 @@ app.controller('menuController',['$scope', '$http', function ($scope, $http) {
                 $scope.cartProductsCount = 0;
             }
                 //$("#cart-badge").html(response.total_cart_items);
-                console.log(response);
+                //console.log(response);
 
             }).error(function(err){
                console.log('Oops! Error occur'+err);
@@ -157,6 +157,29 @@ app.controller('productController',['$scope', '$http','$sce', function ($scope, 
     };
     
     
+     $scope.imageResize = function(imageSrc){
+        alert(imageSrc);
+        var data = { 
+            image_src: imageSrc, 
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/product/imageresize',config).success(function (response, status, headers, config){
+           alert("success"+response.success);
+            //console.log(response);
+           
+        }).error(function(err){
+           console.log('Oops! Error occur'+err);
+        }); 
+        
+//        $http.get('/product/imageresize').success(function(response){
+//          alert("success"+response.success);
+//        }).error(function(){
+//            console.log('Oops! Error listing products-detail');
+//        });
+    };
      
 }]);
 

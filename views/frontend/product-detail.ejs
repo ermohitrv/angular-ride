@@ -27,6 +27,8 @@ $(document).on('click','.smallimageuploaded',function(){
       var smallimgsrc = document.getElementById(smallimageid).src;
       $('.largeimageuploaded').attr('src',smallimgsrc);
       $('.largeimageuploaded').attr('data-magnify-src',smallimgsrc);
+     
+      
 });
 
 //
@@ -39,7 +41,15 @@ $(document).on('click','.smallimageuploaded',function(){
 //});
 
 $(document).on('click','.zoom',function(){
+   var largeimgsrc = document.getElementById('large_image').src;
+   
    $('.zoom').magnify();
+//   $('.zoom').magnify({
+//    speed: 200,
+//    src: largeimgsrc,
+//   
+//  });
+   //angular.element(this).scope().imageResize(largeimgsrc);
 });
 
 </script>

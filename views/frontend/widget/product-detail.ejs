@@ -6,7 +6,8 @@
                 <div class="sp-large">
                     <% if(result.product_image[0] != "" ){ %>
                     <a href="#" class="">
-                    <img src="/public/uploads/<%= result.product_image[0] %>" data-magnify-src="/public/uploads/<%= result.product_image[0] %>" id="large_<%= result.product_image[0] %>"  class="magnify-image img-responsive largeimageuploaded zoom" alt="img"></a>
+                    <img src="/public/uploads/<%= result.product_image[0] %>" data-magnify-src="/public/uploads/<%= result.product_image[0] %>" id="large_image"  class="magnify-image img-responsive largeimageuploaded zoom" alt="img"></a>
+                    <!--<img src="/public/images/error_bg.jpg" data-magnify-src="/public/images/error_bg.jpg" id="large_<%= result.product_image[0] %>"  class="magnify-image img-responsive largeimageuploaded zoom" alt="img"></a>-->
                     <% } else {%>
                     <a href="#" class="">
                     <img src="/images/product1.jpg" data-magnify-src="large.jpg" class="magnify-image img-responsive" alt="img"></a>
