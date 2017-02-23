@@ -1148,140 +1148,245 @@ router.post('/facebook-create-user', function (req, res) {
 /* API endpoint to be used by mobile device for rproutes  */
 router.get('/rproutes', function (req, res) {
     
+       var Points        = require('../models/points');
        console.log("*******rproutes*********");
-       res.send(true);
-       var email              = req.query.email;
-       var rproute            = req.query.rproute;
-       var numberofRoutes     = req.query.numberofRoutes;
-       var totalDistance      = req.query.totalDistance;
-       var friendsList        = req.query.friendsList;
-       var nailsAt            = req.query.nailsAt;
-       var nailsBy            = req.query.nailsBy;
-       var patchesusedby      = req.query.patchesusedby;
-       var purchasetire       = req.query.purchasetire;
-       var numberofvideos     = req.query.numberofvideos;
-       
-       if(rproute >= 4){
-           var oilthrownAt       = req.query.oilthrownAt;
-           var oilthrownBy       = req.query.oilthrownBy;
-           var wrenchusedBy         = req.query.wrenchusedBy;
-       }
-       if(rproute >= 7){
-           var carthrownAt       = req.query.carthrownAt;
-           var carthrownBy       = req.query.carthrownBy;
-           var towtruckusedBy    = req.query.towtruckusedBy;
-       }
-       if(rproute >= 10){
-           var policecarthrownAt       = req.query.policecarthrownAt;
-           var policecarthrownBy       = req.query.policecarthrownBy;
-           var odometerusedBy         = req.query.odometerusedBy;
-       }
-       
-//        if(email != "" && email != undefined){
-//        User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function(err, user) {
-//            // if there are any errors, return the error
-//            if (err) {
-//                console.log("error caught 1");
-//                res.json({ 
-//                    success: false, 
-//                    data: null, 
-//                    message: err, 
-//                    code: 400
-//                });
-//            }
-//            else{
-//                
-//                if(user){   // if user exist with that email
-//                User.update({ 
-//                                'local.email': { $regex : new RegExp(email, "i") } 
-//                            },
-//                            { 
-//                                $set:   { 
-//                                            'local.profileImage': profileImage ,
-//                                            'local.username':username,
-//                                            'facebook.id': facebook_id
-//                                        } 
-//                            },
-//                            { multi: true },
-//                function(err, userinfo){
-//
-//                     if (err){
-//                        console.log("error caught 3");
-//                        res.json({ 
-//                            success: false, 
-//                            data: null, 
-//                            message: err, 
-//                            code: 400
-//                        });
-//                    }else{
-//                        
-//                        
-//                        res.json({ 
-//                            success: true,
-//                            data: 
-//                                {
-//                                    username        :username,
-//                                    email           :email,
-//                                    profilepic      :profileImage
-//                                   
-//                                },
-//                            message: globalConfig.successUpdate, 
-//                            code: 200
-//                        });
-//                    }
-//                });    
-//
+       //res.send(true);
+        var nailsAt           = 'false'; 
+        var nailsBy           = 'false';
+        var patchesusedby     = 'false';
+        var oilthrownAt       = 'false';
+        var oilthrownBy       = 'false';
+        var wrenchusedBy      = 'false';
+        var carthrownAt       = 'false';
+        var carthrownBy       = 'false';
+        var towtruckusedBy    = 'false';
+        var policecarthrownAt = 'false';
+        var policecarthrownBy = 'false';
+        var odometerusedBy    = 'false';
+        var friendsList       = [];
+        var numberofvideos    = 'false';
+        var purchasetire      = 'false';
+        var points = '0';
+        
+//        var email              = req.query.email;
+//        var rproute            = req.query.rproute;
+//        var subRoutescompleted = req.query.subRoutescompleted;
+//        var totalDistanceCompleted = req.query.totalDistanceCompleted;
+//        var currentlocationLat = req.query.currentlocationLat;
+//        var currentlocationLng = req.query.currentlocationLng;
+
+        var email              = 'preeti_dev@rvtechnologies.co.in';
+        var riderproute            = '2';
+        var subRoutescompleted = '3';
+        var totalDistanceCompleted = '10';
+        var currentlocationLat = 'test';
+        var currentlocationLng = 'test';
+
+       console.log("*******rproute*********"+riderproute);
+
+
+         
+        if(req.query.friendsList != "" && req.query.friendsList !=""){
+           friendsList = req.query.friendsList; 
+        } 
+        if(req.query.nailsAt != "" && req.query.nailsBy !=""){
+           nailsAt       = req.query.oilthrownAt;
+           nailsBy       = req.query.oilthrownBy;
+           if(req.query.patchesusedby != ""){
+                patchesusedby      = req.query.patchesusedby;
+           }
+        }
+        if(req.query.numberofvideos != ""){
+           numberofvideos = req.query.numberofvideos;
+           
+        } 
+        if(req.query.purchasetire != ""){
+           purchasetire = req.query.purchasetire;
+           
+        } 
+        if(riderproute >= 4 && req.query.oilthrownAt != "" && req.query.oilthrownBy !=""){
+           oilthrownAt       = req.query.oilthrownAt;
+           oilthrownBy       = req.query.oilthrownBy;
+           if(req.query.wrenchusedBy != ""){
+                wrenchusedBy      = req.query.wrenchusedBy;
+           }
+        }
+        if(riderproute >= 7 && req.query.carthrownAt != "" && req.query.carthrownBy !=""){
+           carthrownAt       = req.query.carthrownAt;
+           carthrownBy       = req.query.carthrownBy;
+           if(req.query.towtruckusedBy != ""){
+                towtruckusedBy    = req.query.towtruckusedBy;
+           }
+        }
+        if(riderproute >= 10){
+           policecarthrownAt       = req.query.policecarthrownAt;
+           policecarthrownBy       = req.query.policecarthrownBy;
+           if(req.query.odometerusedBy != ""){
+                odometerusedBy         = req.query.odometerusedBy;
+            }
+        }
+        
+//        Points.findOne({ 'route': riderproute }, function(err, getpoints) {
+//             if (err) {
+//                    console.log("point error caught 1");
+//                    res.json({ 
+//                        success: false, 
+//                        data: null, 
+//                        message: err, 
+//                        code: 400
+//                    });
 //                }
-//                else{ 
-//                // if there is no user with that email
-//                // create the user
-//                var newUser                     = new User();
-//                newUser.local.username          = username;
-//                newUser.local.email             = email;
-//                newUser.local.userLevel         = 'NORMAL';    //default to NORMAL
-//                newUser.local.userActive        = 'ACTIVE';    //default to ACTIVE
-//                newUser.local.token             = globalConfig.randomString;
-//                newUser.local.profileImage      = profileImage;
-//                newUser.facebook.id             = facebook_id;
-//        	// save the user
-//                newUser.save(function(err){
-//                    if (err){
-//                        console.log("error caught 3");
-//                        res.json({ 
-//                            success: false, 
-//                            data: null, 
-//                            message: err, 
-//                            code: 400
-//                        });
-//                    }else{
-//                        
-//                        console.log('case 3 profileImage: '+profileImage);
-//                        
-//                        res.json({ 
-//                            success: true,
-//                            data: 
-//                                {
-//                                    username        :username,
-//                                    email           :email,
-//                                    profilepic      :profileImage
-//                                   
-//                                },
-//                            message: globalConfig.successRegister, 
-//                            code: 200
-//                        });
-//                    }
-//                });
-//            }   
-//        }
-//    });
-//    }else{
-//        res.json({ 
-//            success: false, 
-//            data: null, 
-//            message: "missing parameters", 
-//            code: 400
+//            else {
+//                
+//            }
+//             
+//             
 //        });
-//    }
+        
+        if(email != "" && email != undefined){
+           
+            RpRoutes.findOne({ 'email' :  { $regex : new RegExp(email, "i") },'route': riderproute }, function(err, getrproutes) {
+            // if there are any errors, return the error
+            if (err) {
+                    console.log("route error caught 1");
+                    res.json({ 
+                        success: false, 
+                        data: null, 
+                        message: err, 
+                        code: 400
+                    });
+                }
+            else {
+                 
+                if(getrproutes){   // if user exist with that email
+                RpRoutes.update({ 
+                                'email': { $regex : new RegExp(email, "i") } 
+                            },
+                            { 
+                                $set:   { 
+                                            'numberofRoutescompleted': subRoutescompleted ,
+                                            'totalDistanceCompleted':totalDistanceCompleted,
+                                            'currentlocationLat': currentlocationLat,
+                                            'currentlocationLng': currentlocationLng ,
+                                            'activeStatus':'ACTIVE',
+                                            'isRouteCompleted': 'ONGOING',
+                                            'invitedFriends.friendsList': friendsList,
+                                            'useNails.nailsthrownAt':nailsAt,
+                                            'useNails.nailsthrownBy':nailsBy,
+                                            'usePatches.patchesusedBy':patchesusedby,
+                                            'watchVideo.numberofvideos':numberofvideos,
+                                            'useOil.oilthrownAt':oilthrownAt,
+                                            'useOil.oilthrownBy':oilthrownBy,
+                                            'useWrench.wrenchusedBy':wrenchusedBy,
+                                            'usecar.carthrownAt':carthrownAt,
+                                            'usecar.carthrownBy':carthrownBy,
+                                            'towTruck.towtruckusedBy':towtruckusedBy,
+                                            'policeCar.policecarthrownAt':policecarthrownAt,
+                                            'policeCar.policecarthrownBy':policecarthrownBy,
+                                            'odometer.odometerusedBy':odometerusedBy,
+                                            'points':points,
+                                            'purchasetire':purchasetire 
+                                        } 
+                            },
+                            { multi: true },
+                function(err, rprouteinfo){
+
+                     if (err){
+                        console.log("route error caught 3");
+                        res.json({ 
+                            success: false, 
+                            data: null, 
+                            message: err, 
+                            code: 400
+                        });
+                    }else{
+                        
+                        
+                        res.json({ 
+                            success: true,
+                            data: 
+                                {
+                                   
+                                    email       :email,
+                                    points      :points
+                                   
+                                },
+                            message: globalConfig.successUpdate, 
+                            code: 200
+                        });
+                    }
+                });    
+
+                }
+                else{ 
+                // if there is no user with that email
+                // create the user
+                var newRpRoutes                        = new RpRoutes();
+                newRpRoutes.email                      = email;
+                newRpRoutes.route                      = riderproute;
+                newRpRoutes.numberofRoutescompleted    = subRoutescompleted;
+                newRpRoutes.totalDistanceCompleted     = totalDistanceCompleted;
+                newRpRoutes.currentlocationLat         = currentlocationLat;    
+                newRpRoutes.currentlocationLng         = currentlocationLng;   
+                newRpRoutes.activeStatus               = 'ACTIVE';
+                newRpRoutes.isRouteCompleted           = 'ONGOING';
+                newRpRoutes.invitedFriends             = friendsList;
+                newRpRoutes.useNails.nailsthrownAt     = nailsAt;
+                newRpRoutes.useNails.nailsthrownBy     = nailsBy;
+                newRpRoutes.usePatches.patchesusedBy   = patchesusedby;    
+                newRpRoutes.watchVideo.numberofvideos  = numberofvideos;    
+                newRpRoutes.useOil.oilthrownAt         = oilthrownAt;
+                newRpRoutes.useOil.oilthrownBy         = 'ONGOING';
+                newRpRoutes.useWrench.wrenchusedBy     = wrenchusedBy;
+                newRpRoutes.usecar.carthrownAt         = carthrownAt;
+                newRpRoutes.usecar.carthrownBy         = carthrownBy;
+                newRpRoutes.towTruck.towtruckusedBy    = towtruckusedBy;    
+                newRpRoutes.policeCar.policecarthrownAt= policecarthrownAt;
+                newRpRoutes.policeCar.policecarthrownBy= policecarthrownBy;
+                newRpRoutes.odometer.odometerusedBy    = odometerusedBy;
+                newRpRoutes.points                     = points,
+                newRpRoutes.purchasetire               = purchasetire
+        	// save the newRpRoutes
+                newRpRoutes.save(function(err){
+                    if (err){
+                        console.log("route error caught 3");
+                        res.json({ 
+                            success: false, 
+                            data: null, 
+                            message: err, 
+                            code: 400
+                        });
+                    }else{
+                        
+                        
+                        res.json({ 
+                            success: true,
+                            data: 
+                                {
+                                    email       :email,
+                                    points      :points
+                                   
+                                },
+                            message: globalConfig.successRegister, 
+                            code: 200
+                        });
+                    }
+                });
+            } 
+                
+                }
+           
+            });
+          
+       }
+    else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+    }
        
 });
 

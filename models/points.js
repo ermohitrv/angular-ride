@@ -6,7 +6,7 @@ var rproutespointsSchema = mongoose.Schema({
         numberofroutes             : {type: String, default: ''},
         totalDistance              : {type: String, default: ''},        
         pointsPerkm                : {type: String, default: ''},
-        pointsAddingfriend      : {type: String, default: ''},
+        pointsAddingfriend         : {type: String, default: ''},
         pointsUsingappeveryday     : {type: String, default: ''},
         bonusPoint                 : {type: String, default: ''},
         nailStealingpoints         : {type: String, default: ''},
