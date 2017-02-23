@@ -1146,10 +1146,32 @@ router.post('/facebook-create-user', function (req, res) {
 });
 
 /* API endpoint to be used by mobile device for rproutes  */
-router.get('/rproutes', function (req, res) {
-    
-       var Points        = require('../models/points');
-       console.log("*******rproutes*********");
+router.post('/start-route', function (req, res) {
+        
+//        var lat1 = "1.2393";
+//        var lat2 = "1.5532";
+//        var lon1 = "1.8184";
+//        var lon2 = "0.4221";
+//
+//        var unit = "K";
+//        var radlat1 = Math.PI * lat1/180;
+//	var radlat2 = Math.PI * lat2/180;
+//	var theta = lon1-lon2;
+//	var radtheta = Math.PI * theta/180;
+//	var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+//	dist = Math.acos(dist);
+//	dist = dist * 180/Math.PI;
+//	dist = dist * 60 * 1.1515;
+//	if (unit=="K") { dist = dist * 1.609344; }
+//	if (unit=="N") { dist = dist * 0.8684; }
+//        
+//	console.log("distance***********"+dist);
+//        var roundDist = Math.round(dist);
+//        console.log("round distance"+roundDist);
+//        res.send(true);
+        
+        var Points        = require('../models/points');
+        console.log("*******rproutes*********");
        //res.send(true);
         var nailsAt           = 'false'; 
         var nailsBy           = 'false';
@@ -1163,26 +1185,36 @@ router.get('/rproutes', function (req, res) {
         var policecarthrownAt = 'false';
         var policecarthrownBy = 'false';
         var odometerusedBy    = 'false';
-        var friendsList       = [];
+        var friendsList       =  [];
         var numberofvideos    = 'false';
         var purchasetire      = 'false';
-        var points = '0';
+        var points            = '0';
+        var isRouteCompleted  = 'ONGOING';
         
-//        var email              = req.query.email;
-//        var rproute            = req.query.rproute;
-//        var subRoutescompleted = req.query.subRoutescompleted;
-//        var totalDistanceCompleted = req.query.totalDistanceCompleted;
-//        var currentlocationLat = req.query.currentlocationLat;
-//        var currentlocationLng = req.query.currentlocationLng;
+      var email                  = req.body.email;
+      var riderproute            = req.body.rproute;
+      var subRoutescompleted     = req.body.subRoutescompleted;
+      var totalDistanceCompleted = req.body.totalDistanceCompleted;
+      var currentlocationLat     = req.body.currentlocationLat;
+      var currentlocationLng     = req.body.currentlocationLng;
+      var startinglocationLat    = req.body.startinglocationLat;
+      var startinglocationLng    = req.body.startinglocationLng;
+      var endinglocationLat      = req.body.endinglocationLat;
+      var endinglocationLng      = req.body.endinglocationLng;
 
-        var email              = 'preeti_dev@rvtechnologies.co.in';
-        var riderproute            = '2';
-        var subRoutescompleted = '3';
-        var totalDistanceCompleted = '10';
-        var currentlocationLat = 'test';
-        var currentlocationLng = 'test';
+//        var email                  = 'preeti_dev@rvtechnologies.co.in';
+//        var riderproute            = '2';
+//        var subRoutescompleted     = '3';
+//        var totalDistanceCompleted = '10';
+//        var currentlocationLat     = '1.2393';
+//        var currentlocationLng     = '1.8184';
+//        var startinglocationLat    = '1.2393';
+//        var startinglocationLng    = '1.8184';
+//        var endinglocationLat      = '2.2393';
+//        var endinglocationLng      = '2.8184';
+        
 
-       console.log("*******rproute*********"+riderproute);
+        console.log("*******rproute*********"+riderproute);
 
 
          
@@ -1226,22 +1258,32 @@ router.get('/rproutes', function (req, res) {
             }
         }
         
-//        Points.findOne({ 'route': riderproute }, function(err, getpoints) {
-//             if (err) {
-//                    console.log("point error caught 1");
-//                    res.json({ 
-//                        success: false, 
-//                        data: null, 
-//                        message: err, 
-//                        code: 400
-//                    });
-//                }
-//            else {
-//                
-//            }
-//             
-//             
-//        });
+                    var currentlat = currentlocationLat;
+                    var endlat = endinglocationLat;
+                    var currentlon = currentlocationLng;
+                    var endlon = endinglocationLng;
+                    /* get distance between 2 positions */
+                    var unit = "K";
+                    var radlat1 = Math.PI * currentlat/180;
+                    var radlat2 = Math.PI * endlat/180;
+                    var theta = currentlon-endlon;
+                    var radtheta = Math.PI * theta/180;
+                    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+                    dist = Math.acos(dist);
+                    dist = dist * 180/Math.PI;
+                    dist = dist * 60 * 1.1515;
+                    if (unit=="K") { dist = dist * 1.609344; } //kilometers
+                    if (unit=="N") { dist = dist * 0.8684; } //nautical miles
+                    
+                    var distInmeters = dist/1000;
+                    var roundDist = Math.round(distInmeters);
+                    if(roundDist <= 10 ){
+                            isRouteCompleted = 'COMPLETED';
+                    }else{
+                            isRouteCompleted = 'ONGOING';
+                    }
+                    
+                    console.log("round distance****"+roundDist);
         
         if(email != "" && email != undefined){
            
@@ -1268,8 +1310,12 @@ router.get('/rproutes', function (req, res) {
                                             'totalDistanceCompleted':totalDistanceCompleted,
                                             'currentlocationLat': currentlocationLat,
                                             'currentlocationLng': currentlocationLng ,
+                                            'startinglocationLat': startinglocationLat,
+                                            'startinglocationLng': startinglocationLng ,
+                                            'endinglocationLat': endinglocationLat,
+                                            'endinglocationLng': endinglocationLng ,
                                             'activeStatus':'ACTIVE',
-                                            'isRouteCompleted': 'ONGOING',
+                                            'isRouteCompleted': isRouteCompleted,
                                             'invitedFriends.friendsList': friendsList,
                                             'useNails.nailsthrownAt':nailsAt,
                                             'useNails.nailsthrownBy':nailsBy,
@@ -1308,7 +1354,8 @@ router.get('/rproutes', function (req, res) {
                                 {
                                    
                                     email       :email,
-                                    points      :points
+                                    points      :points,
+                                    isRouteCompleted :isRouteCompleted
                                    
                                 },
                             message: globalConfig.successUpdate, 
@@ -1327,16 +1374,20 @@ router.get('/rproutes', function (req, res) {
                 newRpRoutes.numberofRoutescompleted    = subRoutescompleted;
                 newRpRoutes.totalDistanceCompleted     = totalDistanceCompleted;
                 newRpRoutes.currentlocationLat         = currentlocationLat;    
-                newRpRoutes.currentlocationLng         = currentlocationLng;   
+                newRpRoutes.currentlocationLng         = currentlocationLng;  
+                newRpRoutes.startinglocationLat        = startinglocationLat,
+                newRpRoutes.startinglocationLng        = startinglocationLng ,
+                newRpRoutes.endinglocationLat          = endinglocationLat,
+                newRpRoutes.endinglocationLng          = endinglocationLng ,
                 newRpRoutes.activeStatus               = 'ACTIVE';
-                newRpRoutes.isRouteCompleted           = 'ONGOING';
+                newRpRoutes.isRouteCompleted           = isRouteCompleted;
                 newRpRoutes.invitedFriends             = friendsList;
                 newRpRoutes.useNails.nailsthrownAt     = nailsAt;
                 newRpRoutes.useNails.nailsthrownBy     = nailsBy;
                 newRpRoutes.usePatches.patchesusedBy   = patchesusedby;    
                 newRpRoutes.watchVideo.numberofvideos  = numberofvideos;    
                 newRpRoutes.useOil.oilthrownAt         = oilthrownAt;
-                newRpRoutes.useOil.oilthrownBy         = 'ONGOING';
+                newRpRoutes.useOil.oilthrownBy         = oilthrownBy;
                 newRpRoutes.useWrench.wrenchusedBy     = wrenchusedBy;
                 newRpRoutes.usecar.carthrownAt         = carthrownAt;
                 newRpRoutes.usecar.carthrownBy         = carthrownBy;
@@ -1364,7 +1415,8 @@ router.get('/rproutes', function (req, res) {
                             data: 
                                 {
                                     email       :email,
-                                    points      :points
+                                    points      :points,
+                                    isRouteCompleted :isRouteCompleted
                                    
                                 },
                             message: globalConfig.successRegister, 
