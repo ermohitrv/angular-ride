@@ -73,7 +73,7 @@ var rproutesSchema = mongoose.Schema({
         helmets                    : {type: String, default: false}, 
         points                     : {type: String, default: false},    
         purchasetire               : {type: String, default: false},
-         
+        lastModifiedDate           : {type: Date, default: Date.now()},        
 });
 
 // create the model for rproutes and expose it to our app

@@ -1461,7 +1461,12 @@ button.continue_shoping, button.checkout_btn {
   box-shadow: none;
   border-radius: 3px;
 }
-
+.checkout_page .btn-danger {
+    font-size: 18px;
+    padding: 10px 30px;
+    width: 100%;
+    max-width: 200px;
+}
 /** MEDIA QUERIES **/
 @media only screen and (max-width: 767px){
     .col-xss-12{

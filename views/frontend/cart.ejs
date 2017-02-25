@@ -25,7 +25,7 @@
                         <% if( sessionCartItemsCount !=  undefined && sessionCartItemsCount > 0 ){ %>
                         <% for(var i = 0; i < productIds.length; i++){ %>
                         <% var productid = productIds[i]; %>
-                        <%= sessionCart[productid].product_image[0] %>
+                       
                         <tr id="productrow_<%= i %>">
                             <td class="col-sm-8 col-md-6">
                                 <div class="media">
@@ -85,9 +85,9 @@
                             <td>
                             </td>
                             <td>
-                            <button type="button" class="btn btn-success checkout_btn">
+                            <a href="/checkout"><button type="button" class="btn btn-success checkout_btn">
                                 Checkout <span class="glyphicon glyphicon-play"></span>
-                            </button></td>
+                                </button></a></td>
                         </tr>
                     </tbody>
                 </table>

@@ -14,6 +14,11 @@ var globalConfig    = require('../config/globals.js');
 
 /*SHOP section required variables */
 var Products = require('../models/products');
+var Orders = require('../models/orders');
+var OrdersProducts = require('../models/ordersproducts');
+var Payments = require('../models/payments');
+var OrdersShipping = require('../models/ordersshipping');
+
 
 /* Route for homepage */
 router.get('/', function(req, res){
@@ -503,7 +508,7 @@ router.get('/cart', function(req, res, next) {
 });
 
 /* shop route to render cart page */
-router.get('/checkout', function(req, res, next) {
+router.get('/checkout', csrfProtection, function(req, res, next) {
     
     // if there is no items in the cart then render a failure
     if(!req.session.cart){
@@ -516,10 +521,16 @@ router.get('/checkout', function(req, res, next) {
     // render the checkout
     res.render('checkout', { 
         title: 'Checkout', 
+        csrfToken: req.csrfToken(), 
         session: req.session,
         user: req.user,
+        sessionCart: req.session.cart,
+        productIds : req.session.productids,
+        sessionCartItemsCount: JSON.stringify(req.session.cart_total_items),
         message: middleware.clear_session_value(req.session, "message"),
         message_type: middleware.clear_session_value(req.session, "message_type"),
+        payment_approved: false,
+        payment_message: ''
     });
 });
 
@@ -536,7 +547,7 @@ router.post('/checkout_action', function(req, res, next) {
         res.redirect("/cart");
         return;
     }
-    
+    console.log(req.user.local.email);
     // new order doc
     var order_doc = { 
         order_total: req.session.total_cart_amount,
@@ -559,14 +570,94 @@ router.post('/checkout_action', function(req, res, next) {
         // send the order to Paypal
         middleware.order_with_paypal(req, res);
     }else{
+        console.log("product length"+req.session.productids.length);
         // no order ID so we create a new one
-        req.db.orders.insert(order_doc, function (err, newDoc) {
+        /*req.db.orders.insert(order_doc, function (err, newDoc) {
             // set the order ID in the session
             req.session.order_id = newDoc._id;
             
             // send the order to Paypal
             middleware.order_with_paypal(req, res);
-        });
+        });*/
+        
+                var newOrders                        = new Orders();
+                newOrders.order_total                = req.session.total_cart_amount;
+                newOrders.order_email                = req.user.local.email;
+                newOrders.order_firstname            = req.user.local.firstName;
+                newOrders.order_lastname             = req.user.local.lastName;    
+                newOrders.order_country              = req.user.local.locationCountry;
+                newOrders.order_state                = req.user.local.locationState;
+                newOrders.order_city                 = req.user.local.locationCity;
+                newOrders.order_postcode             = req.user.local.locationZipcode;
+                newOrders.order_status               = 'Processing';
+
+                newOrders.save(function(err,orderdata){
+                    if (err){
+                        console.log("route error caught 3");
+                        res.json({ 
+                            success: false, 
+                            data: null, 
+                            message: err, 
+                            code: 400
+                        });
+                    }else{
+                        req.session.order_id = orderdata._id;
+                        if(req.user != ""){
+                        for(var i = 0; i < req.session.productids.length; i++){ 
+                            var productid = req.session.productids[i];
+                            var newOrdersProducts                      = new OrdersProducts();
+                            newOrdersProducts.order_id                 = orderdata._id;
+                            newOrdersProducts.product_title            = req.session.cart[productid].title;
+                            newOrdersProducts.product_quantity         = req.session.cart[productid].quantity;
+                            newOrdersProducts.product_item_price       = req.session.cart[productid].item_price;   
+                            newOrdersProducts.product_total_item_price = req.session.cart[productid].total_item_price; 
+                            newOrdersProducts.product_link             = req.session.cart[productid].link;
+                            newOrdersProducts.save(function(err,orderproductsdata){
+                                if (err){
+                                    console.log("route error caught 3");
+                                    res.json({ 
+                                        success: false, 
+                                        data: null, 
+                                        message: err, 
+                                        code: 400
+                                    });
+                                }else{
+                                    console.log("products orders saved");
+                                }
+                        
+                            });
+                        }
+                    }
+                    if(req.body.ship_email!=""){
+                            var newOrdersShipping                            = new OrdersShipping();
+                            newOrdersShipping.order_id                       = orderdata._id;
+                            newOrdersShipping.order_shipemail                = req.body.ship_email;
+                            newOrdersShipping.order_shipfirstname            = req.body.ship_firstname;
+                            newOrdersShipping.order_shiplastname             = req.body.ship_lastname;   
+                            newOrdersShipping.order_shipadd1                 = req.body.ship_addr1;
+                            newOrdersShipping.order_shipadd2                 = req.body.ship_addr2;
+                            newOrdersShipping.order_shipcountry              = req.body.ship_country;
+                            newOrdersShipping.order_shipstate                = req.body.ship_state;
+                            newOrdersShipping.order_shippostcode             = req.body.ship_postcode;
+                            newOrdersShipping.save(function(err,orderproductsdata){
+                                if (err){
+                                    console.log("route error caught 3");
+                                    res.json({ 
+                                        success: false, 
+                                        data: null, 
+                                        message: err, 
+                                        code: 400
+                                    });
+                                }else{
+                                    console.log("shipping address saved");
+                                }
+                        
+                            });
+                    }
+                        
+                        middleware.order_with_paypal(req, res);
+                    } 
+                });
     }
 });
 
@@ -574,13 +665,14 @@ router.post('/checkout_action', function(req, res, next) {
 router.get('/checkout_return', function(req, res, next) {
     var config = req.config.get('application');
     var paypal = require('paypal-express-checkout').init(config.paypal_username, config.paypal_password, config.paypal_signature, config.base_url + '/checkout_return', config.base_url + '/checkout_cancel', true);
-    
+    var token = req.query.token;
+    var PayerID = req.query.PayerID;
     paypal.detail(req.query.token, req.query.PayerID, function(err, data, invoiceNumber, price) {
         // check if payment is approved
         var payment_approved = false;
         var order_id = invoiceNumber;
         var payment_status = data.PAYMENTSTATUS;
-        
+        console.log(payment_status);
         // fully approved
         if(data.PAYMENTSTATUS == "Completed"){
             payment_approved = true;
@@ -589,7 +681,7 @@ router.get('/checkout_return', function(req, res, next) {
             // clear the cart
             if(req.session.cart){
                 req.session.cart = null;
-                req.session.order_id = null;
+                //req.session.order_id = null;
                 req.session.total_cart_amount = 0;
             }
         }
@@ -603,7 +695,7 @@ router.get('/checkout_return', function(req, res, next) {
             // clear the cart
             if(req.session.cart){
                 req.session.cart = null;
-                req.session.order_id = null;
+                //req.session.order_id = null;
                 req.session.total_cart_amount = 0;
             }
         }
@@ -618,7 +710,7 @@ router.get('/checkout_return', function(req, res, next) {
             if(err = "ACK Failure: Payment has already been made for this InvoiceID."){
                 payment_message = "Error: Duplicate invoice payment. Please check you have not been charged and try again.";
                 if(req.session.cart){
-                    req.session.order_id = null;
+                    //req.session.order_id = null;
                 }
             }
         }
@@ -628,33 +720,81 @@ router.get('/checkout_return', function(req, res, next) {
             payment_approved = false;
             payment_message = "Error: " + data.L_LONGMESSAGE0;
             if(req.session.cart){
-                req.session.order_id = null;
+                //req.session.order_id = null;
             }
         }
         
         // update the order status
-        req.db.orders.update({ _id: invoiceNumber}, { $set: { order_status: payment_status} }, { multi: false }, function (err, numReplaced) {
-            req.db.orders.findOne({ _id: invoiceNumber}, function (err, order) {
-                var lunr_doc = {
-                    order_lastname: order.order_lastname,
-                    order_email: order.order_email,
-                    order_postcode: order.order_postcode,
-                    id: order._id
-                }; 
-                
-                // add to lunr index
-                req.orders_index.add(lunr_doc);
-                
-                // show the view
-                res.render('checkout', { 
-                    title: "Checkout result",
-                    user: req.user,
-                    session: req.session,
-                    payment_approved: payment_approved,
-                    payment_message: payment_message
+//        req.db.orders.update({ _id: invoiceNumber}, { $set: { order_status: payment_status} }, { multi: false }, function (err, numReplaced) {
+//            req.db.orders.findOne({ _id: invoiceNumber}, function (err, order) {
+//                var lunr_doc = {
+//                    order_lastname: order.order_lastname,
+//                    order_email: order.order_email,
+//                    order_postcode: order.order_postcode,
+//                    id: order._id
+//                }; 
+//                
+//                // add to lunr index
+//                req.orders_index.add(lunr_doc);
+//                
+//                // show the view
+//                res.render('checkout', { 
+//                    title: "Checkout result",
+//                    user: req.user,
+//                    session: req.session,
+//                    payment_approved: payment_approved,
+//                    payment_message: payment_message
+//                });
+//            });
+//        });
+            
+
+            Orders.update({ _id: req.session.order_id}, { $set: { order_status: payment_status} }, { multi: true }, function (err, orderstatusupdated) {
+                 if (err){
+                        console.log("route error caught 3");
+                        res.json({ 
+                            success: false, 
+                            data: null, 
+                            message: err, 
+                            code: 400
+                        });
+                    }else{
+                        var newPayments               = new Payments();
+                        newPayments.username          = req.user.local.username;
+                        newPayments.user_email        = req.user.local.email;
+                        newPayments.payment_status    = payment_status;
+                        newPayments.paypalToken       = token;    
+                        newPayments.paypalPayerid     = PayerID;  
+                        
+                        newPayments.save(function(err,orderdata){
+                            if (err){
+                                console.log("route error caught 3");
+                                res.json({ 
+                                    success: false, 
+                                    data: null, 
+                                    message: err, 
+                                    code: 400
+                                });
+                            }else{
+                            req.session.order_id = null;
+                            // show the view
+                            res.render('checkout', { 
+                                title: "Checkout result",
+                                user: req.user,
+                                session: req.session,
+                                payment_approved: payment_approved,
+                                payment_message: payment_message
+
+                            });
+                        }
                 });
-            });
+            }
         });
+
+
+
+
+
     });
 });
 
@@ -666,7 +806,7 @@ router.get('/checkout_cancel', function(req, res, next) {
     
     paypal.detail(req.query.token, req.query.PayerID, function(err, data, invoiceNumber, price) {
         // remove the cancelled order
-        req.db.orders.remove({_id: invoiceNumber}, {}, function (err, numRemoved) {	
+        Orders.remove({_id: req.session.order_id }, {}, function (err, numRemoved) {	
             // clear the order_id from the session so the user can checkout again
             if(req.session.cart){
                 req.session.order_id = null;
