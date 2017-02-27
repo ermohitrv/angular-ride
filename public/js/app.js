@@ -91,6 +91,34 @@ app.controller('menuController',['$scope', '$http', function ($scope, $http) {
             }); 
        };
     
+       
+//            $scope.complete=function(){
+//                  alert("sdsds");
+//                    console.log(availableTags);
+//                     angular.element(document).ready(function () {
+//                        $( "#tags" ).autocomplete({
+//                          source: availableTags,
+//                        });
+//                 });
+//            } ;
+            
+            angular.element(document).ready(function () {
+              
+//                    $( "#search-box" ).autocomplete({
+//                          source: availableTags,
+//                        });
+                $( "#search-box" ).autocomplete({
+                    source: '/autocomplete-search',
+
+                }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+                       var productlink = "/product/"+item.product_link;
+                       ul.addClass('search-product-list');
+                       return $( "<li>" )
+                      .append( '<a href='+productlink+'><span>'+item.product_title+'</span></a>' )
+                       .appendTo( ul );
+                    };
+            });
+
 }]);
 
 /********************** profile controller  **********************/

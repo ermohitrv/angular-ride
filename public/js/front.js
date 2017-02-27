@@ -314,6 +314,79 @@ jQuery('#change_password_form').validate({
          }
     }); 
    
+    /*Form Validations start here :: shipping form on checkout Page*/
+    jQuery("#shipping_form").validate({
+        rules: {
+            ship_country: {
+                required: true,
+                
+            },
+            ship_firstname: {
+                required: true,
+                minlength: 3,
+                maxlength: 20,
+            },
+            ship_lastname: {
+                required: true,
+                minlength: 3,
+                maxlength: 20,
+            },
+            ship_addr1: {
+                required: true,
+                minlength: 5,
+                maxlength: 20,
+                letterswithbasicpunc:true,
+               
+                
+            },
+
+            ship_addr2: {
+                minlength: 5,
+                maxlength: 20,
+                letterswithbasicpunc:true,
+            }, 
+            ship_state: {
+                required: true,
+                minlength: 5,
+                maxlength: 20,
+                letterswithbasicpunc:true,
+            },
+            ship_postcode: {
+                required: true,
+                minlength: 5,
+                maxlength: 20,
+                
+            },
+            phone_number: {
+                required: true,
+                minlength: 5,
+                maxlength: 20,
+            },
+            ship_email: {
+                required: true,
+                email:true,
+                
+            },   
+         },
+        
+         submitHandler: function(form) {
+           
+            if(localUserUsername){
+            form.submit();
+            }else{
+                var scrollPos =  $("#logincheckoutsection").offset().top;
+                $(window).scrollTop(scrollPos);
+                $('.logincheckout').css('display','block');  
+            }
+         }
+    }); 
+   
+   
+   
+   
+   
+   
+   
     //code to make ajax request to check if username exists or not
     var checkUsernameSuccess = function(response){
         switch (response) {
@@ -431,3 +504,17 @@ function show_notification(msg, type, reload_page){
         }
     });
 }
+
+
+// autocomplete search at header
+//    $( "#search-box" ).autocomplete({
+//    source: '/autocomplete-search',
+//   
+//    }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+//    ul.addClass('search-product-list');
+//    return $( "<li>" )
+//    .append( '<a href="javascript:;">'+item.product_title+' </a>' )
+//    //.append( "<a>" + item.label + "<br>" + item.image + "</a>" )
+//    .appendTo( ul );
+//    };
+

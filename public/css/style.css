@@ -2194,8 +2194,26 @@ body.profile a.navbar-brand.logo{    max-width: 200px;}
     position: relative;
     padding: 5px 0px 0px 15px;
 }
+.logincheckout{
+    color: #ce0000;
+    text-transform: uppercase;
+    text-align: center;
+}
+.search-product{
+    top:5px;
+}
 
-
+.search-product-list { max-height: calc(100% - 74px); overflow-y: auto; }
+.ui-autocomplete {
+    width: 215px !important;
+    background-color: #ccc !important;
+    position: relative !important;
+    z-index: 9999999999 !important;
+    border: 2px solid #ccc !important;
+}
+.ui-autocomplete span {
+    color: #2d2e30;
+}
 @media (min-width: 768px){
 .modal-dialog {
     width: 450px;

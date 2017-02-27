@@ -234,12 +234,20 @@ router.post('/update-profile', parseForm, csrfProtection, middleware.isLoggedIn,
 router.get('/loginCheckAdmin', middleware.isLoggedIn, function (req, res) {
     
     var requestUser = req.user;
-    if (req.session.adminId !== undefined && req.session.adminId !== null) {
+    console.log("checkout login: "+req.session.checkoutlogin);
+    if (req.session.adminId !== undefined && req.session.adminId !== null && req.session.checkoutlogin == false) {
         res.redirect('/admin');
     }
-    if (req.session.enableaccountId !== undefined && req.session.enableaccountId !== null) {
+    if (req.session.enableaccountId !== undefined && req.session.enableaccountId !== null && req.session.checkoutlogin == false) {
         res.redirect('/profile');
     }
+    if(req.session.adminId !== undefined && req.session.adminId !== null && req.session.checkoutlogin == true){
+        res.redirect('/checkout');
+    }
+    if (req.session.enableaccountId !== undefined && req.session.enableaccountId !== null && req.session.checkoutlogin == true) {
+        res.redirect('/checkout');
+    }
+    
     res.redirect(req.session.returnTo || '/profile/');
     delete req.session.returnTo;
 });
@@ -509,7 +517,9 @@ router.get('/cart', function(req, res, next) {
 
 /* shop route to render cart page */
 router.get('/checkout', csrfProtection, function(req, res, next) {
-    
+   
+        req.session.checkoutlogin = true;
+   
     // if there is no items in the cart then render a failure
     if(!req.session.cart){
         req.session.message = "The are no items in your cart. Please add some items before checking out";
@@ -564,12 +574,12 @@ router.post('/checkout_action', function(req, res, next) {
         order_products: req.session.cart
     };
 	
-    if(req.session.order_id){
+    if(req.user && req.session.order_id){
         // we have an order ID (probably from a failed/cancelled payment previosuly) so lets use that.
         
         // send the order to Paypal
         middleware.order_with_paypal(req, res);
-    }else{
+    }else if(req.user){
         console.log("product length"+req.session.productids.length);
         // no order ID so we create a new one
         /*req.db.orders.insert(order_doc, function (err, newDoc) {
@@ -870,6 +880,28 @@ router.get('/classified', function (req, res) {
         message_type: middleware.clear_session_value(req.session, "message_type"),
         page_url: globalConfig.base_url
     });
+});
+
+router.get('/autocomplete-search', function(req, res){
+  var term = req.query.term;
+  console.log(term);
+  
+   Products.find({$or :[{ 'product_title': new RegExp(term, 'i') }, {'product_category': new RegExp(term, 'i')},{'product_brand': new RegExp(term, 'i')}]}, function(err, products){
+
+  // Products.find({ 'product_title':  new RegExp(term, 'i')}, function(err, products){
+    var productnames = [];
+    if(products.length > 0){
+      products.forEach(function(products){
+          console.log( products.product_title);
+        //usernames.push(user.local.username);
+        var dataObj = { 'product_title':  products.product_title,'product_link':products.product_permalink};
+        productnames.push(dataObj);
+      });
+    }
+    
+    console.log(productnames);
+    res.json(productnames);
+  });
 });
 
 module.exports = router;

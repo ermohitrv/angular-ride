@@ -26,8 +26,11 @@ module.exports = {
             return next();
         }else{
             req.session.adminId = null;
+            if(!req.session.checkoutlogin){
+               req.session.checkoutlogin == false;
+            }
         }
-        if( req.session.adminId !== null && req.session.adminId !== undefined ) {
+        if( req.session.adminId !== null && req.session.adminId !== undefined && req.session.checkoutlogin == false) {
             return next();
         }
         res.redirect('/login');

@@ -8,7 +8,24 @@
                     <div id="clock-details"><span>Hours</span><span>Minutes</span><span>Secs.</span></div>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="col-lg-4 col-md-4 col-sm-4">
+                <div class="follow_us navbar-right"> 
+                    <form class="navbar-form" role="search">
+                        <div class="input-group">
+                            <input  class="form-control search-product" placeholder="Search" name="search-box" id="search-box" ng-keyup="complete()">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                            </div>
+                        </div>
+                    </form>   
+                   
+            
+
+                </div>     
+               
+                <!--<input id="tags" ng-keyup="complete()"/>-->
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2">
                 <div class="follow_us navbar-right">
                     <p>&nbsp;</p>
                     <ul>
@@ -80,3 +97,12 @@
     </nav>
 </div>
 <!--=============================hEADEr eND===============================================-->
+<% if (user !== undefined && user !== null) { %>
+<script data-cfasync="false" type="text/javascript">
+var localUserUsername = '<%= user.local.username %>';
+</script>
+<%  }else{ %>
+<script data-cfasync="false"  type="text/javascript">
+var localUserUsername = '';
+</script>
+<% } %>
