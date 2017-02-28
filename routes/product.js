@@ -215,7 +215,7 @@ router.post('/get-categories-list',  function(req, res){
     //res.send(true);
     Categories.aggregate([{$sort: {'category_added_date': 1}}], function (err, categoryList) {
         if(categoryList){
-            console.log(categoryList);
+           
             res.json(categoryList);
         }else{
             res.json({});
