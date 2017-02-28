@@ -15,7 +15,7 @@
                             <h3>Filter</h3>
                             <h4>Categories</h4>
                             <ul>
-                                <li data-ng-if="categoryList.length > 0" data-ng-repeat="category in categoryList" id="{{ category._id }}"><a href="#" data-ng-bind="category.category_title"></a></li>
+                                <li data-ng-if="categoryList.length > 0" data-ng-repeat="category in categoryList" id="{{ category._id }}" data-ng-click="getCategoriessearch()"><a href="#" data-ng-bind="category.category_title"></a></li>
                                
                             </ul>
 <!--                            <ul>
@@ -75,8 +75,11 @@
                                             <div class="quickview">
                                                 <a data-toggle="modal" class="btn btn-xs btn-quickview" href="#" data-target="">Quick View</a>
                                             </div>
-                                            <a href="#"><img src="/public/uploads/<%= result.product_image[0] %>" alt="img" class="img-responsive"></a>
-                                        </div>
+                                            <% if(result.product_image[0] != "" && result.product_image[0] != undefined ){ %>
+                                                <a href="/product/<%= result.product_permalink %>"><img  src="/public/uploads/<%= result.product_image[0] %>" alt="img" class="img-responsive" ></a>
+                                            <% } else {%>
+                                                <a href="#"><img  src="http://placehold.it/240x240" alt="img" class="img-responsive" ></a>
+                                            <% } %>                                        </div>
                                         <div class="description">
                                             <h4><a href="#"><%= result.product_title %></a></h4>
                                             <span class="size">XL / XXL / S </span>

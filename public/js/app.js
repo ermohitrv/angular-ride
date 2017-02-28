@@ -275,6 +275,20 @@ app.controller('shopController',['$scope', '$http', '$sce',function ($scope, $ht
         });
     };
     
+    /* categories wise search */
+    $scope.getCategoriessearch = function(){
+        
+        var config = {
+            headers : {'Accept' : 'application/json'}
+        };
+//        $http.post('/product/get-categories-list',config).success(function(response, status, headers, config){
+//            console.log("categoryList");
+//            $scope.categoryList = response;
+//        }).error(function(){
+//            console.log('Oops! Error listing get-category-list on search page');
+//        });
+    };
+    
     
 }]);
 

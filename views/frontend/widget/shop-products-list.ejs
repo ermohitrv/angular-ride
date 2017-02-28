@@ -12,8 +12,10 @@ result = results[i];
                     <a data-toggle="modal" class="btn btn-xs btn-quickview" href="/product/<%= result.product_permalink %>" data-target="">Quick View</a>
                 </div>
                 <!--<a href="/product/<%= result.product_permalink %>"><img src="/images/related_product.jpg" alt="img" class="img-responsive"></a>-->
-            <% if(result.product_image[0] != "" ){ %>
+            <% if(result.product_image[0] != "" && result.product_image[0] != undefined ){ %>
                 <a href="/product/<%= result.product_permalink %>"><img  src="/public/uploads/<%= result.product_image[0] %>" alt="img" class="img-responsive" ></a>
+            <% } else {%>
+                <a href="#"><img  src="http://placehold.it/240x240" alt="img" class="img-responsive" ></a>
             <% } %>
             </div>
             <div class="description">
