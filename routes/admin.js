@@ -15,6 +15,8 @@ var globalConfig    = require('../config/globals');
 /*SHOP section required variables */
 var Products = require('../models/products');
 var Brands = require('../models/brands');
+var Categories = require('../models/category');
+var Points = require('../models/points');
 var multer      = require('multer');
 
 var storage = multer.diskStorage({
@@ -1200,4 +1202,157 @@ router.get('/files', middleware.restrict, function(req, res) {
 		});
 	});
 });
+
+/* category form */
+router.get('/category/new', middleware.restrict, function(req, res) {
+    res.render('category_new', {
+        title: 'New category', 
+        session: req.session,
+        message: middleware.clear_session_value(req.session, "message"),
+        message_type: middleware.clear_session_value(req.session, "message_type"),
+        editor: true,
+        user:req.user,
+        active:'add-category'
+    });
+});
+
+// insert new category form action
+router.get('/category/insert',  middleware.restrict, function(req, res) {
+        console.log("title****** : "+req.query.frm_category_title);
+        Categories.find({'category_title': req.query.frm_category_title}, function (err, category) {
+        if(err){
+
+            req.flash('message', globalConfig.productExists);
+            req.flash('message_type','danger');
+            // redirect to insert
+            res.redirect('/admin/insert');
+        }else{
+            
+            
+            
+            var categoryObj = new Categories();
+            categoryObj.category_title        = req.query.frm_category_title;
+            categoryObj.category_description  = req.query.frm_category_description;
+            categoryObj.category_short_description = req.query.frm_category_short_description;
+            categoryObj.category_added_date   = new Date();
+           
+            categoryObj.save(function (err) {
+                if(err){
+                    console.error("Error inserting document: " + err);
+                    req.flash('message', globalConfig.productCreateError+' '+err);
+                    req.flash('message_type','danger');
+                    res.redirect('/admin/insert');
+                }else{
+                    req.flash('message', globalConfig.productCreateSuccess);
+                    req.flash('message_type','success');
+                    res.redirect('/admin/list-categories');
+                }
+            });
+        }
+    });
+});
+
+/* Route for List categories by Angular */
+router.get('/get-categories-list', middleware.isAdminLoggedIn, function(req, res){
+    Categories.aggregate([{$sort: {'category_added_date': 1}}], function (err, categoryList) {
+        if(categoryList){
+            res.json(categoryList);
+        }else{
+            res.json({});
+        }
+    });
+});
+
+router.get('/list-categories', middleware.isAdminLoggedIn, function(req, res){
+    res.render('list-categories', { 
+        message : req.flash('message'),
+        message_type : req.flash('message_type'),
+        user : req.user, 
+        title:'Admin | List Categories',
+        active:'list-category'
+    });
+});
+
+
+
+/* Points management*/
+router.get('/list-rproutespoints', middleware.isAdminLoggedIn, function(req, res){
+    res.render('list-rproutespoints', { 
+        message : req.flash('message'),
+        message_type : req.flash('message_type'),
+        user : req.user, 
+        title:'Admin | List Rproutes Points',
+        active:'list-rproutepoint'
+    });
+});
+
+router.get('/get-points-list', middleware.isAdminLoggedIn, function(req, res){
+    Points.aggregate([{$sort: {'route': 1}}], function (err, pointsList) {
+        if(pointsList){
+            res.json(pointsList);
+        }else{
+            res.json({});
+        }
+    });
+});
+
+router.get('/add-rproutespoints', middleware.restrict, function(req, res) {
+    res.render('rproutepoints_new', {
+        title: 'New Rproute Points', 
+        session: req.session,
+        message: middleware.clear_session_value(req.session, "message"),
+        message_type: middleware.clear_session_value(req.session, "message_type"),
+        editor: true,
+        user:req.user,
+        active:'add-points'
+    });
+});
+
+// insert new points route form action
+router.post('/rproutepoints/insert',  middleware.restrict, function(req, res) {
+        console.log("route****** : "+req.body.frm_point_route);
+        Points.find({'route': req.body.frm_point_route}, function (err, rproutepoints) {
+        if(err){
+
+            req.flash('message', globalConfig.productExists);
+            req.flash('message_type','danger');
+            // redirect to insert
+            res.redirect('/admin/insert');
+        }else{
+            
+            
+            var pointsObj = new Points();
+            pointsObj.route                   = req.body.frm_point_route;
+            pointsObj.numberofroutes          = req.body.frm_point_numberofroutes;
+            pointsObj.totalDistance           = req.body.frm_point_totalDistance;
+            pointsObj.pointsPerkm             = req.body.frm_point_pointsPerkm;
+            pointsObj.pointsAddingfriend      = req.body.frm_point_pointsAddingfriend;
+            pointsObj.pointsUsingappeveryday  = req.body.frm_point_pointsUsingappeveryday;
+            pointsObj.bonusPoint              = req.body.frm_point_bonusPoint;
+            pointsObj.nailStealingpoints      = req.body.frm_point_nailStealingpoints;
+            pointsObj.nailExtrapoints         = req.body.frm_point_nailExtrapoints;
+            pointsObj.oilStealingpoints       = req.body.frm_point_oilStealingpoints;
+            pointsObj.oilExtrapoints          = req.body.frm_point_oilExtrapoints;
+            pointsObj.carStealingpoints       = req.body.frm_point_carStealingpoints;
+            pointsObj.carExtrapoints          = req.body.frm_point_carExtrapoints;
+            pointsObj.policecarStealingpoints = req.body.frm_point_policecarStealingpoints;
+            pointsObj.policecarExtrapoints    = req.body.frm_point_policecarExtrapoints;
+            
+            
+            pointsObj.save(function (err) {
+                if(err){
+                    console.error("Error inserting document: " + err);
+                    req.flash('message', globalConfig.productCreateError+' '+err);
+                    req.flash('message_type','danger');
+                    res.redirect('/admin/insert');
+                }else{
+                    req.flash('message', globalConfig.productCreateSuccess);
+                    req.flash('message_type','success');
+                    res.redirect('/admin/list-rproutespoints');
+                }
+            });
+        }
+    });
+});
+
 module.exports = router;

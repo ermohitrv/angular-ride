@@ -1149,91 +1149,93 @@ router.post('/facebook-create-user', function (req, res) {
 });
 
 /* API endpoint to be used by mobile device for rproutes  */
-router.get('/start-route', function (req, res) {
+router.post('/start-route', function (req, res) {
         
 
         
         var Points        = require('../models/points');
         console.log("*******rproutes*********");
        //res.send(true);
-        var nailsAt           = 'false'; 
-        var nailsBy           = 'false';
-        var patchesusedby     = 'false';
-        var oilthrownAt       = 'false';
-        var oilthrownBy       = 'false';
-        var wrenchusedBy      = 'false';
-        var carthrownAt       = 'false';
-        var carthrownBy       = 'false';
-        var towtruckusedBy    = 'false';
-        var policecarthrownAt = 'false';
-        var policecarthrownBy = 'false';
-        var odometerusedBy    = 'false';
+        var nailsAt           = ''; 
+        var nailsBy           = '';
+        var patchesusedby     = '';
+        var oilthrownAt       = '';
+        var oilthrownBy       = '';
+        var wrenchusedBy      = '';
+        var carthrownAt       = '';
+        var carthrownBy       = '';
+        var towtruckusedBy    = '';
+        var policecarthrownAt = '';
+        var policecarthrownBy = '';
+        var odometerusedBy    = '';
         var friendsList       =  [];
-        var numberofvideos    = 'false';
-        var purchasetire      = 'false';
         var points            = '0';
         var isRouteCompleted  = 'ONGOING';
         
         var lastModifiedDate  = Date.now();
         
-//        var email                  = req.body.email;
-//        var riderproute            = req.body.rproute;
-//        var subRoutescompleted     = req.body.subRoutescompleted;
-//        var totalDistanceCompleted = req.body.totalDistanceCompleted;
-//        var currentlocationLat     = req.body.currentlocationLat;
-//        var currentlocationLng     = req.body.currentlocationLng;
-//        var startinglocationLat    = req.body.startinglocationLat;
-//        var startinglocationLng    = req.body.startinglocationLng;
-//        var endinglocationLat      = req.body.endinglocationLat;
-//        var endinglocationLng      = req.body.endinglocationLng;
+        var email                  = req.body.email;
+        //var totalDistanceCompleted = req.body.totalDistanceCompleted;
+        //var currentlocationLat     = req.body.currentlocationLat;
+        //var currentlocationLng     = req.body.currentlocationLng;
+        var startinglocationLat    = req.body.startinglocationLat;
+        var startinglocationLng    = req.body.startinglocationLng;
+        var endinglocationLat      = req.body.endinglocationLat;
+        var endinglocationLng      = req.body.endinglocationLng;
 
-        var email                  = 'preeti_dev@rvtechnologies.co.in';
-        var totalDistanceCompleted = '10';
-        var currentlocationLat     = '1.2393';
-        var currentlocationLng     = '1.8184';
-        var startinglocationLat    = '1.2393';
-        var startinglocationLng    = '1.8184';
-        var endinglocationLat      = '2.2393';
-        var endinglocationLng      = '2.8184';
+        //var email                  = 'preeti_dev@rvtechnologies.co.in';
+        //var totalDistanceCompleted = '10';
+        //var currentlocationLat     = '1.2393';
+        //var currentlocationLng     = '1.8184';
+//        var startinglocationLat    = '1.2393';
+//        var startinglocationLng    = '1.8184';
+//        var endinglocationLat      = '2.2393';
+//        var endinglocationLng      = '2.8184';
         
+//        var friendlistparam        = ['test1@gmail.com,test2@gmail.com'];
+//        var nailsAtparam           = 'test2@gmail.com';
+//        var nailsByparam           = 'test1@gmail.com';
+//        var patchesusedbyparam     = 'test1@gmail.com';
+//        var oilthrownAtparam       = 'test1@gmail.com';
+//        var oilthrownByparam       = 'test1@gmail.com';
+//        var wrenchusedByparam      = 'test1@gmail.com';
+//        var carthrownAtparam       = 'test1@gmail.com';
+//        var carthrownByparam       = 'test1@gmail.com';
+//        var towtruckusedByparam    = 'test1@gmail.com';
+//        var policecarthrownAtparam = 'test1@gmail.com';
+//        var policecarthrownByparam = 'test1@gmail.com';
+//        var odometerusedByparam    = 'test1@gmail.com';
 
         //console.log("*******rproute*********"+riderproute);
 
 
          
-        if(req.query.friendsList != "" && req.query.friendsList !=""){
-           friendsList = req.query.friendsList; 
-        } 
-        if(req.query.nailsAt != "" && req.query.nailsBy !=""){
-           nailsAt       = req.query.oilthrownAt;
-           nailsBy       = req.query.oilthrownBy;
-           if(req.query.patchesusedby != ""){
-                patchesusedby      = req.query.patchesusedby;
-           }
-        }
-        if(req.query.numberofvideos != ""){
-           numberofvideos = req.query.numberofvideos;
-           
-        } 
-        if(req.query.purchasetire != ""){
-           purchasetire = req.query.purchasetire;
-           
-        } 
-//        if(riderproute >= 4 && req.query.oilthrownAt != "" && req.query.oilthrownBy !=""){
+//        if(req.query.friendsList != "" && req.query.friendsList !=""){
+//           friendsList = req.query.friendsList; 
+//        } 
+//        if(req.query.nailsAt != "" && req.query.nailsBy !=""){
+//           nailsAt       = req.query.oilthrownAt;
+//           nailsBy       = req.query.oilthrownBy;
+//           if(req.query.patchesusedby != ""){
+//                patchesusedby      = req.query.patchesusedby;
+//           }
+//        }
+//        
+//        if( req.query.oilthrownAt != "" && req.query.oilthrownBy !=""){
 //           oilthrownAt       = req.query.oilthrownAt;
 //           oilthrownBy       = req.query.oilthrownBy;
 //           if(req.query.wrenchusedBy != ""){
 //                wrenchusedBy      = req.query.wrenchusedBy;
 //           }
 //        }
-//        if(riderproute >= 7 && req.query.carthrownAt != "" && req.query.carthrownBy !=""){
+//        if( req.query.carthrownAt != "" && req.query.carthrownBy !=""){
 //           carthrownAt       = req.query.carthrownAt;
 //           carthrownBy       = req.query.carthrownBy;
 //           if(req.query.towtruckusedBy != ""){
 //                towtruckusedBy    = req.query.towtruckusedBy;
 //           }
 //        }
-//        if(riderproute >= 10){
+//        if(req.query.policecarthrownAt != "" && req.query.policecarthrownBy !="" ){
 //           policecarthrownAt       = req.query.policecarthrownAt;
 //           policecarthrownBy       = req.query.policecarthrownBy;
 //           if(req.query.odometerusedBy != ""){
@@ -1241,6 +1243,230 @@ router.get('/start-route', function (req, res) {
 //            }
 //        }
         
+                    /*var currentlat = currentlocationLat;
+                    var endlat = endinglocationLat;
+                    var currentlon = currentlocationLng;
+                    var endlon = endinglocationLng;
+                    var unit = "K";
+                    var radlat1 = Math.PI * currentlat/180;
+                    var radlat2 = Math.PI * endlat/180;
+                    var theta = currentlon-endlon;
+                    var radtheta = Math.PI * theta/180;
+                    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+                    dist = Math.acos(dist);
+                    dist = dist * 180/Math.PI;
+                    dist = dist * 60 * 1.1515;
+                    if (unit=="K") { dist = dist * 1.609344; } //kilometers
+                    if (unit=="N") { dist = dist * 0.8684; } //nautical miles
+                    
+                    var distInmeters = dist/1000;
+                    var roundDist = Math.round(distInmeters);
+                    if(roundDist <= 10 ){
+                            isRouteCompleted = 'COMPLETED';
+                    }else{
+                            isRouteCompleted = 'ONGOING';
+                    }
+                    
+                    console.log("round distance****"+roundDist);*/
+        
+        if(email != "" && email != undefined){
+           
+            RpRoutes.findOne({ 'email' :  { $regex : new RegExp(email, "i") },'isRouteCompleted': 'ONGOING' }, function(err, getrproutes) {
+            // if there are any errors, return the error
+            if (err) {
+                    console.log("route error caught 1");
+                    res.json({ 
+                        success: false, 
+                        data: null, 
+                        message: err, 
+                        code: 400
+                    });
+                }
+            else {
+                 
+                if(getrproutes){   // if user exist with that email
+                
+                RpRoutes.update({ 
+                                'email': { $regex : new RegExp(email, "i") } 
+                            },
+                            { 
+                                $set:   { 
+                                            //'numberofRoutescompleted': subRoutescompleted ,
+                                            //'totalDistanceCompleted':totalDistanceCompleted,
+                                            //'currentlocationLat': currentlocationLat,
+                                            //'currentlocationLng': currentlocationLng ,
+                                            'startinglocationLat': startinglocationLat,
+                                            'startinglocationLng': startinglocationLng ,
+                                            'endinglocationLat': endinglocationLat,
+                                            'endinglocationLng': endinglocationLng ,
+                                            'activeStatus':'ACTIVE',
+                                            'isRouteCompleted': isRouteCompleted,
+//                                            'invitedFriends.friendsList': friendsList,
+//                                            'useNails.nailsthrownAt':nailsAt,
+//                                            'useNails.nailsthrownBy':nailsBy,
+//                                            'usePatches.patchesusedBy':patchesusedby,
+//                                            'watchVideo.numberofvideos':numberofvideos,
+//                                            'useOil.oilthrownAt':oilthrownAt,
+//                                            'useOil.oilthrownBy':oilthrownBy,
+//                                            'useWrench.wrenchusedBy':wrenchusedBy,
+//                                            'usecar.carthrownAt':carthrownAt,
+//                                            'usecar.carthrownBy':carthrownBy,
+//                                            'towTruck.towtruckusedBy':towtruckusedBy,
+//                                            'policeCar.policecarthrownAt':policecarthrownAt,
+//                                            'policeCar.policecarthrownBy':policecarthrownBy,
+//                                            'odometer.odometerusedBy':odometerusedBy,
+//                                            'points':points,
+//                                            'purchasetire':purchasetire 
+                                              'lastModifiedDate': lastModifiedDate,
+                                        } 
+                            },
+                            { multi: true },
+                function(err, rprouteinfo){
+
+                     if (err){
+                        console.log("route error caught 3");
+                        res.json({ 
+                            success: false, 
+                            data: null, 
+                            message: err, 
+                            code: 400
+                        });
+                    }else{
+                        
+                        
+                        res.json({ 
+                            success: true,
+                            data: 
+                                {
+                                   
+                                    email       :email,
+                                    route       :rprouteinfo.route,
+                                    //points      :points,
+                                    isRouteCompleted :isRouteCompleted
+                                   
+                                },
+                            message: globalConfig.successUpdate, 
+                            code: 200
+                        });
+                    }
+                });    
+
+                }
+                else{ 
+                var riderproute = '1';    
+               
+               
+                RpRoutes.findOne({ 'email' :  { $regex : new RegExp(email, "i") },'isRouteCompleted': 'COMPLETED' }, function(err, getrproutescomplete) {
+                    
+                    riderproute = +getrproutescomplete.route+ +1; //get next route
+                    console.log("riderproute"+riderproute);
+                // if there is no user with that email
+                // create the user
+                var newRpRoutes                        = new RpRoutes();
+                newRpRoutes.email                      = email;
+                newRpRoutes.route                      = riderproute;
+                //newRpRoutes.numberofRoutescompleted    = subRoutescompleted;
+               // newRpRoutes.totalDistanceCompleted     = totalDistanceCompleted;
+               // newRpRoutes.currentlocationLat         = currentlocationLat;    
+               // newRpRoutes.currentlocationLng         = currentlocationLng;  
+                newRpRoutes.startinglocationLat        = startinglocationLat,
+                newRpRoutes.startinglocationLng        = startinglocationLng ,
+                newRpRoutes.endinglocationLat          = endinglocationLat,
+                newRpRoutes.endinglocationLng          = endinglocationLng ,
+                newRpRoutes.activeStatus               = 'ACTIVE';
+                newRpRoutes.isRouteCompleted           = isRouteCompleted;
+//                newRpRoutes.invitedFriends             = friendsList;
+//                newRpRoutes.useNails.nailsthrownAt     = nailsAt;
+//                newRpRoutes.useNails.nailsthrownBy     = nailsBy;
+//                newRpRoutes.usePatches.patchesusedBy   = patchesusedby;    
+//                newRpRoutes.watchVideo.numberofvideos  = numberofvideos;    
+//                newRpRoutes.useOil.oilthrownAt         = oilthrownAt;
+//                newRpRoutes.useOil.oilthrownBy         = oilthrownBy;
+//                newRpRoutes.useWrench.wrenchusedBy     = wrenchusedBy;
+//                newRpRoutes.usecar.carthrownAt         = carthrownAt;
+//                newRpRoutes.usecar.carthrownBy         = carthrownBy;
+//                newRpRoutes.towTruck.towtruckusedBy    = towtruckusedBy;    
+//                newRpRoutes.policeCar.policecarthrownAt= policecarthrownAt;
+//                newRpRoutes.policeCar.policecarthrownBy= policecarthrownBy;
+//                newRpRoutes.odometer.odometerusedBy    = odometerusedBy;
+//                newRpRoutes.points                     = points,
+//                newRpRoutes.purchasetire               = purchasetire,
+                newRpRoutes.lastModifiedDate           = lastModifiedDate,
+        	// save the newRpRoutes
+                newRpRoutes.save(function(err){
+                    if (err){
+                        console.log("route error caught 3");
+                        res.json({ 
+                            success: false, 
+                            data: null, 
+                            message: err, 
+                            code: 400
+                        });
+                    }else{
+                        
+                        
+                        res.json({ 
+                            success: true,
+                            data: 
+                                {
+                                    email       :email,
+                                    route       :riderproute,
+                                    //points    :points,
+                                    isRouteCompleted :isRouteCompleted
+                                   
+                                },
+                            message: globalConfig.successRegister, 
+                            code: 200
+                        });
+                    }
+                });
+            }).sort({ "lastModifiedDate": -1});
+            } 
+                
+                }
+           
+            });
+          
+       }
+    else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+    }
+       
+});
+
+/* API stop endpoint to be used by mobile device for rproutes  */
+router.post('/stop-route', function (req, res) {
+        
+        var Points        = require('../models/points');
+        console.log("******* stop rproutes*********");
+       //res.send(true);
+       
+        var isRouteCompleted  = 'ONGOING';
+        var lastModifiedDate  = Date.now();
+        
+        var email                  = req.body.email;
+        var totalDistanceCompleted = req.body.totalDistanceCompleted;
+        var currentlocationLat     = req.body.currentlocationLat;
+        var currentlocationLng     = req.body.currentlocationLng;
+        var startinglocationLat    = req.body.startinglocationLat;
+        var startinglocationLng    = req.body.startinglocationLng;
+        var endinglocationLat      = req.body.endinglocationLat;
+        var endinglocationLng      = req.body.endinglocationLng;
+
+//        var email                  = 'preeti_dev@rvtechnologies.co.in';
+//        var totalDistanceCompleted = '10';
+//        var currentlocationLat     = '1.2393';
+//        var currentlocationLng     = '1.8184';
+//        var startinglocationLat    = '1.2393';
+//        var startinglocationLng    = '1.8184';
+//        var endinglocationLat      = '2.2393';
+//        var endinglocationLng      = '2.8184';
+
                     var currentlat = currentlocationLat;
                     var endlat = endinglocationLat;
                     var currentlon = currentlocationLng;
@@ -1300,23 +1526,7 @@ router.get('/start-route', function (req, res) {
                                             'endinglocationLng': endinglocationLng ,
                                             'activeStatus':'ACTIVE',
                                             'isRouteCompleted': isRouteCompleted,
-//                                            'invitedFriends.friendsList': friendsList,
-//                                            'useNails.nailsthrownAt':nailsAt,
-//                                            'useNails.nailsthrownBy':nailsBy,
-//                                            'usePatches.patchesusedBy':patchesusedby,
-//                                            'watchVideo.numberofvideos':numberofvideos,
-//                                            'useOil.oilthrownAt':oilthrownAt,
-//                                            'useOil.oilthrownBy':oilthrownBy,
-//                                            'useWrench.wrenchusedBy':wrenchusedBy,
-//                                            'usecar.carthrownAt':carthrownAt,
-//                                            'usecar.carthrownBy':carthrownBy,
-//                                            'towTruck.towtruckusedBy':towtruckusedBy,
-//                                            'policeCar.policecarthrownAt':policecarthrownAt,
-//                                            'policeCar.policecarthrownBy':policecarthrownBy,
-//                                            'odometer.odometerusedBy':odometerusedBy,
-//                                            'points':points,
-//                                            'purchasetire':purchasetire 
-                                              'lastModifiedDate': lastModifiedDate,
+                                             'lastModifiedDate': lastModifiedDate,
                                         } 
                             },
                             { multi: true },
@@ -1339,6 +1549,7 @@ router.get('/start-route', function (req, res) {
                                 {
                                    
                                     email       :email,
+                                    route       :rprouteinfo.route,
                                     //points      :points,
                                     isRouteCompleted :isRouteCompleted
                                    
@@ -1363,7 +1574,6 @@ router.get('/start-route', function (req, res) {
                 var newRpRoutes                        = new RpRoutes();
                 newRpRoutes.email                      = email;
                 newRpRoutes.route                      = riderproute;
-                //newRpRoutes.numberofRoutescompleted    = subRoutescompleted;
                 newRpRoutes.totalDistanceCompleted     = totalDistanceCompleted;
                 newRpRoutes.currentlocationLat         = currentlocationLat;    
                 newRpRoutes.currentlocationLng         = currentlocationLng;  
@@ -1373,22 +1583,7 @@ router.get('/start-route', function (req, res) {
                 newRpRoutes.endinglocationLng          = endinglocationLng ,
                 newRpRoutes.activeStatus               = 'ACTIVE';
                 newRpRoutes.isRouteCompleted           = isRouteCompleted;
-//                newRpRoutes.invitedFriends             = friendsList;
-//                newRpRoutes.useNails.nailsthrownAt     = nailsAt;
-//                newRpRoutes.useNails.nailsthrownBy     = nailsBy;
-//                newRpRoutes.usePatches.patchesusedBy   = patchesusedby;    
-//                newRpRoutes.watchVideo.numberofvideos  = numberofvideos;    
-//                newRpRoutes.useOil.oilthrownAt         = oilthrownAt;
-//                newRpRoutes.useOil.oilthrownBy         = oilthrownBy;
-//                newRpRoutes.useWrench.wrenchusedBy     = wrenchusedBy;
-//                newRpRoutes.usecar.carthrownAt         = carthrownAt;
-//                newRpRoutes.usecar.carthrownBy         = carthrownBy;
-//                newRpRoutes.towTruck.towtruckusedBy    = towtruckusedBy;    
-//                newRpRoutes.policeCar.policecarthrownAt= policecarthrownAt;
-//                newRpRoutes.policeCar.policecarthrownBy= policecarthrownBy;
-//                newRpRoutes.odometer.odometerusedBy    = odometerusedBy;
-//                newRpRoutes.points                     = points,
-//                newRpRoutes.purchasetire               = purchasetire,
+
                 newRpRoutes.lastModifiedDate           = lastModifiedDate,
         	// save the newRpRoutes
                 newRpRoutes.save(function(err){
@@ -1408,7 +1603,8 @@ router.get('/start-route', function (req, res) {
                             data: 
                                 {
                                     email       :email,
-                                    //points      :points,
+                                    route       :riderproute,
+                                    //points    :points,
                                     isRouteCompleted :isRouteCompleted
                                    
                                 },
@@ -1435,7 +1631,6 @@ router.get('/start-route', function (req, res) {
     }
        
 });
-
 
 // 32 character random string token
 function random_token(){

@@ -262,6 +262,16 @@ app.controller('shopController',['$scope', '$http', '$sce',function ($scope, $ht
         }); 
     };
     
+    $scope.getCategoriesListonsearch = function(){
+        //alert("dsds");
+        $http.get('/admin/get-categories-list').success(function(categoryList){
+            //console.log(categoryList);
+            $scope.categoryList = categoryList;
+        }).error(function(){
+            console.log('Oops! Error listing get-users-list');
+        });
+    };
+    
     
 }]);
 
@@ -332,6 +342,27 @@ app.controller('adminController',['$scope', '$http','$sce', function ($scope, $h
            console.log('Oops! Error occur'+err);
         }); 
     };
+    
+    
+    /*function to list categories in admin panel*/
+    $scope.getCategoriesList = function(){
+        $http.get('/admin/get-categories-list').success(function(categoryList){
+            $scope.categoryList = categoryList;
+        }).error(function(){
+            console.log('Oops! Error listing get-users-list');
+        });
+    };
+    
+    /*function to list points in admin panel*/
+    $scope.getPointsList = function(){
+        $http.get('/admin/get-points-list').success(function(pointsList){
+            console.log(pointsList);
+            $scope.pointsList = pointsList;
+        }).error(function(){
+            console.log('Oops! Error listing get-points-list');
+        });
+    };
+    
 }]);
 
 app.directive('bindUnsafeHtml', ['$compile', function ($compile) {

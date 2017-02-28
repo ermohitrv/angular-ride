@@ -21,6 +21,7 @@ var rproutespointsSchema = mongoose.Schema({
         //startinglocationLng        : {type: String, default: ''},
         //endinglocationLat          : {type: String, default: ''},
         //endinglocationLng          : {type: String, default: ''},
+        point_added_date           : {type: Date, default: Date.now()} 
              
 });
 

@@ -1,0 +1,132 @@
+<% layout('layoutAdmin') -%>
+<!-- Content Wrapper. Contains page content -->
+<script type="text/javascript" src="/public/js/jquery.form.js"></script>
+
+<div class="content-wrapper" data-ng-controller="adminController">
+    <section class="content-header">
+      <h1>
+        Add Rproute Points
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Add Rproute Points</li>
+      </ol>
+    </section>
+    <section class="content" data-ng-init="getBrandsList()">
+        <span class="brandslist" style="display:none;" ng-repeat="item in brandsList | filter:search:true">{{item.brand_title}}{{ $last ? '' : ($index==brandsList.length-2) ? ', ' : ', '}}</span>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="box">
+                    <div class="box-body">
+                        <form method="post" class="form-horizontal" id="points_insert_form" action="/admin/rproutepoints/insert" data-toggle="validator" >
+                            <div class="col-lg-12">
+                                <div class="page-header">
+                                    <div class="pull-right">
+                                        <button id="frm_edit_point_save" class="btn btn-success" type="submit">Submit <i class="fa fa-plus"></i></button>
+                                    </div>
+                                    <h2>New Route Points</h2>
+                                </div>
+                                <div class="form-group">
+                                    <label for="frm_point_route" class="col-sm-2 control-label">Route *</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="frm_point_route" id="frm_point_route" class="form-control" minlength="1" maxlength="5" required/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="frm_point_numberofroutes" class="col-sm-2 control-label">Number of Routes *</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="frm_point_numberofroutes" id="frm_point_numberofroutes" class="form-control" minlength="1" maxlength="5" required/>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="frm_point_totalDistance" class="col-sm-2 control-label">Total Distance *</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="frm_point_totalDistance" id="frm_point_totalDistance" class="form-control" minlength="1" maxlength="5" required/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="frm_point_pointsPerkm" class="col-sm-2 control-label">Points Per Km *</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="frm_point_pointsPerkm" id="frm_point_pointsPerkm" class="form-control" minlength="1" maxlength="200" required/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="frm_point_pointsAddingfriend" class="col-sm-2 control-label">Points adding friend</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="frm_point_pointsAddingfriend" class="form-control" minlength="1" maxlength="200"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="frm_point_pointsUsingappeveryday" class="col-sm-2 control-label">Points Using App Everyday</label>
+                                    <div class="col-sm-6">
+                                            <input type="text" name="frm_point_pointsUsingappeveryday" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="frm_point_bonusPoint" class="col-sm-2 control-label">Bonus Points</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="frm_point_bonusPoint" class="form-control" />
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="frm_point_nailStealingpoints" class="col-sm-2 control-label">Nail Stealing Points</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="frm_point_nailStealingpoints" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="frm_point_nailExtrapoints" class="col-sm-2 control-label">Nail Extra Points</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="frm_point_nailExtrapoints" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="frm_point_oilStealingpoints" class="col-sm-2 control-label">Oil Stealing Points</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="frm_point_oilStealingpoints" class="form-control"  />
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label for="frm_point_oilExtrapoints" class="col-sm-2 control-label">Oil Extra Points</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="frm_point_oilExtrapoints" class="form-control"  />
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label for="frm_point_carStealingpoints" class="col-sm-2 control-label">Car Stealing Points</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="frm_point_carStealingpoints" class="form-control"  />
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label for="frm_point_carExtrapoints" class="col-sm-2 control-label">Car Extra Points</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="frm_point_carExtrapoints" class="form-control"  />
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label for="frm_point_policecarStealingpoints" class="col-sm-2 control-label">Police Car Stealing Points</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="frm_point_policecarStealingpoints" class="form-control"  />
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label for="frm_point_policecarExtrapoints" class="col-sm-2 control-label">Police Car Extra Points</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="frm_point_policecarExtrapoints" class="form-control"  />
+                                    </div>
+                                </div>
+                                
+                               
+                                
+                                
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

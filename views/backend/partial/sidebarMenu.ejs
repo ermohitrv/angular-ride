@@ -29,6 +29,24 @@
             <li <% if(active == "list-users" || active == "view-user"){ %> class="active" <% } %>><a href="/admin/list-users"><i class="fa fa-list"></i> List Users</a></li>
           </ul>
         </li>
+        
+        <li class="treeview <% if(active == "add-category"){ %> active <% } %>">
+        <a href="#">
+            <i class="fa fa-users"></i> <span> Category Management</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li <% if(active == "list-category"){ %> class="active" <% } %>><a href="/admin/list-categories"><i class="fa fa-list"></i> List Categories</a></li>-->
+            <li <% if(active == "add-category"){ %> class="active" <% } %>><a href="/admin/category/new"><i class="fa fa-plus"></i> Add Category</a></li>
+        </ul>
+        </li>
+        
+        
+        
+        
+        
         <li class="treeview <% if(active == "list-products" || active == "add-product"){ %> active <% } %>">
           <a href="#">
             <i class="fa fa-bicycle"></i> <span>Product Management</span>
@@ -75,6 +93,20 @@
             <li><a href="/admin/list-contact-requests"><i class="fa fa-list"></i> List Contact Requests</a></li>
             <li class="treeview">
                 <a href="/admin/list-suggestions"><i class="fa fa-list"></i> List Suggestion</a>
+            </li>
+          </ul>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-flash"></i> <span>Points Management</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="/admin/list-rproutespoints"><i class="fa fa-list"></i> List Rproutes points</a></li>
+            <li class="treeview">
+                <a href="/admin/add-rproutespoints"><i class="fa fa-plus"></i> Add Rproutes Points</a>
             </li>
           </ul>
         </li>

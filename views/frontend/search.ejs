@@ -1,25 +1,30 @@
 <% layout('layout') -%>
 
-<div class="search_result">
+<div class="search_result" data-ng-controller="shopController">
     <div class="overlay_bg"></div>
     <div class="container">
         <div class="row">
             <div class="product_listing">
                 <div class="title"><h1>Search results</h1>
-                    <p>We've got 10000+ results for "a"</p>
+                    <p>We've got <%= results.length %> results for "a"</p>
                 </div>
                 <div class="listing">
-                    <div class="col-lg-3 col-md-3 col-md-12">
+                    <div class="col-lg-3 col-md-3 col-md-12" data-ng-init="getCategoriesListonsearch()">
+                       
                         <div class="categorieslist">
                             <h3>Filter</h3>
                             <h4>Categories</h4>
-                            <ul>
+<!--                            <ul data-ng-if="categoryList.length > 0" data-ng-repeat="category in categoryList">
+                                <li><a href="#">{{ category.category_title }}</a></li>
+                               
+                            </ul>-->
+<!--                            <ul>
                                 <li><a href="#">Men</a></li>
                                 <li><a href="#">Women</a></li>
                                 <li><a href="#">Boy</a></li>
                                 <li><a href="#">Girl</a></li>
-                            </ul>
-                            <h4>Ride Type</h4>
+                            </ul>-->
+<!--                            <h4>Ride Type</h4>
                             <div class="select_ride">
                                 <form>
                                     <p><input type="checkbox"> <label>squid</label></p>
@@ -52,7 +57,7 @@
                                     <p><input type="checkbox"> <label>touring</label></p>
                                    <p> <input type="checkbox"> <label>scooter</label></p>
                                 </form>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
 
