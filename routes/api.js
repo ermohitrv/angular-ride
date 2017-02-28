@@ -1520,8 +1520,8 @@ router.post('/stop-route', function (req, res) {
                                             'totalDistanceCompleted':totalDistanceCompleted,
                                             'currentlocationLat': currentlocationLat,
                                             'currentlocationLng': currentlocationLng ,
-                                            'startinglocationLat': startinglocationLat,
-                                            'startinglocationLng': startinglocationLng ,
+                                            //'startinglocationLat': startinglocationLat,
+                                            //'startinglocationLng': startinglocationLng ,
                                             'endinglocationLat': endinglocationLat,
                                             'endinglocationLng': endinglocationLng ,
                                             'activeStatus':'ACTIVE',
@@ -1577,8 +1577,8 @@ router.post('/stop-route', function (req, res) {
                 newRpRoutes.totalDistanceCompleted     = totalDistanceCompleted;
                 newRpRoutes.currentlocationLat         = currentlocationLat;    
                 newRpRoutes.currentlocationLng         = currentlocationLng;  
-                newRpRoutes.startinglocationLat        = startinglocationLat,
-                newRpRoutes.startinglocationLng        = startinglocationLng ,
+                //newRpRoutes.startinglocationLat        = startinglocationLat,
+                //newRpRoutes.startinglocationLng        = startinglocationLng ,
                 newRpRoutes.endinglocationLat          = endinglocationLat,
                 newRpRoutes.endinglocationLng          = endinglocationLng ,
                 newRpRoutes.activeStatus               = 'ACTIVE';
