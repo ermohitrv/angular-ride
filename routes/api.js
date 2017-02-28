@@ -1453,8 +1453,8 @@ router.post('/stop-route', function (req, res) {
         var totalDistanceCompleted = req.body.totalDistanceCompleted;
         var currentlocationLat     = req.body.currentlocationLat;
         var currentlocationLng     = req.body.currentlocationLng;
-        var startinglocationLat    = req.body.startinglocationLat;
-        var startinglocationLng    = req.body.startinglocationLng;
+        //var startinglocationLat    = req.body.startinglocationLat;
+        //var startinglocationLng    = req.body.startinglocationLng;
         var endinglocationLat      = req.body.endinglocationLat;
         var endinglocationLng      = req.body.endinglocationLng;
 
