@@ -263,12 +263,15 @@ app.controller('shopController',['$scope', '$http', '$sce',function ($scope, $ht
     };
     
     $scope.getCategoriesListonsearch = function(){
-        //alert("dsds");
-        $http.get('/admin/get-categories-list').success(function(categoryList){
-            //console.log(categoryList);
-            $scope.categoryList = categoryList;
+        
+        var config = {
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/product/get-categories-list',config).success(function(response, status, headers, config){
+            console.log("categoryList");
+            $scope.categoryList = response;
         }).error(function(){
-            console.log('Oops! Error listing get-users-list');
+            console.log('Oops! Error listing get-category-list on search page');
         });
     };
     

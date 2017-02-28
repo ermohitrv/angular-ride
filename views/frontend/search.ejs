@@ -14,10 +14,10 @@
                         <div class="categorieslist">
                             <h3>Filter</h3>
                             <h4>Categories</h4>
-<!--                            <ul data-ng-if="categoryList.length > 0" data-ng-repeat="category in categoryList">
-                                <li><a href="#">{{ category.category_title }}</a></li>
+                            <ul>
+                                <li data-ng-if="categoryList.length > 0" data-ng-repeat="category in categoryList" id="{{ category._id }}"><a href="#">{{ category.category_title }}</a></li>
                                
-                            </ul>-->
+                            </ul>
 <!--                            <ul>
                                 <li><a href="#">Men</a></li>
                                 <li><a href="#">Women</a></li>

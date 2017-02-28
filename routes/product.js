@@ -7,6 +7,8 @@ var middleware  = require('./middleware');
 /*SHOP section required variables */
 var Products = require('../models/products');
 var globalConfig    = require('../config/globals.js');
+var Categories = require('../models/category');
+
 /* Route for showing product detail page */
 /*
 router.get('/:productslug', function (req, res) {
@@ -207,5 +209,18 @@ router.post('/imageresize', function(req, res, next) {
     res.status(200).json({"success": "image resize"});
 });
 
+
+router.post('/get-categories-list',  function(req, res){
+    console.log("search");
+    //res.send(true);
+    Categories.aggregate([{$sort: {'category_added_date': 1}}], function (err, categoryList) {
+        if(categoryList){
+            console.log(categoryList);
+            res.json(categoryList);
+        }else{
+            res.json({});
+        }
+    });
+});
 
 module.exports = router;
