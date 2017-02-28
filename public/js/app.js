@@ -261,6 +261,8 @@ app.controller('shopController',['$scope', '$http', '$sce',function ($scope, $ht
            console.log('Oops! Error occur'+err);
         }); 
     };
+    
+    
 }]);
 
 /********************** admin controller  **********************/

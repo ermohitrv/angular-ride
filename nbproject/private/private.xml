@@ -5,13 +5,11 @@
         <group>
             <file>file:/var/www/html/rideprix/routes/index.js</file>
             <file>file:/var/www/html/rideprix/views/frontend/checkout.ejs</file>
-            <file>file:/var/www/html/rideprix/views/frontend/cart.ejs</file>
-            <file>file:/var/www/html/rideprix/models/ordersshipping.js</file>
-            <file>file:/var/www/html/rideprix/models/orders.js</file>
-            <file>file:/var/www/html/rideprix/config/database.js</file>
+            <file>file:/var/www/html/rideprix/public/js/app.js</file>
             <file>file:/var/www/html/rideprix/routes/middleware.js</file>
             <file>file:/var/www/html/rideprix/public/css/style.css</file>
-            <file>file:/var/www/html/rideprix/config/globals.js</file>
+            <file>file:/var/www/html/rideprix/public/js/front.js</file>
+            <file>file:/var/www/html/rideprix/views/frontend/partial/header.ejs</file>
         </group>
     </open-files>
 </project-private>

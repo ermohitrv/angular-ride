@@ -552,22 +552,22 @@ router.get('/change-password', function(req, res){
     });
 });*/
 
-router.get('/init-add-route', function(req, res){
+router.post('/init-add-route', function(req, res){
     var objRoute = new RpRoutes();
     
-//    var email                = req.body.email;
-//    var starting_locationLat = req.body.starting_locationLat;
-//    var starting_locationLng = req.body.starting_locationLng;
-//    
-//    var ending_locationLat   = req.body.ending_locationLat;
-//    var ending_locationLng   = req.body.ending_locationLng;
-
-    var email                = "preeti_dev@rvtechnologies.co.in";
-    var starting_locationLat = "1.2393";
-    var starting_locationLng = "1.8184";
+    var email                = req.body.email;
+    var starting_locationLat = req.body.starting_locationLat;
+    var starting_locationLng = req.body.starting_locationLng;
     
-    var ending_locationLat   = "1.5532";
-    var ending_locationLng   = "0.4221";
+    var ending_locationLat   = req.body.ending_locationLat;
+    var ending_locationLng   = req.body.ending_locationLng;
+
+//    var email                = "preeti_dev@rvtechnologies.co.in";
+//    var starting_locationLat = "1.2393";
+//    var starting_locationLng = "1.8184";
+//    
+//    var ending_locationLat   = "1.5532";
+//    var ending_locationLng   = "0.4221";
     
     
     objRoute.email                  = email;

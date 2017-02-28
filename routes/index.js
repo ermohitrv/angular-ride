@@ -904,4 +904,40 @@ router.get('/autocomplete-search', function(req, res){
   });
 });
 
+/* search products */
+router.post('/searchProducts', function(req, res){
+  var searchterm = req.body.searchbox;
+  console.log(searchterm);
+   var productnames = [];
+
+   Products.find({$or :[{ 'product_title': new RegExp(searchterm, 'i') }, {'product_category': new RegExp(searchterm, 'i')},{'product_brand': new RegExp(searchterm, 'i')}]}, function(err, products){
+    
+//    if(products.length > 0){
+//      products.forEach(function(products){
+//          console.log( products.product_title);
+//        //usernames.push(user.local.username);
+//        var dataObj = {'product_title':  products.product_title,'product_link':products.product_permalink};
+//        productnames.push(dataObj);
+//      });
+//    }
+    
+    console.log(productnames);
+    //res.json(productnames);
+    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+    res.render('search', {
+        title: 'search products', 
+        user: req.user,
+        session: req.session,
+        results:products,
+        page_url: globalConfig.base_url
+    });
+  });
+  
+  
+    
+  
+});
+
+
+
 module.exports = router;
