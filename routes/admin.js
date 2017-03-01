@@ -439,18 +439,28 @@ router.get('/products/filter/:search', middleware.restrict, function(req, res, n
 
 // insert product form
 router.get('/product/new', middleware.restrict, function(req, res) {
-    res.render('product_new', {
-        title: 'New product', 
-        session: req.session,
-        product_title: middleware.clear_session_value(req.session, "product_title"),
-        product_description: middleware.clear_session_value(req.session, "product_description"),
-        product_price: middleware.clear_session_value(req.session, "product_price"),
-        product_permalink: middleware.clear_session_value(req.session, "product_permalink"),
-        message: middleware.clear_session_value(req.session, "message"),
-        message_type: middleware.clear_session_value(req.session, "message_type"),
-        editor: true,
-        user:req.user,
-        active:'add-product'
+    
+    //var catarray = [];
+    Categories.find({ }, function (err, catresults) {
+    
+        Brands.find({ }, function (err, brandresults) {   
+    
+            res.render('product_new', {
+                title: 'New product', 
+                session: req.session,
+                catresults:catresults,
+                brandresults:brandresults,
+                product_title: middleware.clear_session_value(req.session, "product_title"),
+                product_description: middleware.clear_session_value(req.session, "product_description"),
+                product_price: middleware.clear_session_value(req.session, "product_price"),
+                product_permalink: middleware.clear_session_value(req.session, "product_permalink"),
+                message: middleware.clear_session_value(req.session, "message"),
+                message_type: middleware.clear_session_value(req.session, "message_type"),
+                editor: true,
+                user:req.user,
+                active:'add-product'
+            });
+        });
     });
 });
 router.post('/product/removefromcart', function(req, res, next) {	

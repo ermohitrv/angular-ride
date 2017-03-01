@@ -91,22 +91,8 @@ app.controller('menuController',['$scope', '$http', function ($scope, $http) {
             }); 
        };
     
-       
-//            $scope.complete=function(){
-//                  alert("sdsds");
-//                    console.log(availableTags);
-//                     angular.element(document).ready(function () {
-//                        $( "#tags" ).autocomplete({
-//                          source: availableTags,
-//                        });
-//                 });
-//            } ;
-            
-            angular.element(document).ready(function () {
-              
-//                    $( "#search-box" ).autocomplete({
-//                          source: availableTags,
-//                        });
+        angular.element(document).ready(function () {
+
                 $( "#search-box" ).autocomplete({
                     source: '/autocomplete-search',
 
@@ -117,7 +103,9 @@ app.controller('menuController',['$scope', '$http', function ($scope, $http) {
                       .append( '<a href='+productlink+'><span>'+item.product_title+'</span></a>' )
                        .appendTo( ul );
                     };
-            });
+        });
+        
+       
 
 }]);
 
@@ -261,34 +249,77 @@ app.controller('shopController',['$scope', '$http', '$sce',function ($scope, $ht
            console.log('Oops! Error occur'+err);
         }); 
     };
-    
+    /* get categories list on search page */
     $scope.getCategoriesListonsearch = function(){
         
         var config = {
             headers : {'Accept' : 'application/json'}
         };
         $http.post('/product/get-categories-list',config).success(function(response, status, headers, config){
-            console.log("categoryList");
+            
             $scope.categoryList = response;
         }).error(function(){
             console.log('Oops! Error listing get-category-list on search page');
         });
     };
     
-    /* categories wise search */
-    $scope.getCategoriessearch = function(){
+    /* get brands list on search page */
+    $scope.getBrandsListonsearch = function(){
         
         var config = {
             headers : {'Accept' : 'application/json'}
         };
-//        $http.post('/product/get-categories-list',config).success(function(response, status, headers, config){
-//            console.log("categoryList");
-//            $scope.categoryList = response;
-//        }).error(function(){
-//            console.log('Oops! Error listing get-category-list on search page');
-//        });
+        $http.post('/product/get-brands-list',config).success(function(response, status, headers, config){
+            
+            $scope.brandList = response;
+        }).error(function(){
+            console.log('Oops! Error listing get-brands-list on search page');
+        });
     };
     
+    /* categories wise search on search  page */
+    $scope.getCategoriessearch = function(categoryTitle){
+      
+        var data = { 
+            categoryTitle: categoryTitle, 
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+
+
+        $http.get('/product/search/categorywisesearch/'+categoryTitle).success(function(response){
+            //alert("category search");
+            //console.log(response);
+            $scope.shopProductscategorysearch = response;
+        }).error(function(){
+            console.log('Oops! Error listing products-list');
+        });
+
+    };
+    
+     /* Brands wise search on search  page */
+    $scope.getBrandssearch = function(brandTitle){
+       
+        var data = { 
+            brandTitle: brandTitle, 
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+
+
+        $http.get('/product/search/brandsearch/'+brandTitle).success(function(response){
+            //alert("category search");
+            //console.log(response);
+            $scope.shopProductscategorysearch = response;
+        }).error(function(){
+            console.log('Oops! Error listing products-list');
+        });
+
+    };
     
 }]);
 

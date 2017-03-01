@@ -8,6 +8,7 @@ var middleware  = require('./middleware');
 var Products = require('../models/products');
 var globalConfig    = require('../config/globals.js');
 var Categories = require('../models/category');
+var Brands = require('../models/brands');
 
 /* Route for showing product detail page */
 /*
@@ -83,8 +84,10 @@ router.get('/shop/related-products-list', function (req, res){
 // Admin section
 router.post('/addtocart', function(req, res, next) {	
     var _ = require('underscore');
-    var product_qty = req.body.product_quantity;
-    var product_quantity = req.body.product_quantity ? parseInt(product_qty): 1;
+    //var product_qty = req.body.product_quantity;
+    //var product_quantity = req.body.product_quantity ? parseInt(product_qty): 1;
+    var product_qty = req.body.params.product_quantity;
+    var product_quantity = req.body.params.product_quantity ? parseInt(product_qty): 1;
     var product_id = req.body.params.product_id;
     //var product_id_array = array();
     // setup cart object if it doesn't exist
@@ -211,7 +214,7 @@ router.post('/imageresize', function(req, res, next) {
 
 
 router.post('/get-categories-list',  function(req, res){
-    console.log("search");
+    
     //res.send(true);
     Categories.aggregate([{$sort: {'category_added_date': 1}}], function (err, categoryList) {
         if(categoryList){
@@ -221,6 +224,61 @@ router.post('/get-categories-list',  function(req, res){
             res.json({});
         }
     });
+});
+
+router.get('/search/categorywisesearch/:categoryTitle',  function(req, res){
+    
+    //console.log("category search product"+req.body.params.categoryTitle);
+    //res.send(true);
+   
+    Products.find({'product_category': new RegExp(req.params.categoryTitle, 'i')}, function(err, productResults){
+        //console.log(productResults);
+        if(!err){
+            console.log(productResults);
+            res.json(productResults);
+
+        }else{
+            console.log("no results");
+            res.json({});
+
+        }
+    });
+    
+
+});
+
+router.post('/get-brands-list',  function(req, res){
+    
+    //res.send(true);
+    Brands.aggregate([{$sort: {'category_added_date': 1}}], function (err, brandsList) {
+        if(brandsList){
+           
+            res.json(brandsList);
+        }else{
+            res.json({});
+        }
+    });
+});
+
+router.get('/search/brandsearch/:brandTitle',  function(req, res){
+    
+    //console.log("category search product"+req.body.params.categoryTitle);
+    //res.send(true);
+   
+    Products.find({'product_brand': new RegExp(req.params.brandTitle, 'i')}, function(err, productResults){
+        //console.log(productResults);
+        if(!err){
+            console.log(productResults);
+            res.json(productResults);
+
+        }else{
+            console.log("no results");
+            res.json({});
+
+        }
+    });
+    
+
 });
 
 module.exports = router;

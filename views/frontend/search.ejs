@@ -6,17 +6,18 @@
         <div class="row">
             <div class="product_listing">
                 <div class="title"><h1>Search results</h1>
-                    <p>We've got <%= results.length %> results for "a"</p>
+                    <p>We've got <%= productresults.length %> results</p>
                 </div>
                 <div class="listing">
-                    <div class="col-lg-3 col-md-3 col-md-12" data-ng-init="getCategoriesListonsearch()">
+                    <div class="col-lg-3 col-md-3 col-md-12" >
                        
                         <div class="categorieslist">
                             <h3>Filter</h3>
                             <h4>Categories</h4>
-                            <ul>
-                                <li data-ng-if="categoryList.length > 0" data-ng-repeat="category in categoryList" id="{{ category._id }}" data-ng-click="getCategoriessearch()"><a href="#" data-ng-bind="category.category_title"></a></li>
-                               
+                            <ul data-ng-init="getCategoriesListonsearch()">
+                            <!--<li data-ng-if="categoryList.length > 0" data-ng-repeat="category in categoryList" id="{{ category._id }}"  ><a href="/categorysearch?catname={{ category.category_title }}" data-ng-bind="category.category_title"></a></li>-->
+                            <li data-ng-if="categoryList.length > 0" data-ng-repeat="category in categoryList" id="{{ category._id }}"  ><input type="checkbox"><a href="" data-ng-click="getCategoriessearch(category.category_title)" data-ng-bind="category.category_title"></a></li>
+
                             </ul>
 <!--                            <ul>
                                 <li><a href="#">Men</a></li>
@@ -24,22 +25,15 @@
                                 <li><a href="#">Boy</a></li>
                                 <li><a href="#">Girl</a></li>
                             </ul>-->
-<!--                            <h4>Ride Type</h4>
+                           <h4>Brands</h4>
                             <div class="select_ride">
-                                <form>
-                                    <p><input type="checkbox"> <label>squid</label></p>
-                                    <p><input type="checkbox"> <label>mechanic</label></p>
-                                    <p><input type="checkbox"> <label>brand-loyalist</label></p>
-                                    <p><input type="checkbox"> <label>adventure-rider</label></p>
-                                    <p><input type="checkbox"> <label>exclusive-sport-rider</label></p>
-                                    <p><input type="checkbox"> <label>exclusive-cruiser-rider</label></p>
-                                    <p><input type="checkbox"> <label>stunter</label></p>
-                                    <p><input type="checkbox"> <label>philosopher</label></p>
-                                    <p><input type="checkbox"> <label>squid</label></p>
-                                    <p><input type="checkbox"> <label>squid</label></p>
-                                </form>
+                            <ul data-ng-init="getBrandsListonsearch()">
+                            <!--<li data-ng-if="brandList.length > 0" data-ng-repeat="brand in brandList" id="{{ brand._id }}"  ><a href="/brandsearch?brandname={{ brand.brand_title }}" data-ng-bind="brand.brand_title"></a></li>-->
+                            <li data-ng-if="brandList.length > 0" data-ng-repeat="brand in brandList" id="{{ brand._id }}"  ><input type="checkbox"><a href="" data-ng-click="getBrandssearch(brand.brand_title)" data-ng-bind="brand.brand_title"></a></li>
+
+                            </ul>
                             </div>
-                            <h4>Ride Experience</h4>
+                           <!--  <h4>Ride Experience</h4>
                             <div class="select_ride">
                                 <form>
                                     <p><input type="checkbox"> <label>novice</label></p>
@@ -63,9 +57,9 @@
 
                     <div class="col-lg-9 col-md-9 col-md-12">
                         <div class="row">
-                            <% if( results.length > 0 ){ %>
-                            <% for(var i = 0; i < results.length; i++){ 
-                            result = results[i];
+<!--                            <% if( productresults.length > 0 ){ %>
+                            <% for(var i = 0; i < productresults.length; i++){ 
+                            result = productresults[i];
                             %>
                             <div class="col-lg-4 col-md-6 col-md-12">
                                 <div class="item">
@@ -81,17 +75,52 @@
                                                 <a href="#"><img  src="http://placehold.it/240x240" alt="img" class="img-responsive" ></a>
                                             <% } %>                                        </div>
                                         <div class="description">
-                                            <h4><a href="#"><%= result.product_title %></a></h4>
+                                            <h4><a href="/product/<%= result.product_permalink %>"><%= result.product_title %></a></h4>
                                             <span class="size">XL / XXL / S </span>
                                         </div>
                                         <div class="price"><span>$<%= result.product_price %></span></div>
+                                        <div class="action-control">
+                                            <a class="btn btn-danger"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a>
+                                        <button class="btn btn-danger product-add-to-cart" id="<%= result._id %>" type="button" data-toggle="modal" data-target="#myModal">
+                                                    <i class="glyphicon glyphicon-shopping-cart"> </i>Add to Cart
+                                        </button>
+                                        <input type="hidden" id="productidgear_<%= result._id %>" value="<%= result._id %>">
+                                        <input type="hidden" id="quantityboxgear_<%= result._id %>" value="1">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% }} %>-->
+                            
+                            <div class="col-lg-4 col-md-6 col-md-12" data-ng-if="shopProductscategorysearch.length > 0" data-ng-repeat="result in shopProductscategorysearch">
+                                <div class="item">
+                                    <div class="product">
+                                        <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left"><i class="glyphicon glyphicon-heart"></i> </a>
+                                        <div class="image">
+                                            <div class="quickview">
+                                                <a data-toggle="modal" class="btn btn-xs btn-quickview" href="#" data-target="">Quick View</a>
+                                            </div>                                       
+                                            <% if(result.product_image[0] != "" && result.product_image[0] != undefined ){ %>
+                                                <a href="/product/{{ result.product_permalink }}"><img  src="/public/uploads/{{ result.product_image[0] }}" alt="img" class="img-responsive" ></a>
+                                            <% } else {%>
+                                                <a href="#"><img  src="http://placehold.it/240x240" alt="img" class="img-responsive" ></a>
+                                            <% } %> 
+                                        
+                                            </div>
+                                        <div class="description">
+                                            <h4><a href="#">{{ result.product_title }}</a></h4>
+                                            <span class="size">XL / XXL / S </span>
+                                        </div>
+                                        <div class="price"><span>${{result.product_price }}</span></div>
                                         <div class="action-control">
                                             <a class="btn btn-danger"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <% }} %>
+                            
+                            
+                            
 <!--                            <div class="col-lg-4 col-md-6 col-md-12">
                                 <div class="item">
                                     <div class="product">
@@ -225,3 +254,51 @@
         </div>
     </div>
 </div>
+
+
+<!-- Bootstrap modal -->
+<div id="myModal" class="modal fade continueshoppingmodal" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add to Cart</h4>
+      </div>
+      <div class="modal-body">
+          <label>Product added to cart successfully!</label>
+                <div>
+                <table class="table table-hover">
+                        <tbody>
+                            <tr></tr>
+                            <tr>
+                                <td><a href="/gear"><button type="button" class="btn btn-warning continue_shoping">
+                                    <span class="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
+                                    </button></a>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><a  href="/cart"><button type="button" class="btn btn-success checkout_btn">
+                                        Checkout <span class="glyphicon glyphicon-play"></span>
+                                </button></a></td>
+                                </tr>
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+$(document).on('click','.product-add-to-cart',function(){
+    var prodid = this.id;
+    var product_id = $("#productidgear_"+prodid).val();
+    var quantity_box = $("#quantityboxgear_"+prodid).val();
+    angular.element(this).scope().addToCartfromshop(product_id,quantity_box);
+});
+
+</script>

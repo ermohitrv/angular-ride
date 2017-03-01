@@ -35,6 +35,12 @@ div#image_preview {
 .img-wrap:hover .close {
     opacity: 1;
 }
+
+.selectbox{
+    background: #fff;
+    width: 100%;
+    border-color: #d2d6de;
+}
 </style>
 <div class="content-wrapper" data-ng-controller="adminController">
     <section class="content-header">
@@ -69,14 +75,28 @@ div#image_preview {
                                 <div class="form-group">
                                     <label for="frm_product_published" class="col-sm-2 control-label">Category *</label>
                                     <div class="col-sm-6">
-                                        <div id="magicsuggest-category"></div>
+                                        <!--<div id="magicsuggest-category"></div>-->
+                                        <select class="selectbox" name="frm_product_category">
+                                            <option>Please select category</option>
+                                            <% if( catresults.length > 0 ){ %>
+                                            <% for(var i = 0; i < catresults.length; i++){ %>
+                                            <option id="<%= catresults[i].category_title  %>" value="<%= catresults[i].category_title  %>"><%= catresults[i].category_title  %></option>
+                                            <% }} %>
+                                        </select>
                                     </div>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="frm_product_published" class="col-sm-2 control-label">Brand *</label>
                                     <div class="col-sm-6">
-                                        <div id="magicsuggest-brand"></div>
+                                        <!--<div id="magicsuggest-brand"></div>-->
+                                        <select class="selectbox" name="frm_product_brand">
+                                            <option>Please select Brand</option>
+                                            <% if( brandresults.length > 0 ){ %>
+                                            <% for(var j = 0; j < brandresults.length; j++){ %>
+                                            <option id="<%= brandresults[j].brand_title  %>" value="<%= brandresults[j].brand_title  %>"><%= brandresults[j].brand_title  %></option>
+                                            <% }} %>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -155,22 +175,23 @@ div#image_preview {
 </div>
 <script>
 $(function() {
-    var ms_category =  $('#magicsuggest-category').magicSuggest({
-        placeholder: 'Type category name...',
-        name: 'frm_product_category',
-        data: ['SuperSport', 'Cruiser', 'Dual', 'Sport', 'Touring', 'Scooter']
-    });
-    ms_category.setName('frm_product_category');
+//    var ms_category =  $('#magicsuggest-category').magicSuggest({
+//        placeholder: 'Type category name...',
+//        name: 'frm_product_category',
+//        data: ['SuperSport', 'Cruiser', 'Dual', 'Sport', 'Touring', 'Scooter']
+//    });
+//   
+//    ms_category.setName('frm_product_category');
     
-    setTimeout(function(){
-        var brandslist = $('.brandslist').text().split(',');
-        var ms_brand =  $('#magicsuggest-brand').magicSuggest({
-            placeholder: 'Type brand name...',
-            name: 'frm_product_brand',
-            data: brandslist
-        });
-        ms_brand.setName('frm_product_brand');
-    },1000);
+//    setTimeout(function(){
+//        var brandslist = $('.brandslist').text().split(',');
+//        var ms_brand =  $('#magicsuggest-brand').magicSuggest({
+//            placeholder: 'Type brand name...',
+//            name: 'frm_product_brand',
+//            data: brandslist
+//        });
+//        ms_brand.setName('frm_product_brand');
+//    },1000);
     
     var ms_size =  $('#magicsuggest-size').magicSuggest({
         placeholder: 'Type size name...',

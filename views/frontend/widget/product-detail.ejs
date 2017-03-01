@@ -54,15 +54,15 @@
                     <div class="col-lg-6 col-sm-6 col-xs-6">
                         <div class="filterBox">
                             <select id="quantity_box" class="form-control select2-hidden-accessible" tabindex="-1" aria-hidden="true">
-                                <option value="strawberries" selected="">Quantity</option>
-                                <option value="mango">1</option>
-                                <option value="bananas">2</option>
-                                <option value="watermelon">3</option>
-                                <option value="grapes">4</option>
-                                <option value="oranges">5</option>
-                                <option value="pineapple">6</option>
-                                <option value="peaches">7</option>
-                                <option value="cherries">8</option>
+                                <option value="" selected="">Quantity</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
                             </select>
                         </div>
                     </div>
@@ -84,8 +84,9 @@
             <div class="cart-actions">
                 <div class="addto row">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <button class="button btn-block btn-cart cart first product-add-to-cart" data-ng-click="addToCart('<%= result._id %>')" type="button" data-toggle="modal" data-target="#myModal">
-                        Add to Cart
+                        <!--<button class="button btn-block btn-cart cart first product-add-to-cart" data-ng-click="addToCart('<%= result._id %>')" type="button" data-toggle="modal" data-target="#myModal">-->
+                        <button class="button btn-block btn-cart cart first product-add-to-cart"  type="button" data-toggle="modal" data-target="#myModal">
+                            Add to Cart
                         </button>
                         <input type="hidden" id="product_id" value="<%= result._id %>">
                     </div>
