@@ -100,7 +100,7 @@
                                             <div class="quickview">
                                                 <a data-toggle="modal" class="btn btn-xs btn-quickview" href="#" data-target="">Quick View</a>
                                             </div>                                       
-                                            <% if(result.product_image[0] != "" && result.product_image[0] != undefined ){ %>
+                                            <% if(result.product_image[0] != undefined ){ %>
                                                 <a href="/product/{{ result.product_permalink }}"><img  src="/public/uploads/{{ result.product_image[0] }}" alt="img" class="img-responsive" ></a>
                                             <% } else {%>
                                                 <a href="#"><img  src="http://placehold.it/240x240" alt="img" class="img-responsive" ></a>
