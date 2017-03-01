@@ -321,6 +321,39 @@ app.controller('shopController',['$scope', '$http', '$sce',function ($scope, $ht
 
     };
     
+    $scope.filtercheckboxsearch = function(Title){
+       
+        alert("success"+Title);
+        var checkboxObj={};
+        checkboxObj.title=[];
+        //checkboxObj.fruitsDenied=[];
+
+        $("input:checkbox").each(function(){
+            var $this = $(this);
+
+            if($this.is(":checked")){
+                checkboxObj.title.push($this.attr("id"));
+            }else{
+                //checkboxObj.fruitsDenied.push($this.attr("id"));
+            }
+        });
+        
+        console.log(checkboxObj);
+
+    };
+    
+    $scope.searchpageallproducts = function(){
+       
+        $http.get('/product/search/searchpageallproducts').success(function(response){
+            //alert("category search");
+            //console.log(response);
+            $scope.shopProductscategorysearch = response;
+        }).error(function(){
+            console.log('Oops! Error listing products-search page');
+        });
+        
+    };
+  
 }]);
 
 /********************** admin controller  **********************/

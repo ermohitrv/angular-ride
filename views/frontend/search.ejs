@@ -16,7 +16,7 @@
                             <h4>Categories</h4>
                             <ul data-ng-init="getCategoriesListonsearch()">
                             <!--<li data-ng-if="categoryList.length > 0" data-ng-repeat="category in categoryList" id="{{ category._id }}"  ><a href="/categorysearch?catname={{ category.category_title }}" data-ng-bind="category.category_title"></a></li>-->
-                            <li data-ng-if="categoryList.length > 0" data-ng-repeat="category in categoryList" id="{{ category._id }}"  ><input type="checkbox"><a href="" data-ng-click="getCategoriessearch(category.category_title)" data-ng-bind="category.category_title"></a></li>
+                            <li data-ng-if="categoryList.length > 0" data-ng-repeat="category in categoryList" id="{{ category._id }}"  ><input ng-click="filtercheckboxsearch(category.category_title)" class="checkboxfilter" id="{{ category.category_title }}" type="checkbox"><a href="" data-ng-click="getCategoriessearch(category.category_title)" data-ng-bind="category.category_title"></a></li>
 
                             </ul>
 <!--                            <ul>
@@ -29,7 +29,7 @@
                             <div class="select_ride">
                             <ul data-ng-init="getBrandsListonsearch()">
                             <!--<li data-ng-if="brandList.length > 0" data-ng-repeat="brand in brandList" id="{{ brand._id }}"  ><a href="/brandsearch?brandname={{ brand.brand_title }}" data-ng-bind="brand.brand_title"></a></li>-->
-                            <li data-ng-if="brandList.length > 0" data-ng-repeat="brand in brandList" id="{{ brand._id }}"  ><input type="checkbox"><a href="" data-ng-click="getBrandssearch(brand.brand_title)" data-ng-bind="brand.brand_title"></a></li>
+                            <li data-ng-if="brandList.length > 0" data-ng-repeat="brand in brandList" id="{{ brand._id }}"  ><input ng-click="filtercheckboxsearch(brand.brand_title)" class="checkboxfilter" id="{{ brand.brand_title }}" type="checkbox"><a href="" data-ng-click="getBrandssearch(brand.brand_title)" data-ng-bind="brand.brand_title"></a></li>
 
                             </ul>
                             </div>
@@ -56,7 +56,7 @@
                     </div>
 
                     <div class="col-lg-9 col-md-9 col-md-12">
-                        <div class="row">
+                        <div class="row" data-ng-init="searchpageallproducts()">
 <!--                            <% if( productresults.length > 0 ){ %>
                             <% for(var i = 0; i < productresults.length; i++){ 
                             result = productresults[i];

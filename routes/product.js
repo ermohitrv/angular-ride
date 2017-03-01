@@ -281,4 +281,25 @@ router.get('/search/brandsearch/:brandTitle',  function(req, res){
 
 });
 
+router.get('/search/searchpageallproducts',  function(req, res){
+    
+    //console.log("category search product"+req.body.params.categoryTitle);
+    //res.send(true);
+   
+    Products.find({}, function(err, productResults){
+        //console.log(productResults);
+        if(!err){
+           
+            res.json(productResults);
+
+        }else{
+            console.log("no results");
+            res.json({});
+
+        }
+    });
+    
+
+});
+
 module.exports = router;
