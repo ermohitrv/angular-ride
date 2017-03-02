@@ -2286,7 +2286,9 @@ body.profile a.navbar-brand.logo{    max-width: 200px;}
 .pagination>li>a, .pagination>li>span {
     color: #000000;
 }
-
+#selectboxsortby{
+    float:right;background:#fff;margin-right:15px;
+}
 
 @media (min-width: 768px){
 .modal-dialog {

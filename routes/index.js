@@ -884,7 +884,7 @@ router.get('/classified', function (req, res) {
 
 router.get('/autocomplete-search', function(req, res){
   var term = req.query.term;
-  console.log(term);
+ 
   
    Products.find({$or :[{ 'product_title': new RegExp(term, 'i') }, {'product_category': new RegExp(term, 'i')},{'product_brand': new RegExp(term, 'i')}]}, function(err, products){
 
@@ -892,76 +892,52 @@ router.get('/autocomplete-search', function(req, res){
     var productnames = [];
     if(products.length > 0){
       products.forEach(function(products){
-          console.log( products.product_title);
+         
         //usernames.push(user.local.username);
         var dataObj = { 'product_title':  products.product_title,'product_link':products.product_permalink};
         productnames.push(dataObj);
       });
     }
     
-    console.log(productnames);
+    
     res.json(productnames);
   });
 });
 
-/* search products */
+/* search products by search bar on header*/
 router.get('/searchProducts', function(req, res){
-    //console.log("index seacrh");
   //var searchterm = req.body.params.searchbox;
-  var searchterm = req.query.search;
-  console.log(searchterm);
-   var productnames = [];
+    var searchterm = req.query.search;
    
-   Products.find({$or :[{ 'product_title': new RegExp(searchterm, 'i') }, {'product_category': new RegExp(searchterm, 'i')},{'product_brand': new RegExp(searchterm, 'i')}]}, function(err, products){
-    
-
-    //res.json(productnames);
-    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-    res.render('search', {
-        title: 'search products', 
-        user: req.user,
-        session: req.session,
-        productresults:products,
-        page_url: globalConfig.base_url
-    });
-  });
+    console.log("searchterm"+searchterm);
   
+    if(searchterm != "" && searchterm != undefined){
+        console.log("search type");
+        //Products.find({$or :[{ 'product_title': new RegExp(searchterm, 'i') }, {'product_category': new RegExp(searchterm, 'i')},{'product_brand': new RegExp(searchterm, 'i')}]}, function(err, products){
+
+
+         //res.json(productnames);
+         res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+         res.render('search', {
+             title: 'search products', 
+             user: req.user,
+             session: req.session,
+             searchkey:searchterm,
+             //productresults:products,
+             page_url: globalConfig.base_url
+         });
+       //});
+    }else{
+        console.log("no search");
+        res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+        res.render('index', { user : req.user,title:'Homepage' });
+        
+        
+    }
   
     
   
 });
 
-
-router.get('/categorysearch',  function(req, res){
-    
-    var catname = req.query.catname;
-    console.log(catname);
-    
-    Products.find({'product_category': new RegExp(catname, 'i')}, function(err, productResults){
-        if(!err){
-            console.log(productResults);
-            res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-            res.render('search', {
-                title: 'search products', 
-                user: req.user,
-                session: req.session,
-                productresults:productResults,
-                page_url: globalConfig.base_url
-            });
-        }else{
-            console.log("no results");
-            res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-            res.render('search', {
-                title: 'search products', 
-                user: req.user,
-                session: req.session,
-                productresults:productResults,
-                page_url: globalConfig.base_url
-            });
-        }
-    });
-    
-
-});
 
 module.exports = router;

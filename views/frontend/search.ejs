@@ -6,8 +6,14 @@
         <div class="row">
             <div class="product_listing">
                 <div class="title"><h1>Search results</h1>
-                    <p>We've got <%= productresults.length %> results</p>
+                    <p>We've got {{shopProductscategorysearch.length}} results</p>
+                    
                 </div>
+                <select id="selectboxsortby"  ng-click="setOrder()">
+                        <option>Sort By Price</option>
+                        <option id="asc" value="asc">Low to high</option>
+                        <option id="desc" value="desc">High to Low</option>
+                </select>
                 <div class="listing">
                     <div class="col-lg-3 col-md-3 col-md-12" >
                        
@@ -16,7 +22,7 @@
                             <h4>Categories</h4>
                             <ul data-ng-init="getCategoriesListonsearch()">
                             <!--<li data-ng-if="categoryList.length > 0" data-ng-repeat="category in categoryList" id="{{ category._id }}"  ><a href="/categorysearch?catname={{ category.category_title }}" data-ng-bind="category.category_title"></a></li>-->
-                            <li data-ng-if="categoryList.length > 0" data-ng-repeat="category in categoryList" id="{{ category._id }}"  ><input ng-click="filtercheckboxsearch(category.category_title)" class="checkboxfilter" id="{{ category.category_title }}" type="checkbox"><a href="" data-ng-click="getCategoriessearch(category.category_title)" data-ng-bind="category.category_title"></a></li>
+                            <li data-ng-if="categoryList.length > 0" data-ng-repeat="category in categoryList" id="{{ category._id }}"  ><input ng-click="filtercheckboxsearch(category.category_title,'categorycheckbox')" class="checkboxfilter" id="{{ category.category_title }}" type="checkbox"><a href="" data-ng-click="getSearch(category.category_title,'category')" data-ng-bind="category.category_title"></a></li>
 
                             </ul>
 <!--                            <ul>
@@ -29,7 +35,7 @@
                             <div class="select_ride">
                             <ul data-ng-init="getBrandsListonsearch()">
                             <!--<li data-ng-if="brandList.length > 0" data-ng-repeat="brand in brandList" id="{{ brand._id }}"  ><a href="/brandsearch?brandname={{ brand.brand_title }}" data-ng-bind="brand.brand_title"></a></li>-->
-                            <li data-ng-if="brandList.length > 0" data-ng-repeat="brand in brandList" id="{{ brand._id }}"  ><input ng-click="filtercheckboxsearch(brand.brand_title)" class="checkboxfilter" id="{{ brand.brand_title }}" type="checkbox"><a href="" data-ng-click="getBrandssearch(brand.brand_title)" data-ng-bind="brand.brand_title"></a></li>
+                            <li data-ng-if="brandList.length > 0" data-ng-repeat="brand in brandList" id="{{ brand._id }}"  ><input ng-click="filtercheckboxsearch(brand.brand_title,'brandcheckbox')" class="checkboxfilter" id="{{ brand.brand_title }}" type="checkbox"><a href="" data-ng-click="getSearch(brand.brand_title,'brand')" data-ng-bind="brand.brand_title"></a></li>
 
                             </ul>
                             </div>
@@ -56,44 +62,13 @@
                     </div>
 
                     <div class="col-lg-9 col-md-9 col-md-12">
-                        <div class="row" data-ng-init="searchpageallproducts()">
-<!--                            <% if( productresults.length > 0 ){ %>
-                            <% for(var i = 0; i < productresults.length; i++){ 
-                            result = productresults[i];
-                            %>
-                            <div class="col-lg-4 col-md-6 col-md-12">
-                                <div class="item">
-                                    <div class="product">
-                                        <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left"><i class="glyphicon glyphicon-heart"></i> </a>
-                                        <div class="image">
-                                            <div class="quickview">
-                                                <a data-toggle="modal" class="btn btn-xs btn-quickview" href="#" data-target="">Quick View</a>
-                                            </div>
-                                            <% if(result.product_image[0] != "" && result.product_image[0] != undefined ){ %>
-                                                <a href="/product/<%= result.product_permalink %>"><img  src="/public/uploads/<%= result.product_image[0] %>" alt="img" class="img-responsive" ></a>
-                                            <% } else {%>
-                                                <a href="#"><img  src="http://placehold.it/240x240" alt="img" class="img-responsive" ></a>
-                                            <% } %>                                        </div>
-                                        <div class="description">
-                                            <h4><a href="/product/<%= result.product_permalink %>"><%= result.product_title %></a></h4>
-                                            <span class="size">XL / XXL / S </span>
-                                        </div>
-                                        <div class="price"><span>$<%= result.product_price %></span></div>
-                                        <div class="action-control">
-                                            <a class="btn btn-danger"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a>
-                                        <button class="btn btn-danger product-add-to-cart" id="<%= result._id %>" type="button" data-toggle="modal" data-target="#myModal">
-                                                    <i class="glyphicon glyphicon-shopping-cart"> </i>Add to Cart
-                                        </button>
-                                        <input type="hidden" id="productidgear_<%= result._id %>" value="<%= result._id %>">
-                                        <input type="hidden" id="quantityboxgear_<%= result._id %>" value="1">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <% }} %>-->
-                            
-                            <div class="col-lg-4 col-md-6 col-md-12" data-ng-if="shopProductscategorysearch.length > 0" data-ng-repeat="result in shopProductscategorysearch">
-                                <div class="item">
+                        <div class="row" data-ng-init="getSearch('<%= searchkey %>','searchkeyword')">
+
+                           
+                            <!--<div class="col-lg-4 col-md-6 col-md-12" data-ng-if="shopProductscategorysearch.length > 0" data-ng-repeat="result in shopProductscategorysearch | orderBy : order">-->
+                    <div class="col-lg-4 col-md-6 col-md-12" data-ng-if="shopProductscategorysearch.length > 0" data-ng-repeat="result in shopProductscategorysearch | orderBy : order">
+
+                            <div class="item">
                                     <div class="product">
                                         <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left"><i class="glyphicon glyphicon-heart"></i> </a>
                                         <div class="image">
@@ -103,12 +78,6 @@
                                             
                                             <img style="display:inline-block" ng-src="{{result.product_image[0]?('/public/uploads/'+ result.product_image[0]):'http://placehold.it/240x240'}}" alt="img" class="img-responsive"/>
 
-<!--                                        <% if(result.product_image[0] != "" && result.product_image[0] != undefined ){ %>
-                                                <a href="/product/{{ result.product_permalink }}"><img  src="/public/uploads/{{ result.product_image[0] }}" alt="img" class="img-responsive" ></a>
-                                            <% } else {%>
-                                                <a href="#"><img  src="http://placehold.it/240x240" alt="img" class="img-responsive" ></a>
-                                            <% } %> -->
-                                        
                                             </div>
                                         <div class="description">
                                             <h4><a href="#">{{ result.product_title }}</a></h4>

@@ -226,26 +226,7 @@ router.post('/get-categories-list',  function(req, res){
     });
 });
 
-router.get('/search/categorywisesearch/:categoryTitle',  function(req, res){
-    
-    //console.log("category search product"+req.body.params.categoryTitle);
-    //res.send(true);
-   
-    Products.find({'product_category': new RegExp(req.params.categoryTitle, 'i')}, function(err, productResults){
-        //console.log(productResults);
-        if(!err){
-            console.log(productResults);
-            res.json(productResults);
 
-        }else{
-            console.log("no results");
-            res.json({});
-
-        }
-    });
-    
-
-});
 
 router.post('/get-brands-list',  function(req, res){
     
@@ -260,46 +241,83 @@ router.post('/get-brands-list',  function(req, res){
     });
 });
 
-router.get('/search/brandsearch/:brandTitle',  function(req, res){
+
+
+router.post('/search/searchfilter',  function(req, res){
     
     //console.log("category search product"+req.body.params.categoryTitle);
     //res.send(true);
-   
-    Products.find({'product_brand': new RegExp(req.params.brandTitle, 'i')}, function(err, productResults){
-        //console.log(productResults);
-        if(!err){
-            console.log(productResults);
-            res.json(productResults);
-
-        }else{
-            console.log("no results");
-            res.json({});
-
+    
+        var searchtype = req.body.params.searchtype;
+        var searchterm = req.body.params.Title;
+    if(searchtype == 'category' || searchtype == 'brand' || searchtype == 'searchkeyword'){
+        var searchfield = "";
+        if(searchtype == 'category'){
+            searchfield = 'product_category';
         }
-    });
-    
+        else if(searchtype == 'brand') {
+            searchfield = 'product_brand';
+        }
+        else if(searchtype == 'searchkeyword'){
+            searchfield = 'product_title';
+        }
 
-});
+        Products.find({[searchfield]: new RegExp(searchterm, 'i')}, function(err, productResults){
 
-router.get('/search/searchpageallproducts',  function(req, res){
+            if(!err){
+
+                res.json(productResults);
+
+            }else{
+                console.log("no results");
+                res.json({});
+
+            }
+        });
     
-    //console.log("category search product"+req.body.params.categoryTitle);
-    //res.send(true);
-   
-    Products.find({}, function(err, productResults){
-        //console.log(productResults);
-        if(!err){
+    }
+    
+    if(searchtype == 'categorycheckbox' ||  searchtype == 'brandcheckbox'){
+        var checkboxObj = req.body.params.checkboxObj;
+        var optRegexpbrand = [];
+        var optRegexpcat = [];
+        if(searchtype == 'categorycheckbox'){
+            var optValuescat = checkboxObj.cattitle;
            
-            res.json(productResults);
-
-        }else{
-            console.log("no results");
-            res.json({});
-
+            optValuescat.forEach(function(optcat){
+                    optRegexpcat.push(  new RegExp(optcat, "i") );
+            });
         }
-    });
-    
+        
+        if(searchtype == 'brandcheckbox'){
+            var optValuesbrand = checkboxObj.brandstitle;
+            
+            optValuesbrand.forEach(function(optbrand){
+                    optRegexpbrand.push(  new RegExp(optbrand, "i") );
+            });
+        }
+        console.log(optRegexpcat);
+        console.log(optRegexpbrand);
+        
+        //Products.find({'product_category': { $in: optRegexpcat },'product_brand':{ $in: optRegexpbrand }}, function(err, productResults){
+        Products.find({$or :[{'product_category': { $in: optRegexpcat }},{'product_brand': { $in: optRegexpbrand }}]}, function(err, productResults){
 
+            if(!err){
+                
+                res.json(productResults);
+
+            }else{
+                console.log("no results");
+                res.json({});
+
+            }
+        });
+        
+    }
+    
+    
 });
+
+
 
 module.exports = router;

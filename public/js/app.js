@@ -277,19 +277,40 @@ app.controller('shopController',['$scope', '$http', '$sce',function ($scope, $ht
         });
     };
     
-    /* categories wise search on search  page */
-    $scope.getCategoriessearch = function(categoryTitle){
+    
+//    $scope.filtercheckboxsearch = function(Title){
+//       
+//        alert("success"+Title);
+//        var checkboxObj={};
+//        checkboxObj.title=[];
+//        //checkboxObj.fruitsDenied=[];
+//
+//        $("input:checkbox").each(function(){
+//            var $this = $(this);
+//
+//            if($this.is(":checked")){
+//                checkboxObj.title.push($this.attr("id"));
+//            }else{
+//                //checkboxObj.fruitsDenied.push($this.attr("id"));
+//            }
+//        });
+//        
+//        console.log(checkboxObj);
+//
+//    };
+
+    $scope.getSearch = function(Title,searchtype){
       
         var data = { 
-            categoryTitle: categoryTitle, 
+            Title: Title, 
+            searchtype:searchtype,
         };
         var config = {
             params: data,
             headers : {'Accept' : 'application/json'}
         };
 
-
-        $http.get('/product/search/categorywisesearch/'+categoryTitle).success(function(response){
+        $http.post('/product/search/searchfilter/',config).success(function(response, status, headers, config){
             //alert("category search");
             //console.log(response);
             $scope.shopProductscategorysearch = response;
@@ -299,59 +320,66 @@ app.controller('shopController',['$scope', '$http', '$sce',function ($scope, $ht
 
     };
     
-     /* Brands wise search on search  page */
-    $scope.getBrandssearch = function(brandTitle){
+    /* filter data through checkbox */
+    $scope.filtercheckboxsearch = function(Title,checkboxtype){
        
-        var data = { 
-            brandTitle: brandTitle, 
-        };
-        var config = {
-            params: data,
-            headers : {'Accept' : 'application/json'}
-        };
-
-
-        $http.get('/product/search/brandsearch/'+brandTitle).success(function(response){
-            //alert("category search");
-            //console.log(response);
-            $scope.shopProductscategorysearch = response;
-        }).error(function(){
-            console.log('Oops! Error listing products-list');
-        });
-
-    };
-    
-    $scope.filtercheckboxsearch = function(Title){
        
-        alert("success"+Title);
         var checkboxObj={};
-        checkboxObj.title=[];
-        //checkboxObj.fruitsDenied=[];
+        checkboxObj.cattitle=[];
+        checkboxObj.brandstitle=[];
+        if(checkboxtype == 'categorycheckbox'){
+            $("input:checkbox").each(function(){
+                var $this = $(this);
 
-        $("input:checkbox").each(function(){
-            var $this = $(this);
+                if($this.is(":checked")){
+                    checkboxObj.cattitle.push($this.attr("id"));
+                }else{
+                    //checkboxObj.fruitsDenied.push($this.attr("id"));
+                }
+            });
+        }
+        if(checkboxtype == 'brandcheckbox'){
+            $("input:checkbox").each(function(){
+                var $this = $(this);
 
-            if($this.is(":checked")){
-                checkboxObj.title.push($this.attr("id"));
-            }else{
-                //checkboxObj.fruitsDenied.push($this.attr("id"));
-            }
-        });
+                if($this.is(":checked")){
+                    checkboxObj.brandstitle.push($this.attr("id"));
+                }else{
+                    //checkboxObj.fruitsDenied.push($this.attr("id"));
+                }
+            });
+        }
         
-        console.log(checkboxObj);
+        
+        var data = { 
+            checkboxObj: checkboxObj, 
+            searchtype:checkboxtype,
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
 
-    };
-    
-    $scope.searchpageallproducts = function(){
-       
-        $http.get('/product/search/searchpageallproducts').success(function(response){
+
+        $http.post('/product/search/searchfilter/',config).success(function(response, status, headers, config){
             //alert("category search");
             //console.log(response);
             $scope.shopProductscategorysearch = response;
         }).error(function(){
-            console.log('Oops! Error listing products-search page');
+            console.log('Oops! Error listing products-list');
         });
-        
+
+    };
+    
+    $scope.setOrder = function () {
+        var order = $('#selectboxsortby').val();
+        var orderby = "";
+        if(order == "desc"){
+            orderby = "-product_price";
+        }else{
+            orderby = "product_price";
+        }
+        $scope.order = orderby;
     };
   
 }]);

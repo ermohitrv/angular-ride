@@ -5,9 +5,10 @@
         <group>
             <file>file:/var/www/html/rideprix/routes/index.js</file>
             <file>file:/var/www/html/rideprix/public/js/app.js</file>
+            <file>file:/var/www/html/rideprix/routes/product.js</file>
             <file>file:/var/www/html/rideprix/routes/admin.js</file>
-            <file>file:/var/www/html/rideprix/views/frontend/widget/shop-products-list.ejs</file>
             <file>file:/var/www/html/rideprix/views/frontend/search.ejs</file>
+            <file>file:/var/www/html/rideprix/views/frontend/widget/shop-products-list.ejs</file>
             <file>file:/var/www/html/rideprix/public/css/style.css</file>
             <file>file:/var/www/html/rideprix/views/frontend/shop.ejs</file>
             <file>file:/var/www/html/rideprix/views/frontend/partial/header.ejs</file>
