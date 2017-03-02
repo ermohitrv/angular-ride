@@ -371,14 +371,29 @@ app.controller('shopController',['$scope', '$http', '$sce',function ($scope, $ht
 
     };
     
-    $scope.setOrder = function () {
-        var order = $('#selectboxsortby').val();
+    $scope.setOrder = function (sorttype) {
+        if(sorttype == 'price'){
+            var order = $('#selectboxsortbyprice').val();
+        }
+        if(sorttype == 'name'){
+            var order = $('#selectboxsortbyname').val();
+        }
+        
         var orderby = "";
-        if(order == "desc"){
+        
+        if(order == "desc" && sorttype == 'price'){
             orderby = "-product_price";
-        }else{
+        }
+        if(order == "asc" && sorttype == 'price'){
             orderby = "product_price";
         }
+        if(order == "desc" && sorttype == 'name'){
+            orderby = "-product_title";
+        }
+        if(order == "asc" && sorttype == 'name'){
+            orderby = "product_title";
+        }
+        
         $scope.order = orderby;
     };
   

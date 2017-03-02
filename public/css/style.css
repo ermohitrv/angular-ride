@@ -2286,8 +2286,13 @@ body.profile a.navbar-brand.logo{    max-width: 200px;}
 .pagination>li>a, .pagination>li>span {
     color: #000000;
 }
-#selectboxsortby{
-    float:right;background:#fff;margin-right:15px;
+.sortselectsearch{
+    background:#fff;
+    margin-right:15px;
+    border-color: #d2d6de;
+    float: right;
+    font-size: 14px;
+    font-family: 'Lato', sans-serif;
 }
 
 @media (min-width: 768px){

@@ -9,10 +9,15 @@
                     <p>We've got {{shopProductscategorysearch.length}} results</p>
                     
                 </div>
-                <select id="selectboxsortby"  ng-click="setOrder()">
+                <select class="sortselectsearch" id="selectboxsortbyname"  ng-click="setOrder('name')">
+                        <option>Sort By Name</option>
+                        <option id="nameasc" value="asc">A to Z</option>
+                        <option id="namedesc" value="desc">Z to A</option>
+                </select>
+                <select class="sortselectsearch" id="selectboxsortbyprice"  ng-click="setOrder('price')">
                         <option>Sort By Price</option>
-                        <option id="asc" value="asc">Low to high</option>
-                        <option id="desc" value="desc">High to Low</option>
+                        <option id="priceasc" value="asc">Low to high</option>
+                        <option id="pricedesc" value="desc">High to Low</option>
                 </select>
                 <div class="listing">
                     <div class="col-lg-3 col-md-3 col-md-12" >
