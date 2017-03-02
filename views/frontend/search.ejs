@@ -1,6 +1,6 @@
 <% layout('layout') -%>
 
-<div class="search_result" data-ng-controller="shopController">
+<div class="search_result" data-ng-controller="shopController" >
     <div class="overlay_bg"></div>
     <div class="container">
         <div class="row">
@@ -66,12 +66,12 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-9 col-md-9 col-md-12">
+                    <div class="col-lg-9 col-md-9 col-md-12" ng-init="currentPage = 0; pageSize = 6;">
                         <div class="row" data-ng-init="getSearch('<%= searchkey %>','searchkeyword')">
 
                            
-                            <!--<div class="col-lg-4 col-md-6 col-md-12" data-ng-if="shopProductscategorysearch.length > 0" data-ng-repeat="result in shopProductscategorysearch | orderBy : order">-->
-                    <div class="col-lg-4 col-md-6 col-md-12" data-ng-if="shopProductscategorysearch.length > 0" data-ng-repeat="result in shopProductscategorysearch | orderBy : order">
+                            <div   class="col-lg-4 col-md-6 col-md-12" data-ng-if="shopProductscategorysearch.length > 0" data-ng-repeat="result in shopProductscategorysearch | orderBy : order |  startFrom:currentPage*pageSize | limitTo:pageSize">
+                    <!--<div class="col-lg-4 col-md-6 col-md-12" data-ng-if="shopProductscategorysearch.length > 0" dir-paginate="result in shopProductscategorysearch | itemsPerPage:2">-->
 
                             <div class="item">
                                     <div class="product">
@@ -204,7 +204,7 @@
                                 </div>
                             </div>-->
                             <div class="col-md-12">
-                                <div aria-label="Page navigation" class="page_navigation">
+<!--                                <div aria-label="Page navigation" class="page_navigation">
                                   <ul class="pagination">
                                     <li>
                                       <a href="#" aria-label="Previous">
@@ -222,7 +222,33 @@
                                       </a>
                                     </li>
                                   </ul>
+                                </div>-->
+                                <div aria-label="Page navigation" class="page_navigation">
+                                    <ul class="pagination">
+                                    <li>
+                                      <a ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1" href="javascript:void(0)" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                      </a>
+                                    </li>
+                                    <li>   
+                                    <a ng-disabled="currentPage >= shopProductscategorysearch.length/pageSize - 1" ng-click="currentPage=currentPage+1" href="javascript:void(0)" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                    </li>
+                                  </ul>
+<!--                                <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
+                                    Previous
+                                </button>
+                                {{currentPage+1}}/{{shopProductscategorysearch.length/pageSize}}
+                                <button ng-disabled="currentPage >= shopProductscategorysearch.length/pageSize - 1" ng-click="currentPage=currentPage+1">
+                                    Next
+                                </button>-->
                                 </div>
+<!--                                <dir-pagination-controls
+                                    max-size="3"
+                                    direction-links="true"
+                                    boundary-links="true" >
+                                </dir-pagination-controls>-->
                             </div>
                         </div>
                     </div>

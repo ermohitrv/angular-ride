@@ -1,5 +1,6 @@
 var app = angular.module('ridePrixApp', ['ngSanitize']);
 
+
 app.filter('to_trusted', ['$sce', function ($sce) {
     return function (text) {
         return $sce.trustAsHtml(text);
@@ -23,6 +24,13 @@ app.filter('containsstring', function() {
         console.log('hey'+JSON.stringify( array ));
         return array.indexOf(needle) >= 0;
     };
+});
+
+app.filter('startFrom', function() {
+    return function(input, start) {
+        start = +start; //parse to int
+        return input.slice(start);
+    }
 });
 
 /********************** view controller  **********************/
@@ -364,6 +372,7 @@ app.controller('shopController',['$scope', '$http', '$sce',function ($scope, $ht
         $http.post('/product/search/searchfilter/',config).success(function(response, status, headers, config){
             //alert("category search");
             //console.log(response);
+            $scope.limit= 2;
             $scope.shopProductscategorysearch = response;
         }).error(function(){
             console.log('Oops! Error listing products-list');
@@ -397,6 +406,10 @@ app.controller('shopController',['$scope', '$http', '$sce',function ($scope, $ht
         $scope.order = orderby;
     };
   
+    $scope.loadMoreresults = function() {
+        alert("limit");
+        $scope.limit = 2;
+    }
 }]);
 
 /********************** admin controller  **********************/
