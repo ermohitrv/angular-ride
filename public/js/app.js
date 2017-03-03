@@ -333,30 +333,42 @@ app.controller('shopController',['$scope', '$http', '$sce',function ($scope, $ht
        
        
         var checkboxObj={};
-        checkboxObj.cattitle=[];
-        checkboxObj.brandstitle=[];
-        if(checkboxtype == 'categorycheckbox'){
+        checkboxObj.title=[];
+        //checkboxObj.cattitle=[];
+       // checkboxObj.brandstitle=[];
+         
             $("input:checkbox").each(function(){
                 var $this = $(this);
 
                 if($this.is(":checked")){
-                    checkboxObj.cattitle.push($this.attr("id"));
+                    checkboxObj.title.push($this.attr("id"));
                 }else{
                     //checkboxObj.fruitsDenied.push($this.attr("id"));
                 }
             });
-        }
-        if(checkboxtype == 'brandcheckbox'){
-            $("input:checkbox").each(function(){
-                var $this = $(this);
-
-                if($this.is(":checked")){
-                    checkboxObj.brandstitle.push($this.attr("id"));
-                }else{
-                    //checkboxObj.fruitsDenied.push($this.attr("id"));
-                }
-            });
-        }
+        
+//        if(checkboxtype == 'categorycheckbox'){
+//            $("input:checkbox").each(function(){
+//                var $this = $(this);
+//
+//                if($this.is(":checked")){
+//                    checkboxObj.cattitle.push($this.attr("id"));
+//                }else{
+//                    //checkboxObj.fruitsDenied.push($this.attr("id"));
+//                }
+//            });
+//        }
+//        if(checkboxtype == 'brandcheckbox'){
+//            $("input:checkbox").each(function(){
+//                var $this = $(this);
+//
+//                if($this.is(":checked")){
+//                    checkboxObj.brandstitle.push($this.attr("id"));
+//                }else{
+//                    //checkboxObj.fruitsDenied.push($this.attr("id"));
+//                }
+//            });
+//        }
         
         
         var data = { 
@@ -406,10 +418,11 @@ app.controller('shopController',['$scope', '$http', '$sce',function ($scope, $ht
         $scope.order = orderby;
     };
   
-    $scope.loadMoreresults = function() {
-        alert("limit");
-        $scope.limit = 2;
-    }
+    
+    $scope.setPage = function () {
+        $scope.currentPage = this.n;
+    };
+
 }]);
 
 /********************** admin controller  **********************/

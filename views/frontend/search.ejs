@@ -94,7 +94,13 @@
                                         </div>
                                         <div class="price"><span>${{result.product_price }}</span></div>
                                         <div class="action-control">
-                                            <a class="btn btn-danger"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a>
+                                            <!--<a class="btn btn-danger"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a>-->
+                                        <button class="btn btn-danger product-add-to-cart" id="{{result._id }}" type="button" data-toggle="modal" data-target="#myModal">
+                                                    <i class="glyphicon glyphicon-shopping-cart"> </i>Add to Cart
+                                        </button>
+                                        <input type="hidden" id="productidgear_{{result._id }}" value="{{ result._id }}">
+                                        <input type="hidden" id="quantityboxgear_{{ result._id }}" value="1">
+                                        
                                         </div>
                                     </div>
                                 </div>
@@ -228,18 +234,20 @@
                                   </ul>
                                 </div>-->
                                 <div aria-label="Page navigation" class="page_navigation">
-                                    <ul class="pagination">
-                                    <li>
-                                      <a ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1" href="javascript:void(0)" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                      </a>
-                                    </li>
-                                    <li>   
-                                    <a ng-disabled="currentPage >= shopProductscategorysearch.length/pageSize - 1" ng-click="currentPage=currentPage+1" href="javascript:void(0)" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                    </li>
-                                  </ul>
+                                   <ul class="pagination">
+                                        <li>
+                                            <a ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1" href="javascript:void(0)" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+
+                                        <li>   
+                                            <a ng-disabled="currentPage >= shopProductscategorysearch.length/pageSize - 1" ng-click="currentPage=currentPage+1" href="javascript:void(0)" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+
 <!--                                <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
                                     Previous
                                 </button>
@@ -248,11 +256,7 @@
                                     Next
                                 </button>-->
                                 </div>
-<!--                                <dir-pagination-controls
-                                    max-size="3"
-                                    direction-links="true"
-                                    boundary-links="true" >
-                                </dir-pagination-controls>-->
+
                             </div>
                         </div>
                     </div>

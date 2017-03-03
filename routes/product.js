@@ -281,29 +281,29 @@ router.post('/search/searchfilter',  function(req, res){
         var checkboxObj = req.body.params.checkboxObj;
         var optRegexpbrand = [];
         var optRegexpcat = [];
-        if(searchtype == 'categorycheckbox'){
-            var optValuescat = checkboxObj.cattitle;
-           
+       // if(searchtype == 'categorycheckbox'){
+            //var optValuescat = checkboxObj.cattitle;
+              var optValuescat = checkboxObj.title;
             optValuescat.forEach(function(optcat){
                     optRegexpcat.push(  new RegExp(optcat, "i") );
             });
-        }
+        //}
         
-        if(searchtype == 'brandcheckbox'){
-            var optValuesbrand = checkboxObj.brandstitle;
-            
-            optValuesbrand.forEach(function(optbrand){
-                    optRegexpbrand.push(  new RegExp(optbrand, "i") );
-            });
-        }
+//        if(searchtype == 'brandcheckbox'){
+//            var optValuesbrand = checkboxObj.brandstitle;
+//            
+//            optValuesbrand.forEach(function(optbrand){
+//                    optRegexpbrand.push(  new RegExp(optbrand, "i") );
+//            });
+//        }
         console.log(optRegexpcat);
-        console.log(optRegexpbrand);
+       // console.log(optRegexpbrand);
         
         //Products.find({'product_category': { $in: optRegexpcat },'product_brand':{ $in: optRegexpbrand }}, function(err, productResults){
-        Products.find({$or :[{'product_category': { $in: optRegexpcat }},{'product_brand': { $in: optRegexpbrand }}]}, function(err, productResults){
+        Products.find({$or :[{'product_category': { $in: optRegexpcat }},{'product_brand': { $in: optRegexpcat }}]}, function(err, productResults){
 
             if(!err){
-                
+                console.log(productResults);
                 res.json(productResults);
 
             }else{

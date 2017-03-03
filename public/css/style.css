@@ -1865,6 +1865,7 @@ button.continue_shoping, button.checkout_btn {
 .product {
     display: block;
     height: auto;
+    min-height: 425px;
     border: 1px solid #DDDDDD;
     border-bottom: 1px solid #DDDDDD;
     background: #fff;
