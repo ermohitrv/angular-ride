@@ -419,9 +419,7 @@ app.controller('shopController',['$scope', '$http', '$sce',function ($scope, $ht
     };
   
     
-    $scope.setPage = function () {
-        $scope.currentPage = this.n;
-    };
+   
 
 }]);
 
@@ -510,6 +508,23 @@ app.controller('adminController',['$scope', '$http','$sce', function ($scope, $h
             $scope.pointsList = pointsList;
         }).error(function(){
             console.log('Oops! Error listing get-points-list');
+        });
+    };
+    
+    $scope.delete_category = function(catId){
+        alert("erwrwr");
+         var data = { 
+            catId: catId
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/admin/category/delete',config).success(function(response, status, headers, config){
+             
+          
+        }).error(function(){
+            console.log('Oops! Error delete-category');
         });
     };
     

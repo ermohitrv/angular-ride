@@ -207,7 +207,7 @@ router.post('/imageresize', function(req, res, next) {
                 console.log('Image height is ' + info.height);
             });
 
-        readableStream.pipe(transformer).pipe(res);
+        //readableStream.pipe(transformer).pipe(res);
     console.log("Image resize");
     res.status(200).json({"success": "image resize"});
 });

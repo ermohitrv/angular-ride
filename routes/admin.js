@@ -115,7 +115,7 @@ router.get('/get-users-list', middleware.isAdminLoggedIn, function(req, res){
 
 /* Route for List Suggestions */
 router.get('/get-brands-list', middleware.isAdminLoggedIn, function(req, res){
-    Brands.find({'brand_title':{$ne:null}},{_id:0,brand_title:1,brand_description:1,brand_added_date:1},function (err, brandsList) {
+    Brands.find({'brand_title':{$ne:null}},{_id:1,brand_title:1,brand_description:1,brand_added_date:1},function (err, brandsList) {
         if(brandsList){
             res.json(brandsList);
         }else{
@@ -666,7 +666,7 @@ router.post('/product/insert', cpUpload, middleware.restrict, function(req, res)
 // render the editor
 router.get('/product/edit/:id', middleware.restrict, function(req, res) {
 	var db = req.db;
-    var classy = require("markdown-it-classy");
+        var classy = require("markdown-it-classy");
 	var markdownit = req.markdownit;
 	markdownit.use(classy);
 
@@ -802,7 +802,16 @@ router.get('/brand/new', middleware.restrict, function(req, res) {
 });
 
 // insert new brand form action
-router.post('/brand/insert', middleware.restrict, function(req, res) {
+var cpUploadinsertbrand = upload.fields([{name: 'frm_brand_image', maxCount: 1}]);
+router.post('/brand/insert',cpUploadinsertbrand, middleware.restrict, function(req, res) {
+    var imagename="";
+    if(req.files['frm_brand_image']){
+        var imagearray = req.files['frm_brand_image'];
+        console.log(imagearray);
+        console.log(imagearray[0].filename);
+        imagename = imagearray[0].filename;
+    }
+    
     Brands.count({'brand_permalink': req.body.frm_brand_permalink}, function (err, brand) {
         if(brand > 0 && req.body.frm_brand_permalink != ""){
             req.flash('message', globalConfig.brandExists);
@@ -812,7 +821,7 @@ router.post('/brand/insert', middleware.restrict, function(req, res) {
             var brandObj                = new Brands();
             brandObj.brand_title        = req.body.frm_brand_title;
             brandObj.brand_permalink    = req.body.frm_brand_permalink;
-            brandObj.brand_image        = req.body.frm_brand_image;
+            brandObj.brand_image        = imagename;
             brandObj.brand_description  = req.body.frm_brand_description;
             brandObj.brand_added_date   = new Date();
             
@@ -1227,9 +1236,9 @@ router.get('/category/new', middleware.restrict, function(req, res) {
 });
 
 // insert new category form action
-router.get('/category/insert',  middleware.restrict, function(req, res) {
-        console.log("title****** : "+req.query.frm_category_title);
-        Categories.find({'category_title': req.query.frm_category_title}, function (err, category) {
+router.post('/category/insert',  middleware.restrict, function(req, res) {
+        console.log("title****** : "+req.body.frm_category_title);
+        Categories.find({'category_title': req.body.frm_category_title}, function (err, category) {
         if(err){
 
             req.flash('message', globalConfig.productExists);
@@ -1240,10 +1249,10 @@ router.get('/category/insert',  middleware.restrict, function(req, res) {
             
             
             
-            var categoryObj = new Categories();
-            categoryObj.category_title        = req.query.frm_category_title;
-            categoryObj.category_description  = req.query.frm_category_description;
-            categoryObj.category_short_description = req.query.frm_category_short_description;
+           var categoryObj = new Categories();
+            categoryObj.category_title        = req.body.frm_category_title;
+            categoryObj.category_description  = req.body.frm_category_description;
+            categoryObj.category_short_description = req.body.frm_category_short_description;
             categoryObj.category_added_date   = new Date();
            
             categoryObj.save(function (err) {
@@ -1253,7 +1262,7 @@ router.get('/category/insert',  middleware.restrict, function(req, res) {
                     req.flash('message_type','danger');
                     res.redirect('/admin/insert');
                 }else{
-                    req.flash('message', globalConfig.productCreateSuccess);
+                    req.flash('message', 'New category successfully created!');
                     req.flash('message_type','success');
                     res.redirect('/admin/list-categories');
                 }
@@ -1363,6 +1372,198 @@ router.post('/rproutepoints/insert',  middleware.restrict, function(req, res) {
             });
         }
     });
+});
+
+/* delete category from admin */
+router.post('/delete-category/', middleware.isAdminLoggedIn, function(req, res) {
+     
+	// remove the article
+	 Categories.remove({ _id: req.body.uid } ,function(err, status){
+            if(err){
+              status = "error";
+            }
+            else{
+                status = "success";
+            }
+            res.send(status);
+          
+        });
+});
+
+/* update category */
+router.get('/updatecategory', middleware.isAdminLoggedIn, function(req, res) {
+    //res.send(true);
+    
+    Categories.findOne({'_id': req.query.id}, function (err, categorydata) {
+        if(categorydata){
+            
+            res.render('category_update', {
+                title: 'Update category',
+                categorydata : categorydata,
+                session: req.session,
+                message: middleware.clear_session_value(req.session, "message"),
+                message_type: middleware.clear_session_value(req.session, "message_type"),
+                editor: true,
+                user:req.user,
+                active:'add-category'
+            });
+        }
+        else{
+             console.log("vvcvcvc");
+        }
+
+    });
+
+});
+
+
+router.post('/category/update', middleware.isAdminLoggedIn, function(req, res) {
+    
+   
+    
+    Categories.findOne({'_id': req.body.frm_category_id}, function (err, categorydata) {
+        
+        if(categorydata) {
+        Categories.update({ 
+                                '_id': req.body.frm_category_id
+                            },
+                            { 
+                                $set:   { 
+                                            'category_short_description': req.body.frm_category_short_description ,
+                                            'category_description':req.body.frm_category_description,
+                                        } 
+                            },
+                            { multi: true },
+                function(err, categoryinfo){
+
+                     if (err){
+                       
+                    }else{
+                        
+                        console.log('update category');
+                         res.render('list-categories', { 
+                            message : 'Category Updated Successfully!',
+                            message_type : 'success',
+                            user : req.user, 
+                            title:'Admin | List Categories',
+                            active:'list-category'
+                        });
+                        
+                        
+                    }
+                });
+        }
+        else{
+            
+            console.log("error");
+        }
+       
+
+    });
+
+});
+
+
+/* update category */
+router.get('/updatebrand', middleware.isAdminLoggedIn, function(req, res) {
+    console.log("sdasdsd"+req.query.id);
+    //res.send(true);
+    
+    Brands.findOne({'_id': req.query.id}, function (err, branddata) {
+        if(branddata){
+            console.log("qwqwffdf");
+            res.render('brand_update', {
+                title: 'Update Brand',
+                branddata : branddata,
+                session: req.session,
+                message: middleware.clear_session_value(req.session, "message"),
+                message_type: middleware.clear_session_value(req.session, "message_type"),
+                editor: true,
+                user:req.user,
+                active:'add-brand'
+            });
+        }
+        else{
+             console.log("vvcvcvc");
+        }
+
+    });
+
+});
+
+var cpUploadupdatebrand = upload.fields([{name: 'frm_brand_image', maxCount: 1}]);
+router.post('/brand/update', cpUploadupdatebrand, middleware.isAdminLoggedIn, function(req, res) {
+   
+    
+    var imagename="";
+    if(req.files['frm_brand_image']){
+        var imagearray = req.files['frm_brand_image'];
+        console.log(imagearray);
+        console.log(imagearray[0].filename);
+        imagename = imagearray[0].filename;
+    }
+    
+    
+    
+    Brands.findOne({'_id': req.body.frm_brand_id}, function (err, branddata) {
+        
+        if(branddata) {
+        Brands.update({ 
+                                '_id': req.body.frm_brand_id
+                            },
+                            { 
+                                $set:   { 
+                                            'brand_featured': req.body.frm_brand_featured ,
+                                            'brand_description':req.body.frm_brand_description,
+                                            'brand_image':imagename
+                                        } 
+                            },
+                            { multi: true },
+                function(err, brandinfo){
+
+                     if (err){
+                       
+                    }else{
+                        
+                        
+                        
+                        console.log('update brands');
+                        res.render('list-brands', { 
+                            message : 'Brands Updated Successfully!',
+                            message_type : 'success',
+                            user : req.user, 
+                            title:'Admin | List Brands',
+                            active:'list-brands'
+                        });
+                        
+                        
+                    }
+                });
+        }
+        else{
+            
+            console.log("error");
+        }
+       
+
+    });
+
+});
+
+/* delete brand */
+router.post('/delete-brand/', middleware.isAdminLoggedIn, function(req, res) {
+        
+	// remove the article
+	 Brands.remove({ _id: req.body.uid } ,function(err, status){
+            if(err){
+              status = "error";
+            }
+            else{
+                status = "success";
+            }
+            res.send(status);
+          
+        });
 });
 
 module.exports = router;
