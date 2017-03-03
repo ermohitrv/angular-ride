@@ -70,7 +70,7 @@
                                                               </div>
                                                               <div class="modal-footer">
                                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                                                 <a uid="{{ category._id }}" href="javascript:;" class="btn btn-danger delete_this btn" id="confirm">Delete</a>
+                                                                 <a uid="{{ category._id }}" href="javascript:;" class="btn btn-danger delete_this_cat btn" id="confirm">Delete</a>
 
                                                               </div>
                                                             </div>
@@ -101,16 +101,16 @@
   <!-- /.content-wrapper -->
   <script data-cfasync="false"  >
 $(function(){
-    $(document).on('click', 'a.delete_this' ,function(){
+    $(document).on('click', 'a.delete_this_cat' ,function(){
         var uid = $(this).attr('uid');
         
         if(uid != undefined && uid != null){
 
-            delete_user(uid);
+            delete_cat(uid);
         }
     });
 });
-function delete_user(uid){
+function delete_cat(uid){
     
     jQuery.ajax({
         type  : "POST",
