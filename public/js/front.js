@@ -381,7 +381,31 @@ jQuery('#change_password_form').validate({
          }
     }); 
    
-   
+    /*Form Validations start here :: SignIn Page*/
+    jQuery("#create-event").validate({
+        rules: {
+            eventName: {
+                required: true,
+                
+            },
+            eventType: {
+                required: true
+            },
+            eventstartDate: {
+                required: true
+            },
+            eventendDate: {
+                required: true
+            },
+            eventLocation: {
+                required: true
+            },
+           
+        },
+        messages: {
+           
+         }
+    });
    
    
    

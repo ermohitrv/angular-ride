@@ -1048,4 +1048,19 @@ router.get('/list-events', csrfProtection, middleware.isLoggedIn, function (req,
     
 });
 
+router.post('/delete-event/', middleware.isAdminLoggedIn, function(req, res) {
+        
+	// remove the article
+	 Events.remove({ _id: req.body.uid } ,function(err, status){
+            if(err){
+              status = "error";
+            }
+            else{
+                status = "success";
+            }
+            res.send(status);
+          
+        });
+});
+
 module.exports = router;

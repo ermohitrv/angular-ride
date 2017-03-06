@@ -542,21 +542,7 @@ app.controller('adminController',['$scope', '$http','$sce', function ($scope, $h
 }]);
 
 app.controller('eventController',['$scope', '$http', function ($scope, $http, $location, $routeParams) {
-        
-//        $scope.getEventsList= function(){
-//       alert("sdsdsda");
-//        $http.get('/product/get-list-events').success(function(eventlist){
-//            
-//          console.log(eventlist);
-//           //$scope.eventlist = eventlist;
-//           
-//        }).error(function(){
-//            console.log('Oops! Error listing events');
-//        });
-//    };
-        
-        
-        
+      
     $scope.getEventsList = function(){
         
         var config = {
@@ -593,3 +579,22 @@ app.directive('bindUnsafeHtml', ['$compile', function ($compile) {
         );
     };
 }]);
+
+app.directive('googleplace', function() {
+    return {
+        require: 'ngModel',
+        link: function(scope, element, attrs, model) {
+            var options = {
+                types: [],
+                componentRestrictions: {country: 'in'}
+            };
+            scope.gPlace = new google.maps.places.Autocomplete(element[0], options);
+
+            google.maps.event.addListener(scope.gPlace, 'place_changed', function() {
+                scope.$apply(function() {
+                    model.$setViewValue(element.val());                
+                });
+            });
+        }
+    };
+});

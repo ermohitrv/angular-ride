@@ -2302,6 +2302,14 @@ body.profile a.navbar-brand.logo{    max-width: 200px;}
     padding: 5px 0px 5px 0px;
 }
 
+/* event page css */
+
+.btncreateevent{
+    text-align:center;
+}
+
+/* end event page css */
+
 @media (min-width: 768px){
 .modal-dialog {
     width: 450px;

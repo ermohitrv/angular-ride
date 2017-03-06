@@ -1,3 +1,7 @@
+	
+<!--<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyB9yvMbN0o7etQUdR3GAXbZKh93Jv8I8-o"></script>-->
+<!--<script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>-->
+
 <% layout('layout') -%>
 <section id="profile" data-ng-controller="eventController">
    <% include partial/profile-nav.ejs %>
@@ -33,7 +37,7 @@
                             </h1>
                         </div>
                         <div class="panel-body">
-                            <form class="form-horizontal" role="form" action="/save-event" method="post">
+                            <form class="form-horizontal" id="create-event" role="form" action="/save-event" method="post">
                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                 <div class="form-group">
                                     <div class="col-md-6 col-xs-12">
@@ -43,7 +47,7 @@
                                     <div class="col-md-6 col-xs-12">
                                         <label>Event Type</label>
                                         <select class="form-control" name="eventType">
-                                            <option>Please select event type</option>
+                                            <option value="">Please select event type</option>
                                             <% for(var i=0; i< eventtypesList.length; i++){ %>
                                              <option value="<%= eventtypesList[i].event_type %>"><%= eventtypesList[i].event_type %></option>
                                              <% } %>
@@ -64,7 +68,9 @@
                                 <div class="form-group">
                                     <div class="col-md-6 col-xs-12">
                                         <label>Location</label>
-                                        <input value=""  type="text" placeholder="Please enter  location" class="form-control" name="eventLocation">
+                                        <!--<input value=""  type="text" placeholder="Please enter  location" class="form-control" name="eventLocation">-->
+                                     <input type="text" placeholder="Please enter  location" class="form-control" name="eventLocation" id="location" ng-model="chosenPlace" googleplace/>
+                                    <!--<input type="text" id="location"/>-->
                                     </div>
                                     <div class="col-md-6 col-xs-12">
                                         <label>Host</label>
@@ -82,7 +88,7 @@
                                 </div>
                                 
                                 <div class="form-group">
-                                  <div class="col-md-8">
+                                  <div class="col-md-12 col-xs-12 btncreateevent">
                                     <input type="submit" class="btn btn-primary" value="Create Event">
                                   </div>
                                 </div>
@@ -102,5 +108,8 @@
                 
                 $('#enddate').datetimepicker();
                 
+               // $("#location").geocomplete();
             });
+            
+            
 </script>
