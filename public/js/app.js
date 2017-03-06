@@ -528,6 +528,49 @@ app.controller('adminController',['$scope', '$http','$sce', function ($scope, $h
         });
     };
     
+    $scope.getEventsTypeList= function(){
+       
+        $http.get('/admin/get-eventtypes-list').success(function(eventtypelist){
+          
+           $scope.eventtypelist = eventtypelist;
+           
+        }).error(function(){
+            console.log('Oops! Error listing event-types-list');
+        });
+    };
+    
+}]);
+
+app.controller('eventController',['$scope', '$http', function ($scope, $http, $location, $routeParams) {
+        
+//        $scope.getEventsList= function(){
+//       alert("sdsdsda");
+//        $http.get('/product/get-list-events').success(function(eventlist){
+//            
+//          console.log(eventlist);
+//           //$scope.eventlist = eventlist;
+//           
+//        }).error(function(){
+//            console.log('Oops! Error listing events');
+//        });
+//    };
+        
+        
+        
+    $scope.getEventsList = function(){
+        
+        var config = {
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/product/get-events-list',config).success(function(response, status, headers, config){
+            console.log(response);
+            $scope.eventslist = response;
+        }).error(function(){
+            console.log('Oops! Error listing get-brands-list on search page');
+        });
+    };
+    
+    
 }]);
 
 app.directive('bindUnsafeHtml', ['$compile', function ($compile) {

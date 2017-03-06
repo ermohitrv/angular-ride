@@ -18,7 +18,8 @@ var Orders = require('../models/orders');
 var OrdersProducts = require('../models/ordersproducts');
 var Payments = require('../models/payments');
 var OrdersShipping = require('../models/ordersshipping');
-
+var Events = require('../models/events');
+var EventTypes = require('../models/eventtypes');
 
 /* Route for homepage */
 router.get('/', function(req, res){
@@ -938,5 +939,113 @@ router.get('/searchProducts', function(req, res){
   
 });
 
+/* Create events route to render logged in user create events area */
+router.get('/create-event', csrfProtection, middleware.isLoggedIn, function (req, res){
+    
+    EventTypes.find({},function (err, eventtypesList) {
+        if(!err){
+            res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+            res.render('create-event.ejs',{
+                csrfToken: req.csrfToken(),
+                error : req.flash('error'), 
+                user: req.user,
+                eventtypesList:eventtypesList,
+                title:'Create Event',
+                message: '', 
+                messageSuccess: ''
+            });
+        }else{
+            console.log("Error while listing event type");
+        }
+    });
+    
+    
+});
+
+/* Save event */
+router.post('/save-event', parseForm, csrfProtection, middleware.isLoggedIn, function (req, res){
+    
+    if (req.user.local.email != "" && req.user.local.email != undefined) {
+        User.findOne({'local.email': req.user.local.email}, function (err, user) {
+            if (!user) {
+                
+                res.redirect('/create-event');
+                
+            } else {
+                var objEvents           = new Events();
+                objEvents.eventName     = req.body.eventName;
+                objEvents.eventType     = req.body.eventType;
+                objEvents.eventLocation = req.body.eventLocation;
+                objEvents.eventHost     = req.body.eventHost;
+                objEvents.description   = req.body.eventDescription;
+                objEvents.start         = req.body.eventstartDate;
+                objEvents.end           = req.body.eventendDate;
+                objEvents.userEmail     = req.user.local.email;
+               
+
+                objEvents.save(function (err) {
+                    if (err) {
+                        
+                        res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+                        res.render('create-events.ejs', {
+                            user: user, 
+                            message: 'An Error Occured!, '+err, 
+                            messageSuccess: '',
+                            csrfToken: req.csrfToken(),
+                            title:'Create Event'
+                        });
+                    } else {
+                        
+                         
+                                req.flash('messageSuccess', 'Event created successfully!');
+                                res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+                                res.render('list-events.ejs', {
+                                    user: user,
+                                    message: '',
+                                    csrfToken: req.csrfToken(),
+                                    title:'List Events',
+                                    messageSuccess: req.flash('messageSuccess')
+                                });
+                            
+                       
+                       
+                    }
+                });
+            }
+        });
+    }else{
+            res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+                res.render('list-events.ejs', {
+                    user: req.user,
+                    message: '',
+                    csrfToken: req.csrfToken(),
+                    title:'List Events'
+                  
+            });
+    }
+    
+});
+
+router.get('/list-events', csrfProtection, middleware.isLoggedIn, function (req, res){
+    
+    Events.find({},function (err, eventsList) {
+        if(!err){
+            res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+            res.render('list-events.ejs',{
+                csrfToken: req.csrfToken(),
+                error : req.flash('error'), 
+                user: req.user,
+                eventsList:eventsList,
+                title:'List Events',
+                message: '', 
+                messageSuccess: ''
+            });
+        }else{
+            console.log("Error while listing events");
+        }
+    });
+    
+    
+});
 
 module.exports = router;

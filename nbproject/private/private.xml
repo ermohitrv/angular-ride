@@ -7,9 +7,11 @@
             <file>file:/var/www/html/rideprix/public/js/app.js</file>
             <file>file:/var/www/html/rideprix/routes/product.js</file>
             <file>file:/var/www/html/rideprix/routes/admin.js</file>
+            <file>file:/var/www/html/rideprix/views/backend/brand_new.ejs</file>
             <file>file:/var/www/html/rideprix/views/frontend/search.ejs</file>
             <file>file:/var/www/html/rideprix/public/css/style.css</file>
-            <file>file:/var/www/html/rideprix/views/frontend/partial/header.ejs</file>
+            <file>file:/var/www/html/rideprix/views/backend/list-brands.ejs</file>
+            <file>file:/var/www/html/rideprix/views/backend/brand_update.ejs</file>
         </group>
     </open-files>
 </project-private>

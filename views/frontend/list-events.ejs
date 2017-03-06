@@ -1,0 +1,99 @@
+<% layout('layout') -%>
+<section id="profile"  data-ng-controller="eventController">
+   <% include partial/profile-nav.ejs %>
+    <div class="container update-profile-page">
+      <div id="main">
+         <!-- start:breadcrumb -->
+         <ol class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="active">List Event</li>
+         </ol>
+         <div><a href="/create-event" class="btn btn-primary">Create Event</a></div>
+         <!-- end:breadcrumb -->   
+         <div class="row" id="home-content">
+                <div class="title">
+                    <h1 style="color:#3c3c3c">Events</h1>
+                    <hr style="">
+                     
+                </div>
+                
+                  <!-- left column -->
+                  <div class="col-md-1">
+
+                  </div>
+                  
+                  <!-- event form column -->
+                  <div class="col-md-10 personal-info">
+                     
+                    <% if (message.length > 0) { %>
+                        <div class="alert alert-danger"><%= message %></div>
+                    <% } %>
+                    <% if (messageSuccess.length > 0) { %>
+                        <div class="alert alert-success"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a><%= messageSuccess %></div>
+                    <% } %>
+                    
+                    <div class="panel panel-info" ng-init="getEventsList()">
+                        
+                  <div class="row">
+                                <div class="col-sm-12">
+                                    <h3>
+                                        <div class="pull-left"></div>
+                                        <!--<div class="pull-right"><input data-ng-model="search_user.eventName" type="text" class="form-control" placeholder="Search event name"></div>-->
+                                        <div class="clearfix"></div>
+                                    </h3>
+                                <div class="result_del"></div>
+                                <% if (message.length > 0) { %>
+                                    <% if (message_type == "success"){ %>
+                                        <div class="alert alert-success"><%= message %></div>
+                                    <% }else{ %>
+                                        <div class="alert alert-danger"><%= message %></div>
+                                    <% } %>
+                                <% } %>
+                                    <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
+                                        <thead>
+                                            <tr role="row">
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Event Name</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Event Type</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Event Started on</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Event Ended on</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Location</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Action</th>
+                                            </tr>
+                                        </thead>
+                                       
+                                        <tbody>
+                                            <tr data-ng-if="eventslist.length > 0" data-ng-repeat="events in eventslist" id="{{ events._id }}" role="row" class="odd">
+                                                
+                                                <td>{{ events.eventName }}</td>
+                                                <td>
+                                                    <span>{{ events.eventType }}</span>
+                                                </td>
+                                                <td>
+                                                    <span>{{ events.start }}</span>
+                                                </td>
+                                                <td>{{ events.end }}</td>
+                                                <td>
+                                                    <span>{{ events.eventLocation }}</span>
+                                                </td>
+                                               
+                                                <td>
+
+                                                </td>
+                                            </tr>
+                                            <tr  data-ng-if="eventslist.length <= 0">
+                                                <td colspan="5" style="text-align: center">No results found</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+
+                    </div>
+                    
+               </div>
+            <hr>
+         </div>
+      </div>
+    </div>
+</section>

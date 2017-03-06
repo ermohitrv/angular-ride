@@ -9,7 +9,8 @@ var Products = require('../models/products');
 var globalConfig    = require('../config/globals.js');
 var Categories = require('../models/category');
 var Brands = require('../models/brands');
-
+var Events = require('../models/events');
+var EventTypes = require('../models/eventtypes');
 /* Route for showing product detail page */
 /*
 router.get('/:productslug', function (req, res) {
@@ -319,5 +320,18 @@ router.post('/search/searchfilter',  function(req, res){
 });
 
 
+
+router.post('/get-events-list',  function(req, res){
+    
+    //res.send(true);
+    Events.aggregate([{$sort: {'start': 1}}], function (err, eventsList) {
+        if(eventsList){
+           
+            res.json(eventsList);
+        }else{
+            res.json({});
+        }
+    });
+});
 
 module.exports = router;

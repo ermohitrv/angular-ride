@@ -17,6 +17,7 @@ var Products = require('../models/products');
 var Brands = require('../models/brands');
 var Categories = require('../models/category');
 var Points = require('../models/points');
+var EventTypes = require('../models/eventtypes');
 var multer      = require('multer');
 
 var storage = multer.diskStorage({
@@ -1565,5 +1566,72 @@ router.post('/delete-brand/', middleware.isAdminLoggedIn, function(req, res) {
           
         });
 });
+
+/* Route for List event types */
+router.get('/get-eventtypes-list', middleware.isAdminLoggedIn, function(req, res){
+    EventTypes.find({'event_type':{$ne:null}},{_id:1,event_type:1,eventtype_description:1,eventtype_added_date:1},function (err, eventtypesList) {
+        if(eventtypesList){
+            res.json(eventtypesList);
+        }else{
+            res.json({});
+        }
+    });
+});
+
+/* Points management*/
+router.get('/list-eventtypes', middleware.isAdminLoggedIn, function(req, res){
+    res.render('list-eventtypes', { 
+        message : req.flash('message'),
+        message_type : req.flash('message_type'),
+        user : req.user, 
+        title:'Admin | List Event Types',
+        active:'list-eventtypes'
+    });
+});
+
+router.get('/add-eventtype', middleware.restrict, function(req, res) {
+    res.render('eventtype_new', {
+        title: 'New event type', 
+        session: req.session,
+        message: middleware.clear_session_value(req.session, "message"),
+        message_type: middleware.clear_session_value(req.session, "message_type"),
+        editor: true,
+        user:req.user,
+        active:'add-event type'
+    });
+});
+
+
+router.post('/eventtype/insert', middleware.restrict, function(req, res) {
+    
+    
+    EventTypes.count({'event_type': req.body.frm_event_type}, function (err, eventtype) {
+        if(eventtype > 0 && req.body.frm_event_type != ""){
+            req.flash('message', "Event Type already exists");
+            req.flash('message_type','danger');
+            res.redirect('/admin/eventtypeinsert'); // redirect to insert
+        }else{
+            var eventtypeObj                    = new EventTypes();
+            eventtypeObj.event_type             = req.body.frm_event_type;
+            eventtypeObj.eventtype_description  = req.body.frm_eventtype_description;
+            eventtypeObj.eventtype_added_date   = new Date();
+            
+            console.log('eventtypeObj: '+eventtypeObj);
+            eventtypeObj.save(function (err) {
+                if(err){
+                    console.error("Error inserting document: " + err);
+                    req.flash('message', err);
+                    req.flash('message_type','danger');
+                    res.redirect('/admin/eventtypeinsert');
+                }else{
+                    req.flash('message', 'Event Type created successfully!');
+                    req.flash('message_type','success');
+                    res.redirect('/admin/list-eventtypes');
+                }
+            });
+        }
+    });
+});
+
 
 module.exports = router;

@@ -1,0 +1,106 @@
+<% layout('layout') -%>
+<section id="profile" data-ng-controller="eventController">
+   <% include partial/profile-nav.ejs %>
+    <div class="container update-profile-page">
+      <div id="main">
+         <!-- start:breadcrumb -->
+         <ol class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="active">Create Event</li>
+         </ol>
+         <!-- end:breadcrumb -->   
+         <div class="row" id="home-content">
+                <div class="title">
+                    <h1 style="color:#3c3c3c">Create Event</h1>
+                    <hr style="">
+                </div>
+                  <!-- left column -->
+                  <div class="col-md-1">
+
+                  </div>
+                  <!-- event form column -->
+                  <div class="col-md-10 personal-info">
+                    <% if (message.length > 0) { %>
+                        <div class="alert alert-danger"><%= message %></div>
+                    <% } %>
+                    <% if (messageSuccess.length > 0) { %>
+                        <div class="alert alert-success"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a><%= messageSuccess %></div>
+                    <% } %>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h1 class="panel-title">
+                                <strong>Event info</strong>
+                            </h1>
+                        </div>
+                        <div class="panel-body">
+                            <form class="form-horizontal" role="form" action="/save-event" method="post">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                <div class="form-group">
+                                    <div class="col-md-6 col-xs-12">
+                                        <label>Event Name</label>
+                                        <input value="" type="text" placeholder="Please enter event name" class="form-control" name="eventName">
+                                    </div>
+                                    <div class="col-md-6 col-xs-12">
+                                        <label>Event Type</label>
+                                        <select class="form-control" name="eventType">
+                                            <option>Please select event type</option>
+                                            <% for(var i=0; i< eventtypesList.length; i++){ %>
+                                             <option value="<%= eventtypesList[i].event_type %>"><%= eventtypesList[i].event_type %></option>
+                                             <% } %>
+                                        </select>
+                                        <!--<input value="" type="text" placeholder="Please enter event type" class="form-control" name="eventType">-->
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-6 col-xs-12">
+                                        <label>Start</label>
+                                         <input value="" type="text" placeholder="select start date/time" id="startdate" class="form-control" name="eventstartDate">
+                                    </div>
+                                    <div class="col-md-6 col-xs-12">
+                                        <label>End</label>
+                                         <input value="" type="text" placeholder="select end date/time" id="enddate" class="form-control" name="eventendDate">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-6 col-xs-12">
+                                        <label>Location</label>
+                                        <input value=""  type="text" placeholder="Please enter  location" class="form-control" name="eventLocation">
+                                    </div>
+                                    <div class="col-md-6 col-xs-12">
+                                        <label>Host</label>
+                                        <input value=""  type="text" placeholder="Please enter host" class="form-control" name="host">
+                                       
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <div class="col-md-12 col-xs-12">
+                                        <label>Description</label>
+                                        <textarea  type="text" placeholder="Please enter event description" class="form-control" name="eventDescription"></textarea>
+                                    </div>
+                                   
+                                </div>
+                                
+                                <div class="form-group">
+                                  <div class="col-md-8">
+                                    <input type="submit" class="btn btn-primary" value="Create Event">
+                                  </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+               </div>
+            <hr>
+         </div>
+      </div>
+    </div>
+</section>
+<script type="text/javascript">
+            $(function () {
+                $('#startdate').datetimepicker();
+                
+                $('#enddate').datetimepicker();
+                
+            });
+</script>
