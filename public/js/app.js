@@ -585,14 +585,20 @@ app.directive('googleplace', function() {
         require: 'ngModel',
         link: function(scope, element, attrs, model) {
             var options = {
-                types: [],
-                componentRestrictions: {country: 'in'}
+                types: []
+               // componentRestrictions: {country: 'in'}
             };
+            
             scope.gPlace = new google.maps.places.Autocomplete(element[0], options);
+            
+            console.log(attrs.value);
 
+              
             google.maps.event.addListener(scope.gPlace, 'place_changed', function() {
+                
                 scope.$apply(function() {
-                    model.$setViewValue(element.val());                
+                    model.$setViewValue(element.val());   
+                   
                 });
             });
         }

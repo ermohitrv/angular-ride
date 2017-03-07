@@ -1048,7 +1048,7 @@ router.get('/list-events', csrfProtection, middleware.isLoggedIn, function (req,
     
 });
 
-router.post('/delete-event/', middleware.isAdminLoggedIn, function(req, res) {
+router.post('/delete-event/', middleware.isLoggedIn, function(req, res) {
         
 	// remove the article
 	 Events.remove({ _id: req.body.uid } ,function(err, status){
@@ -1062,5 +1062,104 @@ router.post('/delete-event/', middleware.isAdminLoggedIn, function(req, res) {
           
         });
 });
+
+router.get('/updateevent', csrfProtection, middleware.isLoggedIn, function(req, res) {
+    console.log("delete event id : "+req.query.id);
+    //res.send(true);
+    
+    Events.findOne({'_id': req.query.id}, function (err, eventdata) {
+        if(eventdata){
+           console.log("event data");
+            EventTypes.find({},function (err, eventtypesList) {
+                if(!err){
+                    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+                    res.render('update-event', {
+                        title: 'Update Event',
+                        eventdata : eventdata,
+                        session: req.session,
+                        message: '',
+                        messageSuccess: '',
+                        eventtypesList:eventtypesList,
+                        csrfToken: req.csrfToken(),
+                        editor: true,
+                        user:req.user,
+                        active:'update-event'
+                    });
+                }else{
+                    console.log("Error while listing event type");
+                }
+            });
+        }
+        else{
+             console.log("no data event");
+        }
+
+    });
+
+});
+
+/* Save event */
+router.post('/update-event', parseForm, csrfProtection, middleware.isLoggedIn, function (req, res){
+    
+    if (req.user.local.email != "" && req.user.local.email != undefined) {
+        Events.findOne({'_id': req.body.event_id}, function (err, eventinfo) {
+            if (!eventinfo) {
+                
+                res.redirect('/updateevent');
+                
+            } else {
+                //var objEvents           = new Events();
+                eventinfo.eventName     = req.body.eventName;
+                eventinfo.eventType     = req.body.eventType;
+                eventinfo.eventLocation = req.body.eventLocation;
+                eventinfo.eventHost     = req.body.eventHost;
+                eventinfo.description   = req.body.eventDescription;
+                eventinfo.start         = req.body.eventstartDate;
+                eventinfo.end           = req.body.eventendDate;
+               
+
+                eventinfo.save(function (err) {
+                    if (err) {
+                        
+                        res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+                        res.render('update-event.ejs', {
+                            user: req.user, 
+                            message: 'An Error Occured!, '+err, 
+                            messageSuccess: '',
+                            csrfToken: req.csrfToken(),
+                            title:'Create Event'
+                        });
+                    } else {
+                        
+                         
+                                req.flash('messageSuccess', 'Event updated successfully!');
+                                res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+                                res.render('list-events.ejs', {
+                                    user: req.user,
+                                    message: '',
+                                    csrfToken: req.csrfToken(),
+                                    title:'List Events',
+                                    messageSuccess: req.flash('messageSuccess')
+                                });
+                            
+                       
+                       
+                    }
+                });
+            }
+        });
+    }else{
+            res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+                res.render('list-events.ejs', {
+                    user: req.user,
+                    message: '',
+                    csrfToken: req.csrfToken(),
+                    title:'List Events'
+                  
+            });
+    }
+    
+});
+
 
 module.exports = router;

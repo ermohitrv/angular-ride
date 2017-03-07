@@ -1,7 +1,3 @@
-	
-<!--<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyB9yvMbN0o7etQUdR3GAXbZKh93Jv8I8-o"></script>-->
-<!--<script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>-->
-
 <% layout('layout') -%>
 <section id="profile" data-ng-controller="eventController">
    <% include partial/profile-nav.ejs %>
@@ -37,20 +33,23 @@
                             </h1>
                         </div>
                         <div class="panel-body">
-                            <form class="form-horizontal" id="create-event" role="form" action="/save-event" method="post">
+                        
+                      
+                            <form class="form-horizontal" id="create-event" role="form" action="/update-event" method="post">
                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                 <input type="hidden" name="event_id" value="<%= eventdata._id %>">
                                 <div class="form-group">
                                     <div class="col-md-6 col-xs-12">
                                         <label>Event Name</label>
-                                        <input value="" type="text" placeholder="Please enter event name" class="form-control" name="eventName">
+                                        <input  type="text" placeholder="Please enter event name" class="form-control" name="eventName" value="<%= eventdata.eventName %>">
                                     </div>
                                     <div class="col-md-6 col-xs-12">
                                         <label>Event Type</label>
                                         <select class="form-control" name="eventType">
                                             <option value="">Please select event type</option>
                                             <% for(var i=0; i< eventtypesList.length; i++){ %>
-                                             <option value="<%= eventtypesList[i].event_type %>"><%= eventtypesList[i].event_type %></option>
-                                             <% } %>
+                                             <option <% if(eventtypesList[i].event_type == eventdata.eventType){ %>selected<% } %> value="<%= eventtypesList[i].event_type %>"><%= eventtypesList[i].event_type %></option>
+                                             <% }%>
                                         </select>
                                         <!--<input value="" type="text" placeholder="Please enter event type" class="form-control" name="eventType">-->
                                     </div>
@@ -58,23 +57,23 @@
                                 <div class="form-group">
                                     <div class="col-md-6 col-xs-12">
                                         <label>Start</label>
-                                         <input value="" type="text" placeholder="select start date/time" id="startdate" class="form-control" name="eventstartDate">
+                                         <input  type="text" placeholder="select start date/time" id="startdate" class="form-control" name="eventstartDate" >
                                     </div>
                                     <div class="col-md-6 col-xs-12">
                                         <label>End</label>
-                                         <input value="" type="text" placeholder="select end date/time" id="enddate" class="form-control" name="eventendDate">
+                                         <input  type="text" placeholder="select end date/time" id="enddate" class="form-control" name="eventendDate" >
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-6 col-xs-12">
-                                        <label>Location</label>
-                                        <!--<input value=""  type="text" placeholder="Please enter  location" class="form-control" name="eventLocation">-->
-                                     <input type="text" placeholder="Please enter  location" class="form-control" name="eventLocation" id="location" ng-model="chosenPlace" googleplace/>
-                                    <!--<input type="text" id="location"/>-->
+                                    <label>Location</label>
+                                  
+                                    <input type="text"   class="form-control" id="eventlocation" value="<%= eventdata.eventLocation %>"  name="eventLocation"  ng-model="chosenPlace" googleplace/>
+                                   
                                     </div>
                                     <div class="col-md-6 col-xs-12">
                                         <label>Host</label>
-                                        <input value=""  type="text" placeholder="Please enter host" class="form-control" name="eventHost">
+                                        <input  type="text" placeholder="Please enter host" class="form-control" name="eventHost" value="<%= eventdata.eventHost %>">
                                        
                                     </div>
                                 </div>
@@ -82,14 +81,14 @@
                                 <div class="form-group">
                                     <div class="col-md-12 col-xs-12">
                                         <label>Description</label>
-                                        <textarea  type="text" placeholder="Please enter event description" class="form-control" name="eventDescription"></textarea>
+                                        <textarea  type="text" placeholder="Please enter event description" class="form-control" name="eventDescription"><%= eventdata.description %></textarea>
                                     </div>
                                    
                                 </div>
                                 
                                 <div class="form-group">
                                   <div class="col-md-12 col-xs-12 btncreateevent">
-                                    <input type="submit" class="btn btn-primary" value="Create Event">
+                                    <input type="submit" class="btn btn-primary" value="Update Event">
                                   </div>
                                 </div>
                             </form>
@@ -108,8 +107,26 @@
                 
                 $('#enddate').datetimepicker();
                 
-               // $("#location").geocomplete();
             });
             
             
+            
+            $(document).ready(function(){
+                
+                      var startdate = '<%= eventdata.start %>';
+                      var enddate = '<%= eventdata.end %>';
+                      var starteventDate = moment(startdate).format('YYYY-MM-DD h:mm');
+                      var endeventDate = moment(enddate).format('YYYY-MM-DD h:mm');
+                      $('#startdate').val(starteventDate);
+                      $('#enddate').val(endeventDate);
+                      
+//                      $( "#eventlocation" ).autocomplete({
+//                        select: function (){
+//                            console.log('select');
+//                        }
+//                      }).val('chandigarh, India').data('autocomplete')._trigger('select');  
+                      
+                    
+                      
+            });
 </script>

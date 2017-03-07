@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>routes/admin.js</url>
+            <bookmark id="1">
+                <name/>
+                <line>19</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/var/www/html/rideprix/views/frontend/list-events.ejs</file>
             <file>file:/var/www/html/rideprix/routes/index.js</file>
             <file>file:/var/www/html/rideprix/public/js/app.js</file>
-            <file>file:/var/www/html/rideprix/routes/product.js</file>
-            <file>file:/var/www/html/rideprix/routes/admin.js</file>
-            <file>file:/var/www/html/rideprix/views/backend/brand_new.ejs</file>
-            <file>file:/var/www/html/rideprix/views/frontend/search.ejs</file>
+            <file>file:/var/www/html/rideprix/views/frontend/create-event.ejs</file>
             <file>file:/var/www/html/rideprix/public/css/style.css</file>
-            <file>file:/var/www/html/rideprix/views/backend/list-brands.ejs</file>
-            <file>file:/var/www/html/rideprix/views/backend/brand_update.ejs</file>
         </group>
     </open-files>
 </project-private>
