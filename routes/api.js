@@ -7,6 +7,8 @@ var RpRoutes        = require('../models/rproutes');
 var globalConfig    = require('../config/globals.js');
 var nodemailer      = require("nodemailer");
 var friends         = require('../models/friends');
+var Events          = require('../models/events');
+
 
 /* API endpoint to be used by mobile device to see all users list */
 router.get('/listusers', function(req, res) {
@@ -1820,25 +1822,18 @@ router.post('/stop-route', function (req, res) {
        
 });
 
-/* API end point to create event  */
-/*router.post('/create-event', function (req, res) {
-     
-//        var facebook_id     = "111333333";
-//        var username        = "rvtech";
-//        var profileImage    = "";
-//        var email           = "rvtech@gmail.com";
-//        var contact         = "423434242";
-//        var rideType        = "rideType";
-//        var rideExperience  = "rideExperience";
-//        var rideCategory    = "rideCategory";
-//        var locationCity    = "locationCity";
-//        var locationZipcode = "locationZipcode";
-//        var locationState   = "locationState";
-//        var locationCountry = "locationCountry";
-//        var locationLat     = "locationLat";
-//        var locationLng     = "locationLng";
+/* API end point to create event for mobile users */
+router.post('/create-event', function (req, res) {
         
+//        var email          = "preeti_dev@rvtechnologies.co.in";
+//        var eventName      = "test";
+//        var eventType      = "toy run type";
+//        var start          = "2017-03-13 06:00";
+//        var end            = "2017-03-13 09:00";
+//        var location       = "chandigarh";
+//        var host           = "test user";
         
+        var email          = req.body.email;
         var eventName      = req.body.eventName;
         var eventType      = req.body.eventType;
         var start          = req.body.start;
@@ -1850,45 +1845,19 @@ router.post('/stop-route', function (req, res) {
       
     console.log('case 1 email: '+email);
      
-     if(email != "" && email != undefined){
-        User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function(err, user) {
-            // if there are any errors, return the error
-            if (err) {
-                console.log("error caught 1");
-                res.json({ 
-                    success: false, 
-                    data: null, 
-                    message: err, 
-                    code: 400
-                });
-            }
-            else{
-                
-                if(user){   // if user exist with that email
-                User.update({ 
-                                'local.email': { $regex : new RegExp(email, "i") } 
-                            },
-                            { 
-                                $set:   { 
-                                            'local.profileImage'   : profileImage ,
-                                            'local.username'       :username,
-                                            'facebook.id'          : facebook_id,
-                                            'local.contact'        : contact ,
-                                            'rideType'             :rideType,
-                                            'rideExperience'       : rideExperience,
-                                            'rideCategory'         : rideCategory,
-                                            'local.locationCity'   : locationCity,
-                                            'local.locationZipcode': locationZipcode,
-                                            'local.locationState'  : locationState,
-                                            'local.locationCountry': locationCountry,
-                                            'local.locationLat'    : locationLat,
-                                            'local.locationLng'    : locationLng,
-                                        } 
-                            },
-                            { multi: true },
-                function(err, userinfo){
-
-                     if (err){
+    if(email != "" && email != undefined){
+       
+                var objEvents           = new Events();
+                objEvents.eventName     = eventName;
+                objEvents.eventType     = eventType;
+                objEvents.eventLocation = location;
+                objEvents.eventHost     = host;
+                objEvents.start         = start;
+                objEvents.end           = end;
+                objEvents.userEmail     = email;
+       
+                objEvents.save(function (err) {
+                    if (err){
                         console.log("error caught 3");
                         res.json({ 
                             success: false, 
@@ -1904,70 +1873,21 @@ router.post('/stop-route', function (req, res) {
                             success: true,
                             data: 
                                 {
-                                    username        :username,
-                                    email           :email,
-                                    profilepic      :profileImage
-                                   
-                                },
-                            message: globalConfig.successUpdate, 
-                            code: 200
-                        });
-                    }
-                });    
-
-                }
-                else{ 
-                // if there is no user with that email
-                // create the user
-                var newUser                     = new User();
-                newUser.local.username          = username;
-                newUser.local.email             = email;
-                newUser.local.userLevel         = 'NORMAL';    //default to NORMAL
-                newUser.local.userActive        = 'ACTIVE';    //default to ACTIVE
-                newUser.local.token             = globalConfig.randomString;
-                newUser.local.profileImage      = profileImage;
-                newUser.facebook.id             = facebook_id;
-                newUser.local.contact           = contact;
-                newUser.rideType                = rideType;
-                newUser.rideExperience          = rideExperience;
-                newUser.rideCategory            = rideCategory;
-                newUser.local.locationCity      = locationCity;
-                newUser.local.locationZipcode   = locationZipcode;
-                newUser.local.locationState     = locationState;
-                newUser.local.locationCountry   = locationCountry;
-                newUser.local.locationLat       = locationLat;
-                newUser.local.locationLng       = locationLng;
-        	// save the user
-                newUser.save(function(err){
-                    if (err){
-                        console.log("error caught 3");
-                        res.json({ 
-                            success: false, 
-                            data: null, 
-                            message: err, 
-                            code: 400
-                        });
-                    }else{
-                        
-                        console.log('case 3 email: '+email);
-                        
-                        res.json({ 
-                            success: true,
-                            data: 
-                                {
-                                    username        :username,
-                                    email           :email,
-                                    profilepic      :profileImage
-                                   
+                                    
+                                    eventName     :eventName,
+                                    eventType     :eventType,
+                                    eventLocation :location,
+                                    eventHost     :host,
+                                    start         :start,
+                                    end           :end,
+                                    userEmail     :email
+                                      
                                 },
                             message: globalConfig.successRegister, 
                             code: 200
                         });
                     }
                 });
-            }   
-        }
-    });
     }else{
         res.json({ 
             success: false, 
@@ -1977,7 +1897,7 @@ router.post('/stop-route', function (req, res) {
         });
     }
     
-});*/
+});
 
 
 // 32 character random string token
