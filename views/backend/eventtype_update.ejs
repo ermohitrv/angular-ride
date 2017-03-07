@@ -1,0 +1,63 @@
+<% layout('layoutAdmin') -%>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <section class="content-header">
+      <h1>
+        Update Event Type
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Update Event Type</li>
+      </ol>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="box">
+                    <div class="box-body">
+                        <form method="post" class="form-horizontal" id="insert_form" action="/admin/eventtype/update" data-toggle="validator" >
+                            
+                            <input type="hidden" name="frm_event_type_id" class="form-control" minlength="3" maxlength="200" value="<%= eventtype._id %>" />
+
+                            <div class="col-lg-12">
+                                <div class="page-header">
+                                    <div class="pull-right">
+                                        <button id="frm_edit_product_save" class="btn btn-success" type="submit">Submit <i class="fa fa-plus"></i></button>
+                                    </div>
+                                    <h2>Update Event Type</h2>
+                                </div>
+                                <div class="form-group">
+                                    <label for="frm_event_type" class="col-sm-2 control-label">Event Type *</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="frm_event_type" class="form-control" minlength="3" maxlength="200" value="<%= eventtype.event_type %>" required/>
+                                    </div>
+                                </div>
+                               
+                                <div class="form-group" id="editor-wrapper">
+                                    <label for="editor" class="col-sm-2 control-label">Event Type description (Markdown) *</label>
+                                    <div class="col-sm-10">
+                                        <textarea id="editor" minlength="5" rows="5" name="frm_eventtype_description" class="form-control"  required><%= eventtype.eventtype_description %></textarea>
+                                    </div>
+                                </div>
+                               
+                               
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+$(function() {
+    $('#magicsuggest-category').magicSuggest({
+        placeholder: 'Type category name...',
+        data: ['SuperSport', 'Cruiser', 'Dual', 'Sport', 'Touring', 'Scooter']
+    });
+    $('#magicsuggest-brand').magicSuggest({
+        placeholder: 'Type brand name...',
+        data: ['Banana', 'Apple', 'Orange', 'Lemon']
+    });
+});
+</script>

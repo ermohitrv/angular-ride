@@ -68,7 +68,7 @@
                                     <div class="col-md-6 col-xs-12">
                                     <label>Location</label>
                                   
-                                    <input type="text"   class="form-control" id="eventlocation" value="<%= eventdata.eventLocation %>"  name="eventLocation"  ng-model="chosenPlace" googleplace/>
+                                    <input type="text"  class="form-control" id="eventlocation"  ng-init="chosenPlace ='<%= eventdata.eventLocation %>'" name="eventLocation"  ng-model="chosenPlace" googleplace/>
                                    
                                     </div>
                                     <div class="col-md-6 col-xs-12">
@@ -115,18 +115,12 @@
                 
                       var startdate = '<%= eventdata.start %>';
                       var enddate = '<%= eventdata.end %>';
-                      var starteventDate = moment(startdate).format('YYYY-MM-DD h:mm');
-                      var endeventDate = moment(enddate).format('YYYY-MM-DD h:mm');
+                      var starteventDate = moment(startdate).format('YYYY-MM-DD hh:mm:ss');
+                      var endeventDate = moment(enddate).format('YYYY-MM-DD hh:mm:ss');
                       $('#startdate').val(starteventDate);
                       $('#enddate').val(endeventDate);
                       
-//                      $( "#eventlocation" ).autocomplete({
-//                        select: function (){
-//                            console.log('select');
-//                        }
-//                      }).val('chandigarh, India').data('autocomplete')._trigger('select');  
-                      
-                    
+
                       
             });
 </script>

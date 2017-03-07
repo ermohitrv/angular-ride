@@ -1,4 +1,12 @@
 <% layout('layoutAdmin') -%>
+<style>
+.modal-open {
+    overflow: auto !important;
+}
+.modal-backdrop {
+    position: relative !important;
+}
+</style>
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -53,7 +61,7 @@
                                                     <span>{{ brand.brand_description }}</span>
                                                 </td>
                                                 <td>
-                                                    <span>{{ brand.brand_added_date }}</span>
+                                                     <span data-ng-bind="brand.brand_added_date | date:'yyyy-MM-dd hh:mm:ss' "></span>
                                                 </td>
                                                 <td>
                                                     <a target="_blank" title="View profile" class="btn" href="/product/{{ brand.brand_permalink }}"><i class="fa fa-eye"></i></a>
@@ -126,7 +134,7 @@ function delete_brand(uid){
                   $("#"+uid).remove();  
                   $('.modal-backdrop.in').css('opacity','0');
                 //});
-                $(".result_del").html('<div class="alert alert-success">Brands Deleted Successfully!</div>');
+                $(".result_del").html('<div class="alert alert-success">Brand Deleted Successfully!</div>');
             }
         },
         error : function(err){

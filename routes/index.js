@@ -965,7 +965,7 @@ router.get('/create-event', csrfProtection, middleware.isLoggedIn, function (req
 /* Save event */
 router.post('/save-event', parseForm, csrfProtection, middleware.isLoggedIn, function (req, res){
     
-    if (req.user.local.email != "" && req.user.local.email != undefined) {
+    if (req.user.local.email != "" && req.user.local.email != undefined && req.body.event_id != "") {
         User.findOne({'local.email': req.user.local.email}, function (err, user) {
             if (!user) {
                 
@@ -997,16 +997,17 @@ router.post('/save-event', parseForm, csrfProtection, middleware.isLoggedIn, fun
                     } else {
                         
                          
-                                req.flash('messageSuccess', 'Event created successfully!');
-                                res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-                                res.render('list-events.ejs', {
-                                    user: user,
-                                    message: '',
-                                    csrfToken: req.csrfToken(),
-                                    title:'List Events',
-                                    messageSuccess: req.flash('messageSuccess')
-                                });
-                            
+//                                req.flash('messageSuccess', 'Event created successfully!');
+//                                res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+//                                res.render('list-events.ejs', {
+//                                    user: user,
+//                                    message: '',
+//                                    csrfToken: req.csrfToken(),
+//                                    title:'List Events',
+//                                    messageSuccess: req.flash('messageSuccess')
+//                                });
+                             req.flash('messageSuccess', 'Event created successfully!');
+                             res.redirect('/list-events');
                        
                        
                     }
@@ -1014,14 +1015,15 @@ router.post('/save-event', parseForm, csrfProtection, middleware.isLoggedIn, fun
             }
         });
     }else{
-            res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-                res.render('list-events.ejs', {
-                    user: req.user,
-                    message: '',
-                    csrfToken: req.csrfToken(),
-                    title:'List Events'
-                  
-            });
+//            res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+//                res.render('list-events.ejs', {
+//                    user: req.user,
+//                    message: '',
+//                    csrfToken: req.csrfToken(),
+//                    title:'List Events'
+//                  
+//            });
+          res.redirect('/list-events');
     }
     
 });
@@ -1038,7 +1040,7 @@ router.get('/list-events', csrfProtection, middleware.isLoggedIn, function (req,
                 eventsList:eventsList,
                 title:'List Events',
                 message: '', 
-                messageSuccess: ''
+                messageSuccess: req.flash('messageSuccess')
             });
         }else{
             console.log("Error while listing events");
@@ -1101,7 +1103,7 @@ router.get('/updateevent', csrfProtection, middleware.isLoggedIn, function(req, 
 /* Save event */
 router.post('/update-event', parseForm, csrfProtection, middleware.isLoggedIn, function (req, res){
     
-    if (req.user.local.email != "" && req.user.local.email != undefined) {
+    if (req.user.local.email != "" && req.user.local.email != undefined ) {
         Events.findOne({'_id': req.body.event_id}, function (err, eventinfo) {
             if (!eventinfo) {
                 
@@ -1133,14 +1135,15 @@ router.post('/update-event', parseForm, csrfProtection, middleware.isLoggedIn, f
                         
                          
                                 req.flash('messageSuccess', 'Event updated successfully!');
-                                res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-                                res.render('list-events.ejs', {
-                                    user: req.user,
-                                    message: '',
-                                    csrfToken: req.csrfToken(),
-                                    title:'List Events',
-                                    messageSuccess: req.flash('messageSuccess')
-                                });
+//                                res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+//                                res.render('list-events.ejs', {
+//                                    user: req.user,
+//                                    message: '',
+//                                    csrfToken: req.csrfToken(),
+//                                    title:'List Events',
+//                                    messageSuccess: req.flash('messageSuccess')
+//                                });
+                             res.redirect('/list-events');
                             
                        
                        
@@ -1149,14 +1152,15 @@ router.post('/update-event', parseForm, csrfProtection, middleware.isLoggedIn, f
             }
         });
     }else{
-            res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-                res.render('list-events.ejs', {
-                    user: req.user,
-                    message: '',
-                    csrfToken: req.csrfToken(),
-                    title:'List Events'
-                  
-            });
+//            res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+//                res.render('list-events.ejs', {
+//                    user: req.user,
+//                    message: '',
+//                    csrfToken: req.csrfToken(),
+//                    title:'List Events'
+//                  
+//            });
+          res.redirect('/list-events');
     }
     
 });

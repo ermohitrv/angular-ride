@@ -2311,7 +2311,13 @@ body.profile a.navbar-brand.logo{    max-width: 200px;}
 .actioneventbtns {
     padding: 6px 8px;
 }
+.modal-open {
+    overflow: auto !important;
+}
 
+.modal-backdrop {
+    position: relative !important;
+}
 /* end event page css */
 
 @media (min-width: 768px){

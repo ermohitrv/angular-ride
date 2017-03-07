@@ -1,4 +1,12 @@
 <% layout('layoutAdmin') -%>
+<style>
+.modal-open {
+    overflow: auto !important;
+}
+.modal-backdrop {
+    position: relative !important;
+}
+</style>
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -53,7 +61,7 @@
                                                     <span>{{ category.category_description }}</span>
                                                 </td>
                                                 <td>
-                                                    <span>{{ category.category_added_date }}</span>
+                                                    <span data-ng-bind="category.category_added_date | date:'yyyy-MM-dd hh:mm:ss' "></span>
                                                 </td>
                                                 <td>
                                                     <a title="Update" class="click_me_view btn" href="/admin/updatecategory?id={{ category._id }}"><i class="fa fa-pencil"></i></a> 

@@ -585,11 +585,13 @@ app.directive('googleplace', function() {
         require: 'ngModel',
         link: function(scope, element, attrs, model) {
             var options = {
-                types: []
+                types: [],
                // componentRestrictions: {country: 'in'}
+               value:'chandigarh, India'
             };
             
             scope.gPlace = new google.maps.places.Autocomplete(element[0], options);
+            
             
             console.log(attrs.value);
 

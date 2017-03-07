@@ -1633,5 +1633,77 @@ router.post('/eventtype/insert', middleware.restrict, function(req, res) {
     });
 });
 
+router.get('/updateeventtype',  middleware.isAdminLoggedIn, function(req, res) {
+    console.log("Update event type id : "+req.query.id);
+    //res.send(true);
+    
+    
+            EventTypes.findOne({'_id': req.query.id  },function (err, eventtype) {
+                if(!err){
+                    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+                    res.render('eventtype_update', {
+                        title: 'Update Event type',
+                        eventtype : eventtype,
+                        session: req.session,
+                        message: '',
+                        messageSuccess: '',
+                        editor: true,
+                        user:req.user,
+                        active:'update-eventtype'
+                    });
+                }else{
+                    console.log("Error while listing event type");
+                }
+            });
+        
+
+    });
+
+router.post('/eventtype/update',  middleware.isAdminLoggedIn, function (req, res){
+    
+        EventTypes.findOne({'_id': req.body.frm_event_type_id }, function (err, eventtypeinfo) {
+            if (!eventtypeinfo) {
+                
+                res.redirect('/admin/updateeventtype');
+                
+            } else {
+                
+                eventtypeinfo.event_type     = req.body.frm_event_type;
+                eventtypeinfo.eventtype_description     = req.body.frm_eventtype_description;
+               
+                eventtypeinfo.save(function (err) {
+                    if (err) {
+                        
+                         res.redirect('/list-eventtypes');
+                         
+                    } else {
+                            
+                        req.flash('message', 'Event Type updated successfully!');
+                        req.flash('message_type','success');
+                        res.redirect('/admin/list-eventtypes');
+                            
+                    }
+                });
+            }
+        });
+    
+    
+});
+
+router.post('/delete-eventtype/', middleware.isLoggedIn, function(req, res) {
+        
+	// remove the article
+	 EventTypes.remove({ _id: req.body.uid } ,function(err, status){
+            if(err){
+              status = "error";
+            }
+            else{
+                status = "success";
+            }
+            res.send(status);
+          
+        });
+});
+
 
 module.exports = router;
