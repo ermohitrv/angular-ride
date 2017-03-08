@@ -1640,7 +1640,7 @@ router.post('/stop-route', function (req, res) {
         var lastModifiedDate  = Date.now();
         
         var email                  = req.body.email;
-        var totalDistanceCompleted = req.body.totalDistanceCompleted;
+        //var totalDistanceCompleted = req.body.totalDistanceCompleted;
         var currentlocationLat     = req.body.currentlocationLat;
         var currentlocationLng     = req.body.currentlocationLng;
         //var startinglocationLat    = req.body.startinglocationLat;
@@ -1657,32 +1657,32 @@ router.post('/stop-route', function (req, res) {
 //        var endinglocationLat      = '2.2393';
 //        var endinglocationLng      = '2.8184';
 
-                    var currentlat = currentlocationLat;
-                    var endlat = endinglocationLat;
-                    var currentlon = currentlocationLng;
-                    var endlon = endinglocationLng;
-                    /* get distance between 2 positions */
-                    var unit = "K";
-                    var radlat1 = Math.PI * currentlat/180;
-                    var radlat2 = Math.PI * endlat/180;
-                    var theta = currentlon-endlon;
-                    var radtheta = Math.PI * theta/180;
-                    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-                    dist = Math.acos(dist);
-                    dist = dist * 180/Math.PI;
-                    dist = dist * 60 * 1.1515;
-                    if (unit=="K") { dist = dist * 1.609344; } //kilometers
-                    if (unit=="N") { dist = dist * 0.8684; } //nautical miles
-                    
-                    var distInmeters = dist/1000;
-                    var roundDist = Math.round(distInmeters);
-                    if(roundDist <= 10 ){
-                            isRouteCompleted = 'COMPLETED';
-                    }else{
-                            isRouteCompleted = 'ONGOING';
-                    }
-                    
-                    console.log("round distance****"+roundDist);
+//                    var currentlat = currentlocationLat;
+//                    var endlat = endinglocationLat;
+//                    var currentlon = currentlocationLng;
+//                    var endlon = endinglocationLng;
+//                    /* get distance between 2 positions */
+//                    var unit = "K";
+//                    var radlat1 = Math.PI * currentlat/180;
+//                    var radlat2 = Math.PI * endlat/180;
+//                    var theta = currentlon-endlon;
+//                    var radtheta = Math.PI * theta/180;
+//                    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+//                    dist = Math.acos(dist);
+//                    dist = dist * 180/Math.PI;
+//                    dist = dist * 60 * 1.1515;
+//                    if (unit=="K") { dist = dist * 1.609344; } //kilometers
+//                    if (unit=="N") { dist = dist * 0.8684; } //nautical miles
+//                    
+//                    var distInmeters = dist/1000;
+//                    var roundDist = Math.round(distInmeters);
+//                    if(roundDist <= 10 ){
+//                            isRouteCompleted = 'COMPLETED';
+//                    }else{
+//                            isRouteCompleted = 'ONGOING';
+//                    }
+//                    
+//                    console.log("round distance****"+roundDist);
         
         if(email != "" && email != undefined){
            
@@ -1707,7 +1707,7 @@ router.post('/stop-route', function (req, res) {
                             { 
                                 $set:   { 
                                             //'numberofRoutescompleted': subRoutescompleted ,
-                                            'totalDistanceCompleted':totalDistanceCompleted,
+                                            //'totalDistanceCompleted':totalDistanceCompleted,
                                             'currentlocationLat': currentlocationLat,
                                             'currentlocationLng': currentlocationLng ,
                                             //'startinglocationLat': startinglocationLat,
@@ -1715,7 +1715,7 @@ router.post('/stop-route', function (req, res) {
                                             'endinglocationLat': endinglocationLat,
                                             'endinglocationLng': endinglocationLng ,
                                             'activeStatus':'ACTIVE',
-                                            'isRouteCompleted': isRouteCompleted,
+                                            'isRouteCompleted': 'ONGOING',
                                              'lastModifiedDate': lastModifiedDate,
                                         } 
                             },
@@ -1764,7 +1764,7 @@ router.post('/stop-route', function (req, res) {
                 var newRpRoutes                        = new RpRoutes();
                 newRpRoutes.email                      = email;
                 newRpRoutes.route                      = riderproute;
-                newRpRoutes.totalDistanceCompleted     = totalDistanceCompleted;
+               // newRpRoutes.totalDistanceCompleted     = totalDistanceCompleted;
                 newRpRoutes.currentlocationLat         = currentlocationLat;    
                 newRpRoutes.currentlocationLng         = currentlocationLng;  
                 //newRpRoutes.startinglocationLat        = startinglocationLat,
@@ -1772,7 +1772,7 @@ router.post('/stop-route', function (req, res) {
                 newRpRoutes.endinglocationLat          = endinglocationLat,
                 newRpRoutes.endinglocationLng          = endinglocationLng ,
                 newRpRoutes.activeStatus               = 'ACTIVE';
-                newRpRoutes.isRouteCompleted           = isRouteCompleted;
+                newRpRoutes.isRouteCompleted           = 'ONGOING';
 
                 newRpRoutes.lastModifiedDate           = lastModifiedDate,
         	// save the newRpRoutes

@@ -16,6 +16,8 @@
             <file>file:/var/www/html/rideprix/routes/index.js</file>
             <file>file:/var/www/html/rideprix/public/js/app.js</file>
             <file>file:/var/www/html/rideprix/views/frontend/create-event.ejs</file>
+            <file>file:/var/www/html/rideprix/views/frontend/update-event.ejs</file>
+            <file>file:/var/www/html/rideprix/routes/api.js</file>
             <file>file:/var/www/html/rideprix/public/css/style.css</file>
         </group>
     </open-files>
