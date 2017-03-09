@@ -1030,7 +1030,7 @@ router.post('/save-event', parseForm, csrfProtection, middleware.isLoggedIn, fun
 
 router.get('/list-events', csrfProtection, middleware.isLoggedIn, function (req, res){
     
-    Events.find({},function (err, eventsList) {
+    Events.find({  'userEmail': { $regex : new RegExp(req.user.email, "i") }},function (err, eventsList) {
         if(!err){
             res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
             res.render('list-events.ejs',{
