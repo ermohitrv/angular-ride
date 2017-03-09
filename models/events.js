@@ -9,7 +9,7 @@ var eventSchema = Schema({
     description :   {type: String},
     start   :   {type: Date},
     end     :   {type: Date},
-    eventImage :{type: String,default:''},
+    eventImage :{type: String,default:'', maxlength: 450},
     userEmail      :   {type: String}
 });
 
