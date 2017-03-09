@@ -1030,7 +1030,7 @@ router.post('/facebook-create-user', function (req, res) {
 //        var facebook_id     = "111333333";
 //        var username        = "rvtech";
 //        var profileImage    = "";
-//        var email           = "rvtech@gmail.com";
+//        var email           = "priya_kaundal@rvtechnolgies.co.in";
 //        var contact         = "423434242";
 //        var rideType        = "rideType";
 //        var rideExperience  = "rideExperience";
@@ -1191,7 +1191,7 @@ router.post('/facebook-create-user', function (req, res) {
                                     locationCountry  :locationCountry,
                                     locationLat      :locationLat,
                                     locationLng      :locationLng,
-                                    rproputeInviteLink:globalConfig.websiteUrl+"/invite/"+user.local.username
+                                    rproputeInviteLink:globalConfig.websiteUrl+"/invite/"+username
                                    
                                 },
                             message: globalConfig.successRegister, 
