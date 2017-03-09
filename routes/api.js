@@ -1695,6 +1695,7 @@ router.post('/create-event', function (req, res) {
         var location       = req.body.location;
         var host           = req.body.host;
         var description    = req.body.description;
+        var imagePath      = req.body.imagePath;
       
       
       
@@ -1711,6 +1712,7 @@ router.post('/create-event', function (req, res) {
                 objEvents.end           = end;
                 objEvents.userEmail     = email;
                 objEvents.description   = description;
+                objEvents.eventImage    = imagePath;
        
                 objEvents.save(function (err,eventinfo) {
                     if (err){
@@ -1737,7 +1739,8 @@ router.post('/create-event', function (req, res) {
                                     start           :start,
                                     end             :end,
                                     eventDescription:description,
-                                    userEmail       :email
+                                    userEmail       :email,
+                                    image           :imagePath
                                       
                                 },
                             message: globalConfig.successRegister, 
@@ -1775,6 +1778,7 @@ router.post('/update-event', function (req, res) {
         var location       = req.body.location;
         var host           = req.body.host;
         var description    = req.body.description;
+        var imagePath      = req.body.imagePath;
       
       
     console.log('case 1 eventId: '+eventId);
@@ -1803,7 +1807,8 @@ router.post('/update-event', function (req, res) {
                                             'start'        : start,
                                             'end'          : end,
                                             'description'  : description,
-                                            'email'        : event.email
+                                            'email'        : event.email,
+                                            'eventImage'   : imagePath
                                         } 
                             },
                             { multi: true },
@@ -1833,6 +1838,7 @@ router.post('/update-event', function (req, res) {
                                     start         :start,
                                     end           :end,
                                     description   :description,
+                                    image         :imagePath
                                    
                                 },
                             message: globalConfig.successUpdate, 
