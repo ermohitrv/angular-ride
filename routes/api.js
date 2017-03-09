@@ -1694,6 +1694,7 @@ router.post('/create-event', function (req, res) {
         var end            = req.body.end;
         var location       = req.body.location;
         var host           = req.body.host;
+        var description           = req.body.description;
       
       
       
@@ -1709,6 +1710,7 @@ router.post('/create-event', function (req, res) {
                 objEvents.start         = start;
                 objEvents.end           = end;
                 objEvents.userEmail     = email;
+                objEvents.description   = description;
        
                 objEvents.save(function (err) {
                     if (err){
@@ -1728,13 +1730,14 @@ router.post('/create-event', function (req, res) {
                             data: 
                                 {
                                     
-                                    eventName     :eventName,
-                                    eventType     :eventType,
-                                    eventLocation :location,
-                                    eventHost     :host,
-                                    start         :start,
-                                    end           :end,
-                                    userEmail     :email
+                                    eventName       :eventName,
+                                    eventType       :eventType,
+                                    eventLocation   :location,
+                                    eventHost       :host,
+                                    start           :start,
+                                    end             :end,
+                                    eventDescription:description,
+                                    userEmail       :email
                                       
                                 },
                             message: globalConfig.successRegister, 
@@ -1752,6 +1755,199 @@ router.post('/create-event', function (req, res) {
     }
     
 });
+
+
+/* API end point to update event for mobile users */
+router.post('/update-event', function (req, res) {
+        
+//        var email          = "preeti_dev@rvtechnologies.co.in";
+//        var eventName      = "test";
+//        var eventType      = "toy run type";
+//        var start          = "2017-03-13 06:00";
+//        var end            = "2017-03-13 09:00";
+//        var location       = "chandigarh";
+//        var host           = "test user";
+        var eventId        = req.body.eventId;
+        var email          = req.body.email;
+        var eventName      = req.body.eventName;
+        var eventType      = req.body.eventType;
+        var start          = req.body.start;
+        var end            = req.body.end;
+        var location       = req.body.location;
+        var host           = req.body.host;
+        var description    = req.body.description;
+      
+      
+    console.log('case 1 email: '+email);
+     
+    if(email != "" && email != undefined){
+           
+            Events.findOne({ _id: eventId } ,function(err, event){
+                if(err){
+                    res.json({ 
+                                success: false, 
+                                data: null, 
+                                message: "Event not found", 
+                                code: 400
+                    });
+                }
+                else{
+                    
+                Events.update({ 
+                                'email': { $regex : new RegExp(email, "i") } ,'_id':eventId
+                            },
+                            { 
+                                $set:   { 
+
+                                            'eventName'    : eventName,
+                                            'eventType'    : eventType ,
+                                            'eventLocation': location,
+                                            'eventHost'    : host,
+                                            'start'        : start,
+                                            'end'          : end,
+                                            'description'  : description,
+                                        } 
+                            },
+                            { multi: true },
+                function(err, eventinfo){
+
+                     if (err){
+                        console.log("route error caught 3");
+                        res.json({ 
+                            success: false, 
+                            data: null, 
+                            message: err, 
+                            code: 400
+                        });
+                    }else{
+                        
+                        
+                        res.json({ 
+                            success: true,
+                            data: 
+                                {
+                                   
+                                    email         :email,
+                                    eventName     :eventName,
+                                    eventType     :eventType,
+                                    eventLocation :location,
+                                    eventHost     :host,
+                                    start         :start,
+                                    end           :end,
+                                    description   :description,
+                                   
+                                },
+                            message: globalConfig.successUpdate, 
+                            code: 200
+                        });
+                    }
+                }); 
+            }
+        });
+    }else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+    }
+    
+});
+
+/* API end point to delete event for mobile users */
+router.post('/delete-event', function (req, res) {
+        
+
+    var eventId        = req.body.eventId;
+       
+    if(eventId != "" && eventId != undefined){
+       
+        Events.findOne({ _id: eventId } ,function(err, event){
+                if(err){
+                    res.json({ 
+                                success: false, 
+                                data: null, 
+                                message: "Event not found", 
+                                code: 400
+                    });
+                }
+                else{  
+                    Events.remove({ _id: eventId } ,function(err, status){
+
+                        if(err){
+                               res.json({ 
+                                success: false, 
+                                data: null, 
+                                message: err, 
+                                code: 400
+                            });
+                        }
+                        else{
+                              res.json({ 
+                                success: true,
+                                data: null,
+                                message: "Event deleted successfully!", 
+                                code: 200
+                            });
+                        }
+
+                    });
+                }
+            });    
+                
+    }else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+    }
+    
+});
+
+
+/* API end point to list events for mobile users */
+router.post('/list-events', function (req, res) {
+        
+
+    var email  = req.body.email;
+       
+    if(email != "" && email != undefined){
+       
+        Events.find({  'email': { $regex : new RegExp(email, "i") }},function (err, eventsList) {
+            if(!err){
+                res.json({ 
+                                success: true,
+                                data: eventsList,
+                                message: "Event listed successfully!", 
+                                code: 200
+                        });
+            }
+            else{
+                
+               res.json({ 
+                                success: true,
+                                data: null,
+                                message:err, 
+                                code: 400
+                        });
+                
+            }
+        });   
+                
+    }else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+    }
+    
+});
+
 
 
 // 32 character random string token
