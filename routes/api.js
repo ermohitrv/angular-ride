@@ -1305,7 +1305,7 @@ router.post('/start-route', function (req, res) {
                                 {
                                    
                                     email       :email,
-                                    route       :rprouteinfo.route,
+                                    route       :getrproutes.route,
                                     isRouteCompleted :'ONGOING'
                                    
                                 },
@@ -1444,7 +1444,7 @@ router.post('/stop-route', function (req, res) {
                                 {
                                    
                                     email       :email,
-                                    route       :rprouteinfo.route,
+                                    route       :getrproutes.route,
                                     isRouteCompleted :isRouteCompleted
                                    
                                 },
