@@ -10,7 +10,7 @@ var towTruck         = 'ACTIVE INACTIVE'.split(' ');
 var policeCar        = 'ACTIVE INACTIVE'.split(' ');
 var odometer         = 'ACTIVE INACTIVE'.split(' ');
 var invitedFriends   = 'ACTIVE INACTIVE'.split(' ');
-var routeCompleted   = 'COMPLETED ONGOING FAILED'.split(' ');
+var routeCompleted   = 'CREATED COMPLETED ONGOING FAILED'.split(' ');
 
 var rproutesSchema = mongoose.Schema({
         email                      : {type: String, default: ''},
