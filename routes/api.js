@@ -1768,7 +1768,6 @@ router.post('/update-event', function (req, res) {
 //        var location       = "chandigarh";
 //        var host           = "test user";
         var eventId        = req.body.eventId;
-        var email          = req.body.email;
         var eventName      = req.body.eventName;
         var eventType      = req.body.eventType;
         var start          = req.body.start;
@@ -1778,9 +1777,9 @@ router.post('/update-event', function (req, res) {
         var description    = req.body.description;
       
       
-    console.log('case 1 email: '+email);
+    console.log('case 1 eventId: '+eventId);
      
-    if(email != "" && email != undefined){
+    if(eventId != "" && eventId != undefined){
            
             Events.findOne({ _id: eventId } ,function(err, event){
                 if(err){
@@ -1793,9 +1792,7 @@ router.post('/update-event', function (req, res) {
                 }
                 else{
                     
-                Events.update({ 
-                                'userEmail': { $regex : new RegExp(email, "i") } ,'_id':eventId
-                            },
+                Events.update({   '_id':eventId },
                             { 
                                 $set:   { 
 
@@ -1806,6 +1803,7 @@ router.post('/update-event', function (req, res) {
                                             'start'        : start,
                                             'end'          : end,
                                             'description'  : description,
+                                            'email'        : event.email
                                         } 
                             },
                             { multi: true },
@@ -1827,7 +1825,7 @@ router.post('/update-event', function (req, res) {
                             data: 
                                 {
                                    
-                                    email         :email,
+                                    email         : event.email,
                                     eventName     :eventName,
                                     eventType     :eventType,
                                     eventLocation :location,
@@ -1910,14 +1908,14 @@ router.post('/delete-event', function (req, res) {
 
 /* API end point to list events for mobile users */
 router.post('/list-events', function (req, res) {
-        
+     //var email = 'admin@gmail.com'; 
     var email  = req.body.email;
        
     if(email != "" && email != undefined){
        
         Events.find({  'userEmail': { $regex : new RegExp(email, "i") }},function (err, eventsList) {
             if(!err){
-                
+                console.log(eventsList);
                 res.json({ 
                                 success: true,
                                 data: eventsList,
