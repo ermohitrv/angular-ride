@@ -1694,7 +1694,7 @@ router.post('/create-event', function (req, res) {
         var end            = req.body.end;
         var location       = req.body.location;
         var host           = req.body.host;
-        var description           = req.body.description;
+        var description    = req.body.description;
       
       
       
@@ -1712,7 +1712,7 @@ router.post('/create-event', function (req, res) {
                 objEvents.userEmail     = email;
                 objEvents.description   = description;
        
-                objEvents.save(function (err) {
+                objEvents.save(function (err,eventinfo) {
                     if (err){
                         console.log("error caught 3");
                         res.json({ 
@@ -1794,7 +1794,7 @@ router.post('/update-event', function (req, res) {
                 else{
                     
                 Events.update({ 
-                                'email': { $regex : new RegExp(email, "i") } ,'_id':eventId
+                                'userEmail': { $regex : new RegExp(email, "i") } ,'_id':eventId
                             },
                             { 
                                 $set:   { 
@@ -1911,13 +1911,13 @@ router.post('/delete-event', function (req, res) {
 /* API end point to list events for mobile users */
 router.post('/list-events', function (req, res) {
         
-
     var email  = req.body.email;
        
     if(email != "" && email != undefined){
        
-        Events.find({  'email': { $regex : new RegExp(email, "i") }},function (err, eventsList) {
+        Events.find({  'userEmail': { $regex : new RegExp(email, "i") }},function (err, eventsList) {
             if(!err){
+                
                 res.json({ 
                                 success: true,
                                 data: eventsList,
