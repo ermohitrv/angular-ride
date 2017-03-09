@@ -1128,6 +1128,7 @@ router.post('/facebook-create-user', function (req, res) {
                                     locationCountry  :locationCountry,
                                     locationLat      :locationLat,
                                     locationLng      :locationLng,
+                                    rproputeInviteLink:globalConfig.websiteUrl+"/invite/"+user.local.username
                                     
                                    
                                 },
@@ -1190,6 +1191,7 @@ router.post('/facebook-create-user', function (req, res) {
                                     locationCountry  :locationCountry,
                                     locationLat      :locationLat,
                                     locationLng      :locationLng,
+                                    rproputeInviteLink:globalConfig.websiteUrl+"/invite/"+user.local.username
                                    
                                 },
                             message: globalConfig.successRegister, 
