@@ -35,7 +35,7 @@
                         <div class="panel-body">
                         
                       
-                            <form class="form-horizontal" id="create-event" role="form" action="/update-event" method="post">
+                            <form class="form-horizontal" id="create-event" role="form" action="/update-event" method="post" enctype="multipart/form-data">
                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                  <input type="hidden" name="event_id" value="<%= eventdata._id %>">
                                 <div class="form-group">
@@ -56,12 +56,22 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-6 col-xs-12">
-                                        <label>Start</label>
-                                         <input  type="text" placeholder="select start date/time" id="startdate" class="form-control" name="eventstartDate" >
+                                        <label>Start Date</label>
+                                         <input  type="text" placeholder="select start date" id="startdate" class="form-control" name="eventstartDate" >
                                     </div>
                                     <div class="col-md-6 col-xs-12">
-                                        <label>End</label>
-                                         <input  type="text" placeholder="select end date/time" id="enddate" class="form-control" name="eventendDate" >
+                                        <label>End Date</label>
+                                         <input  type="text" placeholder="select end date" id="enddate" class="form-control" name="eventendDate" >
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <div class="col-md-6 col-xs-12">
+                                        <label>Start Time</label>
+                                         <input value="" type="text" placeholder="select start time" id="starttime" class="form-control" name="eventstartTime">
+                                    </div>
+                                    <div class="col-md-6 col-xs-12">
+                                        <label>End Time</label>
+                                         <input value="" type="text" placeholder="select end time" id="endtime" class="form-control" name="eventendTime">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -85,6 +95,19 @@
                                     </div>
                                    
                                 </div>
+                                <div class="form-group">
+                                    <div class="col-md-12 col-xs-12">
+                                        <label>Event Image</label>
+                                        <input  type="file"  class="form-control" name="eventImage" />
+                                    </div>
+                                   
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12 col-xs-12">
+                                        <img src="<%= eventdata.eventImage %>"/>
+                                    </div>
+                                   
+                                </div>
                                 
                                 <div class="form-group">
                                   <div class="col-md-12 col-xs-12 btncreateevent">
@@ -102,25 +125,59 @@
     </div>
 </section>
 <script type="text/javascript">
-            $(function () {
-                $('#startdate').datetimepicker();
+        $(function () {
                 
-                $('#enddate').datetimepicker();
-                
-            });
-            
-            
-            
-            $(document).ready(function(){
-                
-                      var startdate = '<%= eventdata.start %>';
-                      var enddate = '<%= eventdata.end %>';
-                      var starteventDate = moment(startdate).format('YYYY-MM-DD hh:mm:ss');
-                      var endeventDate = moment(enddate).format('YYYY-MM-DD hh:mm:ss');
-                      $('#startdate').val(starteventDate);
-                      $('#enddate').val(endeventDate);
-                      
+            $("#startdate").datetimepicker({
+                 minView : 2,
+                 format: 'yyyy-mm-dd'
 
-                      
             });
+
+             $("#enddate").datetimepicker({
+                 minView : 2,
+                 format: 'yyyy-mm-dd'
+
+            });
+
+
+            $('#starttime').datetimepicker({
+                        format: 'HH:ii p',
+                        autoclose: true,
+                        // todayHighlight: true,
+                        showMeridian: true,
+                        startView: 1,
+                        maxView: 1
+            });
+         
+            $('#endtime').datetimepicker({
+                        format: 'HH:ii p',
+                        autoclose: true,
+                        // todayHighlight: true,
+                        showMeridian: true,
+                        startView: 1,
+                        maxView: 1
+            });
+    
+                
+        });
+            
+            
+            
+        $(document).ready(function(){
+                
+                var startdate = '<%= eventdata.startDate %>';
+                var enddate = '<%= eventdata.endDate %>';
+                var starttime = '<%= eventdata.startTime %>';
+                var endtime = '<%= eventdata.endTime %>';
+                //var starteventDate = moment(startdate).format('YYYY-MM-DD hh:mm:ss');
+                //var endeventDate = moment(enddate).format('YYYY-MM-DD hh:mm:ss');
+                //var starteventTime = moment(startdate).format('YYYY-MM-DD hh:mm:ss');
+                //var endeventTime = moment(enddate).format('YYYY-MM-DD hh:mm:ss');
+                $('#startdate').val(startdate);
+                $('#enddate').val(enddate);
+                $('#starttime').val(starttime);
+                $('#endtime').val(endtime);
+                     
+        });
+        
 </script>

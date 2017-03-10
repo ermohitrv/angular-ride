@@ -37,7 +37,7 @@
                             </h1>
                         </div>
                         <div class="panel-body">
-                            <form class="form-horizontal" id="create-event" role="form" action="/save-event" method="post">
+                            <form class="form-horizontal" id="create-event" role="form" action="/save-event" method="post" enctype="multipart/form-data" >
                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                 <div class="form-group">
                                     <div class="col-md-6 col-xs-12">
@@ -57,12 +57,22 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-6 col-xs-12">
-                                        <label>Start</label>
-                                         <input value="" type="text" placeholder="select start date/time" id="startdate" class="form-control" name="eventstartDate">
+                                        <label>Start Date</label>
+                                         <input value="" type="text" placeholder="select start date" id="startdate" class="form-control" name="eventstartDate">
                                     </div>
                                     <div class="col-md-6 col-xs-12">
-                                        <label>End</label>
-                                         <input value="" type="text" placeholder="select end date/time" id="enddate" class="form-control" name="eventendDate">
+                                        <label>End Date</label>
+                                         <input value="" type="text" placeholder="select end date" id="enddate" class="form-control" name="eventendDate">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-6 col-xs-12">
+                                        <label>Start Time</label>
+                                         <input value="" type="text" placeholder="select start time" id="starttime" class="form-control" name="eventstartTime">
+                                    </div>
+                                    <div class="col-md-6 col-xs-12">
+                                        <label>End Time</label>
+                                         <input value="" type="text" placeholder="select end time" id="endtime" class="form-control" name="eventendTime">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -86,6 +96,13 @@
                                     </div>
                                    
                                 </div>
+                                <div class="form-group">
+                                    <div class="col-md-12 col-xs-12">
+                                        <label>Event Image</label>
+                                        <input  type="file"  class="form-control" name="eventImage" />
+                                    </div>
+                                   
+                                </div>
                                 
                                 <div class="form-group">
                                   <div class="col-md-12 col-xs-12 btncreateevent">
@@ -103,13 +120,53 @@
     </div>
 </section>
 <script type="text/javascript">
-            $(function () {
-                $('#startdate').datetimepicker();
-                
-                $('#enddate').datetimepicker();
-                
-               // $("#location").geocomplete();
+    
+    $(document).ready(function(){
+    
+            $("#startdate").datetimepicker({
+                 minView : 2,
+                 format: 'yyyy-mm-dd'
+
             });
-            
+
+             $("#enddate").datetimepicker({
+                 minView : 2,
+                 format: 'yyyy-mm-dd'
+
+            });
+
+
+            $('#starttime').datetimepicker({
+                        format: 'HH:ii p',
+                        autoclose: true,
+                        // todayHighlight: true,
+                        showMeridian: true,
+                        startView: 1,
+                        maxView: 1
+            });
+         
+            $('#endtime').datetimepicker({
+                        format: 'HH:ii p',
+                        autoclose: true,
+                        // todayHighlight: true,
+                        showMeridian: true,
+                        startView: 1,
+                        maxView: 1
+            });
+    
+   });
+    
+    
+//            $(function () {
+//                //$('#startdate').datetimepicker();
+//                $('#startdate').datetimepicker({
+//                     pickTime: false,
+//                    //format: 'yyyy-mm-dd'
+//                });
+//                $('#enddate').datetimepicker();
+//                
+//               // $("#location").geocomplete();
+//            });
+//            
             
 </script>

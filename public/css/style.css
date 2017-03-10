@@ -2318,6 +2318,10 @@ body.profile a.navbar-brand.logo{    max-width: 200px;}
 .modal-backdrop {
     position: relative !important;
 }
+
+.eventimage{
+    width:100%;
+}
 /* end event page css */
 
 @media (min-width: 768px){

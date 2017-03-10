@@ -1702,6 +1702,9 @@ router.post('/create-event', function (req, res) {
       
       
     console.log('case 1 email: '+email);
+    console.log('endDate: '+endDate);
+    console.log('startTime: '+startTime);
+    console.log('endTime: '+endTime);
      
     if(email != "" && email != undefined){
        
@@ -1711,7 +1714,7 @@ router.post('/create-event', function (req, res) {
                 objEvents.eventLocation = location;
                 objEvents.eventHost     = host;
                 objEvents.startDate     = startDate;
-                objEvents.endDate           = endDate;
+                objEvents.endDate       = endDate;
                 objEvents.userEmail     = email;
                 objEvents.description   = description;
                 objEvents.eventImage    = imagePath;

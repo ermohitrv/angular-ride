@@ -21,6 +21,33 @@ var OrdersShipping = require('../models/ordersshipping');
 var Events = require('../models/events');
 var EventTypes = require('../models/eventtypes');
 
+var multer      = require('multer');
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/uploads/')
+    },
+    filename: function (req, file, cb) {
+        var extension;
+
+        console.log('____________ inside storage var ' + JSON.stringify(file));
+        if (file.mimetype == 'image/png') {
+            extension = 'png';
+        } else if (file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
+            extension = 'jpg';
+        } else if (file.mimetype == 'image/gif') {
+            extension = 'gif';
+        } else if (file.mimetype == 'image/bmp') {
+            extension = 'bmp';
+        } else {
+            extension = 'jpg';
+        }
+
+        cb(null, file.originalname); //Appending .jpg
+    }
+});
+var upload = multer({storage: storage});
+
 /* Route for homepage */
 router.get('/', function(req, res){
     res.render('index', { user : req.user,title:'Homepage' });
@@ -963,7 +990,16 @@ router.get('/create-event', csrfProtection, middleware.isLoggedIn, function (req
 });
 
 /* Save event */
-router.post('/save-event', parseForm, csrfProtection, middleware.isLoggedIn, function (req, res){
+var cpUploadinserevent = upload.fields([{name: 'eventImage', maxCount: 1}]);
+router.post('/save-event',cpUploadinserevent, parseForm, csrfProtection, middleware.isLoggedIn, function (req, res){
+    
+    var imagepath="";
+    if(req.files['eventImage']){
+        var imagearray = req.files['eventImage'];
+        console.log(imagearray[0].path);
+        imagepath = imagearray[0].path;
+    }
+    
     
     if (req.user.local.email != "" && req.user.local.email != undefined && req.body.event_id != "") {
         User.findOne({'local.email': req.user.local.email}, function (err, user) {
@@ -978,9 +1014,12 @@ router.post('/save-event', parseForm, csrfProtection, middleware.isLoggedIn, fun
                 objEvents.eventLocation = req.body.eventLocation;
                 objEvents.eventHost     = req.body.eventHost;
                 objEvents.description   = req.body.eventDescription;
-                objEvents.start         = req.body.eventstartDate;
-                objEvents.end           = req.body.eventendDate;
+                objEvents.startDate     = req.body.eventstartDate;
+                objEvents.endDate       = req.body.eventendDate;
+                objEvents.startTime     = req.body.eventstartTime;
+                objEvents.endTime       = req.body.eventendTime;
                 objEvents.userEmail     = req.user.local.email;
+                objEvents.eventImage    = imagepath;
                
 
                 objEvents.save(function (err) {
@@ -996,35 +1035,17 @@ router.post('/save-event', parseForm, csrfProtection, middleware.isLoggedIn, fun
                         });
                     } else {
                         
-                         
-//                                req.flash('messageSuccess', 'Event created successfully!');
-//                                res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-//                                res.render('list-events.ejs', {
-//                                    user: user,
-//                                    message: '',
-//                                    csrfToken: req.csrfToken(),
-//                                    title:'List Events',
-//                                    messageSuccess: req.flash('messageSuccess')
-//                                });
                              req.flash('messageSuccess', 'Event created successfully!');
-                             res.redirect('/list-events');
-                       
-                       
+                             res.redirect('/list-events');  
+                          
                     }
                 });
             }
         });
     }else{
-//            res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-//                res.render('list-events.ejs', {
-//                    user: req.user,
-//                    message: '',
-//                    csrfToken: req.csrfToken(),
-//                    title:'List Events'
-//                  
-//            });
+
           res.redirect('/list-events');
-    }
+    } 
     
 });
 
@@ -1100,8 +1121,18 @@ router.get('/updateevent', csrfProtection, middleware.isLoggedIn, function(req, 
 
 });
 
-/* Save event */
-router.post('/update-event', parseForm, csrfProtection, middleware.isLoggedIn, function (req, res){
+/* Update event */
+var cpUploadupdateevent = upload.fields([{name: 'eventImage', maxCount: 1}]);
+router.post('/update-event', cpUploadupdateevent , parseForm, csrfProtection, middleware.isLoggedIn, function (req, res){
+    
+    var imagepath="";
+    if(req.files['eventImage']){
+        var imagearray = req.files['eventImage'];
+        console.log(imagearray[0].path);
+        imagepath = imagearray[0].path;
+    }
+    
+    
     
     if (req.user.local.email != "" && req.user.local.email != undefined ) {
         Events.findOne({'_id': req.body.event_id}, function (err, eventinfo) {
@@ -1116,9 +1147,11 @@ router.post('/update-event', parseForm, csrfProtection, middleware.isLoggedIn, f
                 eventinfo.eventLocation = req.body.eventLocation;
                 eventinfo.eventHost     = req.body.eventHost;
                 eventinfo.description   = req.body.eventDescription;
-                eventinfo.start         = req.body.eventstartDate;
-                eventinfo.end           = req.body.eventendDate;
-               
+                eventinfo.startDate     = req.body.eventstartDate;
+                eventinfo.endDate       = req.body.eventendDate;
+                eventinfo.startTime     = req.body.eventstartTime;
+                eventinfo.endTime       = req.body.eventendTime;
+                eventinfo.eventImage    = imagepath;
 
                 eventinfo.save(function (err) {
                     if (err) {
@@ -1129,37 +1162,18 @@ router.post('/update-event', parseForm, csrfProtection, middleware.isLoggedIn, f
                             message: 'An Error Occured!, '+err, 
                             messageSuccess: '',
                             csrfToken: req.csrfToken(),
-                            title:'Create Event'
+                            title:'Update Event'
                         });
                     } else {
                         
-                         
-                                req.flash('messageSuccess', 'Event updated successfully!');
-//                                res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-//                                res.render('list-events.ejs', {
-//                                    user: req.user,
-//                                    message: '',
-//                                    csrfToken: req.csrfToken(),
-//                                    title:'List Events',
-//                                    messageSuccess: req.flash('messageSuccess')
-//                                });
-                             res.redirect('/list-events');
-                            
-                       
-                       
+                            req.flash('messageSuccess', 'Event updated successfully!');
+                            res.redirect('/list-events');  
                     }
                 });
             }
         });
     }else{
-//            res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-//                res.render('list-events.ejs', {
-//                    user: req.user,
-//                    message: '',
-//                    csrfToken: req.csrfToken(),
-//                    title:'List Events'
-//                  
-//            });
+
           res.redirect('/list-events');
     }
     

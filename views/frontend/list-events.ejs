@@ -45,6 +45,7 @@
                                     <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
                                         <thead>
                                             <tr role="row">
+                                                <th style="width:12%" class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"></th>
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Event Name</th>
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Event Type</th>
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Event Started on</th>
@@ -57,13 +58,14 @@
                                         <tbody>
                                             <tr data-ng-if="eventslist.length > 0" data-ng-repeat="events in eventslist" id="{{ events._id }}" role="row" class="odd">
                                                 
+                                                <td><img class="eventimage" src="{{events.eventImage}}"/></td>
                                                 <td data-ng-bind="events.eventName"></td>
                                                 <td data-ng-bind="events.eventType">
                                                     
                                                 </td>
-                                                <td data-ng-bind="events.start | date:'yyyy-MM-dd hh:mm:ss' ">
+                                                <td data-ng-bind="events.endDate+' '+events.startTime">
                                                 </td>
-                                                <td data-ng-bind="events.end | date:'yyyy-MM-dd hh:mm:ss' "></td>
+                                                <td data-ng-bind="events.endDate+' '+events.endTime"></td>
                                                 <td data-ng-bind="events.eventLocation">
                                                    
                                                 </td>
