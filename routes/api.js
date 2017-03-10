@@ -1702,6 +1702,7 @@ router.post('/create-event', function (req, res) {
       
       
     console.log('case 1 email: '+email);
+    console.log('startDate: '+startDate);
     console.log('endDate: '+endDate);
     console.log('startTime: '+startTime);
     console.log('endTime: '+endTime);
