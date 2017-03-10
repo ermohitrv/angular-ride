@@ -1749,7 +1749,7 @@ router.post('/create-event', function (req, res) {
                                     endTime         :endTime,
                                       
                                 },
-                            message: globalConfig.successRegister, 
+                            message: "success", 
                             code: 200
                         });
                     }
@@ -1854,7 +1854,7 @@ router.post('/update-event', function (req, res) {
                                     endTime       : endTime
                                    
                                 },
-                            message: globalConfig.successUpdate, 
+                            message: "success", 
                             code: 200
                         });
                     }
