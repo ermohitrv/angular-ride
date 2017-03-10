@@ -1690,12 +1690,14 @@ router.post('/create-event', function (req, res) {
         var email          = req.body.email;
         var eventName      = req.body.eventName;
         var eventType      = req.body.eventType;
-        var start          = req.body.start;
-        var end            = req.body.end;
+        var startDate      = req.body.startDate;
+        var endDate        = req.body.endDate;
         var location       = req.body.location;
         var host           = req.body.host;
         var description    = req.body.description;
         var imagePath      = req.body.imagePath;
+        var startTime      = req.body.startTime;
+        var endTime        = req.body.endTime;
       
       
       
@@ -1708,11 +1710,13 @@ router.post('/create-event', function (req, res) {
                 objEvents.eventType     = eventType;
                 objEvents.eventLocation = location;
                 objEvents.eventHost     = host;
-                objEvents.start         = start;
-                objEvents.end           = end;
+                objEvents.start         = startDate;
+                objEvents.end           = endDate;
                 objEvents.userEmail     = email;
                 objEvents.description   = description;
                 objEvents.eventImage    = imagePath;
+                objEvents.startTime     = startTime;
+                objEvents.endTime       = endTime;
        
                 objEvents.save(function (err,eventinfo) {
                     if (err){
@@ -1736,11 +1740,13 @@ router.post('/create-event', function (req, res) {
                                     eventType       :eventType,
                                     eventLocation   :location,
                                     eventHost       :host,
-                                    start           :start,
-                                    end             :end,
+                                    startDate       :startDate,
+                                    endDate         :endDate,
                                     eventDescription:description,
                                     userEmail       :email,
-                                    image           :imagePath
+                                    image           :imagePath,
+                                    startTime       :startTime,
+                                    endTime         :endTime,
                                       
                                 },
                             message: globalConfig.successRegister, 
@@ -1773,12 +1779,14 @@ router.post('/update-event', function (req, res) {
         var eventId        = req.body.eventId;
         var eventName      = req.body.eventName;
         var eventType      = req.body.eventType;
-        var start          = req.body.start;
-        var end            = req.body.end;
+        var startDate      = req.body.startDate;
+        var endDate        = req.body.endDate;
         var location       = req.body.location;
         var host           = req.body.host;
         var description    = req.body.description;
         var imagePath      = req.body.imagePath;
+        var startTime      = req.body.startTime;
+        var endTime        = req.body.endTime;
       
       
     console.log('case 1 eventId: '+eventId);
@@ -1804,11 +1812,13 @@ router.post('/update-event', function (req, res) {
                                             'eventType'    : eventType ,
                                             'eventLocation': location,
                                             'eventHost'    : host,
-                                            'start'        : start,
-                                            'end'          : end,
+                                            'startDate'    : startDate,
+                                            'endDate'      : endDate,
                                             'description'  : description,
                                             'email'        : event.email,
-                                            'eventImage'   : imagePath
+                                            'eventImage'   : imagePath,
+                                            'startTime'    : startTime,
+                                            'endTime'      : endTime
                                         } 
                             },
                             { multi: true },
@@ -1835,10 +1845,13 @@ router.post('/update-event', function (req, res) {
                                     eventType     :eventType,
                                     eventLocation :location,
                                     eventHost     :host,
-                                    start         :start,
-                                    end           :end,
-                                    description   :description,
-                                    image         :imagePath
+                                    startDate     : startDate,
+                                    endDate       : endDate,
+                                    description   : description,
+                                    email         : event.email,
+                                    eventImage    : imagePath,
+                                    startTime     : startTime,
+                                    endTime       : endTime
                                    
                                 },
                             message: globalConfig.successUpdate, 
