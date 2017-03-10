@@ -64,15 +64,40 @@ app.controller('homeController', ['$scope', '$http', function ($scope, $http) {
                 
                 if (window.google && google.maps) {
                     // Map script is already loaded
-                    initializeMap(usersList);
+                    initializeMap(usersList,"usermap");
                 } else {
-                    initializeMap(usersList);
+                    initializeMap(usersList,"usermap");
                 }
             }
         }).error(function(){
             console.log('Oops! Error listing get-users-list');
         });
     };
+    
+    
+     /*function to list all events locations on homepage */
+    $scope.eventsList = [];
+    $scope.drawEventsMap = function(eventmonth){
+        
+        $http.get('/draw-events-map/'+eventmonth).success(function(eventsList){
+            console.log(eventsList);
+            $scope.eventsList = eventsList;
+            var widthScreen = $(document).width();
+            if (widthScreen > 768) {
+                
+                if (window.google && google.maps) {
+                    // Map script is already loaded
+                    initializeMap(eventsList,"eventsmap");
+                } else {
+                    initializeMap(eventsList,"eventsmap");
+                }
+            }
+        }).error(function(){
+            console.log('Oops! Error listing get-events-list');
+        });
+    };
+    
+    
 }]);
 
 /********************** menu controller  **********************/

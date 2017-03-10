@@ -1179,5 +1179,55 @@ router.post('/update-event', cpUploadupdateevent , parseForm, csrfProtection, mi
     
 });
 
+/* events section */
+router.get('/events', function (req, res) {
+   
+    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+    res.render('events', {
+        title: 'events', 
+        user: req.user,
+        session: req.session,
+        message: middleware.clear_session_value(req.session, "message"),
+        message_type: middleware.clear_session_value(req.session, "message_type"),
+        page_url: globalConfig.base_url
+    });
+});
+
+
+
+/* Route to get all events map data to load on homepage */
+router.get('/draw-events-map/:eventmonth', function (req, res) {
+    console.log("event month"+req.params.eventmonth);
+    Events.aggregate(
+        [
+        {
+            $project : {
+                '_id':0,
+                'eventName' : 1,
+                'eventType' : 1,
+                'eventLocation' : 1,
+                'eventHost' : 1,
+                'description' : 1,
+                'startDate' : 1,
+                'endDate'  : 1,
+                'startTime'  : 1,
+                'endTime'  : 1,
+                'eventImage'  : 1,
+                'userEmail'  : 1,
+            } 
+        }]
+        ,function (err, eventsList) {
+        if(eventsList){
+            res.json({
+                success: true, 
+                data: {
+                    events : eventsList
+                },
+                message: "success", 
+                code: 200
+            });
+        }
+    });
+});
 
 module.exports = router;

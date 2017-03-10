@@ -1971,7 +1971,6 @@ router.post('/list-events', function (req, res) {
 
 /* API end point to search events for mobile users */
 router.post('/search-events', function (req, res) {
-    
     var searchterm  = req.body.searchterm;
        
     if(searchterm != "" && searchterm != undefined){

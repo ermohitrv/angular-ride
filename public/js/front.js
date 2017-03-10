@@ -453,7 +453,7 @@ var map;
 var markers = [];
 var bounds;
 var points = {};
-function initialize(userData) {
+function initialize(userData,maptype) {
     var mapOptions = {
         zoom: 3,
         center: new google.maps.LatLng(43.16103, -77.61092),
@@ -461,7 +461,12 @@ function initialize(userData) {
     };
     map = new google.maps.Map(document.getElementById('map-canvas'),
             mapOptions);
+    if(maptype == "usermap"){        
     setMarkers(userData);
+    }
+    else if(maptype == "eventsmap"){
+       seteventsMarkers(userData);
+    }
 }
 
 //            google.maps.event.addDomListener(window, 'load', initialize);
@@ -509,9 +514,62 @@ function setMarkers(userData) {
     });
 }
 
-function initializeMap(userData) {
+function seteventsMarkers(userData) {
+
+    var data = JSON.stringify(userData.data.events);
+    var parsedata =  JSON.parse(data);
+      
+    var markersArray = [];
+    var infowindow = new google.maps.InfoWindow({content: "temo"});
+    var i = 0;
+    var icon = new google.maps.MarkerImage("/images/map-pointer.png");
+    $.each(parsedata, function (index, markerData) {
+        var locLat = "";
+        var locLon = "";
+        var geocoder =  new google.maps.Geocoder();
+            geocoder.geocode( { 'address': markerData.eventLocation}, function(results, status) {
+                  if (status == google.maps.GeocoderStatus.OK) {
+                    console.log("location lat lng : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
+                    locLat = results[0].geometry.location.lat();
+                    locLon = results[0].geometry.location.lng();
+                 
+        
+            var name = markerData.eventName;
+            var lat = locLat;
+            var long = locLon;
+            var location = markerData.eventLocation;
+            var host = markerData.eventHost;
+            var starttime = markerData.startDate+' '+markerData.startTime;
+            var endtime = markerData.endDate+' '+markerData.endTime;
+            var html = '<div style="width:250px; height:100px"><div class="googft-info-window"><b>Host: </b>'+host+'<br><b>Event Title: </b>'+name+'<br><b>Start Time: </b>'+starttime+'<br><b>End Time: </b>'+starttime+'<br><b>Venue Location: </b>'+location+'<br></div></div>';
+            var content = html;
+            var myLatLng = new google.maps.LatLng(lat, long);
+            points[i] = myLatLng;
+            var marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                title: name,
+                icon: icon
+            });
+            markersArray[i] = marker;
+            google.maps.event.addListener(marker, 'click', function () {
+                infowindow.setContent(content);
+                infowindow.open(map, this);
+            });
+            } 
+            else{
+                        console.log("Something got wrong " + status);
+                }
+            });
+            i++;
+        
+    });
+}
+
+
+function initializeMap(userData,maptype) {
     
-    initialize(userData);
+    initialize(userData,maptype);
 }
 
 // show notification popup
