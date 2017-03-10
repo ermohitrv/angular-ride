@@ -1710,8 +1710,8 @@ router.post('/create-event', function (req, res) {
                 objEvents.eventType     = eventType;
                 objEvents.eventLocation = location;
                 objEvents.eventHost     = host;
-                objEvents.start         = startDate;
-                objEvents.end           = endDate;
+                objEvents.startDate     = startDate;
+                objEvents.endDate           = endDate;
                 objEvents.userEmail     = email;
                 objEvents.description   = description;
                 objEvents.eventImage    = imagePath;
