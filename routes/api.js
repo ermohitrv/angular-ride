@@ -1938,7 +1938,7 @@ router.post('/list-events', function (req, res) {
        
         Events.find({  'userEmail': { $regex : new RegExp(email, "i") }},function (err, eventsList) {
             if(!err){
-                console.log(eventsList);
+                
                 res.json({ 
                                 success: true,
                                 data: eventsList,
@@ -1969,7 +1969,52 @@ router.post('/list-events', function (req, res) {
     
 });
 
+/* API end point to search events for mobile users */
+router.post('/search-events', function (req, res) {
+    
+    var searchterm  = req.body.searchterm;
+       
+    if(searchterm != "" && searchterm != undefined){
+               
+ Events.find({$or :[{ 'eventName': new RegExp(searchterm, 'i') }, 
+         {'eventType': new RegExp(searchterm, 'i')},
+         {'eventLocation': new RegExp(searchterm, 'i')},
+         {'eventHost': new RegExp(searchterm, 'i')},
+     
+        ]}, function(err, eventsList){
 
+       // Events.find({  'userEmail': { $regex : new RegExp(email, "i") }},function (err, eventsList) {
+            if(!err){
+                
+                res.json({ 
+                                success: true,
+                                data: eventsList,
+                                message: "Events searched successfully!", 
+                                code: 200
+                        });
+            }
+            else{
+                
+               res.json({ 
+                                success: true,
+                                data: null,
+                                message:err, 
+                                code: 400
+                        });
+                
+            }
+        });   
+                
+    }else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+    }
+    
+});
 
 // 32 character random string token
 function random_token(){
