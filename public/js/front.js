@@ -544,7 +544,7 @@ function seteventsMarkers(userData) {
             var endeventDatemarker = moment(markerData.endDate).format('YYYY-MM-DD');
             var starttime = starteventDatemarker+' '+markerData.startTime;
             var endtime = endeventDatemarker+' '+markerData.endTime;
-            var html = '<div style="width:250px;height:130px;"><div class="googft-info-window"><b>Host: </b>'+host+'<br><b>Event Title: </b>'+name+'<br><b>Start Time: </b>'+starttime+'<br><b>End Time: </b>'+endtime+'<br><b>Venue Location: </b>'+location+'<br><br/><a style="margin-left: 35%;" class="btn btn-primary" href="#" onclick='+fun+' >Join Event</a></div></div>';
+            var html = '<div style="width:250px;height:130px;"><div class="googft-info-window"><b>Host: </b>'+host+'<br><b>Event Title: </b>'+name+'<br><b>Start Time: </b>'+starttime+'<br><b>End Time: </b>'+endtime+'<br><b>Venue Location: </b>'+location+'<br><br/><a style="margin-left: 35%;" class="btn btn-primary" href="javascript:;" onclick='+fun+' >Join Event</a></div></div>';
             var content = html;
             var myLatLng = new google.maps.LatLng(lat, long);
             points[i] = myLatLng;
