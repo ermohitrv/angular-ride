@@ -20,6 +20,7 @@ var Payments = require('../models/payments');
 var OrdersShipping = require('../models/ordersshipping');
 var Events = require('../models/events');
 var EventTypes = require('../models/eventtypes');
+var Joinevents = require('../models/joinevents');
 
 var multer      = require('multer');
 
@@ -1199,7 +1200,7 @@ router.get('/events', function (req, res) {
 router.get('/draw-events-map/:eventmonth', function (req, res) {
     //console.log("event month"+req.params.eventmonth);
     var eventmonth = req.params.eventmonth;
-    //console.log("eventmonth "+eventmonth);
+    console.log("eventmonth "+eventmonth);
     
     if(eventmonth != "" && eventmonth != undefined){
         if(eventmonth !== 'all'){
@@ -1207,7 +1208,7 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
             [
             {
                 $project : {
-                    '_id':0,
+                    '_id':1,
                     'eventName' : 1,
                     'eventType' : 1,
                     'eventLocation' : 1,
@@ -1230,7 +1231,7 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
             ,function (err, eventsList) {
                 
             //res.json(eventsList);
-                
+               
             if(!err && eventsList){
                 
                 res.json({
@@ -1249,7 +1250,7 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
             [
             {
                 $project : {
-                    '_id':0,
+                    '_id':1,
                     'eventName' : 1,
                     'eventType' : 1,
                     'eventLocation' : 1,
@@ -1286,5 +1287,47 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
         res.json({err:'error occured'});
     }
 });
+  
+/* get all users to add friend */
+router.post('/join-event', middleware.isLoggedIn, function (req, res){
     
+   console.log("join event"+req.body.eventid);
+  
+   //res.send(true);
+   if(req.body.eventid != "" && req.body.eventid != undefined ){
+          
+        Joinevents.findOne({'userEmail': req.user.local.email,'eventId':req.body.eventid}, function (err, joineventsdata) {
+            if (!joineventsdata) {
+                
+                var objJoinEvents           = new Joinevents();
+                objJoinEvents.eventId       = req.body.eventid;
+                objJoinEvents.userEmail     = req.user.local.email;
+              
+
+                objJoinEvents.save(function (err) {
+                if(err){
+                        status = "error";
+                }
+                else{
+                        status = "success";
+                }
+                
+                res.send(status);
+                
+                });
+            }else{
+                status = "exist";
+                res.send(status);
+                
+            }
+        });
+       
+   }else{
+        res.redirect('/events');  
+   }
+           
+    
+});
+
+
 module.exports = router;

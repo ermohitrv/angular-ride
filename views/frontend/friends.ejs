@@ -1,0 +1,75 @@
+<% layout('layout') -%>
+<section id="profile"  data-ng-controller="eventController">
+   <% include partial/profile-nav.ejs %>
+    <div class="container update-profile-page">
+      <div id="main">
+         <!-- start:breadcrumb -->
+         <ol class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="active">Friends</li>
+         </ol>
+         <!-- end:breadcrumb -->   
+         <div class="row" id="home-content">
+                <div class="title">
+                    <h1 style="color:#3c3c3c">Friends</h1>
+                    <hr style="">
+                     
+                </div>
+                
+                  <!-- left column -->
+                  <div class="col-md-1">
+
+                  </div>
+                  
+                  <!-- event form column -->
+                  <div class="col-md-10 personal-info">
+                      <div class="result_del"></div>
+                    <% if (message.length > 0) { %>
+                        <div class="alert alert-danger"><%= message %></div>
+                    <% } %>
+                    <% if (messageSuccess.length > 0) { %>
+                        <div class="alert alert-success"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a><%= messageSuccess %></div>
+                    <% } %>
+                    <form class="navbar-form" id="searchform" role="search" method="get" action="/searchFriends">
+                        <div class="input-group">
+                            <input  class="form-control search-product" placeholder="Search" name="search" id="search-box">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default" id="searchfrndbtn" type="submit" ><i class="glyphicon glyphicon-search"></i></button>
+                                </div>
+                        </div>
+                    </form>
+                    <div class="panel panel-info" >
+                        
+                  <div class="row">
+                                <div class="col-sm-12">
+                                    <h3>
+                                        <div class="pull-left"></div>
+                                        <!--<div class="pull-right"><input data-ng-model="search_user.eventName" type="text" class="form-control" placeholder="Search event name"></div>-->
+                                        <div class="clearfix"></div>
+                                    </h3>
+                               
+                                    <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
+                                        <thead>
+                                            <tr role="row">
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Friend Name</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Action</th>
+                                            </tr>
+                                        </thead>
+                                       
+                                        <tbody>
+                                            
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+
+                    </div>
+                    
+               </div>
+            <hr>
+         </div>
+      </div>
+    </div>
+</section>

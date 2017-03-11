@@ -515,10 +515,10 @@ function setMarkers(userData) {
 }
 
 function seteventsMarkers(userData) {
-
+    console.log(JSON.stringify(userData));  
     var data = JSON.stringify(userData.data.events);
     var parsedata =  JSON.parse(data);
-      
+    console.log(parsedata);  
     var markersArray = [];
     var infowindow = new google.maps.InfoWindow({content: "temo"});
     var i = 0;
@@ -532,8 +532,9 @@ function seteventsMarkers(userData) {
                     console.log("location lat lng : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
                     locLat = results[0].geometry.location.lat();
                     locLon = results[0].geometry.location.lng();
-                 
-        
+            
+            var id = markerData._id;
+            var fun = "joinevent('"+id+"')";
             var name = markerData.eventName;
             var lat = locLat;
             var long = locLon;
@@ -543,7 +544,7 @@ function seteventsMarkers(userData) {
             var endeventDatemarker = moment(markerData.endDate).format('YYYY-MM-DD');
             var starttime = starteventDatemarker+' '+markerData.startTime;
             var endtime = endeventDatemarker+' '+markerData.endTime;
-            var html = '<div style="width:250px; height:100px"><div class="googft-info-window"><b>Host: </b>'+host+'<br><b>Event Title: </b>'+name+'<br><b>Start Time: </b>'+starttime+'<br><b>End Time: </b>'+endtime+'<br><b>Venue Location: </b>'+location+'<br></div></div>';
+            var html = '<div style="width:250px; height:100px"><div class="googft-info-window"><b>Host: </b>'+host+'<br><b>Event Title: </b>'+name+'<br><b>Start Time: </b>'+starttime+'<br><b>End Time: </b>'+endtime+'<br><b>Venue Location: </b>'+location+'<br><a href="#" onclick='+fun+' >Join Event</a></div></div>';
             var content = html;
             var myLatLng = new google.maps.LatLng(lat, long);
             points[i] = myLatLng;
@@ -602,3 +603,30 @@ function show_notification(msg, type, reload_page){
 //    .appendTo( ul );
 //    };
 
+function joinevent(eventid){
+    
+    if(localUserUsername != ""){
+        jQuery.ajax({
+           type  : "POST",
+           url   : "/join-event",
+           data  : {'eventid' : eventid},
+           timeout: 3000,
+           success: function(data){
+                if(data === 'error'){
+                   alert("error");
+               }
+               if(data === 'exist'){
+                   alert("Already Registered");
+               }
+               else{
+                   alert("success");
+               }
+           },
+           error : function(err){
+
+           }
+       });
+    }else{
+        alert("Please login");
+    }
+}

@@ -2336,7 +2336,12 @@ li.btn.btn-xs.btn-info {
     font-family: 'Open Sans', sans-serif;
 }
 /* end event page css */
+/* friends page */
+#searchfrndbtn{
+    margin-top: 5px;
+}
 
+/*end friends page */
 @media (min-width: 768px){
 .modal-dialog {
     width: 450px;
