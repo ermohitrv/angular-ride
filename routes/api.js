@@ -1971,16 +1971,17 @@ router.post('/list-events', function (req, res) {
 
 /* API end point to search events for mobile users */
 router.post('/search-events', function (req, res) {
-    var searchterm  = req.body.searchterm;
-       
-    if(searchterm != "" && searchterm != undefined){
+    var searchterm  = req.body.searchterm;  
+    var email  = req.body.email;   
+    
+    if(searchterm != "" && searchterm != undefined  && email != "" && email != undefined){
                
  Events.find({$or :[{ 'eventName': new RegExp(searchterm, 'i') }, 
          {'eventType': new RegExp(searchterm, 'i')},
          {'eventLocation': new RegExp(searchterm, 'i')},
          {'eventHost': new RegExp(searchterm, 'i')},
      
-        ]}, function(err, eventsList){
+        ]},{'userEmail': { $regex : new RegExp(email, "i") }}, function(err, eventsList){
 
        // Events.find({  'userEmail': { $regex : new RegExp(email, "i") }},function (err, eventsList) {
             if(!err){
