@@ -1204,7 +1204,32 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
     
     if(eventmonth != "" && eventmonth != undefined){
         if(eventmonth !== 'all'){
-        Events.aggregate(
+            
+            Events.find({ "$where": "this.startDate.getMonth() === "+eventmonth }, function (err, eventsList) {
+            if (err) {
+                
+                res.json({
+                    success: true, 
+                    data:null,
+                    message: "error", 
+                    code: 400
+                });
+            }
+            else{
+                res.json({
+                    success: true, 
+                    data: {
+                        events : eventsList
+                    },
+                    message: "success", 
+                    code: 200
+                });
+            }
+            
+            });
+            
+            
+       /* Events.aggregate(
             [
             {
                 $project : {
@@ -1243,34 +1268,22 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
                     code: 200
                 });
             }
-        }); 
+        }); */
     }else{
         
-        Events.aggregate(
-            [
-            {
-                $project : {
-                    '_id':1,
-                    'eventName' : 1,
-                    'eventType' : 1,
-                    'eventLocation' : 1,
-                    'eventHost' : 1,
-                    'description' : 1,
-                    'startDate' : 1,
-                    'endDate'  : 1,
-                    'startTime'  : 1,
-                    'endTime'  : 1,
-                    'eventImage'  : 1,
-                    'userEmail'  : 1,
-                    month: { $month: "$startDate" }
-                }
+
+
+           Events.find({}, function (err, eventsList) {
+            if (err) {
+                
+                res.json({
+                    success: true, 
+                    data:null,
+                    message: "error", 
+                    code: 400
+                });
             }
-           
-        ]
-            ,function (err, eventsList) {
-                
-            if(!err && eventsList){
-                
+            else{
                 res.json({
                     success: true, 
                     data: {
@@ -1280,7 +1293,8 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
                     code: 200
                 });
             }
-        }); 
+            
+            });
     }
     }
     else{
