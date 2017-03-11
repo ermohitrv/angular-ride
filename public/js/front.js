@@ -544,7 +544,7 @@ function seteventsMarkers(userData) {
             var endeventDatemarker = moment(markerData.endDate).format('YYYY-MM-DD');
             var starttime = starteventDatemarker+' '+markerData.startTime;
             var endtime = endeventDatemarker+' '+markerData.endTime;
-            var html = '<div style="width:250px; height:100px"><div class="googft-info-window"><b>Host: </b>'+host+'<br><b>Event Title: </b>'+name+'<br><b>Start Time: </b>'+starttime+'<br><b>End Time: </b>'+endtime+'<br><b>Venue Location: </b>'+location+'<br><a href="#" onclick='+fun+' >Join Event</a></div></div>';
+            var html = '<div style="width:250px;height:130px;"><div class="googft-info-window"><b>Host: </b>'+host+'<br><b>Event Title: </b>'+name+'<br><b>Start Time: </b>'+starttime+'<br><b>End Time: </b>'+endtime+'<br><b>Venue Location: </b>'+location+'<br><br/><a style="margin-left: 35%;" class="btn btn-primary" href="#" onclick='+fun+' >Join Event</a></div></div>';
             var content = html;
             var myLatLng = new google.maps.LatLng(lat, long);
             points[i] = myLatLng;
@@ -617,9 +617,13 @@ function joinevent(eventid){
                }
                if(data === 'exist'){
                    alert("Already Registered");
+                   //$('#eventsmodal').show();
+                   //$('#eventsmsg').text("Already registered to this event");
                }
                else{
                    alert("success");
+                   //$('#eventsmodal').show();
+                   //$('#eventsmsg').text("You are registered to this event");
                }
            },
            error : function(err){
@@ -627,6 +631,8 @@ function joinevent(eventid){
            }
        });
     }else{
-        alert("Please login");
+        alert("please login");
+        //$('#eventsmodal').show();
+        //$('#eventsmsg').text("Please login to join this event");
     }
 }
