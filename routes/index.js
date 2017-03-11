@@ -1198,6 +1198,34 @@ router.get('/events', function (req, res) {
 /* Route to get all events map data to load on homepage */
 router.get('/draw-events-map/:eventmonth', function (req, res) {
     console.log("event month"+req.params.eventmonth);
+    var eventmonth = req.params.eventmonth;
+    console.log("eventmonth"+eventmonth);
+    
+    /*Events.find({ "$where": "this.startDate.getMonth() === 3" },function (err, eventsList) {
+            if(!err){
+                
+                res.json({ 
+                                success: true,
+                                data: {
+                                    events : eventsList
+                                },
+                                message: "Event listed successfully!", 
+                                code: 200
+                        });
+            }
+            else{
+                
+               res.json({ 
+                                success: true,
+                                data: null,
+                                message:err, 
+                                code: 400
+                        });
+                
+            }
+        });  */ 
+          
+    
     Events.aggregate(
         [
         {
@@ -1214,8 +1242,15 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
                 'endTime'  : 1,
                 'eventImage'  : 1,
                 'userEmail'  : 1,
+                month: { $month: "$startDate" }
             } 
-        }]
+        },
+                
+        {
+            $match:{month: 3 }
+        }
+        
+    ]
         ,function (err, eventsList) {
         if(eventsList){
             res.json({
@@ -1227,7 +1262,7 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
                 code: 200
             });
         }
-    });
+    }); 
 });
-
+    
 module.exports = router;

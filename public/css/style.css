@@ -2322,6 +2322,12 @@ body.profile a.navbar-brand.logo{    max-width: 200px;}
 .eventimage{
     width:100%;
 }
+
+li.btn.btn-xs.btn-info {
+    padding: 15px;
+    font-size: 22px;
+}
+
 /* end event page css */
 
 @media (min-width: 768px){

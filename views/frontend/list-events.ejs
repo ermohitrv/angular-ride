@@ -63,9 +63,12 @@
                                                 <td data-ng-bind="events.eventType">
                                                     
                                                 </td>
-                                                <td data-ng-bind="events.endDate+' '+events.startTime">
+                                                <td>
+                                                    {{events.startDate | date:'yyyy-MM-dd'}}&nbsp;{{events.startTime}}
                                                 </td>
-                                                <td data-ng-bind="events.endDate+' '+events.endTime"></td>
+                                                <td>
+                                                     {{events.endDate | date:'yyyy-MM-dd'}}&nbsp;{{events.endTime}}
+                                                </td>
                                                 <td data-ng-bind="events.eventLocation">
                                                    
                                                 </td>

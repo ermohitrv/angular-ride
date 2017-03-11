@@ -2016,6 +2016,33 @@ router.post('/search-events', function (req, res) {
     
 });
 
+
+/* API end point to list events for mobile users */
+router.post('/list-all-events', function (req, res) {
+   
+        Events.find({},function (err, eventsList) {
+            if(!err){
+                
+                res.json({ 
+                                success: true,
+                                data: eventsList,
+                                message: "Event listed successfully!", 
+                                code: 200
+                        });
+            }
+            else{
+                
+               res.json({ 
+                                success: true,
+                                data: null,
+                                message:err, 
+                                code: 400
+                        });
+                
+            }
+        });   
+      
+});
 // 32 character random string token
 function random_token(){
   var text = "";

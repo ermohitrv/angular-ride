@@ -169,12 +169,12 @@
                 var enddate = '<%= eventdata.endDate %>';
                 var starttime = '<%= eventdata.startTime %>';
                 var endtime = '<%= eventdata.endTime %>';
-                //var starteventDate = moment(startdate).format('YYYY-MM-DD hh:mm:ss');
-                //var endeventDate = moment(enddate).format('YYYY-MM-DD hh:mm:ss');
+                var starteventDate = moment(startdate).format('YYYY-MM-DD');
+                var endeventDate = moment(enddate).format('YYYY-MM-DD');
                 //var starteventTime = moment(startdate).format('YYYY-MM-DD hh:mm:ss');
                 //var endeventTime = moment(enddate).format('YYYY-MM-DD hh:mm:ss');
-                $('#startdate').val(startdate);
-                $('#enddate').val(enddate);
+                $('#startdate').val(starteventDate);
+                $('#enddate').val(endeventDate);
                 $('#starttime').val(starttime);
                 $('#endtime').val(endtime);
                      
