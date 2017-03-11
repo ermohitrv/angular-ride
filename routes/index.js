@@ -1202,7 +1202,49 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
     //console.log("eventmonth "+eventmonth);
     
     if(eventmonth != "" && eventmonth != undefined){
-      
+        if(eventmonth !== 'all'){
+        Events.aggregate(
+            [
+            {
+                $project : {
+                    '_id':0,
+                    'eventName' : 1,
+                    'eventType' : 1,
+                    'eventLocation' : 1,
+                    'eventHost' : 1,
+                    'description' : 1,
+                    'startDate' : 1,
+                    'endDate'  : 1,
+                    'startTime'  : 1,
+                    'endTime'  : 1,
+                    'eventImage'  : 1,
+                    'userEmail'  : 1,
+                    month: { $month: "$startDate" }
+                }
+            },
+            {
+                $match:{ month : 3 }
+            }
+
+        ]
+            ,function (err, eventsList) {
+                
+            //res.json(eventsList);
+                
+            if(!err && eventsList){
+                
+                res.json({
+                    success: true, 
+                    data: {
+                        events : eventsList
+                    },
+                    message: "success", 
+                    code: 200
+                });
+            }
+        }); 
+    }else{
+        
         Events.aggregate(
             [
             {
@@ -1222,14 +1264,9 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
                     month: { $month: "$startDate" }
                 }
             }
-//            {
-//                $match:{ month : 3 }
-//            }
-
+           
         ]
             ,function (err, eventsList) {
-                
-            //res.json(eventsList);
                 
             if(!err && eventsList){
                 
@@ -1243,6 +1280,7 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
                 });
             }
         }); 
+    }
     }
     else{
         res.json({err:'error occured'});
