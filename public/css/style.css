@@ -2327,7 +2327,14 @@ li.btn.btn-xs.btn-info {
     padding: 15px;
     font-size: 22px;
 }
-
+.events_page {
+    background: #000;
+    border-top: 1px solid #ddd;
+    padding: 60px 0;
+    float: left;
+    width: 100%;
+    font-family: 'Open Sans', sans-serif;
+}
 /* end event page css */
 
 @media (min-width: 768px){

@@ -1,12 +1,12 @@
 <% layout('layout') -%>
 <style>.title h1{color:#3a3a3a}</style>
-<div class="classified_page" data-ng-controller="homeController" >
+<div class="events_page" data-ng-controller="homeController" >
     <div class="container">
         <div class="row classified_listing">
             <div class="title"><h1> Events </h1></div>
             <div class="listing">
                 <ul id="nav">
-			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(3)"><a href="#">ALL</a></li>
+			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap('all')"><a href="#">ALL</a></li>
 			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(1)"><a href="#">JAN</a></li>
 			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(2)"><a href="#">FEB</a></li>
 			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(3)"><a href="#">MAR</a></li>
@@ -21,7 +21,7 @@
 			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(12)"><a href="#">DEC</a></li>
 		</ul>
                 <section id="map">
-                    <div class="row4" data-ng-init="drawEventsMap(3)">
+                    <div class="row4" data-ng-init="drawEventsMap('all')">
                         <!--<div class="row4" data-ng-init="drawEventsMap()">-->
                         <div id="map-canvas" style="width: 100%;height: 500px;"></div>
                     </div>

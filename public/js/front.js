@@ -491,7 +491,7 @@ function setMarkers(userData) {
     var markersArray = [];
     var infowindow = new google.maps.InfoWindow({content: "temo"});
     var i = 0;
-    var icon = new google.maps.MarkerImage("/images/map-pointer.png");
+    var icon = new google.maps.MarkerImage("/images/maps-and-flags.png");
     $.each(locations, function (index, markerData) {
         var name = markerData.name;
         var lat = markerData.lat;
@@ -522,7 +522,7 @@ function seteventsMarkers(userData) {
     var markersArray = [];
     var infowindow = new google.maps.InfoWindow({content: "temo"});
     var i = 0;
-    var icon = new google.maps.MarkerImage("/images/map-pointer.png");
+    var icon = new google.maps.MarkerImage("/images/maps-and-flags.png");
     $.each(parsedata, function (index, markerData) {
         var locLat = "";
         var locLon = "";

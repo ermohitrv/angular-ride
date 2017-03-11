@@ -1197,72 +1197,94 @@ router.get('/events', function (req, res) {
 
 /* Route to get all events map data to load on homepage */
 router.get('/draw-events-map/:eventmonth', function (req, res) {
-    console.log("event month"+req.params.eventmonth);
+    //console.log("event month"+req.params.eventmonth);
     var eventmonth = req.params.eventmonth;
-    console.log("eventmonth"+eventmonth);
+    //console.log("eventmonth "+eventmonth);
     
-    /*Events.find({ "$where": "this.startDate.getMonth() === 3" },function (err, eventsList) {
-            if(!err){
-                
-                res.json({ 
-                                success: true,
-                                data: {
-                                    events : eventsList
-                                },
-                                message: "Event listed successfully!", 
-                                code: 200
-                        });
+    if(eventmonth != "" && eventmonth != undefined){
+        if(eventmonth !== 'all'){
+        Events.aggregate(
+            [
+            {
+                $project : {
+                    '_id':0,
+                    'eventName' : 1,
+                    'eventType' : 1,
+                    'eventLocation' : 1,
+                    'eventHost' : 1,
+                    'description' : 1,
+                    'startDate' : 1,
+                    'endDate'  : 1,
+                    'startTime'  : 1,
+                    'endTime'  : 1,
+                    'eventImage'  : 1,
+                    'userEmail'  : 1,
+                    month: { $month: "$startDate" }
+                }
+            },
+            {
+                $match:{ month : 3 }
             }
-            else{
+
+        ]
+            ,function (err, eventsList) {
                 
-               res.json({ 
-                                success: true,
-                                data: null,
-                                message:err, 
-                                code: 400
-                        });
+            //res.json(eventsList);
                 
+            if(!err && eventsList){
+                
+                res.json({
+                    success: true, 
+                    data: {
+                        events : eventsList
+                    },
+                    message: "success", 
+                    code: 200
+                });
             }
-        });  */ 
-          
-    
-    Events.aggregate(
-        [
-        {
-            $project : {
-                '_id':0,
-                'eventName' : 1,
-                'eventType' : 1,
-                'eventLocation' : 1,
-                'eventHost' : 1,
-                'description' : 1,
-                'startDate' : 1,
-                'endDate'  : 1,
-                'startTime'  : 1,
-                'endTime'  : 1,
-                'eventImage'  : 1,
-                'userEmail'  : 1,
-                month: { $month: "$startDate" }
-            } 
-        },
-                
-        {
-            $match:{month: 3 }
-        }
+        }); 
+    }else{
         
-    ]
-        ,function (err, eventsList) {
-        if(eventsList){
-            res.json({
-                success: true, 
-                data: {
-                    events : eventsList
-                },
-                message: "success", 
-                code: 200
-            });
-        }
-    }); 
+        Events.aggregate(
+            [
+            {
+                $project : {
+                    '_id':0,
+                    'eventName' : 1,
+                    'eventType' : 1,
+                    'eventLocation' : 1,
+                    'eventHost' : 1,
+                    'description' : 1,
+                    'startDate' : 1,
+                    'endDate'  : 1,
+                    'startTime'  : 1,
+                    'endTime'  : 1,
+                    'eventImage'  : 1,
+                    'userEmail'  : 1,
+                    month: { $month: "$startDate" }
+                }
+            }
+           
+        ]
+            ,function (err, eventsList) {
+                
+            if(!err && eventsList){
+                
+                res.json({
+                    success: true, 
+                    data: {
+                        events : eventsList
+                    },
+                    message: "success", 
+                    code: 200
+                });
+            }
+        }); 
+    }
+    }
+    else{
+        res.json({err:'error occured'});
+    }
 });
     
 module.exports = router;
