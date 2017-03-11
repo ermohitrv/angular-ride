@@ -78,7 +78,7 @@ app.controller('homeController', ['$scope', '$http', function ($scope, $http) {
      /*function to list all events locations on homepage */
     $scope.eventsList = [];
     $scope.drawEventsMap = function(eventmonth){
-        
+        alert("dfsfs");
         $http.get('/draw-events-map/'+eventmonth).success(function(eventsList){
             console.log(eventsList);
             $scope.eventsList = eventsList;
