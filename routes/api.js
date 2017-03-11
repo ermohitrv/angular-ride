@@ -1976,12 +1976,12 @@ router.post('/search-events', function (req, res) {
     
     if(searchterm != "" && searchterm != undefined  && email != "" && email != undefined){
                
- Events.find({$or :[{ 'eventName': new RegExp(searchterm, 'i') }, 
+ Events.find({ $and: [{ 'userEmail': { $regex : new RegExp(email, "i")} }],$or :[{ 'eventName': new RegExp(searchterm, 'i') }, 
          {'eventType': new RegExp(searchterm, 'i')},
          {'eventLocation': new RegExp(searchterm, 'i')},
          {'eventHost': new RegExp(searchterm, 'i')},
      
-        ]},{'userEmail': { $regex : new RegExp(email, "i") }}, function(err, eventsList){
+        ]}, function(err, eventsList){
 
        // Events.find({  'userEmail': { $regex : new RegExp(email, "i") }},function (err, eventsList) {
             if(!err){
