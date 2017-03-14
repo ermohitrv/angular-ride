@@ -2083,7 +2083,7 @@ router.post('/join-event', function (req, res){
                 
                         var mailOptions = {
                             from   : "Motorcycle <no-reply@motorcycle.com>", 
-                            to     :  req.user.local.email,
+                            to     :  email,
                             subject: "Join Events",
                             html   : html
                         };
