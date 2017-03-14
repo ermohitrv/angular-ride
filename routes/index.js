@@ -676,6 +676,7 @@ router.post('/checkout_action', function(req, res, next) {
                             newOrdersShipping.order_shiplastname             = req.body.ship_lastname;   
                             newOrdersShipping.order_shipadd1                 = req.body.ship_addr1;
                             newOrdersShipping.order_shipadd2                 = req.body.ship_addr2;
+                            newOrdersShipping.order_shipcity                 = req.body.ship_city;
                             newOrdersShipping.order_shipcountry              = req.body.ship_country;
                             newOrdersShipping.order_shipstate                = req.body.ship_state;
                             newOrdersShipping.order_shippostcode             = req.body.ship_postcode;

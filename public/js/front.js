@@ -355,7 +355,7 @@ jQuery('#change_password_form').validate({
                 required: true,
                 minlength: 5,
                 maxlength: 20,
-                
+              
             },
             phone_number: {
                 required: true,
@@ -367,6 +367,7 @@ jQuery('#change_password_form').validate({
                 email:true,
                 
             },   
+            
          },
         
          submitHandler: function(form) {
