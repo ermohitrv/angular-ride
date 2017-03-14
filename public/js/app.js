@@ -140,7 +140,17 @@ app.controller('menuController',['$scope', '$http', function ($scope, $http) {
                     };
         });
         
-       
+        $scope.latestEvents = function(){
+           
+            
+            $http.get('/latestevents').success(function (response){
+                
+                $scope.footerlatestevents = response;
+                
+               }).error(function(err){
+               console.log('Oops! Error occur'+err);
+            }); 
+       };
 
 }]);
 

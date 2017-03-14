@@ -5,9 +5,19 @@
            <p>Lorem Ipsum is simply dummy text of the printing and  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.</p>
            <a href="#" class="learn_more">More Info</a>
         </div>
-        <div class="col-md-4 footer wow fadeInUp animated" data-wow-duration="1000ms" data-wow-delay="400ms" style="visibility: visible; animation-duration: 1000ms; animation-delay: 400ms;">
+        <div class="col-md-4 footer wow fadeInUp animated" data-wow-duration="1000ms" data-wow-delay="400ms" style="visibility: visible; animation-duration: 1000ms; animation-delay: 400ms;" ng-init="latestEvents()">
             <h3>Latest Event</h3>
-            <div class="event">
+            <div class="event" ng-repeat="latestevent in footerlatestevents">
+                <div class="date">
+                    <span ng-bind="latestevent.startDate | date:'MMM'"></span>
+                    <p ng-bind="latestevent.startDate | date:'dd'">26</p>
+                </div>
+                <div class="event_info">
+                    <h6 ng-bind="latestevent.eventName"></h6>
+                    <p>{{ latestevent.description | limitTo: 20 }}{{latestevent.description.length > 20 ? '...' : ''}}</p>
+                </div>
+            </div>
+<!--            <div class="event">
                 <div class="date">
                     <span>Dec</span>
                     <p>26</p>
@@ -26,17 +36,7 @@
                     <h6>Event Name</h6>
                     <p>Lorem Ipsum is simply dummy text </p>
                 </div>
-            </div>
-            <div class="event">
-                <div class="date">
-                    <span>Dec</span>
-                    <p>26</p>
-                </div>
-                <div class="event_info">
-                    <h6>Event Name</h6>
-                    <p>Lorem Ipsum is simply dummy text </p>
-                </div>
-            </div>
+            </div>-->
             
         </div>
         <div class="col-md-4  footer wow fadeInUp animated" data-wow-duration="1000ms" data-wow-delay="600ms" style="visibility: visible; animation-duration: 1000ms; animation-delay: 600ms;">

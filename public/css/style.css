@@ -2335,6 +2335,9 @@ li.btn.btn-xs.btn-info {
     width: 100%;
     font-family: 'Open Sans', sans-serif;
 }
+.eventimageinput{
+    border:none;
+}
 /* end event page css */
 /* friends page */
 #searchfrndbtn{

@@ -1367,5 +1367,18 @@ router.post('/join-event', middleware.isLoggedIn, function (req, res){
     
 });
 
+router.get('/latestevents',  function (req, res){
+    
+    Events.find({ },function (err, latesteventsList) {
+        if(!err){
+            
+            res.json(latesteventsList);
+            
+        }else{
+            res.json({});
+        }
+    }).sort({'startDate':1}).limit(3);
+    
+});
 
 module.exports = router;
