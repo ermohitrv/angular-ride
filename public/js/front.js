@@ -534,7 +534,7 @@ function seteventsMarkers(userData) {
                     locLon = results[0].geometry.location.lng();
             
             var id = markerData._id;
-            var fun = "joinevent('"+id+"')";
+            var fun = "joinevent('"+id+"','"+markerData.eventName+"')";
             var name = markerData.eventName;
             var lat = locLat;
             var long = locLon;
@@ -603,7 +603,7 @@ function show_notification(msg, type, reload_page){
 //    .appendTo( ul );
 //    };
 
-function joinevent(eventid){
+function joinevent(eventid,eventname){
     
     if(localUserUsername != ""){
         jQuery.ajax({
@@ -616,14 +616,14 @@ function joinevent(eventid){
                    alert("error");
                }
                if(data === 'exist'){
-                   alert("Already Registered");
-                   //$('#eventsmodal').show();
-                   //$('#eventsmsg').text("Already registered to this event");
+                $('#eventsmodal').show();
+                $('#eventsmsg').text("You are already registered to this event!");
+                $('#eventmodaltext').text(eventname);
                }
                else{
-                   alert("success");
-                   //$('#eventsmodal').show();
-                   //$('#eventsmsg').text("You are registered to this event");
+                $('#eventsmodal').show();
+                $('#eventsmsg').text("You are succesfully registered to this event!");
+                $('#eventmodaltext').text(eventname);
                }
            },
            error : function(err){
@@ -631,8 +631,8 @@ function joinevent(eventid){
            }
        });
     }else{
-        alert("please login");
-        //$('#eventsmodal').show();
-        //$('#eventsmsg').text("Please login to join this event");
+        $('#eventsmodal').show();
+        $('#eventsmsg').text("Please login to join this event!");
+        $('#eventmodaltext').text(eventname);
     }
 }

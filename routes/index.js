@@ -21,7 +21,8 @@ var OrdersShipping = require('../models/ordersshipping');
 var Events = require('../models/events');
 var EventTypes = require('../models/eventtypes');
 var Joinevents = require('../models/joinevents');
-
+var nodemailer      = require("nodemailer");
+var moment      = require("moment");
 var multer      = require('multer');
 
 var storage = multer.diskStorage({
@@ -1310,6 +1311,7 @@ router.post('/join-event', middleware.isLoggedIn, function (req, res){
    //res.send(true);
    if(req.body.eventid != "" && req.body.eventid != undefined ){
           
+    Events.findOne({'_id':req.body.eventid}, function (err, eventsdata) {      
         Joinevents.findOne({'userEmail': req.user.local.email,'eventId':req.body.eventid}, function (err, joineventsdata) {
             if (!joineventsdata) {
                 
@@ -1323,7 +1325,27 @@ router.post('/join-event', middleware.isLoggedIn, function (req, res){
                         status = "error";
                 }
                 else{
+                        console.log(eventsdata.startDate);
+                        var starteventDate = moment(eventsdata.startDate).format('YYYY-MM-DD');
+                        var endeventDate = moment(eventsdata.endDate).format('YYYY-MM-DD');
+                        var starttime = starteventDate+' '+eventsdata.startTime;
+                        var endtime = endeventDate+' '+eventsdata.endTime;
+                        console.log(starttime);
+                          
+                        var html = 'Hello,<br>You are successfully registered to the event.<br><br><b>Event Title : </b>'+eventsdata.eventName+'<br><b>Host by : </b>'+eventsdata.eventHost+'<br><b>Started on : </b>'+starttime+'<br><b>Ended on : </b>'+endtime+'<br><b>Venue Location : </b>'+eventsdata.eventLocation+'<br><br>';
+                            html += '<br>Thank you, Team Motorcycle';
+                
+                        var mailOptions = {
+                            from   : "Motorcycle <no-reply@motorcycle.com>", 
+                            to     :  req.user.local.email,
+                            subject: "Join Events",
+                            html   : html
+                        };
+
+                        nodemailer.mail(mailOptions);
+                        
                         status = "success";
+                        
                 }
                 
                 res.send(status);
@@ -1335,6 +1357,7 @@ router.post('/join-event', middleware.isLoggedIn, function (req, res){
                 
             }
         });
+    });
        
    }else{
         res.redirect('/events');  

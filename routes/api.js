@@ -8,7 +8,9 @@ var globalConfig    = require('../config/globals.js');
 var nodemailer      = require("nodemailer");
 var friends         = require('../models/friends');
 var Events          = require('../models/events');
-
+var Joinevents = require('../models/joinevents');
+var nodemailer      = require("nodemailer");
+var moment      = require("moment");
 
 /* API endpoint to be used by mobile device to see all users list */
 router.get('/listusers', function(req, res) {
@@ -2043,6 +2045,96 @@ router.post('/list-all-events', function (req, res) {
         });   
       
 });
+
+
+router.post('/join-event', function (req, res){
+    
+   var eventId = req.body.eventId;
+   var email   = req.body.email;
+  
+   if(eventId != "" && eventId != undefined && email != "" && email != undefined ){
+          
+    Events.findOne({'_id':eventId}, function (err, eventsdata) {      
+        Joinevents.findOne({'userEmail': email,'eventId':eventId}, function (err, joineventsdata) {
+            if (!joineventsdata) {
+                
+                var objJoinEvents           = new Joinevents();
+                objJoinEvents.eventId       = eventId;
+                objJoinEvents.userEmail     = email;
+              
+
+                objJoinEvents.save(function (err) {
+                if(err){
+                       res.json({ 
+                                success: true,
+                                data: null,
+                                message:err, 
+                                code: 400
+                        });
+                }
+                else{
+                        var starteventDate = moment(eventsdata.startDate).format('YYYY-MM-DD');
+                        var endeventDate = moment(eventsdata.endDate).format('YYYY-MM-DD');
+                        var starttime = starteventDate+' '+eventsdata.startTime;
+                        var endtime = endeventDate+' '+eventsdata.endTime;
+                          
+                        var html = 'Hello,<br>You are successfully registered to the event.<br><br><b>Event Title : </b>'+eventsdata.eventName+'<br><b>Host by : </b>'+eventsdata.eventHost+'<br><b>Started on : </b>'+starttime+'<br><b>Ended on : </b>'+endtime+'<br><b>Venue Location : </b>'+eventsdata.eventLocation+'<br><br>';
+                            html += '<br>Thank you, Team Motorcycle';
+                
+                        var mailOptions = {
+                            from   : "Motorcycle <no-reply@motorcycle.com>", 
+                            to     :  req.user.local.email,
+                            subject: "Join Events",
+                            html   : html
+                        };
+
+                        nodemailer.mail(mailOptions);
+                        
+                        res.json({ 
+                                success: true,
+                               data: 
+                                {
+                                    email         : email,
+                                    eventName     : eventsdata.eventName,
+                                   
+                                },
+                                message: "Event joined successfully!", 
+                                code: 200
+                        });
+                        
+                }
+                
+                
+                });
+            }else{
+                res.json({ 
+                                success: true,
+                                data: 
+                                {
+                                    email         : email,
+                                    eventName     : eventsdata.eventName,
+                                   
+                                },
+                                message:"Event already joined!",  
+                                code: 200
+                });
+                
+            }
+        });
+    });
+       
+   }else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+   }
+           
+    
+});
+
 // 32 character random string token
 function random_token(){
   var text = "";
