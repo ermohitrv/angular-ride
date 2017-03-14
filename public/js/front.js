@@ -106,6 +106,10 @@ jQuery.validator.addMethod("nodot", function(value, element) {
 	return this.optional(element) || /\./g.test(value);
 }, "No dot please");
 
+jQuery.validator.addMethod("ZipCode", function(value, element) {
+  return this.optional(element) || /^\d{5}(?:-\d{4})?$/.test(value);
+}, "Please provide a valid zipcode.");
+
 /* forget password page validation */
 
 jQuery('#forgot_form').validate({
@@ -351,11 +355,18 @@ jQuery('#change_password_form').validate({
                 maxlength: 20,
                 letterswithbasicpunc:true,
             },
+//            ship_postcode: {
+//                required: true,
+//                minlength: 5,
+//                maxlength: 20,
+//               
+//              
+//            },
             ship_postcode: {
                 required: true,
-                minlength: 5,
-                maxlength: 20,
-              
+                //minlength: 5,
+                //maxlength: 20,
+                ZipCode: true,
             },
             phone_number: {
                 required: true,

@@ -40,8 +40,8 @@
                             <td class="col-sm-1 col-md-1" style="text-align: center">
                                 <input type="number" class="form-control quantitybox" id="exampleInputquantity_<%= i %>" value="<%= sessionCart[productid].quantity %>" >
                             </td>
-                            <td class="col-sm-1 col-md-1 text-center">$<strong id="itemprice_<%= i %>"><%= sessionCart[productid].item_price %></strong></td>
-                            <td class="col-sm-1 col-md-1 text-center"><strong id="totalitemprice_<%= i %>">$<%= sessionCart[productid].total_item_price %></strong></td>
+                            <td class="col-sm-1 col-md-1 text-center">$<strong  id="itemprice_<%= i %>"><%= sessionCart[productid].item_price %></strong></td>
+                            <td class="col-sm-1 col-md-1 text-center">$<strong class="subtotalitemprice" id="totalitemprice_<%= i %>"><%= sessionCart[productid].total_item_price %></strong></td>
                             <td class="col-sm-1 col-md-1">
                                     <button type="button" class="btn btn-danger removeproduct" id="<%= i %>" onclick="deleteRow(this.parentNode.parentNode.rowIndex,'<%= productid %>')">
                                     <span class="glyphicon glyphicon-remove"></span> Remove
@@ -74,7 +74,7 @@
                             <td>   </td>
                             <td>   </td>
                             <td class="text-center"><h3>Total</h3></td>
-                            <td class="text-right"><h3><strong>$<%= (subtotal+6.94) %></strong></h3></td>
+                            <td class="text-right"><h3>$<strong id="final_total"><%= (subtotal+6.94) %></strong></h3></td>
                         </tr>
                         <tr>
                             <td><a href="/gear"><button type="button" class="btn btn-warning continue_shoping">
@@ -189,6 +189,7 @@
        
         var quantityid = this.id;
         var quantityvalue = this.value;
+        var shippingamount = "6.94";
       
         var arrayData =  quantityid.split('_');
         var rowid = arrayData[1];
@@ -198,10 +199,17 @@
         
         $('#totalitemprice_'+rowid).text(totalprice);
         //alert(subtotalprice);
-        var calsubtotalprice = +subtotalprice + +itemprice;
-        $('#sub_total').text(calsubtotalprice);
+        //var calsubtotalprice = +subtotalprice + +itemprice;
+        //$('#sub_total').text(calsubtotalprice);
         
-       
+        var calsubtotalprice = 0;
+        $('.subtotalitemprice').each(function(){
+            alert($(this).text());
+            calsubtotalprice += +$(this).text();
+           
+        });
+        $('#sub_total').text(calsubtotalprice);
+        $('#final_total').text(calsubtotalprice + +shippingamount);
        
    });
     
