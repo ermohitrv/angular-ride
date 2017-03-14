@@ -534,7 +534,8 @@ function seteventsMarkers(userData) {
                     locLon = results[0].geometry.location.lng();
             
             var id = markerData._id;
-            var fun = "joinevent('"+id+"','"+markerData.eventName+"')";
+            var encodename = encodeURI(markerData.eventName);
+            var fun = "joinevent('"+id+"','"+encodename+"')";
             var name = markerData.eventName;
             var lat = locLat;
             var long = locLon;
@@ -618,12 +619,12 @@ function joinevent(eventid,eventname){
                if(data === 'exist'){
                 $('#eventsmodal').show();
                 $('#eventsmsg').text("You are already registered to this event!");
-                $('#eventmodaltext').text(eventname);
+                $('#eventmodaltext').text(decodeURI(eventname));
                }
                else{
                 $('#eventsmodal').show();
                 $('#eventsmsg').text("You are succesfully registered to this event!");
-                $('#eventmodaltext').text(eventname);
+                $('#eventmodaltext').text(decodeURI(eventname));
                }
            },
            error : function(err){
@@ -633,6 +634,6 @@ function joinevent(eventid,eventname){
     }else{
         $('#eventsmodal').show();
         $('#eventsmsg').text("Please login to join this event!");
-        $('#eventmodaltext').text(eventname);
+        $('#eventmodaltext').text(decodeURI(eventname));
     }
 }
