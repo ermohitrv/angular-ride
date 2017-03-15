@@ -319,7 +319,12 @@ router.post('/search/searchfilter',  function(req, res){
 router.post('/get-events-list',  function(req, res){
     
     //res.send(true);
-    Events.aggregate([{$sort: {'start': 1}}], function (err, eventsList) {
+    Events.aggregate([
+        
+        {$match: {'userEmail': req.user.local.email}},
+        {$sort: {'start': 1}}
+    
+    ], function (err, eventsList) {
         if(eventsList){
            
             res.json(eventsList);
