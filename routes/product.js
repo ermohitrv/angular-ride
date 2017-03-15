@@ -11,6 +11,8 @@ var Categories = require('../models/category');
 var Brands = require('../models/brands');
 var Events = require('../models/events');
 var EventTypes = require('../models/eventtypes');
+var Reviews = require('../models/reviews');
+
 /* Route for showing product detail page */
 /*
 router.get('/:productslug', function (req, res) {
@@ -54,13 +56,17 @@ router.get('/shop/products-list', function (req, res){
 router.get('/shop/products-detail/:id', function (req, res){
     console.log('id: '+req.params.id);
     Products.findOne({ product_permalink: req.params.id }, function (err, result) {
+         Reviews.find({ productId: result._id, 'ReviewStatus':'APPROVED' }, function (err, reviews) {
         if(result == null || result.product_published == "false"){
             res.send('error product detail page: '+err);
-        }else{	
+        }else{
+            
+           
             res.header('Content-Type', 'text/html');
             res.render('widget/product-detail',{
                 title: result.product_title, 
                 result: result,
+                reviews:reviews,
                 user: req.user,
                 product_description: result.product_description,
                 session: req.session,
@@ -68,6 +74,7 @@ router.get('/shop/products-detail/:id', function (req, res){
                 message_type: middleware.clear_session_value(req.session, "message_type"),
             });
         }
+    }).sort({'addedOn':-1});
     });
 });
 
@@ -179,37 +186,25 @@ router.post('/cartproducts', function(req, res, next) {
 });
 
 router.post('/imageresize', function(req, res, next) {	   
-//    var gm = require('../node_modules/gm');
-//    gm('/public/uploads/fb-pc.jpg')
-//    .resize(353, 257)
-//    .autoOrient()
-//    .write(writeStream, function (err) {
-//      if (!err) console.log(' hooray! ');
-//    }); 
-//    var ImageResize = require('../node_modules/node-image-resize'),
-//    fs = require('fs');
-// 
-//    var image = new ImageResize('/public/uploads/fb-pc.jpg');
-//    image.loaded.then(function(){
-//        image.smartResizeDown({
-//            width: 200,
-//            height: 200
-//        }).then(function () {
-//            image.stream(function (err, stdout, stderr) {
-//                var writeStream = fs.createWriteStream('/public/uploads/resized.jpg');
-//                stdout.pipe(writeStream);
-//            });
-//        });
-//    });
-        require('../node_modules/sharp');
-        var transformer = sharp()
-            .resize(500)
-            .on('info', function(info) {
-                console.log('Image height is ' + info.height);
-            });
 
-        //readableStream.pipe(transformer).pipe(res);
-    console.log("Image resize");
+//        var sharp = require('sharp');
+//        var transformer = sharp("/public/uploads/fb-pc.jpg")
+//            .resize(500)
+//            .on('info', function(info) {
+//                console.log('Image height is ' + info.height);
+//            });
+//
+//        readableStream.pipe(transformer).pipe(res);
+//    console.log("Image resize");
+
+    var processImage = require('express-processimage');
+    var root = 'http://localhost:2286/public/uploads/1welcome-img.jpg';
+   
+    express()
+    .use(processImage({root: root}))
+    .use(express.static(root));
+   
+
     res.status(200).json({"success": "image resize"});
 });
 

@@ -1,0 +1,130 @@
+<% layout('layoutAdmin') -%>
+<style>
+.modal-open {
+    overflow: auto !important;
+}
+.modal-backdrop {
+    position: relative !important;
+}
+</style>
+<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Reviews
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Dashboard</li>
+      </ol>
+    </section>
+    <section class="content" data-ng-controller="adminController">
+        <div class="row" data-ng-init="getreviewsList()"> 
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-body">
+                        <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                            <div class="row">
+                                <div class="col-sm-6"></div>
+                                <div class="col-sm-6"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h3>
+                                        <div class="pull-left">Reviews</div>
+                                        <div class="pull-right"><input data-ng-model="search_user.event_type" type="text" class="form-control" placeholder="Search review"></div>
+                                        <div class="clearfix"></div>
+                                    </h3>
+                                <div class="result_del"></div>
+                                <% if (message.length > 0) { %>
+                                    <% if (message_type == "success"){ %>
+                                        <div class="alert alert-success"><%= message %></div>
+                                    <% }else{ %>
+                                        <div class="alert alert-danger"><%= message %></div>
+                                    <% } %>
+                                <% } %>
+                                    <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
+                                        <thead>
+                                            <tr role="row">
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Product Code</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">User Email</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Review</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr data-ng-if="reviewslist.length > 0" data-ng-repeat="reviews in reviewslist | orderBy:'addedOn'" id="{{ reviews._id }}" role="row" class="odd">
+                                                
+                                                <td><span data-ng-bind="reviews.productId"></span></td>
+                                                <td>
+                                                    <span data-ng-bind="reviews.userEmail"></span>
+                                                </td>
+                                                <td>
+                                                    <span data-ng-bind="reviews.userReview"></span>
+                                                </td>
+                                                <td>
+                                                    <a title="Approved" class="click_me_view btn" href="/admin/updatereview?id={{ reviews._id }}"><i class="fa fa-pencil"></i></a> 
+                                                    
+                                                </td>
+                                            </tr>
+                                            <tr  data-ng-if="reviewslist.length <= 0">
+                                                <td colspan="5" style="text-align: center">No results found</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                </div>
+                                <div class="col-sm-7">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+  </div>
+  <!-- /.content-wrapper -->
+  <script data-cfasync="false"  >
+$(function(){
+    $(document).on('click', 'a.delete_this_eventtype' ,function(){
+        var uid = $(this).attr('uid');
+        
+        if(uid != undefined && uid != null){
+
+            delete_eventtype(uid);
+        }
+    });
+});
+
+function delete_eventtype(uid){
+    
+    jQuery.ajax({
+        type  : "POST",
+        url   : "/admin/delete-eventtype",
+        data  : {'uid' : uid},
+        timeout: 3000,
+        success: function(data){
+             if(data === 'error'){
+                $(".result_del").html('<div class="alert alert-danger">Error Occured!</div>');
+            }else{
+                $('#confirmDelete_'+uid).hide();
+                //$('#confirmDelete_'+uid).modal('hide').on('hide.bs.modal', function(e){
+                  $("#"+uid).remove();  
+                  $('.modal-backdrop.in').css('opacity','0');
+                //});
+                $(".result_del").html('<div class="alert alert-success">Event Type Deleted Successfully!</div>');
+            }
+        },
+        error : function(err){
+            //alert( 'err: '+JSON.stringify(err) );           
+            //$(".result_del").html('<div class="alert alert-success">User Deleted Successfully!</div>');
+        }
+    });
+}
+</script>
+  

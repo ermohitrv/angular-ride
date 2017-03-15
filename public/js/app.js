@@ -219,7 +219,7 @@ app.controller('productController',['$scope', '$http','$sce', function ($scope, 
     
     
      $scope.imageResize = function(imageSrc){
-        alert(imageSrc);
+        //alert(imageSrc);
         var data = { 
             image_src: imageSrc, 
         };
@@ -228,7 +228,12 @@ app.controller('productController',['$scope', '$http','$sce', function ($scope, 
             headers : {'Accept' : 'application/json'}
         };
         $http.post('/product/imageresize',config).success(function (response, status, headers, config){
-           alert("success"+response.success);
+           //alert("success"+response.success);
+            $('.zoom').magnify({
+                speed: 200,
+                src: "http://localhost:2286/public/uploads/fb-pc.jpg?resize=100,100",
+
+            });
             //console.log(response);
            
         }).error(function(err){
@@ -242,6 +247,9 @@ app.controller('productController',['$scope', '$http','$sce', function ($scope, 
 //        });
     };
      
+     
+
+    
 }]);
 
 
@@ -573,6 +581,17 @@ app.controller('adminController',['$scope', '$http','$sce', function ($scope, $h
            
         }).error(function(){
             console.log('Oops! Error listing event-types-list');
+        });
+    };
+    
+    $scope.getreviewsList= function(){
+       
+        $http.get('/admin/get-reviews-list').success(function(reviewslist){
+          
+           $scope.reviewslist = reviewslist;
+           
+        }).error(function(){
+            console.log('Oops! Error listing review-list');
         });
     };
     

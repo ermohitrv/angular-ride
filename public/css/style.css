@@ -1602,6 +1602,7 @@ button.continue_shoping, button.checkout_btn {
 .ratingInfo a{
   color: #333;
   font-size: 14px;
+  cursor: pointer;
 }
 .product-price {
     font-size: 28px;
@@ -2345,6 +2346,15 @@ li.btn.btn-xs.btn-info {
 }
 
 /*end friends page */
+
+/* product detail page */
+
+.reviewmodal .modal-body {
+    position: relative;
+    padding: 5px 15px 0px 15px;
+}
+
+/* end product detail page */
 @media (min-width: 768px){
 .modal-dialog {
     width: 450px;

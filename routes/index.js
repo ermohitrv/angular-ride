@@ -21,6 +21,7 @@ var OrdersShipping = require('../models/ordersshipping');
 var Events = require('../models/events');
 var EventTypes = require('../models/eventtypes');
 var Joinevents = require('../models/joinevents');
+var Reviews = require('../models/reviews');
 var nodemailer      = require("nodemailer");
 var moment      = require("moment");
 var multer      = require('multer');
@@ -1379,6 +1380,31 @@ router.get('/latestevents',  function (req, res){
         }
     }).sort({'startDate':1}).limit(3);
     
+});
+
+router.post('/sendreview',  function (req, res){
+    
+   console.log("send reviews"+req.user.local.username);
+   //res.send(true);   
+            var objReviews           = new Reviews();
+            objReviews.userReview    = req.body.reviewdesc;
+            objReviews.username      = req.user.local.username;
+            objReviews.productId     = req.body.productId;
+
+            objReviews.save(function (err) {
+                if(err){
+                        status = "error";
+                       
+                }
+                else{
+                     status = "success";
+                     
+                }
+                
+                res.status(200).json({"status": status});
+                
+            });
+            
 });
 
 module.exports = router;

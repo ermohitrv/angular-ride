@@ -18,6 +18,7 @@ var Brands = require('../models/brands');
 var Categories = require('../models/category');
 var Points = require('../models/points');
 var EventTypes = require('../models/eventtypes');
+var Reviews = require('../models/reviews');
 var multer      = require('multer');
 
 var storage = multer.diskStorage({
@@ -1273,7 +1274,7 @@ router.post('/category/insert',  middleware.restrict, function(req, res) {
 });
 
 /* Route for List categories by Angular */
-router.get('/get-categories-list', middleware.isAdminLoggedIn, function(req, res){
+router.get('/get-categories-list', middleware.restrict, function(req, res){
     Categories.aggregate([{$sort: {'category_added_date': 1}}], function (err, categoryList) {
         if(categoryList){
             res.json(categoryList);
@@ -1283,7 +1284,7 @@ router.get('/get-categories-list', middleware.isAdminLoggedIn, function(req, res
     });
 });
 
-router.get('/list-categories', middleware.isAdminLoggedIn, function(req, res){
+router.get('/list-categories', middleware.restrict, function(req, res){
     res.render('list-categories', { 
         message : req.flash('message'),
         message_type : req.flash('message_type'),
@@ -1296,7 +1297,7 @@ router.get('/list-categories', middleware.isAdminLoggedIn, function(req, res){
 
 
 /* Points management*/
-router.get('/list-rproutespoints', middleware.isAdminLoggedIn, function(req, res){
+router.get('/list-rproutespoints', middleware.restrict, function(req, res){
     res.render('list-rproutespoints', { 
         message : req.flash('message'),
         message_type : req.flash('message_type'),
@@ -1306,7 +1307,7 @@ router.get('/list-rproutespoints', middleware.isAdminLoggedIn, function(req, res
     });
 });
 
-router.get('/get-points-list', middleware.isAdminLoggedIn, function(req, res){
+router.get('/get-points-list', middleware.restrict, function(req, res){
     Points.aggregate([{$sort: {'route': 1}}], function (err, pointsList) {
         if(pointsList){
             res.json(pointsList);
@@ -1376,7 +1377,7 @@ router.post('/rproutepoints/insert',  middleware.restrict, function(req, res) {
 });
 
 /* delete category from admin */
-router.post('/delete-category/', middleware.isAdminLoggedIn, function(req, res) {
+router.post('/delete-category/', middleware.restrict, function(req, res) {
      
 	// remove the article
 	 Categories.remove({ _id: req.body.uid } ,function(err, status){
@@ -1392,7 +1393,7 @@ router.post('/delete-category/', middleware.isAdminLoggedIn, function(req, res) 
 });
 
 /* update category */
-router.get('/updatecategory', middleware.isAdminLoggedIn, function(req, res) {
+router.get('/updatecategory', middleware.restrict, function(req, res) {
     //res.send(true);
     
     Categories.findOne({'_id': req.query.id}, function (err, categorydata) {
@@ -1418,7 +1419,7 @@ router.get('/updatecategory', middleware.isAdminLoggedIn, function(req, res) {
 });
 
 
-router.post('/category/update', middleware.isAdminLoggedIn, function(req, res) {
+router.post('/category/update', middleware.restrict, function(req, res) {
     
    
     
@@ -1466,7 +1467,7 @@ router.post('/category/update', middleware.isAdminLoggedIn, function(req, res) {
 
 
 /* update category */
-router.get('/updatebrand', middleware.isAdminLoggedIn, function(req, res) {
+router.get('/updatebrand', middleware.restrict, function(req, res) {
     console.log("sdasdsd"+req.query.id);
     //res.send(true);
     
@@ -1493,7 +1494,7 @@ router.get('/updatebrand', middleware.isAdminLoggedIn, function(req, res) {
 });
 
 var cpUploadupdatebrand = upload.fields([{name: 'frm_brand_image', maxCount: 1}]);
-router.post('/brand/update', cpUploadupdatebrand, middleware.isAdminLoggedIn, function(req, res) {
+router.post('/brand/update', cpUploadupdatebrand, middleware.restrict, function(req, res) {
    
     
     var imagename="";
@@ -1552,7 +1553,7 @@ router.post('/brand/update', cpUploadupdatebrand, middleware.isAdminLoggedIn, fu
 });
 
 /* delete brand */
-router.post('/delete-brand/', middleware.isAdminLoggedIn, function(req, res) {
+router.post('/delete-brand/', middleware.restrict, function(req, res) {
         
 	// remove the article
 	 Brands.remove({ _id: req.body.uid } ,function(err, status){
@@ -1568,7 +1569,7 @@ router.post('/delete-brand/', middleware.isAdminLoggedIn, function(req, res) {
 });
 
 /* Route for List event types */
-router.get('/get-eventtypes-list', middleware.isAdminLoggedIn, function(req, res){
+router.get('/get-eventtypes-list', middleware.restrict, function(req, res){
     EventTypes.find({'event_type':{$ne:null}},{_id:1,event_type:1,eventtype_description:1,eventtype_added_date:1},function (err, eventtypesList) {
         if(eventtypesList){
             res.json(eventtypesList);
@@ -1579,7 +1580,7 @@ router.get('/get-eventtypes-list', middleware.isAdminLoggedIn, function(req, res
 });
 
 /* Points management*/
-router.get('/list-eventtypes', middleware.isAdminLoggedIn, function(req, res){
+router.get('/list-eventtypes', middleware.restrict, function(req, res){
     res.render('list-eventtypes', { 
         message : req.flash('message'),
         message_type : req.flash('message_type'),
@@ -1597,7 +1598,7 @@ router.get('/add-eventtype', middleware.restrict, function(req, res) {
         message_type: middleware.clear_session_value(req.session, "message_type"),
         editor: true,
         user:req.user,
-        active:'add-event type'
+        active:'add-eventtype'
     });
 });
 
@@ -1633,7 +1634,7 @@ router.post('/eventtype/insert', middleware.restrict, function(req, res) {
     });
 });
 
-router.get('/updateeventtype',  middleware.isAdminLoggedIn, function(req, res) {
+router.get('/updateeventtype',  middleware.restrict, function(req, res) {
     console.log("Update event type id : "+req.query.id);
     //res.send(true);
     
@@ -1659,7 +1660,7 @@ router.get('/updateeventtype',  middleware.isAdminLoggedIn, function(req, res) {
 
     });
 
-router.post('/eventtype/update',  middleware.isAdminLoggedIn, function (req, res){
+router.post('/eventtype/update',  middleware.restrict, function (req, res){
     
         EventTypes.findOne({'_id': req.body.frm_event_type_id }, function (err, eventtypeinfo) {
             if (!eventtypeinfo) {
@@ -1690,7 +1691,7 @@ router.post('/eventtype/update',  middleware.isAdminLoggedIn, function (req, res
     
 });
 
-router.post('/delete-eventtype/', middleware.isLoggedIn, function(req, res) {
+router.post('/delete-eventtype/', middleware.restrict, function(req, res) {
         
 	// remove the article
 	 EventTypes.remove({ _id: req.body.uid } ,function(err, status){
@@ -1705,5 +1706,86 @@ router.post('/delete-eventtype/', middleware.isLoggedIn, function(req, res) {
         });
 });
 
+router.get('/list-reviews', middleware.restrict, function(req, res){
+    res.render('list-reviews', { 
+        message : req.flash('message'),
+        message_type : req.flash('message_type'),
+        user : req.user, 
+        title:'Admin | List Reviews',
+        active:'list-reviews'
+    });
+});
+
+router.get('/get-reviews-list', middleware.restrict, function(req, res){
+    Reviews.find({},function (err, reviewsList) {
+        if(reviewsList){
+            res.json(reviewsList);
+        }else{
+            res.json({});
+        }
+    });
+});
+
+router.get('/updatereview',  middleware.restrict, function (req, res){
+    
+        Reviews.findOne({'_id': req.query.id }, function (err, reviewinfo) {
+            if (!reviewinfo) {
+                
+                res.redirect('/admin/list-reviews');
+                
+            } else {
+                
+                reviewinfo.ReviewStatus = "APPROVED";
+               
+                reviewinfo.save(function (err) {
+                    if (err) {
+                        
+                         res.redirect('/list-reviews');
+                         
+                    } else {
+                            
+                        req.flash('message', 'Review approved!');
+                        req.flash('message_type','success');
+                        res.redirect('/admin/list-reviews');
+                            
+                    }
+                });
+            }
+        });
+    
+        /*Reviews.findOne({'_id': req.query.id}, function (err, reviewinfo) {
+        
+        if(reviewinfo) {
+        Reviews.update({ 
+                                '_id': req.query.id
+                            },
+                            { 
+                                $set:   { 
+                                            'ReviewStatus': "APPROVED" ,
+                                        } 
+                            },
+                            { multi: true },
+                function(err, reviewupdateinfo){
+
+                     if (err){
+                       
+                    }else{
+                        
+                        req.flash('message', 'Review approved!');
+                        req.flash('message_type','success');
+                        res.redirect('/admin/list-reviews');
+                        
+                        
+                    }
+                });
+        }
+        else{
+            
+            console.log("error");
+        }
+       
+
+    });*/
+});
 
 module.exports = router;

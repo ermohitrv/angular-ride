@@ -6,7 +6,7 @@
                 <div class="sp-large">
                     <% if(result.product_image[0] != "" ){ %>
                     <a href="#" class="">
-                    <img src="/public/uploads/<%= result.product_image[0] %>" data-magnify-src="/public/uploads/<%= result.product_image[0] %>" id="large_image"  class="magnify-image img-responsive largeimageuploaded zoom" alt="img"></a>
+                    <img src="/public/uploads/<%= result.product_image[0] %>"   id="large_image"  class="magnify-image img-responsive largeimageuploaded zoom" alt="img"></a>
                     <!--<img src="/public/images/error_bg.jpg" data-magnify-src="/public/images/error_bg.jpg" id="large_<%= result.product_image[0] %>"  class="magnify-image img-responsive largeimageuploaded zoom" alt="img"></a>-->
                     <% } else {%>
                     <a href="#" class="">
@@ -32,7 +32,7 @@
             <h1 class="product-title"><%= result.product_title %></h1>
             <h3 class="product-code">Product Code : <%= result._id %></h3>
             <div class="rating">
-                <p><span><i class="fa fa-star"></i></span> <span><i class="fa fa-star"></i></span> <span><i class="fa fa-star"></i></span> <span><i class="fa fa-star"></i></span> <span><i class="fa fa-star-o "></i></span> <span class="ratingInfo"> <span> / </span> <a data-target="#modal-review" data-toggle="modal"> Write a review</a> </span></p>
+                <p><span><i class="fa fa-star"></i></span> <span><i class="fa fa-star"></i></span> <span><i class="fa fa-star"></i></span> <span><i class="fa fa-star"></i></span> <span><i class="fa fa-star-o "></i></span> <span class="ratingInfo"> <% if(user){ %><span> / </span> <a data-target="#modal-review" data-toggle="modal"> Write a review</a><% } %> </span></p>
             </div>
             <div class="product-price">
                 <span class="price-sales"> $<%= result.product_price %></span> <!--span class="price-standard">$95</span-->
@@ -95,9 +95,9 @@
                     </div>-->
                 </div>
                 <div style="clear:both"></div>
-                <h3 class="incaps"><i class="fa fa fa-check-circle-o color-in"></i> In stock</h3>
+<!--                <h3 class="incaps"><i class="fa fa fa-check-circle-o color-in"></i> In stock</h3>
                 <h3 style="display:none" class="incaps"><i class="fa fa-minus-circle color-out"></i> Out of stock
-                </h3>
+                </h3>-->
                 <h3 class="incaps"><i class="glyphicon glyphicon-lock"></i> Secure online ordering</h3>
             </div>
 
@@ -106,15 +106,18 @@
                 <ul class="nav nav-tabs">
                 <li class="active"><a href="#details" data-toggle="tab">Details</a></li>
                 <li><a href="#size" data-toggle="tab">Size</a></li>
-                <li><a href="#shipping" data-toggle="tab">Shipping</a></li>
+                <li><a href="#review" data-toggle="tab">Reviews</a></li>
+<!--                <li><a href="#shipping" data-toggle="tab">Shipping</a></li>-->
                 </ul>
 
                 <div class="tab-content">
                     <div class="tab-pane active" id="details">
-                        Sed ut eros felis. Vestibulum rutrum imperdiet nunc a interdum. In scelerisque libero ut elit porttitor commodo. Suspendisse laoreet magna nec urna fringilla viverra.<br> 100% Cotton<br>
-                    </div>
+                                <%= result.product_description %></div>
                     <div class="tab-pane" id="size"> 
-                        16" waist<br>
+                        <% for(var productsize = 0; productsize < result.product_size.length; productsize++) { %>
+                        <%= result.product_size[productsize]  %><br>
+                        <% } %>
+<!--                        16" waist<br>
                         34" inseam<br>
                         10.5" front rise<br>
                         8.5" knee<br>
@@ -122,9 +125,38 @@
                         <br>
                         Measurements taken from size 30<br>
                         Model wears size 31. Model is 6'2 <br>
-                        <br>
+                        <br>-->
                     </div>
-                    <div class="tab-pane" id="shipping">
+                    <div class="tab-pane" id="review">
+                       <table>
+                            <colgroup>
+                                <col style="width:50%">
+                                <col>
+                                <!--<col style="width:33%">-->
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Review</th>
+                                    <!--<th>Rating</th>-->
+                                </tr>
+                                <% for(var rev = 0; rev < reviews.length; rev++) { %>
+                                <tr>
+                                    <td><%= reviews[rev].username %></td>
+                                    <td><%= reviews[rev].userReview %></td>
+                                    <!--<td>$15</td>-->
+                                </tr>
+                                <% } %>
+                                
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3">Average</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+<!--                    <div class="tab-pane" id="shipping">
                         <table>
                             <colgroup>
                                 <col style="width:33%">
@@ -154,7 +186,7 @@
                                 </tr>
                             </tfoot>
                         </table>
-                    </div>
+                    </div>-->
                 </div>
 
             </div>
@@ -216,4 +248,34 @@
 
   </div>
 </div>
+
+
+<!--- review modal -->
+<div id="modal-review" class="modal fade reviewmodal" role="dialog">
+  <div class="modal-dialog">
+    <!--<form   method="post"  action="/sendreview" id="review-form" >-->
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add Reviews</h4>
+      </div>
+      <div class="modal-body">
+          <label>Write a review</label>
+          <input type="hidden"  id="productId" name="productId" value="<%= result._id %>"/>
+          <textarea style="width:100%" id="addReview" name="addReview"></textarea>
+                    
+
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="submitReview()">Submit</button>
+      </div>
+    </div>
+    <!--</form>-->
+
+  </div>
+</div>
+<!-- end review modal -->
+
 <!-- end bootstrap modal -->

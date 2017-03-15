@@ -30,7 +30,7 @@
           </ul>
         </li>
         
-        <li class="treeview <% if(active == "add-category"){ %> active <% } %>">
+        <li class="treeview <% if(active == "add-category" || active == "list-category"){ %> active <% } %>">
         <a href="#">
             <i class="fa fa-users"></i> <span> Category Management</span>
             <span class="pull-right-container">
@@ -38,7 +38,7 @@
             </span>
         </a>
         <ul class="treeview-menu">
-            <li <% if(active == "list-category"){ %> class="active" <% } %>><a href="/admin/list-categories"><i class="fa fa-list"></i> List Categories</a></li>-->
+            <li <% if(active == "list-category"){ %> class="active" <% } %>><a href="/admin/list-categories"><i class="fa fa-list"></i> List Categories</a></li>
             <li <% if(active == "add-category"){ %> class="active" <% } %>><a href="/admin/category/new"><i class="fa fa-plus"></i> Add Category</a></li>
         </ul>
         </li>
@@ -96,7 +96,7 @@
             </li>
           </ul>
         </li>
-        <li class="treeview">
+        <li class="treeview <% if(active == "add-points" || active == "list-rproutepoint"){ %> active <% } %>">
           <a href="#">
             <i class="fa fa-flash"></i> <span>Points Management</span>
             <span class="pull-right-container">
@@ -104,26 +104,38 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="/admin/list-rproutespoints"><i class="fa fa-list"></i> List Rproutes points</a></li>
-            <li class="treeview">
+            <li <% if(active == "list-rproutepoint"){ %> class="active" <% } %>><a href="/admin/list-rproutespoints"><i class="fa fa-list"></i> List Rproutes points</a></li>
+            <li <% if(active == "add-points"){ %> class="active" <% } %>>
                 <a href="/admin/add-rproutespoints"><i class="fa fa-plus"></i> Add Rproutes Points</a>
             </li>
           </ul>
         </li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-flash"></i> <span>Events Management</span>
+
+        <li class="treeview <% if(active == "add-eventtype" || active == "list-eventtypes"){ %> active <% } %>">
+        <a href="#">
+            <i class="fa fa-users"></i> <span>Events Management</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="/admin/list-eventtypes"><i class="fa fa-list"></i> List Event Types</a></li>
-            <li class="treeview">
-                <a href="/admin/add-eventtype"><i class="fa fa-plus"></i> Add Event Type</a>
-            </li>
-          </ul>
+        </a>
+        <ul class="treeview-menu">
+            <li <% if(active == "list-eventtypes"){ %> class="active" <% } %>><a href="/admin/list-eventtypes"><i class="fa fa-list"></i> List Event Types</a></li>
+            <li <% if(active == "add-eventtype"){ %> class="active" <% } %>><a href="/admin/add-eventtype"><i class="fa fa-plus"></i>  Add Event Type</a></li>
+        </ul>
         </li>
+        
+        <li class="treeview <% if(active == "list-reviews"){ %> active <% } %>">
+        <a href="#">
+            <i class="fa fa-users"></i> <span>Reviews</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li <% if(active == "list-reviews"){ %> class="active" <% } %>><a href="/admin/list-reviews"><i class="fa fa-list"></i>List Reviews</a></li>
+        </ul>
+        </li>
+        
 <!--        <li class="treeview">
           <a href="#">
             <i class="fa fa-share"></i> <span>Multilevel</span>

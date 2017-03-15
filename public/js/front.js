@@ -419,7 +419,20 @@ jQuery('#change_password_form').validate({
          }
     });
    
-   
+   /* review form */
+   jQuery("#review-form").validate({
+        rules: {
+            addReview: {
+                required: true,
+                
+            },
+           
+        },
+        messages: {
+           
+         }
+       
+    });
    
    
    

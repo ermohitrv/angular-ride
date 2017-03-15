@@ -43,13 +43,37 @@ $(document).on('click','.smallimageuploaded',function(){
 $(document).on('click','.zoom',function(){
    var largeimgsrc = document.getElementById('large_image').src;
    
-   $('.zoom').magnify();
+   //$('.zoom').magnify();
 //   $('.zoom').magnify({
 //    speed: 200,
 //    src: largeimgsrc,
 //   
 //  });
-   //angular.element(this).scope().imageResize(largeimgsrc);
+    angular.element(this).scope().imageResize(largeimgsrc);
 });
+
+function submitReview(){
+    
+    var reviewdesc = $('#addReview').val();
+    var productId  = $('#productId').val();
+    
+     jQuery.ajax({
+        type  : "POST",
+        url   : "/sendreview",
+        data  : {'reviewdesc' : reviewdesc,'productId':productId},
+        //timeout: 3000,
+        success: function(data){
+            console.log(data.status);
+            if(data.status === 'success'){
+                $('#modal-review').hide();
+            }
+        },
+        error : function(err){
+            //alert( 'err: '+JSON.stringify(err) );           
+            //$(".result_del").html('<div class="alert alert-success">User Deleted Successfully!</div>');
+        }
+    });
+}
+
 
 </script>
