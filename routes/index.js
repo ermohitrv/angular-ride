@@ -1210,7 +1210,7 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
     if(eventmonth != "" && eventmonth != undefined){
         if(eventmonth !== 'all'){
             
-            Events.find({ "$where": "this.startDate.getMonth() === "+eventmonth }, function (err, eventsList) {
+            Events.find({ "$where": "this.startDate.getMonth() === "+eventmonth ,'eventLocationType':'public'}, function (err, eventsList) {
             if (err) {
                 
                 res.json({
@@ -1278,7 +1278,7 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
         
 
 
-           Events.find({}, function (err, eventsList) {
+           Events.find({'eventLocationType':'public'}, function (err, eventsList) {
             if (err) {
                 
                 res.json({
