@@ -996,7 +996,7 @@ router.get('/create-event', csrfProtection, middleware.isLoggedIn, function (req
 /* Save event */
 var cpUploadinserevent = upload.fields([{name: 'eventImage', maxCount: 1}]);
 router.post('/save-event',cpUploadinserevent, parseForm, csrfProtection, middleware.isLoggedIn, function (req, res){
-    
+  
     var imagepath="";
     if(req.files['eventImage']){
         var imagearray = req.files['eventImage'];
@@ -1016,6 +1016,7 @@ router.post('/save-event',cpUploadinserevent, parseForm, csrfProtection, middlew
                 objEvents.eventName     = req.body.eventName;
                 objEvents.eventType     = req.body.eventType;
                 objEvents.eventLocation = req.body.eventLocation;
+                objEvents.eventLocationType = req.body.locationtype;
                 objEvents.eventHost     = req.body.eventHost;
                 objEvents.description   = req.body.eventDescription;
                 objEvents.startDate     = req.body.eventstartDate;
@@ -1149,6 +1150,7 @@ router.post('/update-event', cpUploadupdateevent , parseForm, csrfProtection, mi
                 eventinfo.eventName     = req.body.eventName;
                 eventinfo.eventType     = req.body.eventType;
                 eventinfo.eventLocation = req.body.eventLocation;
+                 eventinfo.eventLocationType = req.body.locationtype
                 eventinfo.eventHost     = req.body.eventHost;
                 eventinfo.description   = req.body.eventDescription;
                 eventinfo.startDate     = req.body.eventstartDate;

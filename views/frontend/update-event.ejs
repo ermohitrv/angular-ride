@@ -82,9 +82,9 @@
                                    
                                     </div>
                                     <div class="col-md-6 col-xs-12">
-                                        <label>Host</label>
-                                        <input  type="text" placeholder="Please enter host" class="form-control" name="eventHost" value="<%= eventdata.eventHost %>">
-                                       
+                                        <label>Location Type</label><br/>
+                                        <input type="radio" name="locationtype" value="public" <% if(eventdata.eventLocationType == "public"){ %>checked<% } %>>Public&nbsp;&nbsp;
+                                        <input type="radio" name="locationtype" value="private" <% if(eventdata.eventLocationType == "private"){ %>checked<% } %>>Private<br>                                       
                                     </div>
                                 </div>
                                 
@@ -96,9 +96,14 @@
                                    
                                 </div>
                                 <div class="form-group">
-                                    <div class="col-md-12 col-xs-12">
+                                    <div class="col-md-6 col-xs-12">
                                         <label>Event Image</label>
                                         <input  type="file"  class="form-control" name="eventImage" />
+                                    </div>
+                                    <div class="col-md-6 col-xs-12">
+                                        <label>Host</label>
+                                        <input  type="text" placeholder="Please enter host" class="form-control" name="eventHost" value="<%= eventdata.eventHost %>">
+                                       
                                     </div>
                                    
                                 </div>

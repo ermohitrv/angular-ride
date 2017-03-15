@@ -5,6 +5,7 @@ var eventSchema = Schema({
     eventName       :{type: String},
     eventType       :{type: String},
     eventLocation   :{type: String},
+    eventLocationType :{type: String},
     eventHost       :{type: String},
     description     :{type: String},
     startDate       :{type: Date},
