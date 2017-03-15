@@ -612,6 +612,19 @@ app.controller('eventController',['$scope', '$http', function ($scope, $http, $l
         });
     };
     
+    $scope.sendInvitation = function(){
+          alert("fdfsfs");
+//        var config = {
+//            headers : {'Accept' : 'application/json'}
+//        };
+//        $http.post('/product/get-events-list',config).success(function(response, status, headers, config){
+//            console.log(response);
+//            $scope.eventslist = response;
+//        }).error(function(){
+//            console.log('Oops! Error listing get-brands-list on search page');
+//        });
+    };
+    
     
 }]);
 

@@ -1239,8 +1239,8 @@ router.post('/start-route', function (req, res) {
 
         
         if(email != "" && email != undefined){
-           
-            RpRoutes.findOne({ 'email' :  { $regex : new RegExp(email, "i") },'isRouteCompleted': 'CREATED' }, function(err, getrproutes) {
+        RpRoutes.find({ $and: [{ 'email': { $regex : new RegExp(email, "i")} }],$or :[{ 'isRouteCompleted': 'CREATED' },{'isRouteCompleted': 'ONGOING'}]}, function(err, getrproutes){
+            //RpRoutes.findOne({ 'email' :  { $regex : new RegExp(email, "i") },'isRouteCompleted': 'CREATED' }, function(err, getrproutes) {
             // if there are any errors, return the error
             if (err) {
                     console.log("route error caught 1");
