@@ -1254,6 +1254,7 @@ router.post('/start-route', function (req, res) {
             else {
                  
                 if(getrproutes){   // if user exist with that email
+                    console.log("starting location : "+getrproutes.startinglocationLat);
                     var currentlat = currentlocationLat;
                     var startlat = getrproutes.startinglocationLat;
                     var currentlon = currentlocationLng;
