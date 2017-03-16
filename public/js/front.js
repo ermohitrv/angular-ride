@@ -629,6 +629,17 @@ function show_notification(msg, type, reload_page){
 //    .appendTo( ul );
 //    };
 
+    $( "#search-box-frnd" ).autocomplete({
+                        source: '/autocomplete-search-friend',
+
+        }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+                var profilelink = "/profile/"+item.username;
+                ul.addClass('search-friend-list');
+                return $( "<li>" )
+                .append( '<a href='+profilelink+'><span>'+item.username+'</span></a>' )
+                .appendTo( ul );
+    };
+        
 function joinevent(eventid,eventname){
     
     if(localUserUsername != ""){

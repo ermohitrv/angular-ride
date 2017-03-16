@@ -1,5 +1,5 @@
 <% layout('layout') -%>
-<section id="profile"  data-ng-controller="eventController">
+<section id="profile"  data-ng-controller="friendsController">
    <% include partial/profile-nav.ejs %>
     <div class="container update-profile-page">
       <div id="main">
@@ -17,12 +17,21 @@
                 </div>
                 
                   <!-- left column -->
-                  <div class="col-md-1">
+                  <div class="col-md-3">
+                    <ul class="list-group ">
+                        <li id="new-friend-request-count"  class="list-group-item text-left">
+                            <span><strong><a href="javascript:void(0)" onclick="shownewrequests()">New Request <span class="badge"></span></a></strong></span>
+                        </li>
+                        
+                        <li class="list-group-item text-left">
+                            <span><strong><a href="javascript:void(0)" onclick="showfriends()">Friends</a></strong></span>
+                        </li>
 
+                    </ul>
                   </div>
                   
                   <!-- event form column -->
-                  <div class="col-md-10 personal-info">
+                  <div class="col-md-9 personal-info">
                       <div class="result_del"></div>
                     <% if (message.length > 0) { %>
                         <div class="alert alert-danger"><%= message %></div>
@@ -30,17 +39,11 @@
                     <% if (messageSuccess.length > 0) { %>
                         <div class="alert alert-success"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a><%= messageSuccess %></div>
                     <% } %>
-                    <form class="navbar-form" id="searchform" role="search" method="get" action="/searchFriends">
-                        <div class="input-group">
-                            <input  class="form-control search-product" placeholder="Search" name="search" id="search-box">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-default" id="searchfrndbtn" type="submit" ><i class="glyphicon glyphicon-search"></i></button>
-                                </div>
-                        </div>
-                    </form>
-                    <div class="panel panel-info" >
+                   
+                     
+                    <div id="friendrequests" class="panel panel-info" ng-init="getFriendrequestsList()" style="display:block">
                         
-                  <div class="row">
+                    <div class="row">
                                 <div class="col-sm-12">
                                     <h3>
                                         <div class="pull-left"></div>
@@ -51,14 +54,74 @@
                                     <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
                                         <thead>
                                             <tr role="row">
-                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Friend Name</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Name</th>
+                                           
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Action</th>
                                             </tr>
                                         </thead>
                                        
                                         <tbody>
-                                            
-                                            
+                                            <tr data-ng-if="friendrequestslist.length > 0" data-ng-repeat="friendrequests in friendrequestslist" id="{{ friends._id }}" role="row" class="odd">
+                                                
+                                                <td data-ng-bind="friendrequests.friendRequestSentBy"></td>
+                                               
+                                               
+                                                <td>
+                                                    <a href="/friendrequestaction?friendstatus=accept&friendrequestsentby={{friendrequests.friendRequestSentBy}}" class="btn btn-primary">Accept</a>
+                                                    <a href="/friendrequestaction?friendstatus=reject&friendrequestsentby={{friendrequests.friendRequestSentBy}}" class="btn btn-primary">Reject</a>
+
+                                                </td>
+                                            </tr>
+                                            <tr  data-ng-if="friendrequestslist.length <= 0">
+                                                <td colspan="2" style="text-align: center">No results found</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+
+                    </div>
+                    
+                    <div id="friends" class="panel panel-info" ng-init="getFriendsList()" style="display:none">
+                        
+                    <div class="row">
+                                <div class="col-sm-12">
+                                    <h3>
+                                        <div class="pull-left"></div>
+                                        <!--<div class="pull-right"><input data-ng-model="search_user.eventName" type="text" class="form-control" placeholder="Search event name"></div>-->
+                                        <div class="clearfix"></div>
+                                    </h3>
+                               
+                                    <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
+                                        <thead>
+                                            <tr role="row">
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Name</th>
+                                           
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Action</th>
+                                            </tr>
+                                        </thead>
+                                       
+                                        <tbody>
+                                            <tr data-ng-if="friendslist.length > 0" data-ng-repeat="friends in friendslist" id="{{ friends._id }}" role="row" class="odd">
+                                                
+                                                <!--<td>{{friends.friendRequestSentBy}}</td>-->
+                                               
+                                                <td>
+                                                    {{friends.friendRequestSentBy == '<%= user.local.username %>' ? friends.friendRequestSentTo : friends.friendRequestSentTo == '<%= user.local.username %>' ? friends.friendRequestSentBy : friends.friendRequestSentBy}}
+                                                
+                                                </td>
+                                                
+                                               
+                                                <td>
+                                                    <a href="javascript:void(0)" class="btn btn-primary" ng-click="unFriendfromlist(friends.friendRequestSentBy,friends.friendRequestSentTo)">UnFriend</a>
+
+
+                                                </td>
+                                            </tr>
+                                            <tr  data-ng-if="friendslist.length <= 0">
+                                                <td colspan="2" style="text-align: center">No results found</td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -73,3 +136,18 @@
       </div>
     </div>
 </section>
+<script>
+    
+    function shownewrequests(){
+        $('#friendrequests').css('display','block');
+        $('#friends').css('display','none');
+    }
+    
+    function showfriends(){
+        $('#friendrequests').css('display','none');
+        $('#friends').css('display','block');
+    }
+    
+    
+    
+</script>    

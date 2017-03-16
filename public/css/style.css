@@ -2345,6 +2345,10 @@ li.btn.btn-xs.btn-info {
     margin-top: 5px;
 }
 
+input#search-box-frnd {
+    top: 5px;
+}
+.search-friend-list { max-height: calc(100% - 74px); overflow-y: auto; }
 /*end friends page */
 
 /* product detail page */

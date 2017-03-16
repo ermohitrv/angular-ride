@@ -4,6 +4,16 @@
       <div class="overlay">
          <div class="container">
             <ul class="nav navbar-nav navbar-right top-menu">
+                 <li> 
+                    <form class="navbar-form" id="searchfriends" role="search" method="get" action="/searchFriends">
+                        <div class="input-group">
+                            <input  class="form-control search-friend" placeholder="Search Friends" name="searchfrnd" id="search-box-frnd">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" id="searchfrndbtn" type="submit" ><i class="glyphicon glyphicon-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </li>
                <li id="header_inbox_bar" class="dropdown">
                   <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                   <i class="fa fa-envelope-o" data-original-title="" title=""></i>
@@ -58,6 +68,7 @@
                      <li><a href="/profile"><i class="fa fa-user" data-original-title="" title=""></i> Profile</a></li>
                      <li><a href="/update-profile"><i class=" fa fa-suitcase" data-original-title="" title="Update Profile"></i>Update Profile</a></li>
                      <li><a href="/list-events"><i class="fa fa-user" data-original-title="" title=""></i> List Events</a></li>
+                     <li><a href="/friends"><i class="fa fa-user" data-original-title="" title=""></i>Friends</a></li>
                      <li><a href="/logout"><i class="fa fa-key" data-original-title="" title=""></i> Log Out</a></li>
                   </ul>
                </li>

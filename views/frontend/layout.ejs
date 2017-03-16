@@ -4,7 +4,7 @@
 <% include partial/head.ejs %>
 </head>
 <body <% if(title == "Profile" || title == "Update Profile" ){ %> class="profile" <% } %> id="motorAppBody" data-ng-controller="menuController">
-    <% if(title == "Profile" || title == "Update Profile" || title == "Create Event" || title == "List Events" ||  title == "Update Event"){ %>
+    <% if(title == "Profile" || title == "Update Profile" || title == "Create Event" || title == "List Events" ||  title == "Update Event" ||  title == "User Profile" || title == "friends"){ %>
         <% include partial/header-profile.ejs %>
     <% }else{ %>
         <% include partial/header.ejs %>

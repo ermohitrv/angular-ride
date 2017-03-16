@@ -22,6 +22,7 @@ var Events = require('../models/events');
 var EventTypes = require('../models/eventtypes');
 var Joinevents = require('../models/joinevents');
 var Reviews = require('../models/reviews');
+var Friends = require('../models/friends');
 var nodemailer      = require("nodemailer");
 var moment      = require("moment");
 var multer      = require('multer');
@@ -76,16 +77,16 @@ router.get('/profile', middleware.isLoggedIn, function (req, res){
 });
 
 /* Profile route to render logged in user to profile area */
-router.get('/profile/:username', function (req, res){
-    var username = req.body.username;
-    console.log('username: '+username);
-    User.findOne({'local.username': new RegExp(["^", username, "$"].join(""), "i")}, function (err, user) {
+router.get('/profile/:username', middleware.isLoggedIn,function (req, res){
+    var profileusername = req.params.username;
+    console.log('username: '+profileusername);
+    User.findOne({'local.username': new RegExp(["^", profileusername, "$"].join(""), "i")}, function (err, userprofile) {
         if (err) {
             res.redirect('/');
         }
         res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-        //res.render('user-profile.ejs', { user: user, title: username+' Profile' });
-        res.send(user);
+        res.render('user-profile.ejs', { user: req.user, userprofile: userprofile, title:'User Profile' });
+        //res.send(user);
     });
 });
 
@@ -1407,6 +1408,186 @@ router.post('/sendreview',  function (req, res){
                 
             });
             
+});
+
+
+router.get('/autocomplete-search-friend',middleware.isLoggedIn, function(req, res){
+  var term = req.query.term;
+ 
+  
+   User.find({$or :[{ 'local.firstName': new RegExp(term, 'i') }, {'local.lastName': new RegExp(term, 'i')},{'local.email': new RegExp(term, 'i')},{'local.username': new RegExp(term, 'i')}]}, function(err, users){
+
+  // Products.find({ 'product_title':  new RegExp(term, 'i')}, function(err, products){
+    var usernamesarray = [];
+    if(users.length > 0){
+      users.forEach(function(users){
+         
+        //usernames.push(user.local.username);
+        var dataObj = { 'username':  users.local.username};
+        usernamesarray.push(dataObj);
+      });
+    }
+    
+    
+    res.json(usernamesarray);
+  });
+});
+
+router.post('/sendrequest',middleware.isLoggedIn, function(req, res){
+  var profileusername = req.body.params.profileusername;
+  console.log("profileusername: "+profileusername);
+  //res.send(true);
+                var objFriends                 = new Friends();
+                objFriends.friendRequestSentTo = req.body.params.profileusername;
+                objFriends.friendRequestSentBy = req.user.local.username;
+                
+
+                objFriends.save(function (err) {
+                    if (err) {
+                         
+                        res.status(200).json({"status": "error"});
+                        
+                    } else {
+                        
+                        res.status(200).json({"status": "success"});  
+                          
+                    }
+                });
+ 
+  
+});
+
+router.post('/friendstatus',middleware.isLoggedIn, function(req, res){
+    var profileusername = req.body.params.profileusername;
+    
+    Friends.findOne({$and : [{ $or : [ { 'friendRequestSentTo' : req.user.local.username }, { 'friendRequestSentBy' : req.user.local.username} ] },{ $or : [ { 'friendRequestSentTo' : profileusername }, { 'friendRequestSentBy' : profileusername}]}]}, function(err, friendinfo){
+
+    //Friends.findOne({'friendRequestSentBy': req.user.local.username, 'friendRequestSentTo' : profileusername }, function (err, friendinfo) {
+        
+        if(friendinfo){
+            res.json(friendinfo);
+        }else{
+            res.json({});
+        }
+       
+    });
+
+});
+
+router.get('/friends',middleware.isLoggedIn, function(req, res){
+   
+
+        res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+        res.render('friends', {
+                    title: 'friends', 
+                    user: req.user,
+                    session: req.session,
+                    message: '', 
+                    messageSuccess: '',
+                    page_url: globalConfig.base_url
+        });
+
+
+});
+
+router.post('/get-friendrequests-list',middleware.isLoggedIn, function(req, res){
+   
+    Friends.find({'friendRequestSentTo' : req.user.local.username , 'friendRequestApprovalStatus':'pending'}, function (err, friendsdata) {
+       
+         if(friendsdata){
+            res.json(friendsdata);
+        }else{
+            res.json({});
+        }
+    });
+
+});
+
+router.get('/friendrequestaction',middleware.isLoggedIn, function(req, res){
+   
+
+        var friendrequestsentby = req.query.friendrequestsentby;
+        var friendrequeststatus        = req.query.friendstatus;
+        
+    if(friendrequestsentby != "" && friendrequestsentby != undefined && friendrequeststatus != "" && friendrequeststatus != undefined){
+        Friends.findOne({'friendRequestSentTo' : req.user.local.username , 'friendRequestSentBy' : friendrequestsentby ,'friendRequestApprovalStatus':'pending'}, function (err, friendrequest){
+            if(friendrequest){
+                if(friendrequeststatus == 'accept'){
+                    Friends.update({'friendRequestSentTo' : req.user.local.username , 'friendRequestSentBy' : friendrequestsentby ,'friendRequestApprovalStatus':'pending'},
+                        { $set: { 'friendRequestApprovalStatus': friendrequeststatus } },
+                        { multi: true },
+
+                        function(err, results){
+                            console.log(results);
+                        }
+                    );
+                } 
+                else if(friendrequeststatus == 'reject'){
+                    Friends.remove({'friendRequestSentTo' : req.user.local.username ,'friendRequestSentBy': friendrequestsentby, 'friendRequestApprovalStatus':'pending'}, function (err, friendsdata) {
+       
+                            if(err){
+                                 console.log("error");
+                           }else{
+                                 console.log("removed");
+                           }
+                    });
+                }
+        
+                res.redirect('/friends');
+            }else{
+                res.redirect('/friends');
+            }
+        });
+    }
+    else{
+         res.redirect('/friends');
+    }
+});
+
+//router.post('/unfriend',middleware.isLoggedIn, function(req, res){
+//   
+//    var profileusername = req.body.params.profileusername;
+//    
+//    Friends.remove({'friendRequestSentTo' : profileusername ,'friendRequestSentBy': req.user.local.username, 'friendRequestApprovalStatus':'accept'}, function (err, friendsdata) {
+//       
+//         if(err){
+//             res.status(200).json({"status": "error"}); 
+//        }else{
+//             res.status(200).json({"status": "success"}); 
+//        }
+//    });
+//
+//});
+
+router.post('/get-friends-list',middleware.isLoggedIn, function(req, res){
+   
+    Friends.find({$and : [{ $or : [ { 'friendRequestSentTo' : req.user.local.username }, { 'friendRequestSentBy' : req.user.local.username} ] },{ $or : [ { 'friendRequestApprovalStatus' : 'accept'}]}]}, function(err, friendsdata){
+
+       
+         if(friendsdata){
+            res.json(friendsdata);
+        }else{
+            res.json({});
+        }
+    });
+
+});
+
+router.post('/unfriend',middleware.isLoggedIn, function(req, res){
+   
+    var sentBy = req.body.params.sentBy;
+    var sentTo = req.body.params.sentTo;
+   
+     
+    Friends.remove({$and : [{ $or : [ { 'friendRequestSentTo' : sentBy }, { 'friendRequestSentBy' : sentBy} ] },{ $or : [ { 'friendRequestSentTo' : sentTo }, { 'friendRequestSentBy' : sentTo}]},{ $or : [ { 'friendRequestApprovalStatus' : 'accept'}]}]}, function(err, friendsdata){
+          
+         if(err){
+             res.status(200).json({"status": "error"}); 
+        }else{
+             res.status(200).json({"status": "success"}); 
+        }
+    });
+
 });
 
 module.exports = router;

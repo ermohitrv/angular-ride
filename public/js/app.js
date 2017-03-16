@@ -137,7 +137,8 @@ app.controller('menuController',['$scope', '$http', function ($scope, $http) {
                        return $( "<li>" )
                       .append( '<a href='+productlink+'><span>'+item.product_title+'</span></a>' )
                        .appendTo( ul );
-                    };
+                };
+                    
         });
         
         $scope.latestEvents = function(){
@@ -151,6 +152,8 @@ app.controller('menuController',['$scope', '$http', function ($scope, $http) {
                console.log('Oops! Error occur'+err);
             }); 
        };
+       
+       
 
 }]);
 
@@ -172,6 +175,9 @@ app.controller('profileController',['$scope', '$http', function ($scope, $http) 
            console.log('Oops! Error occur'+err);
         });  
     };
+    
+   
+    
 }]);
 
 /********************** product controller  **********************/
@@ -625,6 +631,123 @@ app.controller('eventController',['$scope', '$http', function ($scope, $http, $l
 //        });
     };
     
+    
+}]);
+
+
+app.controller('friendsController',['$scope', '$http', function ($scope, $http, $location, $routeParams) {
+     /* function to send friend request */
+    $scope.sendRequest = function(profileusername){
+       var data = { 
+            profileusername: profileusername, 
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/sendrequest',config).success(function (response, status, headers, config){
+           
+            console.log(response);
+            if(response.status == "success"){
+                //$('#addfriend').css('display','none');
+                //$('#requestsent').css('display','block');
+                $scope.friendStatus(profileusername);
+            }
+            
+        }).error(function(err){
+           console.log('Oops! Error occur'+err);
+        });  
+    };
+    
+    $scope.friendStatus = function(profileusername){
+      
+       var data = { 
+            profileusername: profileusername, 
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/friendstatus',config).success(function (response, status, headers, config){
+            console.log(response);
+            $scope.friendstatus = response;
+           
+            
+        }).error(function(err){
+           console.log('Oops! Error occur'+err);
+        });  
+    };
+    
+    $scope.getFriendrequestsList = function(){
+        
+        var config = {
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/get-friendrequests-list',config).success(function(response, status, headers, config){
+            console.log(response);
+            $scope.friendrequestslist = response;
+        }).error(function(){
+            console.log('Oops! Error listing get-friends-list on friends page');
+        });
+    };
+    
+    $scope.unFriendprofile = function(profileusername,anotherusername){
+        var data = { 
+            sentBy: profileusername, 
+            sentTo : anotherusername, 
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/unfriend',config).success(function (response, status, headers, config){
+           
+            console.log(response);
+            if(response.status == "success"){
+            
+                $scope.friendStatus(profileusername);
+            }
+            
+        }).error(function(err){
+           console.log('Oops! Error occur'+err);
+        });  
+    };
+    
+    $scope.getFriendsList = function(){
+        
+        var config = {
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/get-friends-list',config).success(function(response, status, headers, config){
+            console.log(response);
+            $scope.friendslist = response;
+        }).error(function(){
+            console.log('Oops! Error listing get-friends-list on friends page');
+        });
+    };
+    
+    $scope.unFriendfromlist = function(sentBy,sentTo){
+        
+       var data = { 
+            sentBy: sentBy, 
+            sentTo : sentTo, 
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/unfriend',config).success(function (response, status, headers, config){
+           
+            console.log(response);
+            if(response.status == "success"){
+            
+                $scope.getFriendsList();
+            }
+            
+        }).error(function(err){
+           console.log('Oops! Error occur'+err);
+        });  
+    };
     
 }]);
 
