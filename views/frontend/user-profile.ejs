@@ -10,11 +10,10 @@
             <li><a href="/">Home</a></li>
             <li class="active">Profile</li>
             <li class="active"><%= userprofile.local.firstName+' '+userprofile.local.lastName %></li>
-            <li class="active"  id="addfriend"  data-ng-if="friendstatus.friendRequestApprovalStatus != 'accept' && friendstatus.friendRequestApprovalStatus != 'pending'"><a href="javascript::void;" ng-click="sendRequest('<%= userprofile.local.username %>')">Add Friend</a></li>
-            <li class="active"  id="requestsent"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending'"><a href="#">Request Sent</a></li>         
-            <li class="active"  id="friends" data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept'"><a href="#">Friends</a></li>
-            <!--<li class="active"  id="friends" data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept'"><a href="javascript:void(0)" ng-click="unFriend('<%= userprofile.local.username %>')">UnFriend</a></li>-->
-            <li class="active"  id="friends" data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept'"><a href="javascript:void(0)" ng-click="unFriendprofile('<%= userprofile.local.username %>','<%= user.local.username %>')">UnFriend</a></li>
+            <li class="active"  id="addfriend"  data-ng-if="friendstatus.friendRequestApprovalStatus != 'accept' && friendstatus.friendRequestApprovalStatus != 'pending'"><a href="javascript::void;" ng-click="sendRequest('<%= userprofile.local.username %>')" class="btn btn-primary">Add Friend</a></li>
+            <li class="active"  id="requestsent"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending'"><a href="#" class="btn btn-primary" >Request Sent</a></li>         
+            <li class="active"  id="friends" ng-mouseenter="changeFriendButtonText('enter')" ng-mouseleave="changeFriendButtonText('leave')" data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept'"><a href="#" ng-click="unFriendprofile('<%= userprofile.local.username %>','<%= user.local.username %>')"  class="btn btn-success" id="friendtext">Friends</a></li>
+            <!--<li class="active"  id="friends"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept'"><a class="btn btn-primary" href="javascript:void(0)" ng-click="unFriendprofile('<%= userprofile.local.username %>','<%= user.local.username %>')">UnFriend</a></li>-->
 
          </ol>
          <!-- end:breadcrumb -->   
@@ -103,8 +102,8 @@
                   <div class="panel-body">
                      <div class="text-center" id="author">
                         <img src="<%= userprofile.local.profileImage %>">
-                        <h3><%= user.local.firstName+' '+user.local.lastName %></h3>
-                        <small class="label label-warning"><%= user.local.locationCountry %></small>
+                        <h3><%= userprofile.local.firstName+' '+userprofile.local.lastName %></h3>
+                        <small class="label label-warning"><%= userprofile.local.locationCountry %></small>
                         <p>Aku kie sing sok ngedolke omah-omah kae, yo iso di omongke makelar ngono sih. Tapi makelar nek payu ne akeh yo dadi sugih bro. Tenanan ra ngapusi.</p>
                         <p class="sosmed-author">
                            <a href="#"><i class="fa fa-facebook" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook"></i></a>

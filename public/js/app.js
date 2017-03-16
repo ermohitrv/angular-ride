@@ -749,6 +749,17 @@ app.controller('friendsController',['$scope', '$http', function ($scope, $http, 
         });  
     };
     
+    $scope.changeFriendButtonText = function(mouseText){
+        
+        if(mouseText == "enter"){
+           $('#friendtext').text("Unfriend");         
+        }
+        
+        if(mouseText == "leave"){
+            $('#friendtext').text("Friends");
+        }
+    };
+    
 }]);
 
 app.directive('bindUnsafeHtml', ['$compile', function ($compile) {
