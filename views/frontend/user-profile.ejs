@@ -10,9 +10,9 @@
             <li><a href="/">Home</a></li>
             <li class="active">Profile</li>
             <li class="active"><%= userprofile.local.firstName+' '+userprofile.local.lastName %></li>
-            <li class="active"  id="addfriend"  data-ng-if="friendstatus.friendRequestApprovalStatus != 'accept' && friendstatus.friendRequestApprovalStatus != 'pending'"><a href="javascript::void;" ng-click="sendRequest('<%= userprofile.local.username %>')" class="btn btn-primary">Add Friend</a></li>
-            <li class="active"  id="requestsent"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending'"><a href="#" class="btn btn-primary" >Request Sent</a></li>         
-            <li class="active"  id="friends" ng-mouseenter="changeFriendButtonText('enter')" ng-mouseleave="changeFriendButtonText('leave')" data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept'"><a href="#" ng-click="unFriendprofile('<%= userprofile.local.username %>','<%= user.local.username %>')"  class="btn btn-success" id="friendtext">Friends</a></li>
+            <li class="active"  id="addfriend"  data-ng-if="friendstatus.friendRequestApprovalStatus != 'accept' && friendstatus.friendRequestApprovalStatus != 'pending'"><a href="javascript:void(0);" ng-click="sendRequest('<%= userprofile.local.username %>')" class="btn btn-primary">Add Friend</a></li>
+            <li class="active"  id="requestsent"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending'"><a href="javascript:void(0)" class="btn btn-primary" >Request Sent</a></li>         
+            <li class="active"  id="friends" ng-mouseenter="changeFriendButtonText('enter')" ng-mouseleave="changeFriendButtonText('leave')" data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept'"><a href="javascript:void(0)" ng-click="unFriendprofile('<%= userprofile.local.username %>','<%= user.local.username %>')"  class="btn btn-success" id="friendtext">Friends</a></li>
             <!--<li class="active"  id="friends"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept'"><a class="btn btn-primary" href="javascript:void(0)" ng-click="unFriendprofile('<%= userprofile.local.username %>','<%= user.local.username %>')">UnFriend</a></li>-->
 
          </ol>
