@@ -2353,6 +2353,9 @@ input#search-box-frnd {
 .friendsearchbox{
     margin-top:-10px;
 }
+.friendsul{
+    list-style: none;
+}
 /*end friends page */
 
 /* product detail page */

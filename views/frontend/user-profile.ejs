@@ -10,10 +10,9 @@
             <li><a href="/">Home</a></li>
             <li class="active">Profile</li>
             <li class="active"><%= userprofile.local.firstName+' '+userprofile.local.lastName %></li>
-            <li class="active"  id="addfriend"  data-ng-if="friendstatus.friendRequestApprovalStatus != 'accept' && friendstatus.friendRequestApprovalStatus != 'pending'"><a href="javascript:void(0);" ng-click="sendRequest('<%= userprofile.local.username %>')" class="btn btn-primary">Add Friend</a></li>
+<!--            <li class="active"  id="addfriend"  data-ng-if="friendstatus.friendRequestApprovalStatus != 'accept' && friendstatus.friendRequestApprovalStatus != 'pending'"><a href="javascript:void(0);" ng-click="sendRequest('<%= userprofile.local.username %>')" class="btn btn-primary">Add Friend</a></li>
             <li class="active"  id="requestsent"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending'"><a href="javascript:void(0)" class="btn btn-primary" >Request Sent</a></li>         
-            <li class="active"  id="friends" ng-mouseenter="changeFriendButtonText('enter')" ng-mouseleave="changeFriendButtonText('leave')" data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept'"><a href="javascript:void(0)" ng-click="unFriendprofile('<%= userprofile.local.username %>','<%= user.local.username %>')"  class="btn btn-success" id="friendtext">Friends</a></li>
-            <!--<li class="active"  id="friends"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept'"><a class="btn btn-primary" href="javascript:void(0)" ng-click="unFriendprofile('<%= userprofile.local.username %>','<%= user.local.username %>')">UnFriend</a></li>-->
+            <li class="active"  id="friends" ng-mouseenter="changeFriendButtonText('enter')" ng-mouseleave="changeFriendButtonText('leave')" data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept'"><a href="javascript:void(0)" ng-click="unFriendprofile('<%= userprofile.local.username %>','<%= user.local.username %>')"  class="btn btn-success" id="friendtext">Friends</a></li>-->
 
          </ol>
          <!-- end:breadcrumb -->   
@@ -92,6 +91,17 @@
             <div class="col-lg-4">
                <!-- start:user info -->
                <div class="panel panel-default">
+                    <div class="panel-heading">
+                     <header class="panel-title">
+                        <div class="text-center">
+                          
+                        <li class="active friendsul"  id="addfriend"  data-ng-if="friendstatus.friendRequestApprovalStatus != 'accept' && friendstatus.friendRequestApprovalStatus != 'pending'"><a href="javascript:void(0);" ng-click="sendRequest('<%= userprofile.local.username %>')" class="btn btn-primary">Add Friend</a></li>
+                        <li class="active friendsul"  id="requestsent"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending'"><a href="javascript:void(0)" class="btn btn-primary" >Request Sent</a></li>         
+                        <li class="active friendsul"  id="friends" ng-mouseenter="changeFriendButtonText('enter')" ng-mouseleave="changeFriendButtonText('leave')" data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept'"><a href="javascript:void(0)" ng-click="unFriendprofile('<%= userprofile.local.username %>','<%= user.local.username %>')"  class="btn btn-success" id="friendtext">Friends</a></li>
+                       
+                        </div>
+                     </header>
+                    </div>
                   <div class="panel-heading">
                      <header class="panel-title">
                         <div class="text-center">
