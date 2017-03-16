@@ -1255,7 +1255,7 @@ router.post('/start-route', function (req, res) {
             else {
                  
                 if(getrproutes){   // if user exist with that email
-                    console.log(getrproutes);
+                    
                     console.log("starting location : "+getrproutes.startinglocationLat);
                     var currentlat = currentlocationLat;
                     var startlat = getrproutes.startinglocationLat;
@@ -1703,6 +1703,8 @@ router.post('/create-event', function (req, res) {
         var imagePath      = req.body.imagePath;
         var startTime      = req.body.startTime;
         var endTime        = req.body.endTime;
+        var locationLat    = req.body.locationLat;
+        var locationLong    = req.body.locationLong;
       
       
       
@@ -1726,6 +1728,8 @@ router.post('/create-event', function (req, res) {
                 objEvents.eventImage    = imagePath;
                 objEvents.startTime     = startTime;
                 objEvents.endTime       = endTime;
+                objEvents.eventlocationLat  = locationLat;
+                objEvents.eventlocationLong = locationLong;
        
                 objEvents.save(function (err,eventinfo) {
                     if (err){
@@ -1748,6 +1752,8 @@ router.post('/create-event', function (req, res) {
                                     eventName       :eventName,
                                     eventType       :eventType,
                                     eventLocation   :location,
+                                    locationlat     :locationLat,
+                                    locationlong    :locationLong,
                                     eventHost       :host,
                                     startDate       :startDate,
                                     endDate         :endDate,
@@ -1796,6 +1802,8 @@ router.post('/update-event', function (req, res) {
         var imagePath      = req.body.imagePath;
         var startTime      = req.body.startTime;
         var endTime        = req.body.endTime;
+        var locationLat    = req.body.locationLat;
+        var locationLong    = req.body.locationLong;
       
       
     console.log('case 1 eventId: '+eventId);
@@ -1820,6 +1828,8 @@ router.post('/update-event', function (req, res) {
                                             'eventName'    : eventName,
                                             'eventType'    : eventType ,
                                             'eventLocation': location,
+                                            'eventlocationLat' : locationLat,
+                                            'eventlocationLong' : locationLong,
                                             'eventHost'    : host,
                                             'startDate'    : startDate,
                                             'endDate'      : endDate,
@@ -1850,10 +1860,12 @@ router.post('/update-event', function (req, res) {
                                 {
                                    
                                     email         : event.email,
-                                    eventName     :eventName,
-                                    eventType     :eventType,
-                                    eventLocation :location,
-                                    eventHost     :host,
+                                    eventName     : eventName,
+                                    eventType     : eventType,
+                                    eventLocation : location,
+                                    locationLat   : locationLat,
+                                    locationLong  : locationLong,
+                                    eventHost     : host,
                                     startDate     : startDate,
                                     endDate       : endDate,
                                     description   : description,

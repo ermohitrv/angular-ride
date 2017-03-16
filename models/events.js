@@ -6,6 +6,8 @@ var eventSchema = Schema({
     eventType       :{type: String},
     eventLocation   :{type: String},
     eventLocationType :{type: String},
+    eventlocationLat : {type: String},
+    eventlocationLong : {type: String},
     eventHost       :{type: String},
     description     :{type: String},
     startDate       :{type: Date},
