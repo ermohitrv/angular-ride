@@ -2066,7 +2066,8 @@ router.post('/join-event', function (req, res){
     
    var eventId = req.body.eventId;
    var email   = req.body.email;
-  
+   console.log("email : "+email);
+   console.log("eventId : "+eventId);
    if(eventId != "" && eventId != undefined && email != "" && email != undefined ){
           
     Events.findOne({'_id':eventId}, function (err, eventsdata) {      
