@@ -2069,7 +2069,7 @@ router.post('/join-event', function (req, res){
    console.log("email : "+email);
    console.log("eventId : "+eventId);
    if(eventId != "" && eventId != undefined && email != "" && email != undefined ){
-    User.findOne({'userEmail': email}, function (err, userdata) {          
+    User.findOne({'local.email': { $regex : new RegExp(email, "i") }}, function (err, userdata) {          
     Events.findOne({'_id':eventId}, function (err, eventsdata) {      
         Joinevents.findOne({'userEmail': email,'eventId':eventId}, function (err, joineventsdata) {
             if (!joineventsdata) {
