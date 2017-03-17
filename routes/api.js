@@ -2105,7 +2105,7 @@ router.post('/join-event', function (req, res){
                         };
                         
                         
-                        var htmladmin = 'Hello,<br>'+userdata.username+' joined this event.<br><br><b>Event Title : </b>'+eventsdata.eventName+'<br><b>Host by : </b>'+eventsdata.eventHost+'<br><b>Started on : </b>'+starttime+'<br><b>Ended on : </b>'+endtime+'<br><b>Venue Location : </b>'+eventsdata.eventLocation+'<br><br>';
+                        var htmladmin = 'Hello,<br>'+userdata.local.username+' joined this event.<br><br><b>Event Title : </b>'+eventsdata.eventName+'<br><b>Host by : </b>'+eventsdata.eventHost+'<br><b>Started on : </b>'+starttime+'<br><b>Ended on : </b>'+endtime+'<br><b>Venue Location : </b>'+eventsdata.eventLocation+'<br><br>';
                             htmladmin += '<br>Thank you, Team Motorcycle';
                 
                         var mailOptionsadmin = {
