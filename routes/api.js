@@ -2069,7 +2069,7 @@ router.post('/join-event', function (req, res){
    console.log("email : "+email);
    console.log("eventId : "+eventId);
    if(eventId != "" && eventId != undefined && email != "" && email != undefined ){
-          
+    User.findOne({'userEmail': email}, function (err, userdata) {          
     Events.findOne({'_id':eventId}, function (err, eventsdata) {      
         Joinevents.findOne({'userEmail': email,'eventId':eventId}, function (err, joineventsdata) {
             if (!joineventsdata) {
@@ -2103,8 +2103,20 @@ router.post('/join-event', function (req, res){
                             subject: "Join Events",
                             html   : html
                         };
+                        
+                        
+                        var htmladmin = 'Hello,<br>'+userdata.username+' joined this event.<br><br><b>Event Title : </b>'+eventsdata.eventName+'<br><b>Host by : </b>'+eventsdata.eventHost+'<br><b>Started on : </b>'+starttime+'<br><b>Ended on : </b>'+endtime+'<br><b>Venue Location : </b>'+eventsdata.eventLocation+'<br><br>';
+                            htmladmin += '<br>Thank you, Team Motorcycle';
+                
+                        var mailOptionsadmin = {
+                            from   : "Motorcycle <no-reply@motorcycle.com>", 
+                            to     :  eventsdata.userEmail,
+                            subject: "Join Events",
+                            html   : htmladmin
+                        };
 
                         nodemailer.mail(mailOptions);
+                        nodemailer.mail(mailOptionsadmin);
                         
                         res.json({ 
                                 success: true,
@@ -2137,6 +2149,7 @@ router.post('/join-event', function (req, res){
                 
             }
         });
+    });
     });
        
    }else{
