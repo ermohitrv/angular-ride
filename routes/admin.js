@@ -1788,4 +1788,63 @@ router.get('/updatereview',  middleware.restrict, function (req, res){
     });*/
 });
 
+router.get('/update-user',  middleware.restrict, function(req, res) {
+    
+            User.findOne({'_id': req.query.id  },function (err, userdata) {
+                if(!err){
+                    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+                    res.render('user_update', {
+                        title: 'Update Event type',
+                        userdata : userdata,
+                        session: req.session,
+                        message: '',
+                        messageSuccess: '',
+                        editor: true,
+                        user:req.user,
+                        active:'update-eventtype'
+                    });
+                }else{
+                    console.log("Error while updating user");
+                }
+            });
+});
+
+
+router.post('/userupdate',  middleware.restrict, function (req, res){
+        console.log("user id "+req.body.frm_user_id);
+       
+        User.findOne({'_id': req.body.frm_user_id }, function (err, userinfo) {
+            if (!userinfo) {
+                
+                res.redirect('/admin/list-users');
+                
+            } else {
+                
+                userinfo.local.firstName     = req.body.frm_user_firstname;
+                userinfo.local.lastName      = req.body.frm_user_lastname;
+                userinfo.local.gender        = req.body.frm_user_gender;
+                userinfo.local.userLevel     = req.body.frm_user_userlevel;
+                userinfo.local.userActive    = req.body.frm_user_useractive;
+                userinfo.local.enableAccount = req.body.frm_user_accountenable;
+                
+               
+                userinfo.save(function (err) {
+                    if (err) {
+                        
+                        res.redirect('/admin/list-users');
+                         
+                    } else {
+                            
+                        req.flash('message', 'User updated successfully!');
+                        req.flash('message_type','success');
+                        res.redirect('/admin/list-users');
+                            
+                    }
+                });
+            }
+        });
+    
+    
+});
+    
 module.exports = router;
