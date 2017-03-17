@@ -1,4 +1,9 @@
 <% layout('layoutAdmin') -%>
+<style>
+    .click_me_view{
+            padding: 6px 8px;
+    }
+</style>    
 <div class="content-wrapper">
     <section class="content-header">
         <h1>List Users</h1>
@@ -66,8 +71,7 @@
                                                     <span data-ng-if="user.local.userLevel.length == 0">-</span>
                                                 </td>
                                                 <td>
-<!--                                                    <a target="_blank" title="View profile" class="btn" href="/profile/{{ user.local.username }}"><i class="fa fa-eye"></i></a>-->
-                                                    <a title="Update" class="click_me_view btn" href="view-user/{{ user._id }}"><i class="fa fa-pencil"></i></a> 
+                                                    <a title="View" class="click_me_view btn" href="view-user/{{ user._id }}"><i class="fa fa-eye"></i></a> 
                                                     <a data-toggle="modal" data-target="#confirmDelete_{{ user._id }}" title="Delete"  class="" href="javascript:;"><i class="fa fa-remove"></i></a>
                                                     <div class="modal fade" id="confirmDelete_{{  user._id }}" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
                                                         <div class="modal-dialog">
@@ -86,6 +90,8 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <!--<a title="Update" class="click_me_view btn" href="update-user/{{ user._id }}"><i class="fa fa-pencil"></i></a>--> 
+
                                                 </td>
                                             </tr>
                                             <tr  data-ng-if="usersList.length <= 0">

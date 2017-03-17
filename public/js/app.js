@@ -79,6 +79,8 @@ app.controller('homeController', ['$scope', '$http', function ($scope, $http) {
     $scope.eventsList = [];
     $scope.drawEventsMap = function(eventmonth){
         
+        $scope.deleteEvents();
+        
         $http.get('/draw-events-map/'+eventmonth).success(function(eventsList){
             console.log(eventsList);
             $scope.eventsList = eventsList;
@@ -97,6 +99,17 @@ app.controller('homeController', ['$scope', '$http', function ($scope, $http) {
         });
     };
     
+    $scope.deleteEvents = function(){
+        
+        
+        $http.get('/delete-previousevents').success(function(response){
+            
+            console.log(response);
+           
+        }).error(function(){
+            console.log('Oops! Error listing get-brands-list on search page');
+        });
+    };
 
     
     
@@ -607,6 +620,8 @@ app.controller('eventController',['$scope', '$http', function ($scope, $http, $l
       
     $scope.getEventsList = function(){
         
+        //$scope.deleteEvents();
+        
         var config = {
             headers : {'Accept' : 'application/json'}
         };
@@ -632,7 +647,40 @@ app.controller('eventController',['$scope', '$http', function ($scope, $http, $l
             console.log('Oops! Error listing get-brands-list on search page');
         });
     };
-   
+    
+    $scope.countJoining = function(eventId){
+        
+        var data = { 
+            eventId: eventId, 
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/get-count-eventjoined',config).success(function(response, status, headers, config){
+            if(response.status == "success"){
+              
+                $scope.count = response.count;
+                $('#joineventcount_'+eventId).text(response.count);
+            }
+            
+        }).error(function(){
+            console.log('Oops! Error listing get-brands-list on search page');
+        });
+       
+    };
+    
+    $scope.deleteEvents = function(){
+        
+        
+        $http.get('/delete-previousevents').success(function(response){
+            
+            console.log(response);
+           
+        }).error(function(){
+            console.log('Oops! Error listing get-brands-list on search page');
+        });
+    };
     
 }]);
 

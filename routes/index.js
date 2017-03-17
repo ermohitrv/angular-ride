@@ -1324,7 +1324,7 @@ router.post('/join-event', middleware.isLoggedIn, function (req, res){
                 var objJoinEvents           = new Joinevents();
                 objJoinEvents.eventId       = req.body.eventid;
                 objJoinEvents.userEmail     = req.user.local.email;
-              
+                objJoinEvents.joined        = 1;
 
                 objJoinEvents.save(function (err) {
                 if(err){
@@ -1789,6 +1789,39 @@ router.get('/invitationaction',middleware.isLoggedIn, function(req, res){
     else{
          res.redirect('/events-invitation');
     }
+});
+
+
+
+router.post('/get-count-eventjoined', middleware.isLoggedIn, function (req, res){
+    
+    var eventId = req.body.params.eventId;
+   
+    Joinevents.count({'eventId':eventId,joined:1}, function(err, count){
+       
+         if(err){
+             res.status(200).json({"status": "error"}); 
+        }else{
+             res.status(200).json({"status": "success","count": count}); 
+        }
+    }); 
+
+});
+
+router.get('/delete-previousevents' , function(req, res) {
+       
+        Events.remove({ endDate : {"$lt" : new Date()} }, function (err, eventsList) {
+
+	 //Events.remove({ startDate :  } ,function(err, status){
+            if(err){
+              status = "error";
+            }
+            else{
+                status = "success";
+            }
+            res.send(status);
+          
+        });
 });
 
 module.exports = router;

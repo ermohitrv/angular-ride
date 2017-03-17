@@ -55,6 +55,7 @@
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Event Ended on</th>
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Location</th>
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Action</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Number of persons joined</th>
                                             </tr>
                                         </thead>
                                        
@@ -102,9 +103,11 @@
 
 
                                                 </td>
+                                               
+                                                <td ng-init="countJoining(events._id)" id="joineventcount_{{events._id}}"></td>
                                             </tr>
                                             <tr  data-ng-if="eventslist.length <= 0">
-                                                <td colspan="6" style="text-align: center">No results found</td>
+                                                <td colspan="8" style="text-align: center">No results found</td>
                                             </tr>
                                         </tbody>
                                     </table>
