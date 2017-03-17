@@ -620,7 +620,7 @@ app.controller('eventController',['$scope', '$http', function ($scope, $http, $l
       
     $scope.getEventsList = function(){
         
-        //$scope.deleteEvents();
+        $scope.deleteEvents();
         
         var config = {
             headers : {'Accept' : 'application/json'}

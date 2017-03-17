@@ -1280,7 +1280,7 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
         
 
 
-           Events.find({'eventLocationType':'public'}, function (err, eventsList) {
+            Events.find({'eventLocationType':'public'}, function (err, eventsList) {
             if (err) {
                 
                 res.json({
@@ -1302,6 +1302,70 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
             }
             
             });
+          
+           
+            
+            
+            
+            /*Events.aggregate(
+                [   
+                    {
+                        $match:{'eventLocationType': 'public' }
+                    },
+                    
+                    
+
+                    {
+                        $lookup:
+                                {
+                                    from: "joinevents",
+                                    localField: "_id",
+                                    foreignField: "eventId",
+                                    as: "item"
+                         }
+                    },
+                    {
+                        $project : {
+                            '_id':1,
+                            'eventName': 1,
+                            'eventLocation':1,
+                            'eventLocationType':1,
+                            'eventHost':1,
+                            'startDate':1,
+                            'endDate':1,
+                            'startTime':1,
+                            'endTime':1,
+                            'userEmail':1,
+                            "eventid": "$item.eventId", 
+                            //"count": { $size:"$item.userEmail"}, 
+                            
+                        } 
+                    }
+                   
+
+                ]
+                ,function (err, eventsList) {
+                if(err){
+                       res.json({
+                        success: true, 
+                        data:null,
+                        message: "error", 
+                        code: 400
+                     });
+                }
+                else{
+                    console.log(eventsList);
+                    res.json({
+                    success: true, 
+                    data: {
+                        events : eventsList
+                    },
+                    message: "success", 
+                    code: 200
+                });
+                }
+            });*/
+            
     }
     }
     else{
