@@ -2077,6 +2077,7 @@ router.post('/join-event', function (req, res){
                 var objJoinEvents           = new Joinevents();
                 objJoinEvents.eventId       = eventId;
                 objJoinEvents.userEmail     = email;
+                objJoinEvents.joined        = 1;
               
 
                 objJoinEvents.save(function (err) {

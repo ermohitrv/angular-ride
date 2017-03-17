@@ -2339,6 +2339,13 @@ li.btn.btn-xs.btn-info {
 .eventimageinput{
     border:none;
 }
+
+.eventslist li{
+        list-style-type: square;
+}
+.eventslist a{
+        text-decoration:underline;
+}
 /* end event page css */
 /* friends page */
 #searchfrndbtn{

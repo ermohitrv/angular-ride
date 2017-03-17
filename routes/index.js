@@ -21,6 +21,7 @@ var OrdersShipping = require('../models/ordersshipping');
 var Events = require('../models/events');
 var EventTypes = require('../models/eventtypes');
 var Joinevents = require('../models/joinevents');
+var Invitation = require('../models/invitation');
 var Reviews = require('../models/reviews');
 var Friends = require('../models/friends');
 var nodemailer      = require("nodemailer");
@@ -1588,6 +1589,206 @@ router.post('/unfriend',middleware.isLoggedIn, function(req, res){
         }
     });
 
+});
+
+router.get('/send-invitation',middleware.isLoggedIn, function(req, res){
+   
+    var eventId = req.query.eventId;
+    var username   = req.user.local.username;
+  
+   Friends.find({$and : [{ $or : [ { 'friendRequestSentTo' : username }, { 'friendRequestSentBy' : username} ] },{ $or : [ { 'friendRequestApprovalStatus' : 'accept'}]}]}, function(err, friendsdata){
+         
+        if(friendsdata){
+            for(var i = 0; i < friendsdata.length; i++ ){
+            var friendsusername = "";
+            console.log(friendsdata[i].friendRequestSentBy+" "+friendsdata[i].friendRequestSentTo);
+            if(friendsdata[i].friendRequestSentBy == username){
+                friendsusername = friendsdata[i].friendRequestSentTo;
+            }
+            else if(friendsdata[i].friendRequestSentTo == username){
+                friendsusername = friendsdata[i].friendRequestSentBy;
+            }
+            console.log("friendsusername"+friendsusername);
+            User.findOne({'local.username': friendsusername}, function (err, userdata) {
+            
+                Invitation.findOne({'invitationSentTo': friendsusername,'eventId':eventId}, function (err, joineventsdata) {
+                    if (!joineventsdata) {
+
+                        var objInvitation               = new Invitation();
+                        objInvitation.eventId           = eventId;
+                        objInvitation.invitationSentTo  = userdata.local.username;
+                        objInvitation.invitationSentBy  = username;
+
+
+                        objInvitation.save(function (err) {
+                        if(err){
+                                req.flash('messageSuccess', 'Error occured');
+                                res.redirect('/list-events');  
+                        }
+                        else{   
+                                console.log("invitation send");
+                               
+                        }
+
+                    });
+                    }else{
+
+                        console.log("user already exist in join events");
+
+                    }
+                });
+            });
+        }
+        
+            req.flash('messageSuccess', 'Invitation sent successfully!');
+            res.redirect('/list-events');  
+             
+        }else{
+            
+            req.flash('messageSuccess', '');
+            res.redirect('/list-events');  
+        }
+       
+    });
+    
+});
+
+
+router.get('/events-invitation', middleware.isLoggedIn, function (req, res){
+    
+            res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+            res.render('events-invitation.ejs',{
+                error : req.flash('error'), 
+                user: req.user,
+                title:'List Events',
+                message: '', 
+                messageSuccess: req.flash('messageSuccess')
+            });
+
+});
+
+router.post('/get-eventsinvitation-list', middleware.isLoggedIn, function (req, res){
+    
+   /* Invitation.find(
+           
+            {  
+                'invitationSentTo': req.user.local.username, 'invitationApprovalStatus' : 'pending'
+    
+    
+    
+            }
+    
+      
+    ,function (err, eventsInvitation) {
+        if(!err){
+            
+            res.status(200).json({"status": "success","eventsInvitation":eventsInvitation});
+            
+        }else{
+            
+             res.status(200).json({"status": "error"}); 
+        }
+    });*/
+    
+    
+      Invitation.aggregate(
+        [   
+            {
+                $match:{'invitationSentTo': req.user.local.username ,'invitationApprovalStatus' : 'pending'}
+            },
+           
+            {
+                $lookup:
+                        {
+                            from: "events",
+                            localField: "eventId",
+                            foreignField: "_id",
+                            as: "item"
+                 }
+            },
+            {
+                $project : {
+                    '_id':1,
+                    'eventId' : 1,
+                    'invitationSentBy' : 1,
+                    'eventName': "$item.eventName"
+
+                } 
+            }
+            
+        ]
+        ,function (err, eventsInvitation) {
+        if(eventsInvitation){
+              //console.log(eventsInvitation);
+              //res.send(eventsInvitation);
+             res.status(200).json({"status": "success","eventsInvitation":eventsInvitation});
+        }
+        else{
+             res.status(200).json({"status": "error"}); 
+        }
+    });
+    
+    
+});
+
+
+router.get('/invitationaction',middleware.isLoggedIn, function(req, res){
+   
+
+        var invitestatus = req.query.invitestatus;
+        var invitationid = req.query.invitationid;
+        
+    if(invitestatus != "" && invitestatus != undefined){
+        Invitation.findOne({'_id' : invitationid }, function (err, invitationdata){
+            if(invitationdata){
+                if(invitestatus == 'accept'){
+                    Invitation.update({'_id' : invitationid },
+                        { $set: { 'invitationApprovalStatus': invitestatus } },
+                        { multi: true },
+
+                        function(err, results){
+                            console.log(results);
+                            var objJoinevents        = new Joinevents();
+                            objJoinevents.eventId    = invitationdata.eventId;
+                            objJoinevents.userEmail  = req.user.local.email;
+                            objJoinevents.joined     = 1;
+
+
+                            objJoinevents.save(function (err) {
+                                if(err){
+                                         console.log("joined event error");
+                                }
+                                else{   
+                                        console.log("event joined successfully");
+
+                                }
+
+                            });
+                            
+                            
+                        }
+                    );
+                } 
+                else if(invitestatus == 'reject'){
+                    Invitation.remove({'_id' : invitationid }, function (err, inviteremovedata) {
+       
+                            if(err){
+                                 console.log("error");
+                           }else{
+                                 console.log("removed");
+                           }
+                    });
+                }
+        
+                res.redirect('/events-invitation');
+            }else{
+                res.redirect('/events-invitation');
+            }
+        });
+    }
+    else{
+         res.redirect('/events-invitation');
+    }
 });
 
 module.exports = router;

@@ -1,0 +1,85 @@
+<% layout('layout') -%>
+<section id="profile"  data-ng-controller="eventController">
+   <% include partial/profile-nav.ejs %>
+    <div class="container update-profile-page">
+      <div id="main">
+         <!-- start:breadcrumb -->
+         <ol class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="active">Events Invitation</li>
+         </ol>
+         
+         <!-- end:breadcrumb -->   
+         <div class="row" id="home-content">
+                <div class="title">
+                    <h1 style="color:#3c3c3c">Events Invitation</h1>
+                    <hr style="">
+                     
+                </div>
+                
+                  <!-- left column -->
+                  <div class="col-md-1">
+
+                  </div>
+                  
+                  <!-- event form column -->
+                  <div class="col-md-10 personal-info">
+                      <div class="result_del"></div>
+                    <% if (message.length > 0) { %>
+                        <div class="alert alert-danger"><%= message %></div>
+                    <% } %>
+                    <% if (messageSuccess.length > 0) { %>
+                        <div class="alert alert-success"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a><%= messageSuccess %></div>
+                    <% } %>
+                    
+                    <div class="panel panel-info" ng-init="getEventsInvitationList()">
+                        
+                  <div class="row">
+                                <div class="col-sm-12">
+                                    <h3>
+                                        <div class="pull-left"></div>
+                                        <!--<div class="pull-right"><input data-ng-model="search_user.eventName" type="text" class="form-control" placeholder="Search event name"></div>-->
+                                        <div class="clearfix"></div>
+                                    </h3>
+                               
+                                    <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
+                                        <thead>
+                                            <tr role="row">
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Invitation Sent By</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Action</th>
+                                            </tr>
+                                        </thead>
+                                       
+                                        <tbody>
+                                            <tr data-ng-if="eventsinvitationlist.length > 0" data-ng-repeat="eventsinvitation in eventsinvitationlist" id="{{ eventsinvitation._id }}" role="row" class="odd">
+                                                
+                                               
+                                                <td data-ng-bind="eventsinvitation.invitationSentBy" >
+                                                   
+                                                </td>
+                                               
+                                                <td>
+                                                    
+                                                   <a href="/invitationaction?invitestatus=accept&invitationid={{eventsinvitation._id}}" class="btn btn-primary">Accept</a>
+                                                   <a href="/invitationaction?invitestatus=reject&invitationid={{eventsinvitation._id}}" class="btn btn-primary">Reject</a>
+
+
+                                                </td>
+                                            </tr>
+                                            <tr  data-ng-if="eventsinvitationlist.length <= 0">
+                                                <td colspan="6" style="text-align: center">No results found</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+
+                    </div>
+                    
+               </div>
+            <hr>
+         </div>
+      </div>
+    </div>
+</section>

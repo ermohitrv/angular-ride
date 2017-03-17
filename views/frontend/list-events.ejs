@@ -8,7 +8,10 @@
             <li><a href="/">Home</a></li>
             <li class="active">List Event</li>
          </ol>
-         <div><a href="/create-event" class="btn btn-primary">Create Event</a></div>
+         <ul class="eventslist">
+         <li><a href="/create-event" >Create Event</a></li>
+         <li><a href="/events-invitation" >Events Invitation</a></li>
+         </ul>
          <!-- end:breadcrumb -->   
          <div class="row" id="home-content">
                 <div class="title">
@@ -95,7 +98,7 @@
                                                         </div>
                                                     </div>
                                                     
-                                                    <!--<a title="Send Invitation to friends" class="click_me_view btn actioneventbtns" href="#" ng-click="sendInvitation()"><i class="fa fa-eye"></i></a>--> 
+                                                    <a  title="Send Invitation to friends" class="click_me_view btn invitefriends" href="/send-invitation?eventId={{events._id}}">Invite Friends</a> 
 
 
                                                 </td>

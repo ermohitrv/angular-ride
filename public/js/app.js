@@ -563,7 +563,7 @@ app.controller('adminController',['$scope', '$http','$sce', function ($scope, $h
     };
     
     $scope.delete_category = function(catId){
-        alert("erwrwr");
+       
          var data = { 
             catId: catId
         };
@@ -618,19 +618,21 @@ app.controller('eventController',['$scope', '$http', function ($scope, $http, $l
         });
     };
     
-    $scope.sendInvitation = function(){
-          alert("fdfsfs");
-//        var config = {
-//            headers : {'Accept' : 'application/json'}
-//        };
-//        $http.post('/product/get-events-list',config).success(function(response, status, headers, config){
-//            console.log(response);
-//            $scope.eventslist = response;
-//        }).error(function(){
-//            console.log('Oops! Error listing get-brands-list on search page');
-//        });
+    $scope.getEventsInvitationList = function(){
+        
+        var config = {
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/get-eventsinvitation-list',config).success(function(response, status, headers, config){
+            if(response.status == "success"){
+                $scope.eventsinvitationlist = response.eventsInvitation;
+            }
+            
+        }).error(function(){
+            console.log('Oops! Error listing get-brands-list on search page');
+        });
     };
-    
+   
     
 }]);
 
