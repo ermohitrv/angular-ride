@@ -45,6 +45,8 @@
                                     <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
                                         <thead>
                                             <tr role="row">
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Event</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Location</th>
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Invitation Sent By</th>
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Action</th>
                                             </tr>
@@ -53,7 +55,9 @@
                                         <tbody>
                                             <tr data-ng-if="eventsinvitationlist.length > 0" data-ng-repeat="eventsinvitation in eventsinvitationlist" id="{{ eventsinvitation._id }}" role="row" class="odd">
                                                 
-                                               
+                                                <td data-ng-bind="eventsinvitation.eventName" ></td>
+                                                
+                                                <td data-ng-bind="eventsinvitation.eventLocation" ></td>
                                                 <td data-ng-bind="eventsinvitation.invitationSentBy" >
                                                    
                                                 </td>

@@ -526,9 +526,12 @@ app.controller('adminController',['$scope', '$http','$sce', function ($scope, $h
             headers : {'Accept' : 'application/json'}
         };
         $http.post('/admin/view-user-detail',config).success(function (response, status, headers, config){
+           
             var text = $sce.trustAsHtml(response);
             $scope.enableAccount = "";
             $scope.userDetailView = response;
+           
+            
         }).error(function(err){
            console.log('Oops! Error occur'+err);
         }); 
@@ -613,6 +616,8 @@ app.controller('adminController',['$scope', '$http','$sce', function ($scope, $h
             console.log('Oops! Error listing review-list');
         });
     };
+    
+
     
 }]);
 

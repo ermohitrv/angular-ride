@@ -1207,12 +1207,13 @@ router.get('/events', function (req, res) {
 router.get('/draw-events-map/:eventmonth', function (req, res) {
     //console.log("event month"+req.params.eventmonth);
     var eventmonth = req.params.eventmonth;
+    
     console.log("eventmonth "+eventmonth);
     
     if(eventmonth != "" && eventmonth != undefined){
         if(eventmonth !== 'all'){
-            
-            Events.find({ "$where": "this.startDate.getMonth() === "+eventmonth ,'eventLocationType':'public'}, function (err, eventsList) {
+            eventmonth = parseInt(eventmonth);
+            /*Events.find({ "$where": "this.startDate.getMonth() === "+eventmonth ,'eventLocationType':'public'}, function (err, eventsList) {
             if (err) {
                 
                 res.json({
@@ -1233,88 +1234,12 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
                 });
             }
             
-            });
+            });*/
             
-            
-       /* Events.aggregate(
-            [
-            {
-                $project : {
-                    '_id':1,
-                    'eventName' : 1,
-                    'eventType' : 1,
-                    'eventLocation' : 1,
-                    'eventHost' : 1,
-                    'description' : 1,
-                    'startDate' : 1,
-                    'endDate'  : 1,
-                    'startTime'  : 1,
-                    'endTime'  : 1,
-                    'eventImage'  : 1,
-                    'userEmail'  : 1,
-                    month: { $month: "$startDate" }
-                }
-            },
-            {
-                $match:{ month : 3 }
-            }
-
-        ]
-            ,function (err, eventsList) {
-                
-            //res.json(eventsList);
-               
-            if(!err && eventsList){
-                
-                res.json({
-                    success: true, 
-                    data: {
-                        events : eventsList
-                    },
-                    message: "success", 
-                    code: 200
-                });
-            }
-        }); */
-    }else{
-        
-
-
-            Events.find({'eventLocationType':'public'}, function (err, eventsList) {
-            if (err) {
-                
-                res.json({
-                    success: true, 
-                    data:null,
-                    message: "error", 
-                    code: 400
-                });
-            }
-            else{
-                res.json({
-                    success: true, 
-                    data: {
-                        events : eventsList
-                    },
-                    message: "success", 
-                    code: 200
-                });
-            }
-            
-            });
-          
-           
-            
-            
-            
-            /*Events.aggregate(
+        Events.aggregate(
                 [   
-                    {
-                        $match:{'eventLocationType': 'public' }
-                    },
+                   
                     
-                    
-
                     {
                         $lookup:
                                 {
@@ -1326,7 +1251,7 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
                     },
                     {
                         $project : {
-                            '_id':1,
+                            //'_id':1,
                             'eventName': 1,
                             'eventLocation':1,
                             'eventLocationType':1,
@@ -1337,10 +1262,110 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
                             'endTime':1,
                             'userEmail':1,
                             "eventid": "$item.eventId", 
-                            //"count": { $size:"$item.userEmail"}, 
+                            "count": { $size:"$item.eventId"}, 
+                             month: { $month: "$startDate" }
+                           
                             
                         } 
+                    },
+                    
+                    {
+                        $match:{'eventLocationType': 'public', month : eventmonth }
                     }
+                     
+                ]
+                ,function (err, eventsList) {
+                if(err){
+                       res.json({
+                        success: true, 
+                        data:null,
+                        message: "error", 
+                        code: 400
+                     });
+                }
+                else{
+                   
+                    res.json({
+                    success: true, 
+                    data: {
+                        events : eventsList
+                    },
+                    message: "success", 
+                    code: 200
+                });
+                }
+            });
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    }else{
+        
+            /*Events.find({'eventLocationType':'public'}, function (err, eventsList) {
+            if (err) {
+                
+                res.json({
+                    success: true, 
+                    data:null,
+                    message: "error", 
+                    code: 400
+                });
+            }
+            else{
+                res.json({
+                    success: true, 
+                    data: {
+                        events : eventsList
+                    },
+                    message: "success", 
+                    code: 200
+                });
+            }
+            
+            });*/
+          
+            
+            Events.aggregate(
+                [   
+                    {
+                        $match:{'eventLocationType': 'public' }
+                    },
+                    
+                    {
+                        $lookup:
+                                {
+                                    from: "joinevents",
+                                    localField: "_id",
+                                    foreignField: "eventId",
+                                    as: "item"
+                         }
+                    },
+                    {
+                        $project : {
+                            //'_id':1,
+                            'eventName': 1,
+                            'eventLocation':1,
+                            'eventLocationType':1,
+                            'eventHost':1,
+                            'startDate':1,
+                            'endDate':1,
+                            'startTime':1,
+                            'endTime':1,
+                            'userEmail':1,
+                            "eventid": "$item.eventId", 
+                            "count": { $size:"$item.eventId"}, 
+                           
+                            
+                        } 
+                    },
+                     
                    
 
                 ]
@@ -1354,7 +1379,7 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
                      });
                 }
                 else{
-                    console.log(eventsList);
+                   
                     res.json({
                     success: true, 
                     data: {
@@ -1364,7 +1389,7 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
                     code: 200
                 });
                 }
-            });*/
+            });
             
     }
     }
@@ -1377,8 +1402,9 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
 router.post('/join-event', middleware.isLoggedIn, function (req, res){
     
    console.log("join event"+req.body.eventid);
-  
-   //res.send(true);
+    
+     
+   
    if(req.body.eventid != "" && req.body.eventid != undefined ){
           
     Events.findOne({'_id':req.body.eventid}, function (err, eventsdata) {      
@@ -1775,7 +1801,13 @@ router.post('/get-eventsinvitation-list', middleware.isLoggedIn, function (req, 
                     '_id':1,
                     'eventId' : 1,
                     'invitationSentBy' : 1,
-                    'eventName': "$item.eventName"
+                    'eventName': "$item.eventName",
+                    'startDate': "$item.startDate",
+                    'endDate': "$item.endDate",
+                    'startTime': "$item.startTime",
+                    'endTime': "$item.endTime",
+                    'eventLocation': "$item.eventLocation",
+                    
 
                 } 
             }
@@ -1783,7 +1815,7 @@ router.post('/get-eventsinvitation-list', middleware.isLoggedIn, function (req, 
         ]
         ,function (err, eventsInvitation) {
         if(eventsInvitation){
-              //console.log(eventsInvitation);
+              console.log(eventsInvitation);
               //res.send(eventsInvitation);
              res.status(200).json({"status": "success","eventsInvitation":eventsInvitation});
         }
