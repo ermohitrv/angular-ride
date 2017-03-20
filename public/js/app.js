@@ -164,7 +164,41 @@ app.controller('menuController',['$scope', '$http', function ($scope, $http) {
                }).error(function(err){
                console.log('Oops! Error occur'+err);
             }); 
-       };
+        };
+       
+        $scope.getNotifications = function(){
+           
+            $http.get('/getnotification').success(function (response){
+                
+                console.log(response.notificationresults);
+                $scope.notificationresults = response.notificationresults;
+                
+               }).error(function(err){
+               console.log('Oops! Error occur'+err);
+            }); 
+            
+        };
+        
+        $scope.removeNotification = function(notificationId){
+          
+        var data = { 
+            notificationId: notificationId, 
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/removenotification',config).success(function (response, status, headers, config){
+           
+            if(response.status == "success"){
+                $scope.getNotifications();
+            }
+            
+           
+        }).error(function(err){
+           console.log('Oops! Error occur'+err);
+        }); 
+        };
        
        
 

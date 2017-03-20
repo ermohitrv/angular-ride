@@ -2373,6 +2373,17 @@ input#search-box-frnd {
 }
 
 /* end product detail page */
+
+span.closeButton {
+    position: absolute;
+    font-size: 12px;
+    padding: 0px 5px 0px 0px; 
+    height: 100%;
+    right: 0;
+    color: red;
+    cursor: pointer;
+}
+
 @media (min-width: 768px){
 .modal-dialog {
     width: 450px;

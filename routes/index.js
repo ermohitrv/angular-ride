@@ -28,6 +28,8 @@ var Followers = require('../models/followers');
 var nodemailer      = require("nodemailer");
 var moment      = require("moment");
 var multer      = require('multer');
+var Activity    = require('../models/activity');
+
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -1531,8 +1533,13 @@ router.post('/sendrequest',middleware.isLoggedIn, function(req, res){
                         
                     } else {
                         
-                        res.status(200).json({"status": "success"});  
-                          
+                        var objActivity  = new Activity();
+                        objActivity.notificationTo = req.body.params.profileusername;
+                        objActivity.notificationBy = req.user.local.username;
+                        objActivity.notificationType = "request";
+                        objActivity.save(function (err) {
+                                res.status(200).json({"status": "success"});  
+                        });
                     }
                 });
  
@@ -1600,7 +1607,15 @@ router.get('/friendrequestaction',middleware.isLoggedIn, function(req, res){
                         { multi: true },
 
                         function(err, results){
-                            console.log(results);
+                            var objActivity  = new Activity();
+                                objActivity.notificationTo = friendrequestsentby;
+                                objActivity.notificationBy = req.user.local.username;
+                                objActivity.notificationType = "acceptrequest";
+                                objActivity.save(function (err) {
+                                
+                                    console.log("Request accepted");
+                                });
+                           
                         }
                     );
                 } 
@@ -1707,8 +1722,14 @@ router.get('/send-invitation',middleware.isLoggedIn, function(req, res){
                                 res.redirect('/list-events');  
                         }
                         else{   
-                                console.log("invitation send");
-                               
+                                var objActivity  = new Activity();
+                                objActivity.notificationTo = userdata.local.username;
+                                objActivity.notificationBy = req.user.local.username;
+                                objActivity.notificationType = "invitation";
+                                objActivity.save(function (err) {
+                                
+                                    console.log("invitation send");
+                                });
                         }
 
                     });
@@ -1846,7 +1867,17 @@ router.get('/invitationaction',middleware.isLoggedIn, function(req, res){
                                          console.log("joined event error");
                                 }
                                 else{   
-                                        console.log("event joined successfully");
+                                        
+                                        var objActivity  = new Activity();
+                                        objActivity.notificationTo = invitationdata.invitationSentBy;
+                                        objActivity.notificationBy = invitationdata.invitationSentTo;
+                                        objActivity.notificationType = "eventjoined";
+                                        objActivity.save(function (err) {
+
+                                             console.log("event joined successfully");
+
+                                        });
+                                       
 
                                 }
 
@@ -1927,9 +1958,16 @@ router.post('/follow-user' , function(req, res) {
                         if(err){
                             res.status(200).json({"status": "error"}); 
                         }
-                        else{   
-                            res.status(200).json({"status": "success"}); 
-
+                        else{
+                                var objActivity  = new Activity();
+                                objActivity.notificationTo = req.body.params.followingUsername;
+                                objActivity.notificationBy = req.user.local.username;
+                                objActivity.notificationType = "follow";
+                                objActivity.save(function (err) {
+                                
+                                    res.status(200).json({"status": "success"}); 
+                                    
+                                });
                         }
 
                 });
@@ -1970,5 +2008,35 @@ router.post('/unfollow',middleware.isLoggedIn, function(req, res){
 
 });
 
+router.get('/getnotification',middleware.isLoggedIn, function(req, res){
+   
+    var notificationTo = req.user.local.username;
+   
+    Activity.find({'notificationTo':notificationTo}, function(err, notificationresults){
+          
+         if(err){
+             res.status(200).json({"status": "error"}); 
+        }else{
+             res.status(200).json({"status": "success","notificationresults":notificationresults}); 
+        }
+    });
+
+});
+
+router.post('/removenotification',middleware.isLoggedIn, function(req, res){
+   
+    var notificationId = req.body.params.notificationId;
+    //res.status(200).json({"status": "success"}); 
+
+    Activity.remove({'_id':notificationId}, function(err, notificationresults){
+          
+         if(err){
+             res.status(200).json({"status": "error"}); 
+        }else{
+             res.status(200).json({"status": "success","notificationresults":notificationresults}); 
+        }
+    });
+
+});
 
 module.exports = router;
