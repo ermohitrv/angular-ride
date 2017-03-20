@@ -21,6 +21,8 @@ var EventTypes = require('../models/eventtypes');
 var Reviews = require('../models/reviews');
 var multer      = require('multer');
 var Friends = require('../models/friends');
+var Followers = require('../models/followers');
+
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -135,14 +137,17 @@ router.post('/view-user-detail', middleware.isAdminLoggedIn, function(req, res){
         User.findOne({_id: user_id},{'_id':0,'local.password' : 0, accountCreationDate:0, lastActivityTime:0 },
         function (err, user) {
         Friends.count({$and : [{ $or : [ { 'friendRequestSentTo' : req.user.local.username }, { 'friendRequestSentBy' : req.user.local.username} ] },{ $or : [ { 'friendRequestApprovalStatus' : 'accept'}]}]}, function(err, friendsdata){
-
+        Followers.count({'followedBy': req.user.local.username }, function(err, followedbycount){
+        Followers.count({'followedTo': req.user.local.username }, function(err, followedtocount){
             if(user){
-                 console.log(friendsdata);
-                res.render('widget/view-user-detail',{result: user,count:friendsdata});
+                
+                res.render('widget/view-user-detail',{result: user,count:friendsdata,followedbycount:followedbycount,followedtocount:followedtocount});
            
             }else{
                 res.send(err);
             }
+        });
+        });
         });
         });
     }else{

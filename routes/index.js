@@ -24,6 +24,7 @@ var Joinevents = require('../models/joinevents');
 var Invitation = require('../models/invitation');
 var Reviews = require('../models/reviews');
 var Friends = require('../models/friends');
+var Followers = require('../models/followers');
 var nodemailer      = require("nodemailer");
 var moment      = require("moment");
 var multer      = require('multer');
@@ -1296,16 +1297,6 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
                 }
             });
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
     }else{
         
             /*Events.find({'eventLocationType':'public'}, function (err, eventsList) {
@@ -1919,5 +1910,65 @@ router.get('/delete-previousevents' , function(req, res) {
           
         });
 });
+
+
+router.post('/follow-user' , function(req, res) {
+    
+    var followingUsername = req.body.params.followingUsername;
+    console.log("followerUsername "+followingUsername);
+    //res.send(true);
+    
+                var objFollowers        = new Followers();
+                objFollowers.followTo    = followingUsername;
+                objFollowers.followedBy  = req.user.local.username;
+
+
+                objFollowers.save(function (err) {
+                        if(err){
+                            res.status(200).json({"status": "error"}); 
+                        }
+                        else{   
+                            res.status(200).json({"status": "success"}); 
+
+                        }
+
+                });
+
+});
+
+
+router.post('/followstatus',middleware.isLoggedIn, function(req, res){
+    var profileusername = req.body.params.profileusername;
+    
+    Followers.count({'followTo':profileusername,'followedBy': req.user.local.username }, function(err, followcount){
+
+        
+        if(followcount){
+            res.status(200).json({"count":followcount}); 
+        }else{
+            res.status(200).json({"count": 0}); 
+        }
+       
+    });
+
+});
+
+router.post('/unfollow',middleware.isLoggedIn, function(req, res){
+   
+    var followBy = req.body.params.followBy;
+    var followTo = req.body.params.followTo;
+   
+     
+    Followers.remove({'followTo':followTo,'followedBy': followBy }, function(err, friendsdata){
+          
+         if(err){
+             res.status(200).json({"status": "error"}); 
+        }else{
+             res.status(200).json({"status": "success"}); 
+        }
+    });
+
+});
+
 
 module.exports = router;

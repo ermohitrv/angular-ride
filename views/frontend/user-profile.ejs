@@ -94,12 +94,16 @@
                     <div class="panel-heading">
                      <header class="panel-title">
                         <div class="text-center">
-                        <!--<div style="float:left;width:50%">-->
+                        <div style="float:left;width:50%">
                         <li class="active friendsul"  id="addfriend"  data-ng-if="friendstatus.friendRequestApprovalStatus != 'accept' && friendstatus.friendRequestApprovalStatus != 'pending'"><a href="javascript:void(0);" ng-click="sendRequest('<%= userprofile.local.username %>')" class="btn btn-primary">Add Friend</a></li>
                         <li class="active friendsul"  id="requestsent"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending'"><a href="javascript:void(0)" class="btn btn-primary" >Request Sent</a></li>         
                         <li class="active friendsul"  id="friends" ng-mouseenter="changeFriendButtonText('enter')" ng-mouseleave="changeFriendButtonText('leave')" data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept'"><a href="javascript:void(0)" ng-click="unFriendprofile('<%= userprofile.local.username %>','<%= user.local.username %>')"  class="btn btn-success" id="friendtext">Friends</a></li>
-                        <!--</div>-->
-                        <!--<div><li class="active friendsul"  id="follow"><a href="javascript:void(0);"  class="btn btn-primary">Follow</a></li></div>-->
+                        </div>
+                        <div ng-init="followStatus('<%= userprofile.local.username %>')">
+                            <li class="active friendsul" data-ng-if="followstatus == 0"  id="follow"><a href="javascript:void(0);" ng-click="followUser('<%= userprofile.local.username %>')" class="btn btn-primary">Follow</a></li>
+                            <li class="active friendsul" data-ng-if="followstatus == 1" ng-mouseenter="changeFollowButtonText('enter')" ng-mouseleave="changeFollowButtonText('leave')"  id="follow"><a href="javascript:void(0);"  ng-click="unFollow('<%= userprofile.local.username %>','<%= user.local.username %>')" class="btn btn-primary" id="followtext">Following</a></li>
+
+                        </div>
                         </div>
                      </header>
                     </div>

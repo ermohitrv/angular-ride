@@ -5,13 +5,13 @@
       <h3 class="profile-username text-center"> <%= result.local.firstName +' '+ result.local.lastName %> </h3>
       <p class="text-muted text-center"><%= result.local.locationState %>, <%= result.local.locationCountry %></p>
       <ul class="list-group list-group-unbordered social-icons-admin">
-<!--        <li class="list-group-item">
-          <b>Followers</b> <a class="pull-right">0</a>
-        </li>-->
-<!--        <li class="list-group-item">
-          <b>Following</b> <a class="pull-right">0</a>
-        </li>-->
-<li class="list-group-item">
+        <li class="list-group-item">
+          <b>Followers</b> <a class="pull-right"><%= followedtocount %></a>
+        </li>
+        <li class="list-group-item">
+          <b>Following</b> <a class="pull-right"><%= followedbycount %></a>
+        </li>
+        <li class="list-group-item">
           <b>Friends</b> <a class="pull-right" id="friendscount"><%= count %></a>
         </li>
         <% if(result.local.userLevel != "ADMIN"){ %>

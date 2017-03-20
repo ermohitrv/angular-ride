@@ -815,6 +815,81 @@ app.controller('friendsController',['$scope', '$http', function ($scope, $http, 
         }
     };
     
+    $scope.followUser = function(followingUsername){
+        
+        var data = { 
+            followingUsername: followingUsername, 
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/follow-user',config).success(function (response, status, headers, config){
+           
+            console.log(response);
+            if(response.status == "success"){
+                $scope.followStatus(followingUsername);
+                
+            }
+           
+            
+        }).error(function(err){
+           console.log('Oops! Error occur'+err);
+        }); 
+    }
+    
+    $scope.followStatus = function(profileusername){
+      
+       var data = { 
+            profileusername: profileusername, 
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/followstatus',config).success(function (response, status, headers, config){
+            
+            $scope.followstatus = response.count;
+           
+            
+        }).error(function(err){
+           console.log('Oops! Error occur'+err);
+        });  
+    };
+    
+    $scope.changeFollowButtonText = function(mouseText){
+        
+        if(mouseText == "enter"){
+           $('#followtext').text("UnFollow");         
+        }
+        
+        if(mouseText == "leave"){
+            $('#followtext').text("Following");
+        }
+    };
+    
+    $scope.unFollow = function(profileusername,loggedusername){
+        var data = { 
+            followTo: profileusername, 
+            followBy : loggedusername, 
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/unfollow',config).success(function (response, status, headers, config){
+           
+            console.log(response);
+            if(response.status == "success"){
+            
+                $scope.followStatus(profileusername);
+            }
+            
+        }).error(function(err){
+           console.log('Oops! Error occur'+err);
+        });  
+    };
+    
 }]);
 
 app.directive('bindUnsafeHtml', ['$compile', function ($compile) {
