@@ -64,8 +64,26 @@
                                                     <span data-ng-bind="reviews.userReview"></span>
                                                 </td>
                                                 <td>
-                                                    <a title="Approved" class="click_me_view btn" href="/admin/updatereview?id={{ reviews._id }}"><i class="fa fa-pencil"></i></a> 
-                                                    
+                                                    <a data-toggle="modal" data-target="#confirmDelete_{{ reviews._id }}" title="Delete"  class="" href="javascript:;"><i class="fa fa-remove"></i></a>
+                                                    <a ng-if="reviews.ReviewStatus == 'PENDING'" title="Approve" class="click_me_view btn" href="/admin/updatereview?id={{ reviews._id }}">Approve</a> 
+                                                    <a ng-if="reviews.ReviewStatus == 'APPROVED'" title="Approved" class="click_me_view btn" href="#">Approved</a> 
+                                                    <div class="modal fade" id="confirmDelete_{{  reviews._id }}" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                              <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                <h4 class="modal-title">{{ reviews.username }}: Delete review  permanently</h4>
+                                                              </div>
+                                                              <div class="modal-body">
+                                                                <p>Are you sure you want to delete this Review ?</p>
+                                                              </div>
+                                                              <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                                                <a uid="{{ reviews._id }}" href="javascript:;" class="btn btn-danger delete_this_review btn" id="confirm">Delete</a>
+                                                              </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                             </tr>
                                             <tr  data-ng-if="reviewslist.length <= 0">
@@ -91,21 +109,21 @@
   <!-- /.content-wrapper -->
   <script data-cfasync="false"  >
 $(function(){
-    $(document).on('click', 'a.delete_this_eventtype' ,function(){
+    $(document).on('click', 'a.delete_this_review' ,function(){
         var uid = $(this).attr('uid');
         
         if(uid != undefined && uid != null){
 
-            delete_eventtype(uid);
+            delete_review(uid);
         }
     });
 });
 
-function delete_eventtype(uid){
+function delete_review(uid){
     
     jQuery.ajax({
         type  : "POST",
-        url   : "/admin/delete-eventtype",
+        url   : "/admin/delete-review",
         data  : {'uid' : uid},
         timeout: 3000,
         success: function(data){
@@ -117,7 +135,7 @@ function delete_eventtype(uid){
                   $("#"+uid).remove();  
                   $('.modal-backdrop.in').css('opacity','0');
                 //});
-                $(".result_del").html('<div class="alert alert-success">Event Type Deleted Successfully!</div>');
+                $(".result_del").html('<div class="alert alert-success">Review Deleted Successfully!</div>');
             }
         },
         error : function(err){

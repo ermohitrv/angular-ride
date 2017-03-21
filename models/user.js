@@ -52,20 +52,20 @@ var userSchema = mongoose.Schema({
     youtubeURL:                 {type: String, default: ''},
     enableAccount:              {type: Boolean, default: true}, // true: enable, false: disable
     rideSettings:{
-            rideVisibility:     {type: Boolean, default: false},
+            rideVisibility:     {type: Number, default: 0},
     },
     ridePrivacy:{
-            rideShowDistance:   {type: Boolean, default: false},
-            rideShowOnline:     {type: Boolean, default: false},
-            ridePublicSearch:   {type: Boolean, default: false}
+            rideShowDistance:   {type: Number, default: 0},
+            rideShowOnline:     {type: Number, default: 0},
+            ridePublicSearch:   {type: Number, default: 0}
     },
     rideNotification:{
-            rideMessage:        {type: Boolean, default: false},
-            rideBumped:         {type: Boolean, default: false},
-            rideAlerts:         {type: Boolean, default: false}
+            rideMessage:        {type: Number, default: 0},
+            rideBumped:         {type: Number, default: 0},
+            rideAlerts:         {type: Number, default: 0}
     },
     rideNews:{
-            rideContestNews:    {type: Boolean, default: false}
+            rideContestNews:    {type: Number, default: 0}
     },
     facebook         : {
         id           : String,

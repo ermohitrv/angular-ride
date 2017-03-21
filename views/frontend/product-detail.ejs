@@ -66,6 +66,7 @@ function submitReview(){
             console.log(data.status);
             if(data.status === 'success'){
                 $('#modal-review').hide();
+                $('#modal-reviewresponse').css('display','block');
             }
         },
         error : function(err){
@@ -74,6 +75,12 @@ function submitReview(){
         }
     });
 }
+
+
+$(document).on('click','.closereviewresponse',function(){
+    
+    $('#modal-reviewresponse').css('display','none');
+});
 
 
 </script>
