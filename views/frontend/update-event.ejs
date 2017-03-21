@@ -6,12 +6,12 @@
          <!-- start:breadcrumb -->
          <ol class="breadcrumb">
             <li><a href="/">Home</a></li>
-            <li class="active">Create Event</li>
+            <li class="active">Update Event</li>
          </ol>
          <!-- end:breadcrumb -->   
          <div class="row" id="home-content">
                 <div class="title">
-                    <h1 style="color:#3c3c3c">Create Event</h1>
+                    <h1 style="color:#3c3c3c">Update Event</h1>
                     <hr style="">
                 </div>
                   <!-- left column -->
@@ -35,7 +35,7 @@
                         <div class="panel-body">
                         
                       
-                            <form class="form-horizontal" id="create-event" role="form" action="/update-event" method="post" enctype="multipart/form-data">
+                            <form class="form-horizontal" id="update-event" role="form" action="/update-event" method="post" enctype="multipart/form-data">
                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                  <input type="hidden" name="event_id" value="<%= eventdata._id %>">
                                  <input type="hidden" id="eventlat" name="eventlat" >

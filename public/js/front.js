@@ -393,7 +393,7 @@ jQuery('#change_password_form').validate({
          }
     }); 
    
-    /*Form Validations start here :: SignIn Page*/
+    /*Form Validations start here :: create event Page*/
     jQuery("#create-event").validate({
         rules: {
             eventName: {
@@ -436,6 +436,47 @@ jQuery('#change_password_form').validate({
         }
     });
    
+     /*Form Validations start here :: update event Page*/
+   jQuery("#update-event").validate({
+        rules: {
+            eventName: {
+                required: true,
+                
+            },
+            eventType: {
+                required: true
+            },
+            eventstartDate: {
+                required: true
+            },
+            eventendDate: {
+                required: true
+            },
+            eventLocation: {
+                required: true
+            },
+            
+        },
+        messages: {
+           
+        },
+        submitHandler: function(form) {
+            
+            var geocoder =  new google.maps.Geocoder();
+            geocoder.geocode( { 'address': form.eventLocation.value}, function(results, status) {
+                  if (status == google.maps.GeocoderStatus.OK) {
+                    console.log("location lat lng : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
+
+                    $('#eventlat').val(results[0].geometry.location.lat());
+                    $('#eventlong').val(results[0].geometry.location.lng());
+                    form.submit();
+                 
+            }});
+           
+        }
+    });
+    
+    
    /* review form */
    jQuery("#review-form").validate({
         rules: {

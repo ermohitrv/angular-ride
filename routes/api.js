@@ -1952,7 +1952,6 @@ router.post('/list-events', function (req, res) {
     var email  = req.body.email;
        
     if(email != "" && email != undefined){
-       
         Events.find({  'userEmail': { $regex : new RegExp(email, "i") }},function (err, eventsList) {
             if(!err){
                 
@@ -1974,7 +1973,6 @@ router.post('/list-events', function (req, res) {
                 
             }
         });   
-                
     }else{
         res.json({ 
             success: false, 

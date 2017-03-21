@@ -1165,7 +1165,9 @@ router.post('/update-event', cpUploadupdateevent , parseForm, csrfProtection, mi
                 eventinfo.endDate       = req.body.eventendDate;
                 eventinfo.startTime     = req.body.eventstartTime;
                 eventinfo.endTime       = req.body.eventendTime;
-                eventinfo.eventImage    = imagepath;
+                if(imagepath != ""){
+                   eventinfo.eventImage    = imagepath;
+                }
                 eventinfo.eventlocationLat    = req.body.eventlat;
                 eventinfo.eventlocationLong    = req.body.eventlong;
 
