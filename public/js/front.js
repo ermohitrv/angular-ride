@@ -419,7 +419,21 @@ jQuery('#change_password_form').validate({
         },
         messages: {
            
-         }
+        },
+        submitHandler: function(form) {
+            
+            var geocoder =  new google.maps.Geocoder();
+            geocoder.geocode( { 'address': form.eventLocation.value}, function(results, status) {
+                  if (status == google.maps.GeocoderStatus.OK) {
+                    console.log("location lat lng : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
+
+                    $('#eventlat').val(results[0].geometry.location.lat());
+                    $('#eventlong').val(results[0].geometry.location.lng());
+                    form.submit();
+                 
+            }});
+           
+        }
     });
    
    /* review form */

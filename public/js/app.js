@@ -200,8 +200,10 @@ app.controller('menuController',['$scope', '$http', function ($scope, $http) {
         }); 
         };
        
-       
-
+        $scope.showtime = function(notificationdate){
+           
+        }
+ 
 }]);
 
 /********************** profile controller  **********************/

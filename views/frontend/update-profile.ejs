@@ -1,6 +1,8 @@
 <% layout('layout') -%>
 <section id="profile" data-ng-controller="profileController">
-    <div id="header">
+      <% include partial/profile-nav.ejs %>
+
+<!--    <div id="header">
       <div class="overlay">
          <div class="container">
             <ul class="nav navbar-nav navbar-right top-menu">
@@ -14,46 +16,34 @@
                         </div>
                     </form>
                 </li>
-               <li id="header_inbox_bar" class="dropdown">
-                  <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                <li id="header_inbox_bar" class="dropdown" ng-init="getNotifications()">
+                  <a data-toggle="dropdown" class="dropdown-toggle" href="#" >
                   <i class="fa fa-envelope-o" data-original-title="" title=""></i>
-                  <span class="badge bg-important">5</span>
+                  <span class="badge bg-important" data-ng-bind="notificationresults.length"></span>
                   </a>
                   <ul class="dropdown-menu extended inbox">
                      <div class="notify-arrow notify-arrow-red"></div>
                      <li>
-                        <p class="red">You have 5 new messages</p>
+                        <p class="red" >You have {{notificationresults.length}} new messages</p>
                      </li>
-                     <li>
-                        <a href="#">
-                            <span class="photo">
-                                <img alt="avatar" src="<%= user.local.profileImage %>">
-                            </span>
+                     <li data-ng-if="notificationresults.length > 0"  ng-repeat="notification in notificationresults" id="li_{{ notification._id}}">
+                        <span class="closeButton" ng-click="removeNotification(notification._id)">X</span>
+                        <a href="javascript:void(0)">
+                            <span class="message" data-ng-if="notification.notificationType == 'request'"><b>{{ notification.notificationBy }}</b> sent you a friend request.</span>
+                            <span class="message" data-ng-if="notification.notificationType == 'invitation'"><b>{{ notification.notificationBy }}</b> sent you an event invitation.</span>
+                            <span class="message" data-ng-if="notification.notificationType == 'follow'"><b>{{ notification.notificationBy }}</b> started following you.</span>
+                            <span class="message" data-ng-if="notification.notificationType == 'acceptrequest'"><b>{{ notification.notificationBy }}</b> accepted your friend request.</span>
+                            <span class="message" data-ng-if="notification.notificationType == 'eventjoined'"><b>{{ notification.notificationBy }}</b> accepted your event invitation.</span>
+ 
                             <span class="subject">
-                                <span class="from"><%= user.local.firstName+' '+user.local.lastName %></span>
-                                <span class="time">Just now</span>
+                                <span class="time" ng-bind="notification.addedOn | date:'yyyy-MM-dd'"></span>
                             </span>
-                            <span class="message">Hello, this is an example msg.</span>
                         </a>
-                     </li>
-                     <li>
-                        <a href="#">
-                        <span class="photo"><img alt="avatar" src="http://bootemplates.com/themes/srikandi/v2/img/avatar-mini.jpg"></span>
-                        <span class="subject">
-                        <span class="from"><%= user.local.firstName+' '+user.local.lastName %></span>
-                        <span class="time">Just now</span>
-                        </span>
-                        <span class="message">
-                        Hello, this is an example msg.
-                        </span>
-                        </a>
-                     </li>
-                     <li>
-                        <a href="#">See all messages</a>
+                        
                      </li>
                   </ul>
                </li>
-               <!-- user login dropdown start-->
+                user login dropdown start
                <li class="dropdown">
                   <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                   <img style="width: 30px;" class="img-circle" src="<%= user.local.profileImage %>">
@@ -76,7 +66,7 @@
          </div>
          <nav class="navbar" role="navigation">
             <div class="container">
-               <!-- Brand and toggle get grouped for better mobile display -->
+                Brand and toggle get grouped for better mobile display 
                <div class="navbar-header">
                   <button type="button" class="btn-block btn-drop navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
                   <strong>MENU</strong>
@@ -85,7 +75,7 @@
             </div>
          </nav>
       </div>
-    </div>
+    </div>-->
     <div class="container update-profile-page">
       <div id="main">
          <!-- start:breadcrumb -->

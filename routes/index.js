@@ -1010,6 +1010,7 @@ router.post('/save-event',cpUploadinserevent, parseForm, csrfProtection, middlew
     }
     
     
+   
     if (req.user.local.email != "" && req.user.local.email != undefined && req.body.event_id != "") {
         User.findOne({'local.email': req.user.local.email}, function (err, user) {
             if (!user) {
@@ -1030,6 +1031,8 @@ router.post('/save-event',cpUploadinserevent, parseForm, csrfProtection, middlew
                 objEvents.endTime       = req.body.eventendTime;
                 objEvents.userEmail     = req.user.local.email;
                 objEvents.eventImage    = imagepath;
+                objEvents.eventlocationLat    = req.body.eventlat;
+                objEvents.eventlocationLong    = req.body.eventlong;
                
 
                 objEvents.save(function (err) {
@@ -1155,7 +1158,7 @@ router.post('/update-event', cpUploadupdateevent , parseForm, csrfProtection, mi
                 eventinfo.eventName     = req.body.eventName;
                 eventinfo.eventType     = req.body.eventType;
                 eventinfo.eventLocation = req.body.eventLocation;
-                 eventinfo.eventLocationType = req.body.locationtype
+                eventinfo.eventLocationType = req.body.locationtype
                 eventinfo.eventHost     = req.body.eventHost;
                 eventinfo.description   = req.body.eventDescription;
                 eventinfo.startDate     = req.body.eventstartDate;
@@ -1163,6 +1166,8 @@ router.post('/update-event', cpUploadupdateevent , parseForm, csrfProtection, mi
                 eventinfo.startTime     = req.body.eventstartTime;
                 eventinfo.endTime       = req.body.eventendTime;
                 eventinfo.eventImage    = imagepath;
+                eventinfo.eventlocationLat    = req.body.eventlat;
+                eventinfo.eventlocationLong    = req.body.eventlong;
 
                 eventinfo.save(function (err) {
                     if (err) {
