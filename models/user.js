@@ -51,7 +51,22 @@ var userSchema = mongoose.Schema({
     skypeUsername:              {type: String, default: ''},
     youtubeURL:                 {type: String, default: ''},
     enableAccount:              {type: Boolean, default: true}, // true: enable, false: disable
-
+    rideSettings:{
+            rideVisibility:     {type: Boolean, default: true},
+    },
+    ridePrivacy:{
+            rideShowDistance:   {type: Boolean, default: true},
+            rideShowOnline:     {type: Boolean, default: true},
+            ridePublicSearch:   {type: Boolean, default: true}
+    },
+    rideNotification:{
+            rideMessage:        {type: Boolean, default: true},
+            rideBumped:         {type: Boolean, default: true},
+            rideAlerts:         {type: Boolean, default: true}
+    },
+    rideNews:{
+            rideContestNews:    {type: Boolean, default: true}
+    },
     facebook         : {
         id           : String,
         token        : String,

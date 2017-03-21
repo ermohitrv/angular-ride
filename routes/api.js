@@ -2165,6 +2165,99 @@ router.post('/join-event', function (req, res){
     
 });
 
+/* API end point to settings for mobile users */
+router.post('/settings', function(req, res){
+    
+    var email                = req.body.email;
+
+    console.log('*** email: '+email);
+    
+    if(email != "" && email != undefined){
+        User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function(err, user) {
+            // if there are any errors, return the error
+            if (err) {
+                console.log("error caught 1");
+                res.json({ 
+                    success: false, 
+                    data: null, 
+                    message: err, 
+                    code: 400
+                });
+            }
+            // check to see if theres already a user with that email
+            if (user) {
+               
+                if(req.body.rideVisibility){
+                    user.rideSettings.rideVisibility        = req.body.rideVisibility;
+                }
+                if(req.body.rideShowDistance){
+                    user.ridePrivacy.rideShowDistance       = req.body.rideShowDistance;
+                }
+                if(req.body.rideShowOnline){
+                    user.ridePrivacy.rideShowOnline         = req.body.rideShowOnline;
+                }
+                if(req.body.ridePublicSearch){
+                    user.ridePrivacy.ridePublicSearch       = req.body.ridePublicSearch;
+                }
+                if(req.body.rideMessage){
+                    user.rideNotification.rideMessage       = req.body.rideMessage;
+                }
+                if(req.body.rideBumped){
+                    user.rideNotification.rideBumped        = req.body.rideBumped;
+                }
+                if(req.body.rideAlerts){
+                    user.rideNotification.rideAlerts        = req.body.rideAlerts;
+                }
+                if(req.body.rideContestNews){
+                    user.rideNews.rideContestNews           = req.body.rideContestNews;
+                }
+                
+              
+                
+        	// save the user
+                user.save(function(err,updateuser){
+                    if (err){
+                        console.log("error caught 3");
+                        res.json({ 
+                            success: false, 
+                            data: null, 
+                            message: err, 
+                            code: 400
+                        });
+                    }else{
+                        res.json({ 
+                            success: true,
+                            data: 
+                                {
+                                    email                :req.body.email,
+                                    rideVisibility       :updateuser.rideSettings.rideVisibility,
+                                    rideShowDistance     :updateuser.ridePrivacy.rideShowDistance,
+                                    rideShowOnline       :updateuser.ridePrivacy.rideShowOnline,
+                                    ridePublicSearch     :updateuser.ridePrivacy.ridePublicSearch,
+                                    rideMessage          :updateuser.rideNotification.rideMessage,
+                                    rideBumped           :updateuser.rideNotification.rideBumped,
+                                    rideAlerts           :updateuser.rideNotification.rideAlerts,
+                                    rideContestNews      :updateuser.rideNews.rideContestNews,
+                                   
+                                },
+                            message: "settings updated", 
+                            code: 200
+                        });
+                    }
+                });
+               
+            }
+        });
+    }else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+    }
+});
+
 // 32 character random string token
 function random_token(){
   var text = "";

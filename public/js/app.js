@@ -201,7 +201,27 @@ app.controller('menuController',['$scope', '$http', function ($scope, $http) {
         };
        
         $scope.showtime = function(notificationdate){
+           var date = new Date();
+           var newdate = date.toISOString();
            
+            var d1 = new Date(notificationdate);
+            var d2 = new Date(newdate);
+            var diff = (d2-d1)/(1000 * 60 * 60);
+            
+            var timediff = Math.round(diff);
+            console.log(timediff);
+            if(timediff >= 1){
+                 var diff = (d2-d1)/(1000 * 60 * 60);
+                 var time = Math.round(diff);
+                 timediff = time+" hour ago";
+            }
+            else{
+                 var diff = (d2-d1)/(1000 * 60);
+                 var time = Math.round(diff);
+                 timediff = time+" minutes ago";
+            }
+            $scope.stopwatch = timediff;
+            
         }
  
 }]);
