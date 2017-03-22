@@ -30,7 +30,7 @@ var moment      = require("moment");
 var multer      = require('multer');
 var Activity    = require('../models/activity');
 var Rating    = require('../models/rating');
-
+var Contact    = require('../models/contact');
 
 
 var storage = multer.diskStorage({
@@ -513,7 +513,13 @@ router.get('/about', function(req, res){
 });
 
 router.get('/contact', function(req, res){ 
-    res.render('contact', { user : req.user, title:'Contact' });
+    res.render('contact', { 
+        user : req.user, 
+        title:'Contact',
+        session: req.session,
+        message : req.flash('message'),
+        message_type : req.flash('message_type'),
+        page_url: globalConfig.base_url });
 });
 
 
@@ -2096,7 +2102,7 @@ router.post('/requestactionfromProfile',middleware.isLoggedIn, function(req, res
                         { multi: true },
 
                         function(err, results){
-                            var objActivity  = new Activity();
+                                var objActivity  = new Activity();
                                 objActivity.notificationTo = profileusername;
                                 objActivity.notificationBy = req.user.local.username;
                                 objActivity.notificationType = "acceptrequest";
@@ -2157,5 +2163,33 @@ router.get('/privacy-policy', function(req, res){
     });
 
 });
+
+router.post('/submit-contactform', function(req, res){
+    
+    
+    var objContact  = new Contact();
+    objContact.contactName        = req.body.contactname;
+    objContact.contactEmail       = req.body.contactemail;
+    objContact.contactSubject     = req.body.contactsubject;
+    objContact.contactDescription = req.body.contactdescription;
+    objContact.save(function (err) {
+            if(err){
+                
+                req.flash('messageSuccess', '');
+                res.redirect('/contact'); 
+            }  
+            else{
+                
+                req.flash('message', 'Message submitted successfully!!');
+                req.flash('message_type','success');
+                res.redirect('/contact');
+            }
+            
+    });
+   
+    
+
+});
+
 
 module.exports = router;

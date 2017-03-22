@@ -2207,6 +2207,26 @@ body.profile a.navbar-brand.logo{    max-width: 200px;}
     position: relative;
 }
 
+#contact_form input.form-control {
+    /* background: rgba(255, 255, 255, 0.8); */
+    border: 2px solid #ffffff;
+    border-radius: 3px;
+    color: #000;
+    height: 45px;
+}
+
+#contact_form label {
+    color: #fff;
+}
+
+#contact_form textarea.form-control {
+    height: 150px;
+}
+
+#contact_form .error {
+    color: #ff0000;
+}
+
 #myModal td {
     border-top: none;
 }

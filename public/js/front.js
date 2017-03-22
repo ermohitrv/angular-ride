@@ -533,6 +533,28 @@ jQuery('#change_password_form').validate({
             form.submit();
          }
     }); 
+    
+    /* validate contact form */
+    jQuery("#contact_form").validate({
+        rules: {
+            contactname: {
+                required: true,
+                minlength: 5,
+                maxlength: 20,
+            },
+            contactemail: {
+                required: true,
+                email:true
+            },
+            contactdescription: {
+                required: true
+            },
+
+        },
+        messages: {
+            
+         }
+    });
    
     //code to make ajax request to check if username exists or not
     var checkUsernameSuccess = function(response){
