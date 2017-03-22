@@ -1764,39 +1764,21 @@ router.get('/updatereview',  middleware.restrict, function (req, res){
             }
         });
     
-        /*Reviews.findOne({'_id': req.query.id}, function (err, reviewinfo) {
+});
+
+router.post('/delete-review/', middleware.restrict, function(req, res) {
         
-        if(reviewinfo) {
-        Reviews.update({ 
-                                '_id': req.query.id
-                            },
-                            { 
-                                $set:   { 
-                                            'ReviewStatus': "APPROVED" ,
-                                        } 
-                            },
-                            { multi: true },
-                function(err, reviewupdateinfo){
-
-                     if (err){
-                       
-                    }else{
-                        
-                        req.flash('message', 'Review approved!');
-                        req.flash('message_type','success');
-                        res.redirect('/admin/list-reviews');
-                        
-                        
-                    }
-                });
-        }
-        else{
-            
-            console.log("error");
-        }
-       
-
-    });*/
+	// remove the article
+	 Reviews.remove({ _id: req.body.uid } ,function(err, status){
+            if(err){
+              status = "error";
+            }
+            else{
+                status = "success";
+            }
+            res.send(status);
+          
+        });
 });
 
 router.get('/update-user',  middleware.restrict, function(req, res) {

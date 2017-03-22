@@ -67,6 +67,7 @@ function submitReview(){
             if(data.status === 'success'){
                 $('#modal-review').hide();
                 $('#modal-reviewresponse').css('display','block');
+                $('#response').text("Thanks for giving reviews!!");
             }
         },
         error : function(err){
@@ -81,6 +82,38 @@ $(document).on('click','.closereviewresponse',function(){
     
     $('#modal-reviewresponse').css('display','none');
 });
+
+
+
+$(document).on('click','.productrating',function(){
+    
+    var starid = this.id;
+    var starrate = $('#'+starid).val();
+    var starproductId  = $('#starproductId').val();
+    
+    jQuery.ajax({
+        type  : "POST",
+        url   : "/rating-product",
+        data  : {'starrate' : starrate,'starproductId':starproductId},
+        //timeout: 3000,
+        success: function(data){
+            console.log(data.status);
+            if(data.status === 'success'){
+               $('#modal-reviewresponse').css('display','block');
+               $('#response').text("Thanks for Rating!!");
+            }
+            if(data.status === 'exist'){
+               $('#modal-reviewresponse').css('display','block');
+               $('#response').text("You have already rated for this product!!");
+            }
+        },
+        error : function(err){
+           
+        }
+    });
+    
+});
+
 
 
 </script>

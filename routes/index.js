@@ -29,6 +29,8 @@ var nodemailer      = require("nodemailer");
 var moment      = require("moment");
 var multer      = require('multer');
 var Activity    = require('../models/activity');
+var Rating    = require('../models/rating');
+
 
 
 var storage = multer.diskStorage({
@@ -2044,6 +2046,71 @@ router.post('/removenotification',middleware.isLoggedIn, function(req, res){
         }
     });
 
+});
+
+router.post('/rating-product',  function (req, res){
+    
+    Rating.findOne({ 'username' :  req.user.local.username,'productId':req.body.starproductId }, function (err, rating){
+            if (rating) {
+//                Rating.update(
+//                    {'username' :  req.user.local.username,'productId':req.body.starproductId },
+//                    { $set: { userRating: req.body.starrate } },
+//                    { multi: true },
+//                        function(err, results){
+//                        if(err){
+//                                        status = "error";
+//
+//                                }
+//                                else{
+//                                     status = "success";
+//
+//                                }
+
+                                res.status(200).json({"status": "exist"});
+//                    }
+//                );
+            }
+            else{
+                           var objRating           = new Rating();
+                            objRating.userRating    = req.body.starrate;
+                            objRating.username      = req.user.local.username;
+                            objRating.productId     = req.body.starproductId;
+
+                            objRating.save(function (err) {
+                                if(err){
+                                        status = "error";
+
+                                }
+                                else{
+                                     status = "success";
+
+                                }
+
+                                res.status(200).json({"status": status});
+
+                            });
+            }
+        });
+    
+//            var objRating           = new Rating();
+//            objRating.userRating    = req.body.starrate;
+//            objRating.username      = req.user.local.username;
+//            objRating.productId     = req.body.starproductId;
+//
+//            objRating.save(function (err) {
+//                if(err){
+//                        status = "error";
+//                       
+//                }
+//                else{
+//                     status = "success";
+//                     
+//                }
+//                
+//                res.status(200).json({"status": status});
+//                
+//            });
+            
 });
 
 module.exports = router;
