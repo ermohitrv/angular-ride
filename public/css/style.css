@@ -2165,7 +2165,42 @@ body.profile a.navbar-brand.logo{    max-width: 200px;}
     font-family: 'Open Sans', sans-serif;
 }
 
+
 .classified_listing {
+    float: left;
+    width: 100%;
+    font-family: 'Open Sans', sans-serif;
+    position: relative;
+}
+
+.terms_page {
+    background: #fff;
+    border-top: 1px solid #ddd;
+    padding: 60px 0;
+    float: left;
+    width: 100%;
+    font-family: 'Open Sans', sans-serif;
+}
+
+
+.terms_listing {
+    float: left;
+    width: 100%;
+    font-family: 'Open Sans', sans-serif;
+    position: relative;
+}
+
+.privacy_page {
+    background: #fff;
+    border-top: 1px solid #ddd;
+    padding: 60px 0;
+    float: left;
+    width: 100%;
+    font-family: 'Open Sans', sans-serif;
+}
+
+
+.privacy_listing {
     float: left;
     width: 100%;
     font-family: 'Open Sans', sans-serif;
@@ -2381,11 +2416,33 @@ span.closeButton {
     padding: 0px 5px 0px 5px;
     right: 0;
     color: red;
-    background: #ccc;
+    /*background: #ccc;*/
     cursor: pointer;
 }
 
+li#header_inbox_bar i.fa.fa-times {
+    font-size: 14px;
+}
+.friendssubmenu{
+    display:none;
+    position: absolute;
+}
 
+.friendsmenuli:hover > ul{
+    display:block;
+}
+
+.approval{   
+    cursor: pointer;
+    color: black;
+    padding: 5px 0px;
+    text-decoration: none;
+    display: block;
+    background: #ccc;
+    margin-left: -31px;
+    width: 140px;
+    border-bottom: 1px solid #000;
+}
 /****** Style Star Rating Widget *****/
 
 .rating { 

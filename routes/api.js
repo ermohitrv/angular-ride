@@ -9,7 +9,6 @@ var nodemailer      = require("nodemailer");
 var friends         = require('../models/friends');
 var Events          = require('../models/events');
 var Joinevents = require('../models/joinevents');
-var nodemailer      = require("nodemailer");
 var moment      = require("moment");
 
 /* API endpoint to be used by mobile device to see all users list */

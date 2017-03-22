@@ -492,7 +492,47 @@ jQuery('#change_password_form').validate({
        
     });
    
-   
+   /*Form Validations start here :: Signup Page*/
+    jQuery("#update-profile").validate({
+        rules: {
+            firstName: {
+                required: true
+            },
+            lastName: {
+                required: true
+            },
+            dob: {
+                required: true
+            },
+           
+            gender: {
+                required: true
+            }, 
+            city: {
+                required: true
+            },
+            state: {
+                required: true
+            },
+            country: {
+                required: true
+            },
+            zipcode: {
+                required: true
+            },
+
+         },
+         messages: {
+            username: {
+                remote: "Sorry, our system has detected that an account with this username already exists!"
+            },
+           
+
+         },
+         submitHandler: function(form) {
+            form.submit();
+         }
+    }); 
    
     //code to make ajax request to check if username exists or not
     var checkUsernameSuccess = function(response){

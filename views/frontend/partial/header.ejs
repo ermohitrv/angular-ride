@@ -1,3 +1,16 @@
+<% 
+    if(user){
+        var profileimageplacehold = "http://placehold.it/300?text="+user.local.firstName;
+        var imagepath = profileimageplacehold;
+        if(user.local.profileImage == profileimageplacehold){ 
+                imagepath = user.local.profileImage;
+        }
+        else{
+                imagepath = "/public/uploads/"+user.local.profileImage;
+        }
+    }
+                    
+%>
 <div class="header">
     <div class="header_top">
         <div class="container">
@@ -62,7 +75,7 @@
                 <% if (user !== undefined && user !== null) {  %>
                  <div class="dropdown">
                   <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                    <img style="width: 30px;" class="img-circle" src="/public/uploads/<%= user.local.profileImage %>">
+                    <img style="width: 30px;" class="img-circle" src="<%= imagepath %>">
                     <span class="name"><%= user.local.firstName +' '+ user.local.lastName %></span>
                     <b class="caret"></b>
                   </a>

@@ -1541,9 +1541,9 @@ router.post('/sendrequest',middleware.isLoggedIn, function(req, res){
                         res.status(200).json({"status": "error"});
                         
                     } else {
-                        
+                        console.log("friend request");
                         var objActivity  = new Activity();
-                        objActivity.notificationTo = req.body.params.profileusername;
+                        objActivity.notificationTo = profileusername;
                         objActivity.notificationBy = req.user.local.username;
                         objActivity.notificationType = "request";
                         objActivity.save(function (err) {
@@ -1552,7 +1552,6 @@ router.post('/sendrequest',middleware.isLoggedIn, function(req, res){
                     }
                 });
  
-  
 });
 
 router.post('/friendstatus',middleware.isLoggedIn, function(req, res){
@@ -2026,9 +2025,11 @@ router.get('/getnotification',middleware.isLoggedIn, function(req, res){
          if(err){
              res.status(200).json({"status": "error"}); 
         }else{
+             console.log("notificationresults");
+             console.log(notificationresults);
              res.status(200).json({"status": "success","notificationresults":notificationresults}); 
         }
-    });
+    }).sort({'addedOn': -1});
 
 });
 
@@ -2052,23 +2053,9 @@ router.post('/rating-product',  function (req, res){
     
     Rating.findOne({ 'username' :  req.user.local.username,'productId':req.body.starproductId }, function (err, rating){
             if (rating) {
-//                Rating.update(
-//                    {'username' :  req.user.local.username,'productId':req.body.starproductId },
-//                    { $set: { userRating: req.body.starrate } },
-//                    { multi: true },
-//                        function(err, results){
-//                        if(err){
-//                                        status = "error";
-//
-//                                }
-//                                else{
-//                                     status = "success";
-//
-//                                }
 
-                                res.status(200).json({"status": "exist"});
-//                    }
-//                );
+                        res.status(200).json({"status": "exist"});
+
             }
             else{
                            var objRating           = new Rating();
@@ -2091,26 +2078,84 @@ router.post('/rating-product',  function (req, res){
                             });
             }
         });
+       
+});
+
+router.post('/requestactionfromProfile',middleware.isLoggedIn, function(req, res){
+   
+
+        var profileusername = req.body.params.profileusername;
+        var pendingapproval = req.body.params.pendingapproval;
+        
+    if(profileusername != "" && profileusername != undefined && pendingapproval != "" && pendingapproval != undefined){
+        Friends.findOne({'friendRequestSentTo' : req.user.local.username , 'friendRequestSentBy' : profileusername ,'friendRequestApprovalStatus':'pending'}, function (err, friendrequest){
+            if(friendrequest){
+                if(pendingapproval == 'accept'){
+                    Friends.update({'friendRequestSentTo' : req.user.local.username , 'friendRequestSentBy' : profileusername ,'friendRequestApprovalStatus':'pending'},
+                        { $set: { 'friendRequestApprovalStatus': pendingapproval } },
+                        { multi: true },
+
+                        function(err, results){
+                            var objActivity  = new Activity();
+                                objActivity.notificationTo = profileusername;
+                                objActivity.notificationBy = req.user.local.username;
+                                objActivity.notificationType = "acceptrequest";
+                                objActivity.save(function (err) {
+                                
+                                    console.log("Request accepted");
+                                });
+                           
+                        }
+                    );
+                } 
+                else if(pendingapproval == 'reject'){
+                    Friends.remove({'friendRequestSentTo' : req.user.local.username ,'friendRequestSentBy': profileusername, 'friendRequestApprovalStatus':'pending'}, function (err, friendsdata) {
+       
+                            if(err){
+                                 console.log("error");
+                           }else{
+                                 console.log("removed");
+                           }
+                    });
+                }
+        
+                res.status(200).json({"status": "success"});  
+            }else{
+                res.status(200).json({"status": "error"});  
+            }
+        });
+    }
+    else{
+         res.status(200).json({"status": "error"});  
+    }
+});
+
+router.get('/terms', function(req, res){
     
-//            var objRating           = new Rating();
-//            objRating.userRating    = req.body.starrate;
-//            objRating.username      = req.user.local.username;
-//            objRating.productId     = req.body.starproductId;
-//
-//            objRating.save(function (err) {
-//                if(err){
-//                        status = "error";
-//                       
-//                }
-//                else{
-//                     status = "success";
-//                     
-//                }
-//                
-//                res.status(200).json({"status": status});
-//                
-//            });
-            
+    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+    res.render('terms', {
+        title: 'Terms', 
+        user: req.user,
+        session: req.session,
+        message: middleware.clear_session_value(req.session, "message"),
+        message_type: middleware.clear_session_value(req.session, "message_type"),
+        page_url: globalConfig.base_url
+    });
+
+});
+
+router.get('/privacy-policy', function(req, res){
+    
+    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+    res.render('privacy-policy', {
+        title: 'Privacy Policy', 
+        user: req.user,
+        session: req.session,
+        message: middleware.clear_session_value(req.session, "message"),
+        message_type: middleware.clear_session_value(req.session, "message_type"),
+        page_url: globalConfig.base_url
+    });
+
 });
 
 module.exports = router;

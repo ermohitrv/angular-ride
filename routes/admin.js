@@ -22,7 +22,7 @@ var Reviews = require('../models/reviews');
 var multer      = require('multer');
 var Friends = require('../models/friends');
 var Followers = require('../models/followers');
-
+var nodemailer      = require("nodemailer");
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -1804,7 +1804,13 @@ router.get('/update-user',  middleware.restrict, function(req, res) {
 
 
 router.post('/userupdate',  middleware.restrict, function (req, res){
-        console.log("user id "+req.body.frm_user_id);
+        
+        var accountenable = "";
+        if(req.body.frm_user_accountenable == "true"){
+            var accounttrue = true;
+        }else if(req.body.frm_user_accountenable == "false"){
+            var accounttrue = false;
+        }
        
         User.findOne({'_id': req.body.frm_user_id }, function (err, userinfo) {
             if (!userinfo) {
@@ -1812,22 +1818,43 @@ router.post('/userupdate',  middleware.restrict, function (req, res){
                 res.redirect('/admin/list-users');
                 
             } else {
-                
+                accountenable = userinfo.enableAccount;
                 userinfo.local.firstName     = req.body.frm_user_firstname;
                 userinfo.local.lastName      = req.body.frm_user_lastname;
                 userinfo.local.gender        = req.body.frm_user_gender;
                 userinfo.local.userLevel     = req.body.frm_user_userlevel;
                 userinfo.local.userActive    = req.body.frm_user_useractive;
-                userinfo.local.enableAccount = req.body.frm_user_accountenable;
-                
+                userinfo.enableAccount       = req.body.frm_user_accountenable;
+              
                
-                userinfo.save(function (err) {
+                userinfo.save(function (err,updateuserinfo) {
                     if (err) {
                         
                         res.redirect('/admin/list-users');
                          
                     } else {
+                        
+                        if(accountenable != accounttrue){
+                            var accountstatus = "";
+                            if(updateuserinfo.enableAccount == true){
+                                accountstatus = "Activated"
+                            }else{
+                                accountstatus = "Deactivated"
+                            }
+                            var html = 'Hello '+userinfo.local.firstName+', <br><br><b>Your rideprix account is '+accountstatus+'.</b><br>';
                             
+                            html += '<br>Thank you, Team Motorcycle';
+
+                            var mailOptions = {
+                                from   : "Motorcycle <no-reply@motorcycle.com>", 
+                                to     :  userinfo.local.email,
+                                //to     : "mohit@rvtechnologies.co.in",
+                                subject: "Rideprix Account "+accountstatus,
+                                html   : html
+                            };
+
+                            nodemailer.mail(mailOptions);
+                        }    
                         req.flash('message', 'User updated successfully!');
                         req.flash('message_type','success');
                         res.redirect('/admin/list-users');

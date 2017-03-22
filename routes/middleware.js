@@ -5,7 +5,8 @@ module.exports = {
         if (req.isAuthenticated()) {
               if(req.user.enableAccount == false){
                 var route_name = req.originalUrl;
-                if(route_name != '/updateprofile'){
+               
+                if(route_name != '/update-profile'){
                     return res.redirect('/accountdeactivated');
                 }
               }

@@ -3,27 +3,27 @@
          <div class="container">
             <ul class="nav navbar-nav navbar-right top-menu">
                 <li class="friendsearchbox"> 
-                    <form class="navbar-form" id="searchfriends" role="search" method="get" action="/searchFriends">
+                    <form class="navbar-form" id="searchfriends" role="search" method="get" action="">
                         <div class="input-group">
                             <input  class="form-control search-friend" placeholder="Search Friends" name="searchfrnd" id="search-box-frnd">
                             <div class="input-group-btn">
-                                <button class="btn btn-default" id="searchfrndbtn" type="submit" ><i class="glyphicon glyphicon-search"></i></button>
+                                <button class="btn btn-default" id="searchfrndbtn" type="button" ><i class="glyphicon glyphicon-search"></i></button>
                             </div>
                         </div>
                     </form>
                 </li>
                <li id="header_inbox_bar" class="dropdown" ng-init="getNotifications()">
-                  <a data-toggle="dropdown" class="dropdown-toggle" href="#" >
+                  <a data-toggle="dropdown" class="dropdown-toggle" href="#" title="Notifications">
                   <i class="fa fa-envelope-o" data-original-title="" title=""></i>
                   <span class="badge bg-important" data-ng-bind="notificationresults.length"></span>
                   </a>
                   <ul class="dropdown-menu extended inbox">
                      <div class="notify-arrow notify-arrow-red"></div>
                      <li>
-                        <p class="red" >You have {{notificationresults.length}} new messages</p>
+                        <p class="red" >You have {{notificationresults.length}} new notifications</p>
                      </li>
                      <li data-ng-if="notificationresults.length > 0"  ng-repeat="notification in notificationresults" id="li_{{ notification._id}}">
-                        <span class="closeButton" ng-click="removeNotification(notification._id)">X</span>
+                        <span class="closeButton" ng-click="removeNotification(notification._id)"><i class="fa fa-times" aria-hidden="true"></i></span>
                         <a href="javascript:void(0)">
 <!--                            <span class="photo">
                                 <img alt="avatar" src="<%= user.local.profileImage %>">
@@ -75,10 +75,23 @@
                      </li>-->
                   </ul>
                </li>
+                <% 
+                    var profileimageplacehold = "http://placehold.it/300?text="+user.local.firstName;
+                    var imagepath = profileimageplacehold;
+                    if(user.local.profileImage == profileimageplacehold){ 
+                        imagepath = user.local.profileImage;
+                    }
+                    else{
+                        imagepath = "/public/uploads/"+user.local.profileImage;
+                    }
+                    
+                %>
                <!-- user login dropdown start-->
                <li class="dropdown">
                   <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                  <img style="width: 30px;" class="img-circle" src="/public/uploads/<%= user.local.profileImage %>">
+                   
+                  <img style="width: 30px;" class="img-circle" src="<%= imagepath %>">
+                  
                   <span class="username"><%= user.local.firstName+' '+user.local.lastName %></span>
                   <b class="caret"></b>
                   </a>

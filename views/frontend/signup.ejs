@@ -7,9 +7,9 @@
             <% if (error.length > 0) { %>
                 <div class="alert alert-danger"><%= error %></div>
             <% } %>
-            aaa
+            
             <div ng-view="studenttable"></div>
-            bbb
+            
             <form action="/signup" class="form-horizontal" method="post" id="signup_form">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <div class="form-group">
@@ -322,7 +322,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-12 col-xs-12">
-                        <label><input type="checkbox" name="confirm_joining"> By clicking “Join RidePrix” you confirm that you accept our <a class="undrline" target="_blank" href="javascript:;">Terms of Use</a> and <a class="undrline" target="_blank" href="javascript:;">Privacy Policy</a></label>
+                        <label><input type="checkbox" name="confirm_joining"> By clicking “Join RidePrix” you confirm that you accept our <a class="undrline" target="_blank" href="/terms">Terms of Use</a> and <a class="undrline" target="_blank" href="/privacy-policy">Privacy Policy</a></label>
                     </div>
                 </div>
                 <div class="form-group">
@@ -341,6 +341,11 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script>
   $( function() {
-    $( "#datepicker" ).datepicker();
+    $( "#datepicker" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-50:+0",
+            dateFormat: 'yy-mm-dd'
+        });
   } );
-  </script>
+</script>

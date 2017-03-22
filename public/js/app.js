@@ -206,21 +206,31 @@ app.controller('menuController',['$scope', '$http', function ($scope, $http) {
            
             var d1 = new Date(notificationdate);
             var d2 = new Date(newdate);
-            var diff = (d2-d1)/(1000 * 60 * 60);
+            console.log(d1);
+            console.log(d2);
+            //var diff = (d2-d1)/(1000);
             
-            var timediff = Math.round(diff);
-            console.log(timediff);
-            if(timediff >= 1){
-                 var diff = (d2-d1)/(1000 * 60 * 60);
-                 var time = Math.round(diff);
-                 timediff = time+" hour ago";
+            //var timediff = Math.round(diff);
+            var timediff = 0;
+            var time = 0;
+            var diff = d2 - d1;
+            
+            if (diff > 60e3){ 
+                console.log(Math.floor(diff / 60e3), 'minutes ago' );
+                timediff =  Math.floor(diff / 60e3);
+                time = Math.round(timediff)+" minutes ago";
+                if(timediff > 60){
+                     timediff = timediff/60;
+                     time = Math.round(timediff)+" hour ago";
+                }
             }
-            else{
-                 var diff = (d2-d1)/(1000 * 60);
-                 var time = Math.round(diff);
-                 timediff = time+" minutes ago";
+            else {
+                console.log(Math.floor(diff / 1e3), 'seconds ago' );
+                timediff =  Math.floor(diff / 1e3);
+                time =  Math.round(timediff)+" seconds ago";
             }
-            $scope.stopwatch = timediff;
+          
+            $scope.stopwatch = time;
             
         }
  
@@ -921,6 +931,7 @@ app.controller('friendsController',['$scope', '$http', function ($scope, $http, 
         
         if(mouseText == "leave"){
             $('#followtext').text("Following");
+           
         }
     };
     
@@ -939,6 +950,28 @@ app.controller('friendsController',['$scope', '$http', function ($scope, $http, 
             if(response.status == "success"){
             
                 $scope.followStatus(profileusername);
+            }
+            
+        }).error(function(err){
+           console.log('Oops! Error occur'+err);
+        });  
+    };
+    
+    $scope.requestactionfromProfile = function(pendingapproval,profileusername){
+       var data = { 
+            profileusername: profileusername, 
+            pendingapproval: pendingapproval
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/requestactionfromProfile',config).success(function (response, status, headers, config){
+           
+            console.log(response);
+            if(response.status == "success"){
+                
+                $scope.friendStatus(profileusername);
             }
             
         }).error(function(err){
