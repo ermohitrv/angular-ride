@@ -2266,7 +2266,7 @@ router.post('/nearby-riders', function (req, res) {
     //var email               = 'preeti_dev@rvtechnologies.co.in';
     //var currentlocationLat  = '1.2393';
     //var currentlocationLng  = '1.8184';
-    var jsonarray = [];
+    var jsonarray = {};
     
     if(email != "" && email != undefined && currentlocationLat != "" && currentlocationLat != undefined && currentlocationLng != "" && currentlocationLng != undefined){
     RpRoutes.find({}, function(err, getrproutes){
