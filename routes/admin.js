@@ -1808,6 +1808,7 @@ router.get('/update-user',  middleware.restrict, function(req, res) {
 router.post('/userupdate',  middleware.restrict, function (req, res){
         console.log(req.body.frm_user_firstname);
         console.log(req.body.frm_user_lastname);
+         console.log(req.body.frm_user_gender);
         var accountenable = "";
         if(req.body.frm_user_accountenable == "true"){
             var accounttrue = true;
