@@ -1832,7 +1832,7 @@ router.post('/userupdate',  middleware.restrict, function (req, res){
                
                 userinfo.save(function (err,updateuserinfo) {
                     if (err) {
-                        console.log("aaaaa");
+                        console.log("aaaaa"+err);
                         res.redirect('/admin/list-users');
                          
                     } else {
@@ -1841,20 +1841,20 @@ router.post('/userupdate',  middleware.restrict, function (req, res){
                         console.log("accountenable"+accountenable);
                         if(accountenable != accounttrue){
                             console.log("enter email");
-                             console.log("enter email qqq"+userinfo.local.email);
+                             console.log("enter email"+userinfo.local.email);
                             var accountstatus = "";
                             if(updateuserinfo.enableAccount == true){
                                 accountstatus = "Activated"
                             }else{
                                 accountstatus = "Deactivated"
                             }
-                            var html = 'Hello '+updateuserinfo.local.firstName+', <br><br><b>Your rideprix account is '+accountstatus+'.</b><br>';
+                            var html = 'Hello '+userinfo.local.firstName+', <br><br><b>Your rideprix account is '+accountstatus+'.</b><br>';
                             
                             html += '<br>Thank you, Team Motorcycle';
 
                             var mailOptions = {
                                 from   : "Motorcycle <no-reply@motorcycle.com>", 
-                                to     :  updateuserinfo.local.email,
+                                to     :  userinfo.local.email,
                                 //to     : "mohit@rvtechnologies.co.in",
                                 subject: "Rideprix Account "+accountstatus,
                                 html   : html
