@@ -2352,7 +2352,7 @@ router.post('/nearby-riders', function (req, res) {
                         'rideCategory':1 
                     }, 
                     function(err, user) {
-                           // console.log(user);
+                            console.log(user);
                             if(err){
                                     console.log("error caught 3");
                                     res.json({ 
