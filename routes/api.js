@@ -2266,7 +2266,7 @@ router.post('/nearby-riders', function (req, res) {
     //var email               = 'preeti_dev@rvtechnologies.co.in';
     //var currentlocationLat  = '1.2393';
     //var currentlocationLng  = '1.8184';
-    
+    var jsonarray = {};
     
     if(email != "" && email != undefined && currentlocationLat != "" && currentlocationLat != undefined && currentlocationLng != "" && currentlocationLng != undefined){
     RpRoutes.find({}, function(err, getrproutes){
@@ -2363,12 +2363,14 @@ router.post('/nearby-riders', function (req, res) {
                                     });
                             }
                             else{
-                                res.json({ 
-                                    success: true,
-                                    data:{user:user},
-                                    message: "Nearby riders listed", 
-                                    code: 200
-                                 });
+                                
+                                jsonarray.push(user);
+//                                res.json({ 
+//                                    success: true,
+//                                    data:{user:user},
+//                                    message: "Nearby riders listed", 
+//                                    code: 200
+//                                 });
 
                             }
 
@@ -2452,6 +2454,12 @@ router.post('/nearby-riders', function (req, res) {
                     }
             
             }
+            res.json({ 
+                                    success: true,
+                                    data:{users:jsonarray},
+                                    message: "Nearby riders listed", 
+                                    code: 200
+            });
             
         }else{
             res.json({ 
