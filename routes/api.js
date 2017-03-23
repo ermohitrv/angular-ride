@@ -2298,6 +2298,44 @@ router.post('/nearby-riders', function (req, res) {
                     console.log(roundDist);
                     if(roundDist <= 25 ){
                        
+                    /*User.find({ 
+                        'local.email': getrproutes[i].email,
+                        'rideSettings.rideVisibility' :1 
+                    },
+                    {
+                        'local.firstName':1,
+                        'local.lastName' : 1, 
+                        'local.username':1, 
+                        'local.email':1,
+                        'local.contact':1,
+                        'local.profileImage':1,
+                        'rideType':1,
+                        'rideExperience':1,
+                        'rideCategory':1 
+                    }, 
+                    function(err, user) {
+
+                            if(err){
+                                    console.log("error caught 3");
+                                    res.json({ 
+                                        success: false, 
+                                        data: null, 
+                                        message: err, 
+                                        code: 400
+                                    });
+                            }
+                            else{
+                                res.json({ 
+                                    success: true,
+                                    data:{user:user},
+                                    message: "Nearby riders listed", 
+                                    code: 200
+                                 });
+
+                            }
+
+                    });*/
+                    
                     User.find({ 
                         'local.email': getrproutes[i].email,
                         'rideSettings.rideVisibility' :1 
@@ -2328,20 +2366,6 @@ router.post('/nearby-riders', function (req, res) {
                                 res.json({ 
                                     success: true,
                                     data:{user:user},
-//                                    data: {
-//                                        firstName           :user.local.firstName,
-//                                        lastName            :user.local.lastName,
-//                                        username            :user.local.username,
-//                                        email               :user.local.email,
-//                                        contact             :user.local.contact,
-//                                        profileImage        :user.local.profileImage,
-//                                        rideType            :user.rideType,
-//                                        rideExperience      :user.rideExperience,
-//                                        rideCategory        :user.rideCategory,
-//                                        currentlocationlat  :getrproutes[i].currentlocationLat,
-//                                        currentlocationlong :getrproutes[i].currentlocationLng,
-//                                        
-//                                    },
                                     message: "Nearby riders listed", 
                                     code: 200
                                  });
@@ -2349,6 +2373,73 @@ router.post('/nearby-riders', function (req, res) {
                             }
 
                     });
+                    
+                    
+                    /*User.aggregate(
+                        [   
+                   
+                    
+                            {
+                                $lookup:
+                                        {
+                                            from: "friends",
+                                            localField: "local.email",
+                                            foreignField: "friendRequestSentBy",
+                                            as: "item"
+                                 }
+                            },
+                            {
+                                $project : {
+                                    //'_id':1,
+                                    'eventName': 1,
+                                    'eventLocation':1,
+                                    'eventLocationType':1,
+                                    'eventHost':1,
+                                    'startDate':1,
+                                    'endDate':1,
+                                    'startTime':1,
+                                    'endTime':1,
+                                    'userEmail':1,
+                                    "eventid": "$item.eventId", 
+                                    
+
+
+                                } 
+                            },
+
+                            {
+                                $match:{
+                                        'local.email': getrproutes[i].email,
+                                        'rideSettings.rideVisibility' :1  
+                                    }
+                            }
+
+                        ]
+                                ,function (err, usersList) {
+                                if(err){
+                                       res.json({
+                                        success: true, 
+                                        data:null,
+                                        message: "error", 
+                                        code: 400
+                                     });
+                                }
+                                else{
+
+                                    res.json({
+                                        success: true, 
+                                        data: {
+                                            events : usersList
+                                        },
+                                        message: "success", 
+                                        code: 200
+                                    });
+                                }
+                    });*/
+                    
+                    
+                    
+                    
                 
                     }else{
                         res.json({ 
@@ -2382,6 +2473,70 @@ router.post('/nearby-riders', function (req, res) {
         });
     }
     
+});
+
+/* API route to accept friend request */
+router.post('/respond-friend-request', function (req, res) {
+    var friendRequestBy = req.body.friendRequestBy; //email
+    var friendRequestTo = req.body.friendRequestTo; //email
+    var friendRequestRespond = req.body.friendRequestRespond;
+
+    if ((friendRequestBy !== undefined && friendRequestBy !== null) && (friendRequestTo !== undefined && friendRequestTo !== null)) {
+        friends.findOne({'friendRequestSentBy': friendRequestBy, 'friendRequestSentTo': friendRequestTo,'friendRequestApprovalStatus':'pending'}, function (err, friendReq) {
+            if (err) {
+                res.json(false);
+            } else {
+                if(friendRequestRespond == 'accept'){
+                        friendReq.friendRequestApprovalStatus = 'accept';
+                        friendReq.save(function (err) {
+                            if (!err) {
+                                res.json({ 
+                                    success: true, 
+                                    data: {
+                                        friendRequestSentBy : friendRequestBy,
+                                        friendRequestSentTo: friendRequestTo,
+                                        friendRequestStatus: friendReq.friendRequestApprovalStatus
+                                    }, 
+                                    message: "friend request accepted ", 
+                                    code: 400
+                                });
+                            } else {
+                                res.json({ 
+                                    success: false, 
+                                    data: null, 
+                                    message: "error occured : "+err, 
+                                    code: 400
+                                });
+                            }
+                        });
+                }
+                else if(friendRequestRespond == 'reject'){
+                    friends.remove({'friendRequestSentBy': friendRequestBy, 'friendRequestSentTo': friendRequestTo,'friendRequestApprovalStatus':'pending'}, function (err, friendReq) {
+                        if(err){
+                                res.json({ 
+                                    success: false, 
+                                    data: null, 
+                                    message: "error occured : "+err, 
+                                    code: 400
+                                });
+                            
+                        }else{
+                            res.json({ 
+                                    success: true, 
+                                    data: {
+                                        friendRequestSentBy : friendRequestBy,
+                                        friendRequestSentTo: friendRequestTo,
+                                        friendRequestStatus: 'rejected'
+                                    }, 
+                                    message: "friend request rejected ", 
+                                    code: 400
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    }
 });
 
 // 32 character random string token
