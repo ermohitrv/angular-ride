@@ -2352,7 +2352,7 @@ router.post('/nearby-riders', function (req, res) {
                         'rideCategory':1 
                     }, 
                     function(err, user) {
-                            console.log(user);
+                            
                             if(err){
                                     console.log("error caught 3");
                                     res.json({ 
@@ -2364,7 +2364,10 @@ router.post('/nearby-riders', function (req, res) {
                             }
                             else{
                                 //jsonarray = user;
+                                if(user != ""){
+                                console.log(user);    
                                 jsonarray.push(user);
+                                }
 //                                res.json({ 
 //                                    success: true,
 //                                    data:{user:user},
