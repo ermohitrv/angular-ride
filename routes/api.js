@@ -2363,8 +2363,8 @@ router.post('/nearby-riders', function (req, res) {
                                     });
                             }
                             else{
-                                
-                                jsonarray.push(user);
+                                //jsonarray.user
+                                //jsonarray.push(user);
 //                                res.json({ 
 //                                    success: true,
 //                                    data:{user:user},
@@ -2456,7 +2456,7 @@ router.post('/nearby-riders', function (req, res) {
             }
             res.json({ 
                                     success: true,
-                                    data:{users:jsonarray},
+                                    //data:{users:jsonarray},
                                     message: "Nearby riders listed", 
                                     code: 200
             });
