@@ -2300,7 +2300,7 @@ router.post('/nearby-riders', function (req, res) {
                        
                     User.find({ 
                         'local.email': getrproutes[i].email,
-                       // 'rideSettings.rideVisibility' :1 
+                        'rideSettings.rideVisibility' :1 
                     },
                     {
                         'local.firstName':1,
