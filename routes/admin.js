@@ -1806,7 +1806,8 @@ router.get('/update-user',  middleware.restrict, function(req, res) {
 
 
 router.post('/userupdate',  middleware.restrict, function (req, res){
-        
+        console.log(req.body.frm_user_firstname);
+        console.log(req.body.frm_user_lastname);
         var accountenable = "";
         if(req.body.frm_user_accountenable == "true"){
             var accounttrue = true;
@@ -1816,7 +1817,7 @@ router.post('/userupdate',  middleware.restrict, function (req, res){
        
         User.findOne({'_id': req.body.frm_user_id }, function (err, userinfo) {
             if (!userinfo) {
-                
+                console.log("ssdfsf");
                 res.redirect('/admin/list-users');
                 
             } else {
@@ -1831,10 +1832,11 @@ router.post('/userupdate',  middleware.restrict, function (req, res){
                
                 userinfo.save(function (err,updateuserinfo) {
                     if (err) {
-                        
+                        console.log("aaaaa");
                         res.redirect('/admin/list-users');
                          
                     } else {
+                        console.log("nnnnn");
                         console.log("accounttrue"+accounttrue);
                         console.log("accountenable"+accountenable);
                         if(accountenable != accounttrue){
