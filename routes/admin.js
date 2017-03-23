@@ -1806,9 +1806,7 @@ router.get('/update-user',  middleware.restrict, function(req, res) {
 
 
 router.post('/userupdate',  middleware.restrict, function (req, res){
-        console.log(req.body.frm_user_firstname);
-        console.log(req.body.frm_user_lastname);
-         console.log(req.body.frm_user_gender);
+        
         var accountenable = "";
         if(req.body.frm_user_accountenable == "true"){
             var accounttrue = true;
@@ -1833,16 +1831,13 @@ router.post('/userupdate',  middleware.restrict, function (req, res){
                
                 userinfo.save(function (err,updateuserinfo) {
                     if (err) {
-                        console.log("aaaaa"+err);
+                        
                         res.redirect('/admin/list-users');
                          
                     } else {
-                        console.log("nnnnn");
-                        console.log("accounttrue"+accounttrue);
-                        console.log("accountenable"+accountenable);
+                       
                         if(accountenable != accounttrue){
-                            console.log("enter email");
-                             console.log("enter email"+userinfo.local.email);
+                           
                             var accountstatus = "";
                             if(updateuserinfo.enableAccount == true){
                                 accountstatus = "Activated"
