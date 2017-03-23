@@ -2258,7 +2258,7 @@ router.post('/settings', function(req, res){
 
 /* API stop endpoint to be used by mobile device for rproutes  */
 router.post('/nearby-riders', function (req, res) {
-    
+    var _ = require('underscore');
     var email               = req.body.email;
     var currentlocationLat  = req.body.currentlocationLat;
     var currentlocationLng  = req.body.currentlocationLng;
