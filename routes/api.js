@@ -2269,7 +2269,7 @@ router.post('/nearby-riders', function (req, res) {
     
     
     if(email != "" && email != undefined && currentlocationLat != "" && currentlocationLat != undefined && currentlocationLng != "" && currentlocationLng != undefined){
-    RpRoutes.find({'email': { $ne: email } }, function(err, getrproutes){
+    RpRoutes.find({}, function(err, getrproutes){
         
         if(getrproutes){
                 for(var i = 0; i < getrproutes.length; i++){
