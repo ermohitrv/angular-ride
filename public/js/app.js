@@ -694,6 +694,16 @@ app.controller('adminController',['$scope', '$http','$sce', function ($scope, $h
         });
     };
     
+    $scope.getorderList= function(){
+       
+        $http.get('/admin/get-order-list').success(function(orderlist){
+          
+           $scope.orderlist = orderlist;
+           
+        }).error(function(){
+            console.log('Oops! Error listing orderlist');
+        });
+    };
 
     
 }]);

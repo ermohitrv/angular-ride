@@ -156,31 +156,81 @@
                         <br>-->
                     </div>
                     <div class="tab-pane" id="review">
-                        <% if(reviews.length > 0) { %>
+<!--                        <% if(reviews.length > 0) { %>
                        <table>
                             <colgroup>
                                 <col style="width:50%">
                                 <col>
-                                <!--<col style="width:33%">-->
                             </colgroup>
                             <tbody>
                                 <tr>
                                     <th>Name</th>
                                     <th>Review</th>
-                                    <!--<th>Rating</th>-->
                                 </tr>
                                 <% for(var rev = 0; rev < reviews.length; rev++) { %>
                                 <tr>
                                     <td><%= reviews[rev].username %></td>
                                     <td><%= reviews[rev].userReview %></td>
-                                    <!--<td>$15</td>-->
                                 </tr>
                                 <% } %>
                                 
                             </tbody>
                             
                         </table>
-                        <% } %>
+                        <% } %>-->
+                        <div id="myCarousel" class="carousel  productdetailcarousel" data-ride="carousel">
+                          <!-- Indicators -->
+                          <ol class="carousel-indicators">
+                            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                            <% for(var rev = 1; rev < reviews.length; rev++) { %>
+                            <li data-target="#myCarousel" data-slide-to="1"></li>
+                             <% } %>
+                          </ol>
+
+                          <!-- Wrapper for slides -->
+                          <div class="carousel-inner" role="listbox">
+                            <% for(var rev = 0; rev < reviews.length; rev++) { %>
+                            <div class="item active">
+                                <p>By&nbsp;<span><%= reviews[rev].username %>,</span></p>
+<!--                                 <fieldset class="rating crouselrating">
+                                    <input   type="radio" id="star5" name="rating" value="5" disabled="yes" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
+                                    <input   type="radio" id="star4half" name="rating" value="4.5" disabled="yes"/><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+                                    <input   type="radio" id="star4" name="rating" value="4" disabled="yes" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
+                                    <input  type="radio" id="star3half" name="rating" value="3.5" disabled="yes"/><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+                                    <input  type="radio" id="star3" name="rating" value="3" disabled="yes"/><label class = "full" for="star3" title="Meh - 3 stars"></label>
+                                    <input  type="radio" id="star2half" name="rating" value="2.5" disabled="yes"/><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+                                    <input   type="radio" id="star2" name="rating" value="2" disabled="yes"/><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
+                                    <input  type="radio" id="star1half" name="rating" value="1.5" disabled="yes"/><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+                                    <input  type="radio" id="star1" name="rating" value="1" disabled="yes"/><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
+                                    <input   type="radio" id="starhalf" name="rating" value="0.5" disabled="yes"/><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                                </fieldset><br/>  -->
+                                <p><%= reviews[rev].userReview %></p>
+                            </div>
+                            <% } %>
+
+<!--                            <div class="item">
+                              test2
+                            </div>
+
+                            <div class="item">
+                              test3
+                            </div>
+
+                            <div class="item">
+                              test4
+                            </div>-->
+                          </div>
+
+                          <!-- Left and right controls -->
+                          <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                          </a>
+                          <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                          </a>
+                        </div>
                     </div>
 <!--                    <div class="tab-pane" id="shipping">
                         <table>

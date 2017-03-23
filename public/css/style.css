@@ -2428,6 +2428,20 @@ input#search-box-frnd {
     padding: 5px 15px 0px 15px;
 }
 
+.productdetailcarousel{
+    height: 150px ;
+}
+
+.productdetailcarousel .item {
+    height: 150px ;
+    color: #fff;
+    padding: 10px 0px 0px 10px;
+}
+
+fieldset.crouselrating {
+    line-height: 0px;
+}
+
 /* end product detail page */
 
 span.closeButton {

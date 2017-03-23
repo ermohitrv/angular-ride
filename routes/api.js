@@ -2335,7 +2335,7 @@ router.post('/nearby-riders', function (req, res) {
                             }
 
                     });*/
-                    
+                    console.log("getrproutes[i].email : "+getrproutes[i].email);
                     User.find({ 
                         'local.email': getrproutes[i].email,
                         'rideSettings.rideVisibility' :1 
@@ -2352,7 +2352,7 @@ router.post('/nearby-riders', function (req, res) {
                         'rideCategory':1 
                     }, 
                     function(err, user) {
-
+                            console.log(user);
                             if(err){
                                     console.log("error caught 3");
                                     res.json({ 

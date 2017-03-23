@@ -552,7 +552,7 @@ jQuery('#change_password_form').validate({
             },
 
         },
-        messages: {
+        messages: { 
             
          }
     });

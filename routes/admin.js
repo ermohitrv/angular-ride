@@ -24,6 +24,8 @@ var Friends = require('../models/friends');
 var Followers = require('../models/followers');
 var nodemailer      = require("nodemailer");
 var Contact    = require('../models/contact');
+var Orders    = require('../models/orders');
+
 
 
 var storage = multer.diskStorage({
@@ -91,7 +93,7 @@ router.get('/view-user/:id', middleware.isAdminLoggedIn, function(req, res){
 
 /* Route for  List Orders */
 router.get('/list-orders', middleware.isAdminLoggedIn, function(req, res){
-    res.render('list-orders', { user : req.user, title:'Admin | List Orders',active:'list-orders'});
+    res.render('list-orders', { user : req.user, message : req.flash('message'),message_type : req.flash('message_type'),title:'Admin | List Orders',active:'list-orders'});
 });
 
 /* Route for List Contact Requests */
@@ -1874,6 +1876,16 @@ router.get('/get-contacts-list', middleware.restrict, function(req, res){
     Contact.find({},function (err, contactList) {
         if(contactList){
             res.json(contactList);
+        }else{
+            res.json({});
+        }
+    });
+});
+
+router.get('/get-order-list', middleware.restrict, function(req, res){
+    Orders.find({},function (err, orderList) {
+        if(orderList){
+            res.json(orderList);
         }else{
             res.json({});
         }
