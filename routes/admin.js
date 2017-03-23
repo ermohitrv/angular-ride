@@ -1840,6 +1840,7 @@ router.post('/userupdate',  middleware.restrict, function (req, res){
                         console.log("accounttrue"+accounttrue);
                         console.log("accountenable"+accountenable);
                         if(accountenable != accounttrue){
+                            console.log("enter email");
                             var accountstatus = "";
                             if(updateuserinfo.enableAccount == true){
                                 accountstatus = "Activated"
