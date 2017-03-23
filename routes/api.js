@@ -2366,7 +2366,8 @@ router.post('/nearby-riders', function (req, res) {
                                 //jsonarray = user;
                                 if(user != ""){
                                 console.log(JSON.stringify(user));    
-                                jsonarray.push(user);
+                                //jsonarray.push(user);
+                                 _.extend(jsonarray, user);
                                 }
 //                                res.json({ 
 //                                    success: true,
