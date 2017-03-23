@@ -23,6 +23,8 @@ var multer      = require('multer');
 var Friends = require('../models/friends');
 var Followers = require('../models/followers');
 var nodemailer      = require("nodemailer");
+var Contact    = require('../models/contact');
+
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -94,7 +96,7 @@ router.get('/list-orders', middleware.isAdminLoggedIn, function(req, res){
 
 /* Route for List Contact Requests */
 router.get('/list-contact-requests', middleware.isAdminLoggedIn, function(req, res){
-    res.render('list-contact-requests', { user : req.user, title:'Admin | List Contact Requests',active:'list-contact-requests'});
+    res.render('list-contact-requests', { user : req.user, message : req.flash('message'),message_type : req.flash('message_type'), title:'Admin | List Contact Requests',active:'list-contact-requests'});
 });
 
 /* Route for List Suggestions */
@@ -1833,7 +1835,8 @@ router.post('/userupdate',  middleware.restrict, function (req, res){
                         res.redirect('/admin/list-users');
                          
                     } else {
-                        
+                        console.log("accounttrue"+accounttrue);
+                        console.log("accountenable"+accountenable);
                         if(accountenable != accounttrue){
                             var accountstatus = "";
                             if(updateuserinfo.enableAccount == true){
@@ -1867,4 +1870,15 @@ router.post('/userupdate',  middleware.restrict, function (req, res){
     
 });
     
+    
+router.get('/get-contacts-list', middleware.restrict, function(req, res){
+    Contact.find({},function (err, contactList) {
+        if(contactList){
+            res.json(contactList);
+        }else{
+            res.json({});
+        }
+    });
+});
+
 module.exports = router;

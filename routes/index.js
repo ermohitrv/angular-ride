@@ -2180,6 +2180,29 @@ router.post('/submit-contactform', function(req, res){
             }  
             else{
                 
+                var html = 'Hello '+req.body.contactname+',<br>Your query submitted succesfully.<br> Thankyou for contacting us.<br><br>';
+                            html += '<br>Thank you, Team Motorcycle';
+                
+                var mailOptions = {
+                            from   : "Motorcycle <no-reply@motorcycle.com>", 
+                            to     :  req.body.contactemail,
+                            subject: "Contact",
+                            html   : html
+                };
+
+                var htmladmin = 'Hello,<br>'+req.body.contactdescription+'<br><br>';
+                            htmladmin += '<br>Thank you, '+ req.body.contactname;
+                
+                var mailOptionsadmin = {
+                            from   : "Motorcycle <no-reply@motorcycle.com>", 
+                            to     :  'preeti_dev@rvtechnologies.co.in',
+                            subject: req.body.contactsubject,
+                            html   : htmladmin
+                };
+                
+                nodemailer.mail(mailOptionsadmin);
+                nodemailer.mail(mailOptions);
+                
                 req.flash('message', 'Message submitted successfully!!');
                 req.flash('message_type','success');
                 res.redirect('/contact');

@@ -683,6 +683,17 @@ app.controller('adminController',['$scope', '$http','$sce', function ($scope, $h
         });
     };
     
+    $scope.getcontactList= function(){
+       
+        $http.get('/admin/get-contacts-list').success(function(contactlist){
+          
+           $scope.contactlist = contactlist;
+           
+        }).error(function(){
+            console.log('Oops! Error listing contactlist');
+        });
+    };
+    
 
     
 }]);
