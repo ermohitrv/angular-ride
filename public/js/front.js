@@ -547,7 +547,8 @@ jQuery('#change_password_form').validate({
                 email:true
             },
             contactdescription: {
-                required: true
+                required: true,
+                maxlength: 200,
             },
 
         },
