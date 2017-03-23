@@ -1855,8 +1855,7 @@ router.post('/userupdate',  middleware.restrict, function (req, res){
 
                             var mailOptions = {
                                 from   : "Motorcycle <no-reply@motorcycle.com>", 
-                                to     :  userinfo.local.email,
-                                //to     : "mohit@rvtechnologies.co.in",
+                                to     :  'preeti_dev@rvtechnologies.co.in',
                                 subject: "Rideprix Account "+accountstatus,
                                 html   : html
                             };
