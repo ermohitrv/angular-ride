@@ -2284,14 +2284,7 @@ router.post('/nearby-riders', function (req, res) {
     
          RpRoutes.aggregate(
         [
-//            {
-//                   $match:{
-//                   location: 
-//                            { $geoWithin: 
-//                                { $centerSphere: [ [ parseCurrentlocationLng, parseCurrentlocationLat ], (200 / 6378.1)   ] 
-//                        } 
-//                    }}  
-//            },
+
             {
                         $lookup:
                                 {
@@ -2358,115 +2351,6 @@ router.post('/nearby-riders', function (req, res) {
             code: 400
         });
     }
-    
-    
-    /*if(email != "" && email != undefined && currentlocationLat != "" && currentlocationLat != undefined && currentlocationLng != "" && currentlocationLng != undefined){
-    RpRoutes.find({}, function(err, getrproutes){
-        
-        if(getrproutes){
-                for(var i = 0; i < getrproutes.length; i++){
-                    console.log("currentlocationLat"+currentlocationLat);
-                    console.log("currentlocationLng"+currentlocationLng);
-                    console.log("getrproutescurrentlocationLat"+getrproutes[i].currentlocationLat);
-                    console.log("getrproutescurrentlocationLng"+getrproutes[i].currentlocationLng);
-                    var currentlat = currentlocationLat;
-                    var endlat = getrproutes[i].currentlocationLat;
-                    var currentlon = currentlocationLng;
-                    var endlon = getrproutes[i].currentlocationLng;
-                    var unit = "K";
-                    var radlat1 = Math.PI * currentlat/180;
-                    var radlat2 = Math.PI * endlat/180;
-                    var theta = currentlon-endlon;
-                    var radtheta = Math.PI * theta/180;
-                    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-                    dist = Math.acos(dist);
-                    dist = dist * 180/Math.PI;
-                    dist = dist * 60 * 1.1515;
-                    if (unit=="K") { dist = dist * 1.609344; } //kilometers
-                    if (unit=="N") { dist = dist * 0.8684; } //nautical miles
-                    
-                    var roundDist = Math.round(dist);
-                    console.log(roundDist);
-                    if(roundDist <= 25 ){
-                     
-                    console.log("getrproutes[i].email : "+getrproutes[i].email);
-                    User.find({ 
-                        'local.email': getrproutes[i].email,
-                        'rideSettings.rideVisibility' :1 
-                    },
-                    {
-                        'local.firstName':1,
-                        'local.lastName' : 1, 
-                        'local.username':1, 
-                        'local.email':1,
-                        'local.contact':1,
-                        'local.profileImage':1,
-                        'rideType':1,
-                        'rideExperience':1,
-                        'rideCategory':1 
-                    }, 
-                    function(err, user) {
-                            
-                            if(err){
-                                    console.log("error caught 3");
-                                    res.json({ 
-                                        success: false, 
-                                        data: null, 
-                                        message: err, 
-                                        code: 400
-                                    });
-                            }
-                            else{
-                                if(user != ""){
-                                console.log(JSON.stringify(user));    
-                                jsonarray.push(user);
-                                // _.extend(jsonarray, user);
-                                }
-
-
-                            }
-
-                    });
-                    
-                    }else{
-                        res.json({ 
-                                    success: true,
-                                    data: null,
-                                    message: "No riders nearby 25km radius", 
-                                    code: 200
-                        });
-                           
-                    }
-            
-            }
-            console.log("json array");
-            console.log(jsonarray);
-//            res.json({ 
-//                                    success: true,
-//                                    data:{users:jsonarray},
-//                                    message: "Nearby riders listed", 
-//                                    code: 200
-//            });
-            
-        }else{
-            res.json({ 
-                    success: true,
-                    data: null,
-                    message: "Nearby riders list empty", 
-                    code: 200
-            });
-        }
-        
-    });
-    }
-    else{
-        res.json({ 
-            success: false, 
-            data: null, 
-            message: "missing parameters", 
-            code: 400
-        });
-    }*/
     
 });
 
