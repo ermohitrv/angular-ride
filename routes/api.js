@@ -2295,6 +2295,8 @@ router.post('/nearby-riders', function (req, res) {
                         }
             },
             
+            { "$unwind": "$item" },
+            
             {
                         $project:
                                 {
@@ -2309,7 +2311,6 @@ router.post('/nearby-riders', function (req, res) {
                                           
                                 }
             }, 
-            { $unwind : "$item" },
             
             {
                    $match:{
