@@ -2442,6 +2442,9 @@ fieldset.crouselrating {
     line-height: 0px;
 }
 
+fieldset.reviewrating{
+    line-height:0;
+}
 /* end product detail page */
 
 span.closeButton {

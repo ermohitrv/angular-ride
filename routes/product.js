@@ -12,7 +12,6 @@ var Brands = require('../models/brands');
 var Events = require('../models/events');
 var EventTypes = require('../models/eventtypes');
 var Reviews = require('../models/reviews');
-var Rating = require('../models/rating');
 
 /* Route for showing product detail page */
 /*
@@ -57,8 +56,9 @@ router.get('/shop/products-list', function (req, res){
 router.get('/shop/products-detail/:id', function (req, res){
     console.log('id: '+req.params.id);
     Products.findOne({ product_permalink: req.params.id }, function (err, result) {
-         Reviews.find({ productId: result._id, 'ReviewStatus':'APPROVED' }, function (err, reviews) {
-         Rating.find({ productId: result._id }, function (err, rating) {
+         Reviews.find({ productId: result._id }, function (err, reviews) {
+            
+         Reviews.find({ productId: result._id,ReviewStatus:'APPROVED' }, function (err, approvedreviews) {
         if(result == null || result.product_published == "false"){
             res.send('error product detail page: '+err);
         }else{
@@ -69,7 +69,7 @@ router.get('/shop/products-detail/:id', function (req, res){
                 title: result.product_title, 
                 result: result,
                 reviews:reviews,
-                rating:rating,
+                approvedreviews:approvedreviews,
                 user: req.user,
                 product_description: result.product_description,
                 session: req.session,
@@ -77,7 +77,7 @@ router.get('/shop/products-detail/:id', function (req, res){
                 message_type: middleware.clear_session_value(req.session, "message_type"),
             });
         }
-    });
+    }).sort({'addedOn':-1});;
     }).sort({'addedOn':-1});
     });
 });

@@ -29,7 +29,6 @@ var nodemailer      = require("nodemailer");
 var moment      = require("moment");
 var multer      = require('multer');
 var Activity    = require('../models/activity');
-var Rating    = require('../models/rating');
 var Contact    = require('../models/contact');
 
 
@@ -1487,7 +1486,12 @@ router.get('/latestevents',  function (req, res){
 router.post('/sendreview',  function (req, res){
     
    console.log("send reviews"+req.user.local.username);
-   //res.send(true);   
+   
+      Reviews.findOne({ 'username' :  req.user.local.username,'productId':req.body.productId }, function (err, reviews){
+            if(reviews){
+                 res.status(200).json({"status": "exist"});
+            }
+            else{
             var objReviews           = new Reviews();
             objReviews.userReview    = req.body.reviewdesc;
             objReviews.username      = req.user.local.username;
@@ -1506,6 +1510,8 @@ router.post('/sendreview',  function (req, res){
                 res.status(200).json({"status": status});
                 
             });
+        }
+    });
             
 });
 
@@ -2057,19 +2063,34 @@ router.post('/removenotification',middleware.isLoggedIn, function(req, res){
 
 router.post('/rating-product',  function (req, res){
     
-    Rating.findOne({ 'username' :  req.user.local.username,'productId':req.body.starproductId }, function (err, rating){
-            if (rating) {
+    Reviews.findOne({ 'username' :  req.user.local.username,'productId':req.body.starproductId }, function (err, reviews){
+            if (reviews) {
+                        if(reviews.userRating == ""){
+                        reviews.userRating = req.body.starrate;
+                        reviews.save(function (err) {
+                           if(err){
+                                        status = "error";
 
+                                }
+                                else{
+                                     status = "success";
+
+                                }
+                                res.status(200).json({"status": "success"});
+                        });
+                        }
+                        else{
                         res.status(200).json({"status": "exist"});
+                        }
 
             }
             else{
-                           var objRating           = new Rating();
-                            objRating.userRating    = req.body.starrate;
-                            objRating.username      = req.user.local.username;
-                            objRating.productId     = req.body.starproductId;
+                           var objReviews           = new Reviews();
+                            objReviews.userRating    = req.body.starrate;
+                            objReviews.username      = req.user.local.username;
+                            objReviews.productId     = req.body.starproductId;
 
-                            objRating.save(function (err) {
+                            objReviews.save(function (err) {
                                 if(err){
                                         status = "error";
 

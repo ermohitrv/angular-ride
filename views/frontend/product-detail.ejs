@@ -69,6 +69,11 @@ function submitReview(){
                 $('#modal-reviewresponse').css('display','block');
                 $('#response').text("Thanks for giving reviews!!");
             }
+            if(data.status === 'exist'){
+               $('#modal-review').hide();
+               $('#modal-reviewresponse').css('display','block');
+               $('#response').text("You have already given review for this product!!");
+            }
         },
         error : function(err){
             //alert( 'err: '+JSON.stringify(err) );           
