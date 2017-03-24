@@ -1116,7 +1116,7 @@ router.post('/facebook-create-user', function (req, res) {
                             success: true,
                             data: 
                                 {
-                                    username         :username,
+                                    username         :user.local.firstName+" "+user.local.lastName,
                                     email            :email,
                                     profilepic       :profileImage,
                                     contact          :contact,
