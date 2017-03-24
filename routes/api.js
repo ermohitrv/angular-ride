@@ -2309,7 +2309,9 @@ router.post('/nearby-riders', function (req, res) {
                                           
                                 }
             }, 
-           {
+            { $unwind : "$item" },
+            
+            {
                    $match:{
                    location: 
                             { $geoWithin: 
