@@ -2272,6 +2272,11 @@ router.post('/nearby-riders', function (req, res) {
 //    var email               = 'preeti_dev@rvtechnologies.co.in';
 //    var currentlocationLat  = 40.74;
 //    var currentlocationLng  = -74;
+      var parseCurrentlocationLng = parseFloat(currentlocationLng);
+      var parseCurrentlocationLat = parseFloat(currentlocationLat);
+
+    console.log("parseCurrentlocationLng ****** "+parseCurrentlocationLng);
+    console.log("parseCurrentlocationLat ****** "+parseCurrentlocationLat);
     var jsonarray = [];
    
    
@@ -2331,7 +2336,7 @@ router.post('/nearby-riders', function (req, res) {
                    $match:{
                    location: 
                             { $geoWithin: 
-                                { $centerSphere: [ [ parseFloat(currentlocationLng), parseFloat(currentlocationLat) ], (200 / 6378.1)   ] 
+                                { $centerSphere: [ [ parseCurrentlocationLng, parseCurrentlocationLat ], (200 / 6378.1)   ] 
                         } 
                     },'rideVisibility':1}  
             },
@@ -2339,7 +2344,7 @@ router.post('/nearby-riders', function (req, res) {
             
         ]
         ,function (err, getrproutes) {
-           
+            console.log(getrproutes);
         if(getrproutes){
             res.json({
                 success: true, 
