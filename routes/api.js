@@ -2339,6 +2339,7 @@ router.post('/nearby-riders', function (req, res) {
             
         ]
         ,function (err, getrproutes) {
+            console.log(getrproutes);
         if(getrproutes){
             res.json({
                 success: true, 
