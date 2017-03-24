@@ -2282,29 +2282,6 @@ router.post('/nearby-riders', function (req, res) {
    
     if(email != "" && email != undefined && currentlocationLat != "" && currentlocationLat != undefined && currentlocationLng != "" && currentlocationLng != undefined){
     
-    /*RpRoutes.find({ location: { $geoWithin: { $centerSphere: [ [ currentlocationLng, currentlocationLat ], (200 / 6378.1)   ] } } }
-       , function(err, getrproutes){
-        console.log('*** getrproutes *** '+getrproutes);
-        if(getrproutes){
-                
-                res.json({ 
-                                    success: true,
-                                    data:{users:getrproutes},
-                                    message: "Nearby riders listed", 
-                                    code: 200
-            });
-            
-        }else{
-            res.json({ 
-                    success: true,
-                    data: null,
-                    message: "Nearby riders list empty", 
-                    code: 200
-            });
-        }
-        
-    });*/
-    
          RpRoutes.aggregate(
         [
 //            {
