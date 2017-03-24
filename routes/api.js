@@ -2339,13 +2339,13 @@ router.post('/nearby-riders', function (req, res) {
                                           
                                 }
             }, 
-            {
+           {
                    $match:{
                    location: 
                             { $geoWithin: 
                                 { $centerSphere: [ [ parseCurrentlocationLng, parseCurrentlocationLat ], (200 / 6378.1)   ] 
                         } 
-                    }}  
+                    },'rideVisibility':"1"}  
             },
            
             
