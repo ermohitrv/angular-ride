@@ -2534,6 +2534,41 @@ router.post('/respond-friend-request', function (req, res) {
     }
 });
 
+router.post('/get-friendrequests-list', function(req, res){
+   
+    var email = req.body.email;
+    if(email != "" && email != undefined){
+    friends.find({'friendRequestSentTo' : email , 'friendRequestApprovalStatus':'pending'}, function (err, friendsdata) {
+       
+         if(friendsdata){
+            res.json({ 
+                    success: true,
+                    data: friendsdata,
+                    message: "success", 
+                    code: 200
+            });
+        }else{
+            res.json({ 
+                    success: true,
+                    data: null,
+                    message: "success", 
+                    code: 200
+            });
+        }
+    });
+    }
+    else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+        
+    }
+
+});
+
 // 32 character random string token
 function random_token(){
   var text = "";
