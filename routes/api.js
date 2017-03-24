@@ -565,13 +565,13 @@ router.post('/init-add-route', function(req, res){
     var ending_locationLat   = req.body.ending_locationLat;
     var ending_locationLng   = req.body.ending_locationLng;
 
-//    var email                = "preeti_dev@rvtechnologies.co.in";
+//    var email                = "test@gmail.com";
 //    var starting_locationLat = "1.2393";
 //    var starting_locationLng = "1.8184";
 //    
 //    var ending_locationLat   = "1.5532";
 //    var ending_locationLng   = "0.4221";
-    
+      
     
     objRoute.email                  = email;
     objRoute.route                  = '1';
@@ -1229,13 +1229,14 @@ router.post('/start-route', function (req, res) {
         var email                  = req.body.email;
         var currentlocationLat     = req.body.currentlocationLat;
         var currentlocationLng     = req.body.currentlocationLng;
-       
-
-        //var email                  = 'preeti_dev@rvtechnologies.co.in';
-        //var currentlocationLat     = '1.2393';
-        //var currentlocationLng     = '1.8184';
-
-
+        
+//        var email                  = 'test@gmail.com';
+//        var currentlocationLat     = '40';
+//        var currentlocationLng     = '-73';
+        var locationarray = [];
+        locationarray.push(parseFloat(currentlocationLng));
+        locationarray.push(parseFloat(currentlocationLat));
+        console.log(locationarray);
         
         if(email != "" && email != undefined){
            
@@ -1289,6 +1290,7 @@ router.post('/start-route', function (req, res) {
                                             'activeStatus':'ACTIVE',
                                             'isRouteCompleted': 'ONGOING',
                                             'lastModifiedDate': lastModifiedDate,
+                                            'location': locationarray,
                                         } 
                             },
                             { multi: true },
@@ -1373,7 +1375,10 @@ router.post('/stop-route', function (req, res) {
         //var email                  = 'preeti_dev@rvtechnologies.co.in';
         //var currentlocationLat     = '1.2393';
         //var currentlocationLng     = '1.8184';
-
+        var locationarray = [];
+        locationarray.push(parseFloat(currentlocationLng));
+        locationarray.push(parseFloat(currentlocationLat));
+        console.log(locationarray);
 
         
         if(email != "" && email != undefined){
@@ -1428,6 +1433,7 @@ router.post('/stop-route', function (req, res) {
                                             'activeStatus':'ACTIVE',
                                             'isRouteCompleted': isRouteCompleted,
                                             'lastModifiedDate': lastModifiedDate,
+                                            'location': locationarray,
                                         } 
                             },
                             { multi: true },
@@ -2258,17 +2264,113 @@ router.post('/settings', function(req, res){
 
 /* API stop endpoint to be used by mobile device for rproutes  */
 router.post('/nearby-riders', function (req, res) {
-    var _ = require('underscore');
+   
     var email               = req.body.email;
     var currentlocationLat  = req.body.currentlocationLat;
     var currentlocationLng  = req.body.currentlocationLng;
     
-    //var email               = 'preeti_dev@rvtechnologies.co.in';
-    //var currentlocationLat  = '1.2393';
-    //var currentlocationLng  = '1.8184';
+//    var email               = 'preeti_dev@rvtechnologies.co.in';
+//    var currentlocationLat  = 40.74;
+//    var currentlocationLng  = -74;
     var jsonarray = [];
-    
+   
+   
     if(email != "" && email != undefined && currentlocationLat != "" && currentlocationLat != undefined && currentlocationLng != "" && currentlocationLng != undefined){
+    
+    /*RpRoutes.find({ location: { $geoWithin: { $centerSphere: [ [ currentlocationLng, currentlocationLat ], (200 / 6378.1)   ] } } }
+       , function(err, getrproutes){
+        console.log('*** getrproutes *** '+getrproutes);
+        if(getrproutes){
+                
+                res.json({ 
+                                    success: true,
+                                    data:{users:getrproutes},
+                                    message: "Nearby riders listed", 
+                                    code: 200
+            });
+            
+        }else{
+            res.json({ 
+                    success: true,
+                    data: null,
+                    message: "Nearby riders list empty", 
+                    code: 200
+            });
+        }
+        
+    });*/
+    
+         RpRoutes.aggregate(
+        [
+            
+            {
+                        $lookup:
+                                {
+                                    from: "users",
+                                    localField: "email",
+                                    foreignField: "local.email",
+                                    as: "item"
+                        }
+            },
+            
+            {
+                        $project:
+                                {
+                                     "rideVisibility": "$item.rideSettings.rideVisibility",
+                                     "FirstName": "$item.local.firstName",
+                                     "LastName": "$item.local.lastName",
+                                     "LastName": "$item.local.lastName",
+                                     "email"   : "$item.local.email",
+                                     "profileimage" :"$item.local.profileImage",
+                                     "username" :"$item.local.username",
+                                     "location":1
+                                          
+                                }
+            }, 
+           {
+                   $match:{
+                   location: 
+                            { $geoWithin: 
+                                { $centerSphere: [ [ currentlocationLng, currentlocationLat ], (200 / 6378.1)   ] 
+                        } 
+                    },'rideVisibility':1}  
+            },
+           
+            
+        ]
+        ,function (err, getrproutes) {
+        if(getrproutes){
+            res.json({
+                success: true, 
+                data: {
+                    users : getrproutes
+                },
+                message: "success", 
+                code: 200
+            });
+        }else{
+            res.json({ 
+                    success: true,
+                    data: null,
+                    message: "No riders nearby 25km radius", 
+                    code: 200
+            });
+        }
+    });
+    
+    
+    }
+    else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+    }
+    
+    
+    /*if(email != "" && email != undefined && currentlocationLat != "" && currentlocationLat != undefined && currentlocationLng != "" && currentlocationLng != undefined){
     RpRoutes.find({}, function(err, getrproutes){
         
         if(getrproutes){
@@ -2281,7 +2383,6 @@ router.post('/nearby-riders', function (req, res) {
                     var endlat = getrproutes[i].currentlocationLat;
                     var currentlon = currentlocationLng;
                     var endlon = getrproutes[i].currentlocationLng;
-                    /* get distance between 2 positions */
                     var unit = "K";
                     var radlat1 = Math.PI * currentlat/180;
                     var radlat2 = Math.PI * endlat/180;
@@ -2297,44 +2398,7 @@ router.post('/nearby-riders', function (req, res) {
                     var roundDist = Math.round(dist);
                     console.log(roundDist);
                     if(roundDist <= 25 ){
-                       
-                    /*User.find({ 
-                        'local.email': getrproutes[i].email,
-                        'rideSettings.rideVisibility' :1 
-                    },
-                    {
-                        'local.firstName':1,
-                        'local.lastName' : 1, 
-                        'local.username':1, 
-                        'local.email':1,
-                        'local.contact':1,
-                        'local.profileImage':1,
-                        'rideType':1,
-                        'rideExperience':1,
-                        'rideCategory':1 
-                    }, 
-                    function(err, user) {
-
-                            if(err){
-                                    console.log("error caught 3");
-                                    res.json({ 
-                                        success: false, 
-                                        data: null, 
-                                        message: err, 
-                                        code: 400
-                                    });
-                            }
-                            else{
-                                res.json({ 
-                                    success: true,
-                                    data:{user:user},
-                                    message: "Nearby riders listed", 
-                                    code: 200
-                                 });
-
-                            }
-
-                    });*/
+                     
                     console.log("getrproutes[i].email : "+getrproutes[i].email);
                     User.find({ 
                         'local.email': getrproutes[i].email,
@@ -2363,90 +2427,17 @@ router.post('/nearby-riders', function (req, res) {
                                     });
                             }
                             else{
-                                //jsonarray = user;
                                 if(user != ""){
                                 console.log(JSON.stringify(user));    
                                 jsonarray.push(user);
                                 // _.extend(jsonarray, user);
                                 }
-//                                res.json({ 
-//                                    success: true,
-//                                    data:{user:user},
-//                                    message: "Nearby riders listed", 
-//                                    code: 200
-//                                 });
+
 
                             }
 
                     });
                     
-                    
-                    /*User.aggregate(
-                        [   
-                   
-                    
-                            {
-                                $lookup:
-                                        {
-                                            from: "friends",
-                                            localField: "local.email",
-                                            foreignField: "friendRequestSentBy",
-                                            as: "item"
-                                 }
-                            },
-                            {
-                                $project : {
-                                    //'_id':1,
-                                    'eventName': 1,
-                                    'eventLocation':1,
-                                    'eventLocationType':1,
-                                    'eventHost':1,
-                                    'startDate':1,
-                                    'endDate':1,
-                                    'startTime':1,
-                                    'endTime':1,
-                                    'userEmail':1,
-                                    "eventid": "$item.eventId", 
-                                    
-
-
-                                } 
-                            },
-
-                            {
-                                $match:{
-                                        'local.email': getrproutes[i].email,
-                                        'rideSettings.rideVisibility' :1  
-                                    }
-                            }
-
-                        ]
-                                ,function (err, usersList) {
-                                if(err){
-                                       res.json({
-                                        success: true, 
-                                        data:null,
-                                        message: "error", 
-                                        code: 400
-                                     });
-                                }
-                                else{
-
-                                    res.json({
-                                        success: true, 
-                                        data: {
-                                            events : usersList
-                                        },
-                                        message: "success", 
-                                        code: 200
-                                    });
-                                }
-                    });*/
-                    
-                    
-                    
-                    
-                
                     }else{
                         res.json({ 
                                     success: true,
@@ -2458,14 +2449,14 @@ router.post('/nearby-riders', function (req, res) {
                     }
             
             }
-             console.log("json array");
+            console.log("json array");
             console.log(jsonarray);
-            res.json({ 
-                                    success: true,
-                                    data:{users:jsonarray},
-                                    message: "Nearby riders listed", 
-                                    code: 200
-            });
+//            res.json({ 
+//                                    success: true,
+//                                    data:{users:jsonarray},
+//                                    message: "Nearby riders listed", 
+//                                    code: 200
+//            });
             
         }else{
             res.json({ 
@@ -2485,7 +2476,7 @@ router.post('/nearby-riders', function (req, res) {
             message: "missing parameters", 
             code: 400
         });
-    }
+    }*/
     
 });
 
