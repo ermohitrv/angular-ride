@@ -396,7 +396,8 @@ router.post('/signup', function(req, res){
                                     lastName        :req.body.lastName,
                                     rideType        :req.body.rideType,
                                     rideExperience  :req.body.rideExperience,
-                                    rideCategory    :req.body.rideCategory
+                                    rideCategory    :req.body.rideCategory,
+                                   
                                 },
                             message: globalConfig.successRegister, 
                             code: 200
@@ -1116,7 +1117,7 @@ router.post('/facebook-create-user', function (req, res) {
                             success: true,
                             data: 
                                 {
-                                    username         :user.local.firstName+" "+user.local.lastName,
+                                    username         :username,
                                     email            :email,
                                     profilepic       :profileImage,
                                     contact          :contact,
