@@ -2331,7 +2331,7 @@ router.post('/nearby-riders', function (req, res) {
                    $match:{
                    location: 
                             { $geoWithin: 
-                                { $centerSphere: [ [ currentlocationLng, currentlocationLat ], (200 / 6378.1)   ] 
+                                { $centerSphere: [ [ currentlocationLng, currentlocationLat ], (200 / 6378)   ] 
                         } 
                     },'rideVisibility':1}  
             },
