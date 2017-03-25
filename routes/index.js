@@ -241,7 +241,7 @@ router.post('/update-profile', parseForm, csrfProtection, middleware.isLoggedIn,
                         });
                     } else {
                         
-                        req.flash('messageSuccess', 'Your Information updated successfully!');
+                        req.flash('messageSuccess', 'Profile Updated!');
                         res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
                         res.render('update-profile.ejs', {
                             user: user,
@@ -2363,5 +2363,32 @@ router.post('/submit-contactform', function(req, res){
 
 });
 
+router.get('/shipping-policy', function(req, res){
+    
+    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+    res.render('shipping-policy', {
+        title: 'Shipping Policy', 
+        user: req.user,
+        session: req.session,
+        message: middleware.clear_session_value(req.session, "message"),
+        message_type: middleware.clear_session_value(req.session, "message_type"),
+        page_url: globalConfig.base_url
+    });
+
+});
+
+router.get('/faq', function(req, res){
+    
+    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+    res.render('faq', {
+        title: 'FAQ', 
+        user: req.user,
+        session: req.session,
+        message: middleware.clear_session_value(req.session, "message"),
+        message_type: middleware.clear_session_value(req.session, "message_type"),
+        page_url: globalConfig.base_url
+    });
+
+});
 
 module.exports = router;

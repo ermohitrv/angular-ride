@@ -2408,6 +2408,10 @@ li.btn.btn-xs.btn-info {
 .eventslist a{
         text-decoration:underline;
 }
+.lastestevents-footer{
+    line-height:1.4 !important;
+    font-size:14px;
+}
 /* end event page css */
 /* friends page */
 #searchfrndbtn{

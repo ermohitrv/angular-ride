@@ -1,7 +1,7 @@
 <section id="footer">
     <div class="container">
         <div class="col-md-4 footer wow fadeInUp animated" data-wow-duration="1000ms" data-wow-delay="200ms" style="visibility: visible; animation-duration: 1000ms; animation-delay: 200ms;">
-           <h3>About RidePrix</h3>
+           <h3>OUR PARTNERS</h3>
            <p>Lorem Ipsum is simply dummy text of the printing and  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.</p>
            <a href="#" class="learn_more">More Info</a>
         </div>
@@ -14,7 +14,8 @@
                 </div>
                 <div class="event_info">
                     <h6 ng-bind="latestevent.eventName"></h6>
-                    <p>{{ latestevent.description | limitTo: 20 }}{{latestevent.description.length > 20 ? '...' : ''}}</p>
+                    <p class="lastestevents-footer">{{ latestevent.description | limitTo: 20 }}{{latestevent.description.length > 20 ? '...' : ''}}<br/><span>{{ latestevent.eventLocation }}</span></p>
+                   
                 </div>
             </div>
 <!--            <div class="event">
@@ -40,15 +41,35 @@
             
         </div>
         <div class="col-md-4  footer wow fadeInUp animated" data-wow-duration="1000ms" data-wow-delay="600ms" style="visibility: visible; animation-duration: 1000ms; animation-delay: 600ms;">
-            <h3>Contact info</h3>
+            <h3>LETS US HELP</h3>
             <div class="event cstm-link-foot">
                 <div class="event_info">
-                    <h6 class="link" onclick="javascript:location.href='/contact/'">Contact</h6><p></p>
+                    <h6 class="link" onclick="javascript:location.href='/contact/'">Contact US</h6><p></p>
                 </div>
             </div>
             <div class="event cstm-link-foot">
                 <div class="event_info">
                     <h6 class="link" onclick="javascript:location.href='/about/'">About Us</h6><p></p>
+                </div>
+            </div>
+            <div class="event cstm-link-foot">
+                <div class="event_info">
+                    <h6 class="link" onclick="javascript:location.href='/shipping-policy'">Shipping Policy</h6><p></p>
+                </div>
+            </div>
+            <div class="event cstm-link-foot">
+                <div class="event_info">
+                    <h6 class="link" onclick="javascript:location.href='/privacy-policy'">Privacy Policy</h6><p></p>
+                </div>
+            </div>
+            <div class="event cstm-link-foot">
+                <div class="event_info">
+                    <h6 class="link" onclick="javascript:location.href='/terms'">Terms & Conditions</h6><p></p>
+                </div>
+            </div>
+            <div class="event cstm-link-foot">
+                <div class="event_info">
+                    <h6 class="link" onclick="javascript:location.href='/faq'">FAQs</h6><p></p>
                 </div>
             </div>
             <div class="club_address">
@@ -74,7 +95,7 @@
 <section id="copyright">
     <div class="container">
        <div class="copyright">
-        &copy; Copyright 2017 Ride Prix Inc. All rights reserved.
+        &copy; Copyright 2017 Ride Prix Inc. All Rights Reserved.
        </div>
     </div>
 </section>

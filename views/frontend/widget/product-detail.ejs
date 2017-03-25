@@ -153,7 +153,7 @@
             <div class="product-tab w100 clearfix">
                 <ul class="nav nav-tabs">
                 <li class="active"><a href="#details" data-toggle="tab">Details</a></li>
-                <li><a href="#size" data-toggle="tab">Size</a></li>
+                <!--<li><a href="#size" data-toggle="tab">Size</a></li>-->
                 <li><a href="#review" data-toggle="tab">Reviews</a></li>
 <!--                <li><a href="#shipping" data-toggle="tab">Shipping</a></li>-->
                 </ul>
@@ -161,20 +161,12 @@
                 <div class="tab-content">
                     <div class="tab-pane active" id="details">
                                 <%= result.product_description %></div>
-                    <div class="tab-pane" id="size"> 
+<!--                    <div class="tab-pane" id="size"> 
                         <% for(var productsize = 0; productsize < result.product_size.length; productsize++) { %>
                         <%= result.product_size[productsize]  %><br>
                         <% } %>
-<!--                        16" waist<br>
-                        34" inseam<br>
-                        10.5" front rise<br>
-                        8.5" knee<br>
-                        7.5" leg opening<br>
-                        <br>
-                        Measurements taken from size 30<br>
-                        Model wears size 31. Model is 6'2 <br>
-                        <br>-->
-                    </div>
+
+                    </div>-->
                     <div class="tab-pane" id="review">
                          <% if(approvedreviews.length > 0) { %>
                         <div id="myCarousel" class="carousel  productdetailcarousel" data-ride="carousel">

@@ -129,16 +129,19 @@
 <script type="text/javascript">
     
     $(document).ready(function(){
-    
+             
+var dateToday = new Date();
             $("#startdate").datetimepicker({
-                 minView : 2,
-                 format: 'yyyy-mm-dd'
+                minView : 2,
+                format: 'yyyy-mm-dd',
+                startDate:new Date()
 
             });
 
              $("#enddate").datetimepicker({
-                 minView : 2,
-                 format: 'yyyy-mm-dd'
+                minView : 2,
+                format: 'yyyy-mm-dd',
+                startDate:new Date()
 
             });
 
