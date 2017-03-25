@@ -25,18 +25,19 @@
                      <li data-ng-if="notificationresults.length > 0"  ng-repeat="notification in notificationresults" id="li_{{ notification._id}}">
                         <span class="closeButton" ng-click="removeNotification(notification._id)"><i class="fa fa-times" aria-hidden="true"></i></span>
                         <a href="javascript:void(0)">
-<!--                            <span class="photo">
-                                <img alt="avatar" src="<%= user.local.profileImage %>">
-                            </span>-->
+                            <span class="photo">
+                                <img alt="avatar" src="/public/uploads/{{ notification.profileImage }}">
+
+                            </span>
 <!--                            <span class="subject">
                                 <span class="from">{{ notification.notificationBy }}</span>
                                 <span class="time" ng-bind="notification.addedOn | date:'yyyy-MM-dd'"></span>
                             </span>-->
-                            <span class="message" data-ng-if="notification.notificationType == 'request'"><b>{{ notification.notificationBy }}</b> sent you a friend request.</span>
-                            <span class="message" data-ng-if="notification.notificationType == 'invitation'"><b>{{ notification.notificationBy }}</b> sent you an event invitation.</span>
-                            <span class="message" data-ng-if="notification.notificationType == 'follow'"><b>{{ notification.notificationBy }}</b> started following you.</span>
-                            <span class="message" data-ng-if="notification.notificationType == 'acceptrequest'"><b>{{ notification.notificationBy }}</b> accepted your friend request.</span>
-                            <span class="message" data-ng-if="notification.notificationType == 'eventjoined'"><b>{{ notification.notificationBy }}</b> accepted your event invitation.</span>
+                            <span class="message" data-ng-if="notification.notificationType == 'request'"><b>{{ notification.FirstName }}&nbsp;{{ notification.LastName }}</b> sent you a friend request.</span>
+                            <span class="message" data-ng-if="notification.notificationType == 'invitation'"><b>{{ notification.FirstName }}&nbsp;{{ notification.LastName }}</b> sent you an event invitation.</span>
+                            <span class="message" data-ng-if="notification.notificationType == 'follow'"><b>{{ notification.FirstName }}&nbsp;{{ notification.LastName }}</b> started following you.</span>
+                            <span class="message" data-ng-if="notification.notificationType == 'acceptrequest'"><b>{{ notification.FirstName }}&nbsp;{{ notification.LastName }}</b> accepted your friend request.</span>
+                            <span class="message" data-ng-if="notification.notificationType == 'eventjoined'"><b>{{ notification.FirstName }}&nbsp;{{ notification.LastName }}</b> accepted your event invitation.</span>
  
                             <span class="subject">
                                 <!--<span class="time" ng-bind="notification.addedOn | date:'yyyy-MM-dd'"></span>-->

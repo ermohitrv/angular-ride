@@ -893,7 +893,8 @@ li#header_inbox_bar i {
 	min-width: 160px !important;
 	top: 46px;
 	right: 34px;
-	width: 235px !important;
+	/*width: 235px !important;*/
+        width: 300px !important;
 	padding: 0;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.176) !important;
 	border: none !important;
@@ -943,11 +944,16 @@ li#header_inbox_bar i {
 	border-radius: 4px;
 }
 #profile .dropdown-menu.inbox li a .photo img {
-	border-radius: 2px 2px 2px 2px;
+/*	border-radius: 2px 2px 2px 2px;
 	float: left;
 	height: 40px;
 	margin-right: 4px;
-	width: 40px;
+	width: 40px;*/
+        float: left;
+        height: 30px;
+        margin-right: 4px;
+        width: 30px;
+        border-radius: 30px;
 }
 #profile .dropdown-menu.inbox li a .subject {
 	display: block;
@@ -2419,6 +2425,12 @@ input#search-box-frnd {
 .friendsul{
     list-style: none;
 }
+
+.friendimage{
+    height: 50px;
+    width: 50px;
+    border-radius: 30px;
+}
 /*end friends page */
 
 /* product detail page */
@@ -2445,6 +2457,11 @@ fieldset.crouselrating {
 fieldset.reviewrating{
     line-height:0;
 }
+
+textarea#addReview {
+    padding: 5px 5px 5px 10px;
+}
+
 /* end product detail page */
 
 span.closeButton {

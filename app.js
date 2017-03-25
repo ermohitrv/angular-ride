@@ -27,6 +27,7 @@ var app         = express();
 var bodyParser = require('body-parser');
 var csrf        = require('csurf');
 var csrfProtection  = csrf({ cookie: true });
+var processImage = require('express-processimage');
 
 //var storage = multer.diskStorage({
 //    destination: function (req, file, cb) {
@@ -80,6 +81,7 @@ app.use(passport.session());
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/public', express.static(path.join(__dirname, 'node_modules')));
 app.use('/', express.static(path.join(__dirname, 'public')));
+app.use(processImage('public'));
 //
 //
 //var cpUpload = upload.fields([{name: 'userPhoto', maxCount: 1}]);

@@ -1539,12 +1539,12 @@ router.get('/autocomplete-search-friend',middleware.isLoggedIn, function(req, re
 });
 
 router.post('/sendrequest',middleware.isLoggedIn, function(req, res){
-  var profileusername = req.body.params.profileusername;
-  console.log("profileusername: "+profileusername);
+  var profileuseremail = req.body.params.profileuseremail;
+  console.log("profileuseremail: "+profileuseremail);
   //res.send(true);
                 var objFriends                 = new Friends();
-                objFriends.friendRequestSentTo = req.body.params.profileusername;
-                objFriends.friendRequestSentBy = req.user.local.username;
+                objFriends.friendRequestSentTo = req.body.params.profileuseremail;
+                objFriends.friendRequestSentBy = req.user.local.email;
                 
 
                 objFriends.save(function (err) {
@@ -1555,8 +1555,8 @@ router.post('/sendrequest',middleware.isLoggedIn, function(req, res){
                     } else {
                         console.log("friend request");
                         var objActivity  = new Activity();
-                        objActivity.notificationTo = profileusername;
-                        objActivity.notificationBy = req.user.local.username;
+                        objActivity.notificationTo = profileuseremail;
+                        objActivity.notificationBy = req.user.local.email;
                         objActivity.notificationType = "request";
                         objActivity.save(function (err) {
                                 res.status(200).json({"status": "success"});  
@@ -1567,9 +1567,9 @@ router.post('/sendrequest',middleware.isLoggedIn, function(req, res){
 });
 
 router.post('/friendstatus',middleware.isLoggedIn, function(req, res){
-    var profileusername = req.body.params.profileusername;
+    var profileuseremail = req.body.params.profileuseremail;
     
-    Friends.findOne({$and : [{ $or : [ { 'friendRequestSentTo' : req.user.local.username }, { 'friendRequestSentBy' : req.user.local.username} ] },{ $or : [ { 'friendRequestSentTo' : profileusername }, { 'friendRequestSentBy' : profileusername}]}]}, function(err, friendinfo){
+    Friends.findOne({$and : [{ $or : [ { 'friendRequestSentTo' : req.user.local.email }, { 'friendRequestSentBy' : req.user.local.email} ] },{ $or : [ { 'friendRequestSentTo' : profileuseremail }, { 'friendRequestSentBy' : profileuseremail}]}]}, function(err, friendinfo){
 
     //Friends.findOne({'friendRequestSentBy': req.user.local.username, 'friendRequestSentTo' : profileusername }, function (err, friendinfo) {
         
@@ -1601,9 +1601,49 @@ router.get('/friends',middleware.isLoggedIn, function(req, res){
 
 router.post('/get-friendrequests-list',middleware.isLoggedIn, function(req, res){
    
-    Friends.find({'friendRequestSentTo' : req.user.local.username , 'friendRequestApprovalStatus':'pending'}, function (err, friendsdata) {
-       
-         if(friendsdata){
+//    Friends.find({'friendRequestSentTo' : req.user.local.username , 'friendRequestApprovalStatus':'pending'}, function (err, friendsdata) {
+//       
+//         if(friendsdata){
+//            res.json(friendsdata);
+//        }else{
+//            res.json({});
+//        }
+//    });
+
+      
+         Friends.aggregate(
+        [
+            {
+                   $match:{'friendRequestSentTo':req.user.local.email, 'friendRequestApprovalStatus':'pending'}  
+            },
+            
+            {
+                        $lookup:
+                                {
+                                    from: "users",
+                                    localField: "friendRequestSentBy",
+                                    foreignField: "local.email",
+                                    as: "item"
+                        }
+            },
+            
+            { "$unwind": "$item" },
+            
+            {
+                        $project:
+                                {
+                                     "FirstName": "$item.local.firstName",
+                                     "LastName": "$item.local.lastName",
+                                     "profileImage": "$item.local.profileImage",
+                                     "friendRequestSentBy": 1,
+                                          
+                                }
+            } 
+            
+        ]
+        ,function (err, friendsdata) {
+            console.log(friendsdata);
+        if(!err){
             res.json(friendsdata);
         }else{
             res.json({});
@@ -1619,17 +1659,17 @@ router.get('/friendrequestaction',middleware.isLoggedIn, function(req, res){
         var friendrequeststatus        = req.query.friendstatus;
         
     if(friendrequestsentby != "" && friendrequestsentby != undefined && friendrequeststatus != "" && friendrequeststatus != undefined){
-        Friends.findOne({'friendRequestSentTo' : req.user.local.username , 'friendRequestSentBy' : friendrequestsentby ,'friendRequestApprovalStatus':'pending'}, function (err, friendrequest){
+        Friends.findOne({'friendRequestSentTo' : req.user.local.email , 'friendRequestSentBy' : friendrequestsentby ,'friendRequestApprovalStatus':'pending'}, function (err, friendrequest){
             if(friendrequest){
                 if(friendrequeststatus == 'accept'){
-                    Friends.update({'friendRequestSentTo' : req.user.local.username , 'friendRequestSentBy' : friendrequestsentby ,'friendRequestApprovalStatus':'pending'},
+                    Friends.update({'friendRequestSentTo' : req.user.local.email , 'friendRequestSentBy' : friendrequestsentby ,'friendRequestApprovalStatus':'pending'},
                         { $set: { 'friendRequestApprovalStatus': friendrequeststatus } },
                         { multi: true },
 
                         function(err, results){
                             var objActivity  = new Activity();
                                 objActivity.notificationTo = friendrequestsentby;
-                                objActivity.notificationBy = req.user.local.username;
+                                objActivity.notificationBy = req.user.local.email;
                                 objActivity.notificationType = "acceptrequest";
                                 objActivity.save(function (err) {
                                 
@@ -1640,7 +1680,7 @@ router.get('/friendrequestaction',middleware.isLoggedIn, function(req, res){
                     );
                 } 
                 else if(friendrequeststatus == 'reject'){
-                    Friends.remove({'friendRequestSentTo' : req.user.local.username ,'friendRequestSentBy': friendrequestsentby, 'friendRequestApprovalStatus':'pending'}, function (err, friendsdata) {
+                    Friends.remove({'friendRequestSentTo' : req.user.local.email ,'friendRequestSentBy': friendrequestsentby, 'friendRequestApprovalStatus':'pending'}, function (err, friendsdata) {
        
                             if(err){
                                  console.log("error");
@@ -1678,10 +1718,50 @@ router.get('/friendrequestaction',middleware.isLoggedIn, function(req, res){
 
 router.post('/get-friends-list',middleware.isLoggedIn, function(req, res){
    
-    Friends.find({$and : [{ $or : [ { 'friendRequestSentTo' : req.user.local.username }, { 'friendRequestSentBy' : req.user.local.username} ] },{ $or : [ { 'friendRequestApprovalStatus' : 'accept'}]}]}, function(err, friendsdata){
+//    Friends.find({$and : [{ $or : [ { 'friendRequestSentTo' : req.user.local.email }, { 'friendRequestSentBy' : req.user.local.email} ] },{ $or : [ { 'friendRequestApprovalStatus' : 'accept'}]}]}, function(err, friendsdata){
+//
+//       
+//         if(friendsdata){
+//            res.json(friendsdata);
+//        }else{
+//            res.json({});
+//        }
+//    });
 
-       
-         if(friendsdata){
+      Friends.aggregate(
+        [
+            {
+                   $match:{$and : [{ $or : [ { 'friendRequestSentTo' : req.user.local.email }, { 'friendRequestSentBy' : req.user.local.email} ] },{ $or : [ { 'friendRequestApprovalStatus' : 'accept'}]}]}  
+            },
+            
+            {
+                        $lookup:
+                                {
+                                    from: "users",
+                                    localField: "friendRequestSentBy",
+                                    foreignField: "local.email",
+                                    as: "item"
+                        }
+            },
+            
+            { "$unwind": "$item" },
+            
+            {
+                        $project:
+                                {
+                                     "FirstName": "$item.local.firstName",
+                                     "LastName": "$item.local.lastName",
+                                     "profileImage": "$item.local.profileImage",
+                                     "friendRequestSentTo": 1,
+                                     "friendRequestSentBy": 1,
+                                          
+                                }
+            } 
+            
+        ]
+        ,function (err, friendsdata) {
+            console.log(friendsdata);
+        if(!err){
             res.json(friendsdata);
         }else{
             res.json({});
@@ -1965,13 +2045,13 @@ router.get('/delete-previousevents' , function(req, res) {
 
 router.post('/follow-user' , function(req, res) {
     
-    var followingUsername = req.body.params.followingUsername;
-    console.log("followerUsername "+followingUsername);
+    var followingUseremail = req.body.params.followingUseremail;
+    console.log("followingUseremail "+followingUseremail);
     //res.send(true);
     
                 var objFollowers        = new Followers();
-                objFollowers.followTo    = followingUsername;
-                objFollowers.followedBy  = req.user.local.username;
+                objFollowers.followTo    = followingUseremail;
+                objFollowers.followedBy  = req.user.local.email;
 
 
                 objFollowers.save(function (err) {
@@ -1980,8 +2060,8 @@ router.post('/follow-user' , function(req, res) {
                         }
                         else{
                                 var objActivity  = new Activity();
-                                objActivity.notificationTo = req.body.params.followingUsername;
-                                objActivity.notificationBy = req.user.local.username;
+                                objActivity.notificationTo = req.body.params.followingUseremail;
+                                objActivity.notificationBy = req.user.local.email;
                                 objActivity.notificationType = "follow";
                                 objActivity.save(function (err) {
                                 
@@ -1996,9 +2076,9 @@ router.post('/follow-user' , function(req, res) {
 
 
 router.post('/followstatus',middleware.isLoggedIn, function(req, res){
-    var profileusername = req.body.params.profileusername;
+    var profileuseremail = req.body.params.profileuseremail;
     
-    Followers.count({'followTo':profileusername,'followedBy': req.user.local.username }, function(err, followcount){
+    Followers.count({'followTo':profileuseremail,'followedBy': req.user.local.email }, function(err, followcount){
 
         
         if(followcount){
@@ -2030,18 +2110,66 @@ router.post('/unfollow',middleware.isLoggedIn, function(req, res){
 
 router.get('/getnotification',middleware.isLoggedIn, function(req, res){
    
-    var notificationTo = req.user.local.username;
+    var notificationTo = req.user.local.email;
    
-    Activity.find({'notificationTo':notificationTo}, function(err, notificationresults){
-          
-         if(err){
-             res.status(200).json({"status": "error"}); 
-        }else{
-             console.log("notificationresults");
-             console.log(notificationresults);
+//    Activity.find({'notificationTo':notificationTo}, function(err, notificationresults){
+//          
+//         if(err){
+//             res.status(200).json({"status": "error"}); 
+//        }else{
+//             console.log("notificationresults");
+//             console.log(notificationresults);
+//             res.status(200).json({"status": "success","notificationresults":notificationresults}); 
+//        }
+//    }).sort({'addedOn': -1});
+
+         Activity.aggregate(
+        [
+            {
+                   $match:{'notificationTo':notificationTo}  
+            },
+            
+            {
+                        $lookup:
+                                {
+                                    from: "users",
+                                    localField: "notificationBy",
+                                    foreignField: "local.email",
+                                    as: "item"
+                        }
+            },
+            
+            { "$unwind": "$item" },
+            
+            {
+                        $project:
+                                {
+                                     "FirstName": "$item.local.firstName",
+                                     "LastName": "$item.local.lastName",
+                                     "addedOn": 1,
+                                     "notificationType": 1,
+                                     "profileImage": "$item.local.profileImage",
+                                          
+                                }
+            } 
+            
+            
+           
+            
+        ]
+        ,function (err, notificationresults) {
+            console.log(notificationresults);
+        if(!err){
              res.status(200).json({"status": "success","notificationresults":notificationresults}); 
+        }else{
+             res.status(200).json({"status": "error"}); 
         }
-    }).sort({'addedOn': -1});
+    });
+
+
+
+
+
 
 });
 
@@ -2111,21 +2239,21 @@ router.post('/rating-product',  function (req, res){
 router.post('/requestactionfromProfile',middleware.isLoggedIn, function(req, res){
    
 
-        var profileusername = req.body.params.profileusername;
+        var profileuseremail = req.body.params.profileuseremail;
         var pendingapproval = req.body.params.pendingapproval;
         
-    if(profileusername != "" && profileusername != undefined && pendingapproval != "" && pendingapproval != undefined){
-        Friends.findOne({'friendRequestSentTo' : req.user.local.username , 'friendRequestSentBy' : profileusername ,'friendRequestApprovalStatus':'pending'}, function (err, friendrequest){
+    if(profileuseremail != "" && profileuseremail != undefined && pendingapproval != "" && pendingapproval != undefined){
+        Friends.findOne({'friendRequestSentTo' : req.user.local.email , 'friendRequestSentBy' : profileuseremail ,'friendRequestApprovalStatus':'pending'}, function (err, friendrequest){
             if(friendrequest){
                 if(pendingapproval == 'accept'){
-                    Friends.update({'friendRequestSentTo' : req.user.local.username , 'friendRequestSentBy' : profileusername ,'friendRequestApprovalStatus':'pending'},
+                    Friends.update({'friendRequestSentTo' : req.user.local.email , 'friendRequestSentBy' : profileuseremail ,'friendRequestApprovalStatus':'pending'},
                         { $set: { 'friendRequestApprovalStatus': pendingapproval } },
                         { multi: true },
 
                         function(err, results){
                                 var objActivity  = new Activity();
-                                objActivity.notificationTo = profileusername;
-                                objActivity.notificationBy = req.user.local.username;
+                                objActivity.notificationTo = profileuseremail;
+                                objActivity.notificationBy = req.user.local.email;
                                 objActivity.notificationType = "acceptrequest";
                                 objActivity.save(function (err) {
                                 
@@ -2136,7 +2264,7 @@ router.post('/requestactionfromProfile',middleware.isLoggedIn, function(req, res
                     );
                 } 
                 else if(pendingapproval == 'reject'){
-                    Friends.remove({'friendRequestSentTo' : req.user.local.username ,'friendRequestSentBy': profileusername, 'friendRequestApprovalStatus':'pending'}, function (err, friendsdata) {
+                    Friends.remove({'friendRequestSentTo' : req.user.local.email ,'friendRequestSentBy': profileuseremail, 'friendRequestApprovalStatus':'pending'}, function (err, friendsdata) {
        
                             if(err){
                                  console.log("error");

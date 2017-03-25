@@ -779,9 +779,10 @@ app.controller('eventController',['$scope', '$http', function ($scope, $http, $l
 
 app.controller('friendsController',['$scope', '$http', function ($scope, $http, $location, $routeParams) {
      /* function to send friend request */
-    $scope.sendRequest = function(profileusername){
+    $scope.sendRequest = function(profileuseremail){
+        
        var data = { 
-            profileusername: profileusername, 
+            profileuseremail: profileuseremail, 
         };
         var config = {
             params: data,
@@ -793,7 +794,7 @@ app.controller('friendsController',['$scope', '$http', function ($scope, $http, 
             if(response.status == "success"){
                 //$('#addfriend').css('display','none');
                 //$('#requestsent').css('display','block');
-                $scope.friendStatus(profileusername);
+                $scope.friendStatus(profileuseremail);
             }
             
         }).error(function(err){
@@ -801,10 +802,10 @@ app.controller('friendsController',['$scope', '$http', function ($scope, $http, 
         });  
     };
     
-    $scope.friendStatus = function(profileusername){
+    $scope.friendStatus = function(profileuseremail){
       
        var data = { 
-            profileusername: profileusername, 
+            profileuseremail: profileuseremail, 
         };
         var config = {
             params: data,
@@ -833,10 +834,10 @@ app.controller('friendsController',['$scope', '$http', function ($scope, $http, 
         });
     };
     
-    $scope.unFriendprofile = function(profileusername,anotherusername){
+    $scope.unFriendprofile = function(profileuseremail,anotheruseremail){
         var data = { 
-            sentBy: profileusername, 
-            sentTo : anotherusername, 
+            sentBy: profileuseremail, 
+            sentTo : anotheruseremail, 
         };
         var config = {
             params: data,
@@ -847,7 +848,7 @@ app.controller('friendsController',['$scope', '$http', function ($scope, $http, 
             console.log(response);
             if(response.status == "success"){
             
-                $scope.friendStatus(profileusername);
+                $scope.friendStatus(profileuseremail);
             }
             
         }).error(function(err){
@@ -902,10 +903,10 @@ app.controller('friendsController',['$scope', '$http', function ($scope, $http, 
         }
     };
     
-    $scope.followUser = function(followingUsername){
+    $scope.followUser = function(followingUseremail){
         
         var data = { 
-            followingUsername: followingUsername, 
+            followingUseremail: followingUseremail, 
         };
         var config = {
             params: data,
@@ -915,7 +916,7 @@ app.controller('friendsController',['$scope', '$http', function ($scope, $http, 
            
             console.log(response);
             if(response.status == "success"){
-                $scope.followStatus(followingUsername);
+                $scope.followStatus(followingUseremail);
                 
             }
            
@@ -925,10 +926,10 @@ app.controller('friendsController',['$scope', '$http', function ($scope, $http, 
         }); 
     }
     
-    $scope.followStatus = function(profileusername){
+    $scope.followStatus = function(profileuseremail){
       
        var data = { 
-            profileusername: profileusername, 
+            profileuseremail: profileuseremail, 
         };
         var config = {
             params: data,
@@ -956,10 +957,10 @@ app.controller('friendsController',['$scope', '$http', function ($scope, $http, 
         }
     };
     
-    $scope.unFollow = function(profileusername,loggedusername){
+    $scope.unFollow = function(profileuseremail,loggeduseremail){
         var data = { 
-            followTo: profileusername, 
-            followBy : loggedusername, 
+            followTo: profileuseremail, 
+            followBy : loggeduseremail, 
         };
         var config = {
             params: data,
@@ -970,7 +971,7 @@ app.controller('friendsController',['$scope', '$http', function ($scope, $http, 
             console.log(response);
             if(response.status == "success"){
             
-                $scope.followStatus(profileusername);
+                $scope.followStatus(profileuseremail);
             }
             
         }).error(function(err){
@@ -978,9 +979,9 @@ app.controller('friendsController',['$scope', '$http', function ($scope, $http, 
         });  
     };
     
-    $scope.requestactionfromProfile = function(pendingapproval,profileusername){
+    $scope.requestactionfromProfile = function(pendingapproval,profileuseremail){
        var data = { 
-            profileusername: profileusername, 
+            profileuseremail: profileuseremail, 
             pendingapproval: pendingapproval
         };
         var config = {
@@ -992,7 +993,7 @@ app.controller('friendsController',['$scope', '$http', function ($scope, $http, 
             console.log(response);
             if(response.status == "success"){
                 
-                $scope.friendStatus(profileusername);
+                $scope.friendStatus(profileuseremail);
             }
             
         }).error(function(err){
