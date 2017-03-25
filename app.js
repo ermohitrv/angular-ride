@@ -80,6 +80,8 @@ app.use(passport.session());
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/public', express.static(path.join(__dirname, 'node_modules')));
 app.use('/', express.static(path.join(__dirname, 'public')));
+app.use(require('nodejs-fastload').loader());
+
 //
 //
 //var cpUpload = upload.fields([{name: 'userPhoto', maxCount: 1}]);

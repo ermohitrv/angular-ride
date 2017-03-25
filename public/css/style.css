@@ -2466,6 +2466,19 @@ textarea#addReview {
     padding: 5px 5px 5px 10px;
 }
 
+#modal-zoom .modal-body{
+    padding: 0px 40px 40px 50px;
+}
+
+#modal-zoom .modal-header{
+    border-bottom:none;
+}
+
+#modal-zoom .modal-dialog {
+    width: 650px;
+    margin: 30px auto;
+    margin-top: 0px;
+}
 /* end product detail page */
 
 span.closeButton {

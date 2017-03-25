@@ -75,6 +75,7 @@ router.get('/shop/products-detail/:id', function (req, res){
                 session: req.session,
                 message: middleware.clear_session_value(req.session, "message"),
                 message_type: middleware.clear_session_value(req.session, "message_type"),
+                page_url: globalConfig.base_url
             });
         }
     }).sort({'addedOn':-1});;

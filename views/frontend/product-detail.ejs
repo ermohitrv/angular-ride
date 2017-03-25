@@ -1,4 +1,5 @@
 <% layout('layout') -%>
+
 <div class="product_page" data-ng-controller="productController">
     <div data-ng-init="productDetail('<%= productId %>')" data-ng-bind-html="productDetailView"></div>
 </div>
@@ -15,6 +16,7 @@
 h1 { margin-top:150px; text-align:center;}
 </style>
 <script>
+
 $(document).on('click','.product-add-to-cart',function(){
     
     var product_id = $("#product_id").val();
@@ -42,6 +44,11 @@ $(document).on('click','.smallimageuploaded',function(){
 
 $(document).on('click','.zoom',function(){
    var largeimgsrc = document.getElementById('large_image').src;
+   var page_url = document.getElementById('url').value;
+   
+   $('#modal-zoom').css('display','block');
+   $('#zoomimage').attr('src',page_url+"/l/600x600/"+largeimgsrc);
+   //$('#zoomimage').attr('src',"http://localhost:2286/public/images/error_bg.jpg");
    
    //$('.zoom').magnify();
 //   $('.zoom').magnify({
@@ -49,7 +56,7 @@ $(document).on('click','.zoom',function(){
 //    src: largeimgsrc,
 //   
 //  });
-    angular.element(this).scope().imageResize(largeimgsrc);
+    //angular.element(this).scope().imageResize(largeimgsrc);
 });
 
 function submitReview(){
@@ -119,6 +126,10 @@ $(document).on('click','.productrating',function(){
     
 });
 
+$(document).on('click','.closezoombox',function(){
+    
+    $('#modal-zoom').css('display','none');
+});
 
 
 </script>
