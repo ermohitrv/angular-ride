@@ -2,7 +2,7 @@ jQuery(function() {
     var remtime1 = parseInt("85999");
     var clock1,clock2;
     jQuery(document).ready(function() {
-        clock1 = jQuery('.clock1').FlipClock(3600 * 24 * 3,{
+        clock1 = jQuery('.clock1').FlipClock({
             clockFace: 'DailyCounter',
             autoStart: false,
             callbacks: {
