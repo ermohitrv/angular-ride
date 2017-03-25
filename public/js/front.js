@@ -72,25 +72,25 @@ jQuery(function() {
             password: {
                 required: true
             },
-            hiddenRecaptcha: {
-                required: function() {
-                    if(grecaptcha.getResponse() == '') {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                },
-                remote: {
-                    url: "https://www.google.com/recaptcha/api/siteverify",
-                    type: "post",
-                    data: {
-                      response: function() {
-                        return grecaptcha.getResponse()
-                      },
-                      secret: '6LebSxoUAAAAAHMG5A4H1jxTGk0-IA2xAMhhlaxK'
-                    }
-                }
-            },
+//            hiddenRecaptcha: {
+//                required: function() {
+//                    if(grecaptcha.getResponse() == '') {
+//                        return true;
+//                    } else {
+//                        return false;
+//                    }
+//                },
+//                remote: {
+//                    url: "https://www.google.com/recaptcha/api/siteverify",
+//                    type: "post",
+//                    data: {
+//                      response: function() {
+//                        return grecaptcha.getResponse()
+//                      },
+//                      secret: '6LebSxoUAAAAAHMG5A4H1jxTGk0-IA2xAMhhlaxK'
+//                    }
+//                }
+//            },
         },
         messages: {
             email: {
@@ -231,25 +231,25 @@ jQuery('#change_password_form').validate({
                     }
                 }
             },
-            hiddenRecaptcha: {
-                required: function() {
-                    if(grecaptcha.getResponse() == '') {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                },
-                remote: {
-                    url: "https://www.google.com/recaptcha/api/siteverify",
-                    type: "post",
-                    data: {
-                      response: function() {
-                        return grecaptcha.getResponse()
-                      },
-                      secret: '6LebSxoUAAAAAHMG5A4H1jxTGk0-IA2xAMhhlaxK'
-                    }
-                }
-            },
+//            hiddenRecaptcha: {
+//                required: function() {
+//                    if(grecaptcha.getResponse() == '') {
+//                        return true;
+//                    } else {
+//                        return false;
+//                    }
+//                },
+//                remote: {
+//                    url: "https://www.google.com/recaptcha/api/siteverify",
+//                    type: "post",
+//                    data: {
+//                      response: function() {
+//                        return grecaptcha.getResponse()
+//                      },
+//                      secret: '6LebSxoUAAAAAHMG5A4H1jxTGk0-IA2xAMhhlaxK'
+//                    }
+//                }
+//            },
             gender: {
                 required: true
             }, 
