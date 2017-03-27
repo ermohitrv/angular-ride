@@ -10,7 +10,9 @@ var friends         = require('../models/friends');
 var Events          = require('../models/events');
 var Joinevents = require('../models/joinevents');
 var moment      = require("moment");
-
+var FCM = require('fcm-node');
+var serverKey = 'AAAAFYFV6mc:APA91bFB4RWwB7eaQL_AsyFvg1Dy_TWP-S4g9tWmn5XsaCcS-vR_MNMZbAjsHtziRxNtIZKHBF9bTFWOtvLhdXDJFjppLWf0_tYaktvMEuNzTciCUTpD8qTWuKee5bID0EP4pUo-EFuE';
+var fcm = new FCM(serverKey);
 
 /* API endpoint to be used by mobile device to see all users list */
 router.get('/listusers', function(req, res) {
@@ -959,22 +961,18 @@ router.post('/search', function(req, res){
 });
 
 // save friend request
-router.get('/send-friend-request', function (req, res) {
-    //var friendRequestBy = req.body.friendRequestBy; //email
-    //var friendRequestTo = req.body.friendRequestTo; //email
+router.post('/send-friend-request', function (req, res) {
     
-    var friendRequestBy = "preeti_dev@rvtechnologies.co.in"; //email
-    var friendRequestTo = "tester@rvtech.com"; //email
+    var friendRequestBy = req.body.friendRequestBy; //email
+    var friendRequestTo = req.body.friendRequestTo; //email
     
-    var note = new apn.Notification();
-    note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now. 
-    note.badge = 3;
-    note.sound = "ping.aiff";
-    note.alert = "\uD83D\uDCE7 \u2709 You have a new message";
-    note.payload = {'messageFrom': 'John Appleseed'};
-    note.topic = "<your-app-bundle-id>";
+    //var friendRequestBy = "preeti_dev@rvtechnologies.co.in"; //email
+    //var friendRequestTo = "tester@rvtech.com"; //email
+    
+   
 
     if ((friendRequestBy !== undefined && friendRequestBy !== null) && (friendRequestTo !== undefined && friendRequestTo !== null)) {
+        User.findOne({'local.email': friendRequestTo}, function (err, userdata) {
         friends.findOne({'friendRequestSentBy': friendRequestBy, 'friendRequestSentTo': friendRequestTo}, function (err, friendReq) {
             if (friendReq) {
                 res.json(false);
@@ -984,17 +982,42 @@ router.get('/send-friend-request', function (req, res) {
                 newFriendReq.friendRequestSentTo = friendRequestTo;
                 newFriendReq.save(function (err) {
                     if (!err) {
-                      
+                     
+                    var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+                        to: userdata.fcmToken, 
+                        
+                        notification: {
+                            title: 'Request', 
+                            body: userdata.local.firstName+" "+userdata.local.lastName+" sent you a friend request." 
+                        },
+
+                    };
+
+                    fcm.send(message, function(err, response){
+                        if (err) {
+                            console.log("Something has gone wrong!");
                                 res.json({ 
-                                    success: true, 
-                                    data: {
-                                        friendRequestSentBy : friendRequestBy,
-                                        friendRequestSentTo: friendRequestTo,
-                                        friendRequestStatus: 'pending'
-                                    }, 
-                                    message: "friend request sent to : "+friendRequestTo, 
+                                    success: false, 
+                                    data: null, 
+                                    message: "error occured : "+err, 
                                     code: 400
                                 });
+                        } else {
+                            console.log("Notification Successfully sent with response: ", response);
+                                                res.json({ 
+                                                    success: true, 
+                                                    data: {
+                                                        friendRequestSentBy : friendRequestBy,
+                                                        friendRequestSentTo: friendRequestTo,
+                                                        friendRequestStatus: 'pending'
+                                                    }, 
+                                                    message: "friend request sent to : "+friendRequestTo, 
+                                                    code: 400
+                                                });
+                        }
+
+                    });
+                                 
                     } else {
                         res.json({ 
                             success: false, 
@@ -1006,6 +1029,8 @@ router.get('/send-friend-request', function (req, res) {
                 });
             }
         });
+    });
+        
     }
 });
 
@@ -2533,41 +2558,37 @@ router.post('/get-friendrequests-list', function(req, res){
 
 });
 
-router.post('/push-notification', function(req, res){
-    
-    //return res.json({'msg': 'my msg'});
-    
-    var FCM = require('fcm-node');
-
-    var serverKey = 'AAAAFYFV6mc:APA91bFB4RWwB7eaQL_AsyFvg1Dy_TWP-S4g9tWmn5XsaCcS-vR_MNMZbAjsHtziRxNtIZKHBF9bTFWOtvLhdXDJFjppLWf0_tYaktvMEuNzTciCUTpD8qTWuKee5bID0EP4pUo-EFuE';
-    var fcm = new FCM(serverKey);
-
-    var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-        to: 'fIIAKgKHpqk:APA91bF2pHQAZ1LkRJ9gD8YfoR0mv4QFqaaexPsBuFpVBnnZlU94Uhk_r1kFTambf1dIQTYfkdX8sMkWrC7ToDSvmKax0PI4XDV-ZAiksLUoNyDafxXmMD8bAWAJwNYdFQ2N_mie4kLn', 
-        //collapse_key: 'your_collapse_key',
-
-        notification: {
-            title: 'Request', 
-            body: 'User A sent you a friend request.' 
-        },
-
-//        data: {  //you can send only notification or only data(or include both)
-//            my_key: 'my value',
-//            my_another_key: 'my another value'
+//router.post('/push-notification', function(req, res){
+//    
+//    //return res.json({'msg': 'my msg'});
+//    
+//    var FCM = require('fcm-node');
+//
+//    var serverKey = 'AAAAFYFV6mc:APA91bFB4RWwB7eaQL_AsyFvg1Dy_TWP-S4g9tWmn5XsaCcS-vR_MNMZbAjsHtziRxNtIZKHBF9bTFWOtvLhdXDJFjppLWf0_tYaktvMEuNzTciCUTpD8qTWuKee5bID0EP4pUo-EFuE';
+//    var fcm = new FCM(serverKey);
+//
+//    var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+//        to: 'fIIAKgKHpqk:APA91bF2pHQAZ1LkRJ9gD8YfoR0mv4QFqaaexPsBuFpVBnnZlU94Uhk_r1kFTambf1dIQTYfkdX8sMkWrC7ToDSvmKax0PI4XDV-ZAiksLUoNyDafxXmMD8bAWAJwNYdFQ2N_mie4kLn', 
+//        //collapse_key: 'your_collapse_key',
+//
+//        notification: {
+//            title: 'Request', 
+//            body: 'User A sent you a friend request.' 
+//        },
+//
+//    };
+//
+//    fcm.send(message, function(err, response){
+//        if (err) {
+//            console.log("Something has gone wrong!");
+//            return res.json(err);
+//        } else {
+//            console.log("Successfully sent with response: ", response);
+//            return res.json(response);
 //        }
-    };
-
-    fcm.send(message, function(err, response){
-        if (err) {
-            console.log("Something has gone wrong!");
-            return res.json(err);
-        } else {
-            console.log("Successfully sent with response: ", response);
-            return res.json(response);
-        }
-        
-    });
-});
+//        
+//    });
+//});
 
 router.post('/get-friends-list', function(req, res){
      
