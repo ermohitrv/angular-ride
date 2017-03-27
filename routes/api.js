@@ -2426,6 +2426,7 @@ router.post('/respond-friend-request', function (req, res) {
     var friendRequestRespond = req.body.friendRequestRespond;
 
     if ((friendRequestBy !== undefined && friendRequestBy !== null) && (friendRequestTo !== undefined && friendRequestTo !== null)) {
+        User.findOne({'local.email': friendRequestBy}, function (err, userdata) {
         friends.findOne({'friendRequestSentBy': friendRequestBy, 'friendRequestSentTo': friendRequestTo,'friendRequestApprovalStatus':'pending'}, function (err, friendReq) {
             if (err) {
                 res.json(false);
@@ -2434,16 +2435,41 @@ router.post('/respond-friend-request', function (req, res) {
                         friendReq.friendRequestApprovalStatus = 'accept';
                         friendReq.save(function (err) {
                             if (!err) {
-                                res.json({ 
-                                    success: true, 
-                                    data: {
-                                        friendRequestSentBy : friendRequestBy,
-                                        friendRequestSentTo: friendRequestTo,
-                                        friendRequestStatus: friendReq.friendRequestApprovalStatus
-                                    }, 
-                                    message: "friend request accepted ", 
-                                    code: 400
+                                var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+                                    to: userdata.fcmToken, 
+
+                                    notification: {
+                                        title: 'Accept', 
+                                        body: userdata.local.firstName+" "+userdata.local.lastName+" accepted your friend request." 
+                                    },
+
+                                };
+
+                                fcm.send(message, function(err, response){
+                                    if (err) {
+                                        console.log("Something has gone wrong!");
+                                            res.json({ 
+                                                success: false, 
+                                                data: null, 
+                                                message: "error occured : "+err, 
+                                                code: 400
+                                            });
+                                    } else {
+                                        console.log("Notification Successfully sent with response: ", response);
+                                                            res.json({ 
+                                                                    success: true, 
+                                                                    data: {
+                                                                        friendRequestSentBy : friendRequestBy,
+                                                                        friendRequestSentTo: friendRequestTo,
+                                                                        friendRequestStatus: friendReq.friendRequestApprovalStatus
+                                                                    }, 
+                                                                    message: "friend request accepted ", 
+                                                                    code: 400
+                                                                });
+                                    }
+
                                 });
+                               
                             } else {
                                 res.json({ 
                                     success: false, 
@@ -2480,6 +2506,7 @@ router.post('/respond-friend-request', function (req, res) {
                 }
             }
         });
+    });
     }
 });
 
