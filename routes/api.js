@@ -2425,25 +2425,65 @@ router.post('/respond-friend-request', function (req, res) {
 router.post('/get-friendrequests-list', function(req, res){
    
     var email = req.body.email;
+    //var email = "tester@rvtech.com";
     if(email != "" && email != undefined){
-    friends.find({'friendRequestSentTo' : email , 'friendRequestApprovalStatus':'pending'}, function (err, friendsdata) {
-       
-         if(friendsdata){
-            res.json({ 
-                    success: true,
-                    data: friendsdata,
-                    message: "success", 
-                    code: 200
+      friends.aggregate(
+        [
+
+            {
+                        $lookup:
+                                {
+                                    from: "users",
+                                    localField: "friendRequestSentBy",
+                                    foreignField: "local.email",
+                                    as: "item"
+                        }
+            },
+            
+            { "$unwind": "$item" },
+            
+            {
+                        $project:
+                                {
+                                     "FirstName": "$item.local.firstName",
+                                     "LastName": "$item.local.lastName",
+                                     "LastName": "$item.local.lastName",
+                                     "email"   : "$item.local.email",
+                                     "profileimage" :"$item.local.profileImage",
+                                     "username" :"$item.local.username",
+                                     "friendRequestSentTo":1,
+                                     "friendRequestApprovalStatus":1,
+                                     "friendRequestSentBy":1
+                                         
+                                }
+            }, 
+            
+            {
+                   $match:{'friendRequestSentTo' : email , 'friendRequestApprovalStatus':'pending'} 
+            },
+            
+        ]
+        ,function (err, friendsdata) {
+        if(friendsdata){
+            res.json({
+                success: true, 
+                data: {
+                    requestlist : friendsdata
+                },
+                message: "success", 
+                code: 200
             });
         }else{
             res.json({ 
                     success: true,
                     data: null,
-                    message: "success", 
+                    message: "request list empty", 
                     code: 200
             });
         }
     });
+   
+    
     }
     else{
         res.json({ 
