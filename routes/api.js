@@ -253,7 +253,7 @@ router.post('/login', function(req, res){
     var password    = req.body.password;
     var fcmToken    = req.body.fcmToken;
     //var fcmToken   = "test";
-    
+    console.log("fcmToken : "+fcmToken);
     if( ( email != "" && email != undefined ) && ( password != "" && password != undefined ) ){
         User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function(err, user) {
             if (err){
@@ -301,6 +301,7 @@ router.post('/login', function(req, res){
                                     code: 404
                                 });
                            }else{
+                               console.log("results : "+results);
                                 res.json({ 
                                         success: true,
                                         data: {
