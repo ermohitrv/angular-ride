@@ -1120,6 +1120,7 @@ router.post('/facebook-create-user', function (req, res) {
         var locationCountry  = req.body.locationCountry;
         var locationLat      = req.body.locationLat;
         var locationLng      = req.body.locationLng;
+        var fcmToken         = req.body.fcmToken;
       
       
     console.log('case 1 email: '+email);
@@ -1157,6 +1158,7 @@ router.post('/facebook-create-user', function (req, res) {
                                             'local.locationCountry': locationCountry,
                                             'local.locationLat'    : locationLat,
                                             'local.locationLng'    : locationLng,
+                                            'fcmToken'             : fcmToken
                                         } 
                             },
                             { multi: true },
@@ -1191,7 +1193,8 @@ router.post('/facebook-create-user', function (req, res) {
                                     locationCountry  :locationCountry,
                                     locationLat      :locationLat,
                                     locationLng      :locationLng,
-                                    rproputeInviteLink:globalConfig.websiteUrl+"/invite/"+user.local.username
+                                    rproputeInviteLink:globalConfig.websiteUrl+"/invite/"+user.local.username,
+                                    fcmToken         :fcmToken
                                     
                                    
                                 },
@@ -1223,6 +1226,7 @@ router.post('/facebook-create-user', function (req, res) {
                 newUser.local.locationCountry   = locationCountry;
                 newUser.local.locationLat       = locationLat;
                 newUser.local.locationLng       = locationLng;
+                newUser.fcmToken                = fcmToken;
         	// save the user
                 newUser.save(function(err){
                     if (err){
@@ -1254,7 +1258,8 @@ router.post('/facebook-create-user', function (req, res) {
                                     locationCountry  :locationCountry,
                                     locationLat      :locationLat,
                                     locationLng      :locationLng,
-                                    rproputeInviteLink:globalConfig.websiteUrl+"/invite/"+username
+                                    rproputeInviteLink:globalConfig.websiteUrl+"/invite/"+username,
+                                    fcmToken         :fcmToken
                                    
                                 },
                             message: globalConfig.successRegister, 
