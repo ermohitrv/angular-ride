@@ -11,6 +11,7 @@ var Events          = require('../models/events');
 var Joinevents = require('../models/joinevents');
 var moment      = require("moment");
 
+
 /* API endpoint to be used by mobile device to see all users list */
 router.get('/listusers', function(req, res) {
     User.aggregate([{$sort: {'local.username': 1}}], function (err, usersList) {
@@ -248,6 +249,9 @@ router.post('/mylocaction', function(req, res){
 router.post('/login', function(req, res){
     var email       = req.body.email;
     var password    = req.body.password;
+    var fcmToken    = req.body.fcmToken;
+    //var fcmToken   = "test";
+    
     if( ( email != "" && email != undefined ) && ( password != "" && password != undefined ) ){
         User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function(err, user) {
             if (err){
@@ -281,22 +285,42 @@ router.post('/login', function(req, res){
                     });
                     req.logout();
                 }else{
-                    res.json({ 
-                        success: true,
-                        data: {
-                            firstName       :user.local.firstName,
-                            lastName        :user.local.lastName,
-                            email           :user.local.email,
-                            contact         :user.local.contact,
-                            profileImage    :user.local.profileImage,
-                            rideType        :user.rideType,
-                            rideExperience  :user.rideExperience,
-                            rideCategory    :user.rideCategory,
-                            rproputeInviteLink:globalConfig.websiteUrl+"/invite/"+user.local.username
-                        },
-                        message: "success", 
-                        code: 200
-                    });
+                    
+                    User.update({'local.email' : email },
+                        { $set: { 'fcmToken': fcmToken } },
+                        { multi: true },
+
+                        function(err, results){
+                           if(err){
+                                res.json({ 
+                                    success: false, 
+                                    data: null, 
+                                    message: "FCM token error while update", 
+                                    code: 404
+                                });
+                           }else{
+                                res.json({ 
+                                        success: true,
+                                        data: {
+                                            firstName       :user.local.firstName,
+                                            lastName        :user.local.lastName,
+                                            email           :user.local.email,
+                                            contact         :user.local.contact,
+                                            profileImage    :user.local.profileImage,
+                                            rideType        :user.rideType,
+                                            rideExperience  :user.rideExperience,
+                                            rideCategory    :user.rideCategory,
+                                            rproputeInviteLink:globalConfig.websiteUrl+"/invite/"+user.local.username,
+                                            fcmToken        :fcmToken,
+                                        },
+                                        message: "success", 
+                                        code: 200
+                                });
+                            }
+                            
+                        }
+                    );
+                   
                 }
             }else{
                 res.json({ 
@@ -935,9 +959,20 @@ router.post('/search', function(req, res){
 });
 
 // save friend request
-router.post('/send-friend-request', function (req, res) {
-    var friendRequestBy = req.body.friendRequestBy; //email
-    var friendRequestTo = req.body.friendRequestTo; //email
+router.get('/send-friend-request', function (req, res) {
+    //var friendRequestBy = req.body.friendRequestBy; //email
+    //var friendRequestTo = req.body.friendRequestTo; //email
+    
+    var friendRequestBy = "preeti_dev@rvtechnologies.co.in"; //email
+    var friendRequestTo = "tester@rvtech.com"; //email
+    
+    var note = new apn.Notification();
+    note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now. 
+    note.badge = 3;
+    note.sound = "ping.aiff";
+    note.alert = "\uD83D\uDCE7 \u2709 You have a new message";
+    note.payload = {'messageFrom': 'John Appleseed'};
+    note.topic = "<your-app-bundle-id>";
 
     if ((friendRequestBy !== undefined && friendRequestBy !== null) && (friendRequestTo !== undefined && friendRequestTo !== null)) {
         friends.findOne({'friendRequestSentBy': friendRequestBy, 'friendRequestSentTo': friendRequestTo}, function (err, friendReq) {
@@ -949,16 +984,17 @@ router.post('/send-friend-request', function (req, res) {
                 newFriendReq.friendRequestSentTo = friendRequestTo;
                 newFriendReq.save(function (err) {
                     if (!err) {
-                        res.json({ 
-                            success: true, 
-                            data: {
-                                friendRequestSentBy : friendRequestBy,
-                                friendRequestSentTo: friendRequestTo,
-                                friendRequestStatus: 'pending'
-                            }, 
-                            message: "friend request sent to : "+friendRequestTo, 
-                            code: 400
-                        });
+                      
+                                res.json({ 
+                                    success: true, 
+                                    data: {
+                                        friendRequestSentBy : friendRequestBy,
+                                        friendRequestSentTo: friendRequestTo,
+                                        friendRequestStatus: 'pending'
+                                    }, 
+                                    message: "friend request sent to : "+friendRequestTo, 
+                                    code: 400
+                                });
                     } else {
                         res.json({ 
                             success: false, 
@@ -2493,6 +2529,99 @@ router.post('/get-friendrequests-list', function(req, res){
             code: 400
         });
         
+    }
+
+});
+
+router.post('/push-notification', function(req, res){
+    
+    //return res.json({'msg': 'my msg'});
+    
+    var FCM = require('fcm-node');
+
+    var serverKey = 'AAAAFYFV6mc:APA91bFB4RWwB7eaQL_AsyFvg1Dy_TWP-S4g9tWmn5XsaCcS-vR_MNMZbAjsHtziRxNtIZKHBF9bTFWOtvLhdXDJFjppLWf0_tYaktvMEuNzTciCUTpD8qTWuKee5bID0EP4pUo-EFuE';
+    var fcm = new FCM(serverKey);
+
+    var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+        to: 'fIIAKgKHpqk:APA91bF2pHQAZ1LkRJ9gD8YfoR0mv4QFqaaexPsBuFpVBnnZlU94Uhk_r1kFTambf1dIQTYfkdX8sMkWrC7ToDSvmKax0PI4XDV-ZAiksLUoNyDafxXmMD8bAWAJwNYdFQ2N_mie4kLn', 
+        //collapse_key: 'your_collapse_key',
+
+        notification: {
+            title: 'Request', 
+            body: 'User A sent you a friend request.' 
+        },
+
+//        data: {  //you can send only notification or only data(or include both)
+//            my_key: 'my value',
+//            my_another_key: 'my another value'
+//        }
+    };
+
+    fcm.send(message, function(err, response){
+        if (err) {
+            console.log("Something has gone wrong!");
+            return res.json(err);
+        } else {
+            console.log("Successfully sent with response: ", response);
+            return res.json(response);
+        }
+        
+    });
+});
+
+router.post('/get-friends-list', function(req, res){
+     
+    var email = req.body.email;
+    //var email = "preeti_dev@rvtechnologies.co.in";
+    
+    if(email != "" && email != undefined){
+     friends.aggregate(
+        [
+            {
+                   $match:{$and : [{ $or : [ { 'friendRequestSentTo' : email }, { 'friendRequestSentBy' : email} ] },{ $or : [ { 'friendRequestApprovalStatus' : 'accept'}]}]}  
+            },
+            
+            {
+                        $lookup:
+                                {
+                                    from: "users",
+                                    localField: "friendRequestSentTo",
+                                    foreignField: "local.email",
+                                    as: "item"
+                        }
+            },
+            
+            { "$unwind": "$item" },
+            
+            {
+                        $project:
+                                {
+                                     "FirstName": "$item.local.firstName",
+                                     "LastName": "$item.local.lastName",
+                                     "profileImage": "$item.local.profileImage",
+                                     "friendRequestSentTo": 1,
+                                     "friendRequestSentBy": 1,
+                                          
+                                }
+            } 
+            
+        ]
+        ,function (err, friendsdata) {
+            console.log(friendsdata);
+        if(!err){
+            res.json(friendsdata);
+        }else{
+            res.json({});
+        }
+    });
+    }
+    else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
     }
 
 });

@@ -51,6 +51,7 @@ var userSchema = mongoose.Schema({
     skypeUsername:              {type: String, default: ''},
     youtubeURL:                 {type: String, default: ''},
     enableAccount:              {type: Boolean, default: true}, // true: enable, false: disable
+    fcmToken:                   {type: String, default: ''},
     rideSettings:{
             rideVisibility:     {type: Number, default: 0},
     },
