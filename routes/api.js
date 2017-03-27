@@ -301,7 +301,7 @@ router.post('/login', function(req, res){
                                     code: 404
                                 });
                            }else{
-                               console.log("results : "+results);
+                               console.log(results);
                                 res.json({ 
                                         success: true,
                                         data: {
