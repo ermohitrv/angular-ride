@@ -8,15 +8,16 @@
         <div class="col-md-4 footer wow fadeInUp animated" data-wow-duration="1000ms" data-wow-delay="400ms" style="visibility: visible; animation-duration: 1000ms; animation-delay: 400ms;" ng-init="latestEvents()">
             <h3>Latest Event</h3>
             <div class="event" ng-repeat="latestevent in footerlatestevents">
+                <a href="/event?id={{latestevent._id}}" >
                 <div class="date">
                     <span ng-bind="latestevent.startDate | date:'MMM'"></span>
                     <p ng-bind="latestevent.startDate | date:'dd'">26</p>
                 </div>
                 <div class="event_info">
-                    <a href="/event?id={{latestevent._id}}" ><h6 ng-bind="latestevent.eventName"></h6></a>
+                    <h6 ng-bind="latestevent.eventName"></h6>
                     <p class="lastestevents-footer">{{ latestevent.description | limitTo: 20 }}{{latestevent.description.length > 20 ? '...' : ''}}<br/><span>{{ latestevent.eventLocation }}</span></p>
                    
-                </div>
+                </div></a>
             </div>
 <!--            <div class="event">
                 <div class="date">
