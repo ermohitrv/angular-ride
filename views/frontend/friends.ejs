@@ -99,7 +99,6 @@
                                     <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
                                         <thead>
                                             <tr role="row">
-                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"></th>
 
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Name</th>
                                            
@@ -110,10 +109,10 @@
                                         <tbody>
                                             <tr data-ng-if="friendslist.length > 0" data-ng-repeat="friends in friendslist" id="{{ friends._id }}" role="row" class="odd">
                                                 
-                                                <td><img class="friendimage" src="/public/uploads/{{friends.profileImage}}"/></td>
+                                                
                                           
                                                 <td>
-                                                    {{friends.friendRequestSentBy == '<%= user.local.email %>' ? friends.friendRequestSentTo : friends.friendRequestSentTo == '<%= user.local.email %>' ? friends.friendRequestSentBy : friends.friendRequestSentBy}}
+                                                    {{friends.FirstName}}&nbsp;{{friends.LastName}}
                                                 
                                                 </td>
                                                 
@@ -125,7 +124,7 @@
                                                 </td>
                                             </tr>
                                             <tr  data-ng-if="friendslist.length <= 0">
-                                                <td colspan="3" style="text-align: center">No results found</td>
+                                                <td colspan="2" style="text-align: center">No results found</td>
                                             </tr>
                                         </tbody>
                                     </table>

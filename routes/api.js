@@ -983,7 +983,7 @@ router.post('/send-friend-request', function (req, res) {
                 newFriendReq.friendRequestSentTo = friendRequestTo;
                 newFriendReq.save(function (err) {
                     if (!err) {
-                     
+                    console.log("fcm token : "+userdata.fcmToken);
                     var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
                         to: userdata.fcmToken, 
                         
@@ -2629,45 +2629,66 @@ router.post('/get-friends-list', function(req, res){
     //var email = "preeti_dev@rvtechnologies.co.in";
     
     if(email != "" && email != undefined){
-     friends.aggregate(
+    friends.aggregate(
         [
             {
                    $match:{$and : [{ $or : [ { 'friendRequestSentTo' : email }, { 'friendRequestSentBy' : email} ] },{ $or : [ { 'friendRequestApprovalStatus' : 'accept'}]}]}  
             },
             
-            {
+            {          
                         $lookup:
                                 {
                                     from: "users",
                                     localField: "friendRequestSentTo",
                                     foreignField: "local.email",
-                                    as: "item"
+                                    as: "item1"
+                        }
+            },
+            {          
+                        $lookup:
+                                {
+                                    from: "users",
+                                    localField: "friendRequestSentBy",
+                                    foreignField: "local.email",
+                                    as: "item2"
                         }
             },
             
-            { "$unwind": "$item" },
+            { "$unwind": "$item1" },
+            { "$unwind": "$item2" },
             
             {
                         $project:
-                                {
-                                     "FirstName": "$item.local.firstName",
-                                     "LastName": "$item.local.lastName",
-                                     "profileImage": "$item.local.profileImage",
+                                { 
+                                     "FirstName":  { $cond: [  { $eq : [ email, "$friendRequestSentTo" ] }, "$item2.local.firstName", "$item1.local.firstName" ]},
+                                     "LastName": { $cond: [ { $eq : [ email, "$friendRequestSentTo" ] }, "$item2.local.lastName", "$item1.local.lastName" ]},
+                                     "profileImage": { $cond: [ { $eq : [ email, "$friendRequestSentTo" ] }, "$item2.local.profileImage", "$item1.local.profileImage" ]},
                                      "friendRequestSentTo": 1,
                                      "friendRequestSentBy": 1,
-                                          
                                 }
             } 
             
         ]
         ,function (err, friendsdata) {
-            console.log(friendsdata);
         if(!err){
-            res.json(friendsdata);
+            res.json({
+                success: true, 
+                data: {
+                    friendsdata : friendsdata
+                },
+                message: "success", 
+                code: 200
+            });
         }else{
-            res.json({});
+            res.json({
+                success: false, 
+                data: null,
+                message: "error", 
+                code: 400
+            });
         }
     });
+    
     }
     else{
         res.json({ 

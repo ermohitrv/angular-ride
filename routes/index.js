@@ -1718,17 +1718,7 @@ router.get('/friendrequestaction',middleware.isLoggedIn, function(req, res){
 
 router.post('/get-friends-list',middleware.isLoggedIn, function(req, res){
    
-//    Friends.find({$and : [{ $or : [ { 'friendRequestSentTo' : req.user.local.email }, { 'friendRequestSentBy' : req.user.local.email} ] },{ $or : [ { 'friendRequestApprovalStatus' : 'accept'}]}]}, function(err, friendsdata){
-//
-//       
-//         if(friendsdata){
-//            res.json(friendsdata);
-//        }else{
-//            res.json({});
-//        }
-//    });
-
-      Friends.aggregate(
+      /*Friends.aggregate(
         [
             {
                    $match:{$and : [{ $or : [ { 'friendRequestSentTo' : req.user.local.email }, { 'friendRequestSentBy' : req.user.local.email} ] },{ $or : [ { 'friendRequestApprovalStatus' : 'accept'}]}]}  
@@ -1766,7 +1756,61 @@ router.post('/get-friends-list',middleware.isLoggedIn, function(req, res){
         }else{
             res.json({});
         }
+    });*/
+    
+    
+    Friends.aggregate(
+        [
+            {
+                   $match:{$and : [{ $or : [ { 'friendRequestSentTo' : req.user.local.email }, { 'friendRequestSentBy' : req.user.local.email} ] },{ $or : [ { 'friendRequestApprovalStatus' : 'accept'}]}]}  
+            },
+            
+            {          
+                        $lookup:
+                                {
+                                    from: "users",
+                                    localField: "friendRequestSentTo",
+                                    foreignField: "local.email",
+                                    as: "item1"
+                        }
+            },
+            {          
+                        $lookup:
+                                {
+                                    from: "users",
+                                    localField: "friendRequestSentBy",
+                                    foreignField: "local.email",
+                                    as: "item2"
+                        }
+            },
+            
+            { "$unwind": "$item1" },
+            { "$unwind": "$item2" },
+            
+            {
+                        $project:
+                                { 
+                                     "FirstName":  { $cond: [  { $eq : [ req.user.local.email, "$friendRequestSentTo" ] }, "$item2.local.firstName", "$item1.local.firstName" ]},
+                                     "LastName": { $cond: [ { $eq : [ req.user.local.email, "$friendRequestSentTo" ] }, "$item2.local.lastName", "$item1.local.lastName" ]},
+                                     "profileImage": { $cond: [ { $eq : [ req.user.local.email, "$friendRequestSentTo" ] }, "$item2.local.profileImage", "$item1.local.profileImage" ]},
+                                     "friendRequestSentTo": 1,
+                                     "friendRequestSentBy": 1,
+                                }
+            } 
+            
+        ]
+        ,function (err, friendsdata) {
+        if(!err){
+            res.json(friendsdata);
+        }else{
+            res.json({});
+        }
     });
+    
+    
+    
+    
+    
 
 });
 
