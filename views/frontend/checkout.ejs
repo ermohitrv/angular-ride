@@ -1,6 +1,6 @@
 <% layout('layout') -%>
 
-<div class="checkout_page">
+<div class="checkout_page" data-ng-controller="cartController">
     <div class="overlay_bg"></div>
     <div class="container">
     <% if(payment_approved == true) { %>
@@ -87,6 +87,7 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-md-pull-6 col-sm-pull-6">
                     <!--Login Form-->
+                    <% if(!user) {%>
                     <div id="logincheckoutsection">
                     <form action="/login" method="post" id="login_form">
                     <div class="panel panel-info">
@@ -120,6 +121,7 @@
                         <p class="text-center">Need an account? <a href="/signup">Signup</a> Or go <a href="/">home</a></p><br>
                     </div>
                     </form></div>
+                    <% } %>
                     <!--SHIPPING METHOD-->
                     <form class="form-horizontal" role="form" id="shipping_form" method="post" action="/checkout_action" data-toggle="validator" novalidate="false">
                     <div class="panel panel-info">
@@ -130,11 +132,19 @@
                                     <h4>Shipping Address</h4>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <% 
+                            var country = "";
+                            if(user) {
+                                   country = user.local.locationCountry;
+                            } else { 
+                                   country = "";
+                            }%>
+               
+                            <div class="form-group" data-ng-init="renderCountry('<%= country %>')">
                                 <div class="col-md-12"><strong>Country:</strong></div>
                                 <div class="col-md-12">
                                     <!--<input type="text" class="form-control" id="ship_country" name="ship_country" placeholder="Country" required>-->
-                                    <select required="" class="form-control" name="ship_country">
+                                    <select required=""  data-ng-model="selectedOption" class="form-control" name="ship_country">
                                         <option value="">SELECT COUNTRY</option>
                                         <option value="Afghanistan">Afghanistan</option>
                                         <option value="Albania">Albania</option>
@@ -381,12 +391,12 @@
                             <div class="form-group">
                                 <div class="col-md-6 col-xs-12">
                                     <strong>First Name:</strong>
-                                    <input type="text"  id="ship_firstname" name="ship_firstname" placeholder="First name" class="form-control"    required/>
+                                    <input type="text"  id="ship_firstname" name="ship_firstname" placeholder="First name" class="form-control" value="<% if(user){%><%= user.local.firstName %><% } %>"   required/>
                                 </div>
                                 <div class="span1"></div>
                                 <div class="col-md-6 col-xs-12">
                                     <strong>Last Name:</strong>
-                                    <input type="text" class="form-control" id="ship_lastname" name="ship_lastname" placeholder="Last name" required>
+                                    <input type="text" class="form-control" id="ship_lastname" name="ship_lastname" placeholder="Last name" value="<% if(user){%><%= user.local.lastName %><% } %>" required>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -404,28 +414,28 @@
                             <div class="form-group">
                                 <div class="col-md-12"><strong>City:</strong></div>
                                 <div class="col-md-12">
-                                    <input type="text" name="ship_city" class="form-control" placeholder="City" />
+                                    <input type="text" name="ship_city" class="form-control" placeholder="City" value="<% if(user){%><%= user.local.locationCity %><% } %>" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-12"><strong>State:</strong></div>
                                 <div class="col-md-12">
-                                    <input type="text" class="form-control" id="ship_state" name="ship_state" placeholder="State/Province" required>
+                                    <input type="text" class="form-control" id="ship_state" name="ship_state" placeholder="State/Province" value="<% if(user){%><%= user.local.locationState %><% }%>" required>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-12"><strong>Zip / Postal Code:</strong></div>
                                 <div class="col-md-12">
-                                    <input type="number" class="form-control" id="ship_postcode" name="ship_postcode" placeholder="Post/Zip code" required>
+                                    <input type="text" class="form-control" id="ship_postcode" name="ship_postcode" placeholder="Post/Zip code" value="<% if(user){%><%= user.local.locationZipcode %><% }%>" required>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-12"><strong>Phone Number:</strong></div>
-                                <div class="col-md-12"><input type="text" name="phone_number" class="form-control"  /></div>
+                                <div class="col-md-12"><input type="text" name="phone_number" class="form-control" value="<% if(user){%><%= user.local.contact %><% } %>" /></div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-12"><strong>Email Address:</strong></div>
-                                <div class="col-md-12"><input type="email" id="ship_email" name="ship_email" class="form-control"  minlength="5" placeholder="Email address" required /></div>
+                                <div class="col-md-12"><input type="email" id="ship_email" name="ship_email" class="form-control"  minlength="5" placeholder="Email address" value="<% if(user){%><%= user.local.email %><% }%>" required /></div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-6 col-sm-6 col-xs-12">

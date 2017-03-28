@@ -600,7 +600,7 @@ router.post('/checkout_action', function(req, res, next) {
         res.redirect("/cart");
         return;
     }
-    console.log(req.user.local.email);
+    console.log("Total amount"+req.session.total_cart_amount);
     // new order doc
     var order_doc = { 
         order_total: req.session.total_cart_amount,

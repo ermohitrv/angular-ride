@@ -2479,6 +2479,11 @@ textarea#addReview {
     margin: 30px auto;
     margin-top: 0px;
 }
+
+div#modal-zoom {
+    background: rgba(0, 0, 0, 0.8);
+    overflow: auto;
+}
 /* end product detail page */
 
 span.closeButton {

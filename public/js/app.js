@@ -351,6 +351,10 @@ app.controller('cartController',['$scope', '$http','$sce', function ($scope, $ht
         });
       
     };
+     
+    $scope.renderCountry = function(country){
+        $scope.selectedOption = country;
+    };    
         
 }]);
 
