@@ -1,0 +1,117 @@
+<% layout('layout') -%>
+
+<div class="product_page" data-ng-controller="eventController">
+    <div>   
+    <div class="container">
+    <div class="row transitionfx">
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="main-image sp-wrap col-lg-12 no-padding">
+                <div class="sp-large">
+                    <a href="#" class="">
+                        <% if(event.eventImage != "") { %>
+                        <img src="<%= event.eventImage %>"   id="large_image"  class="img-responsive" alt="img">
+                        <% } else{%>
+                        <img src="http://placehold.it/300"   id="large_image"  class="img-responsive" alt="img">
+                        <% } %>
+                    </a> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6 col-md-6 col-sm-5">
+            <h1 class="product-title"><%= event.eventName %></h1>
+            <h3 class="product-code">Hosted By: <%= event.eventHost %> </h3>
+           
+            <div class="event-venue">
+                <span class="price-sales">Venue: <%= event.eventLocation %></span> 
+            </div>
+            <div class="details-description">
+
+                <p>Time: <span id="eventtime"></span></p>
+            </div>
+            
+
+
+            <div class="cart-actions">
+                <div class="addto row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <button class="button btn-block"  type="button" onclick="joinevent('<%= event._id %>','<%= event.eventName %>')">
+                            Join Event
+                        </button>
+                        <input type="hidden" id="product_id" value="gghfg">
+                    </div>
+
+                </div>
+                <div style="clear:both"></div>
+
+            </div>
+
+            <div class="clear"></div>
+            <div class="product-tab w100 clearfix">
+                <ul class="nav nav-tabs">
+                <li class="active"><a href="#details" data-toggle="tab">Description</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="details">
+                                <%= event.description %></div>
+
+
+                    </div>
+                   
+
+                </div>
+
+            </div>
+
+            <div style="clear:both"></div>
+            
+        </div>
+    </div>
+</div>     
+</div>
+<div class="modal fade in" id="eventsmodal" role="dialog" aria-labelledby="eventsmodal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="modalbtnclose">&times;</button>
+                    <h4 class="modal-title">Event: <span id="eventmodaltext"></span></h4>
+                         </div>
+              <div class="modal-body">
+                   <p id="eventsmsg"></p>
+                     </div>
+                    <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" data-dismiss="modal" id="modalbtnok">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<script>
+    
+       $(document).ready(function(){
+                $('#modalbtnok').click(function(){
+          
+                    $('#eventsmodal').hide();
+
+                 });
+
+                 $('#modalbtnclose').click(function(){
+
+                    $('#eventsmodal').hide();
+
+                });
+        
+                var startdate = '<%= event.startDate %>';
+                var enddate = '<%= event.endDate %>';
+                var starttime = '<%= event.startTime %>';
+                var endtime = '<%= event.endTime %>';
+                var starteventDate = moment(startdate).format('YYYY-MM-DD');
+                var endeventDate = moment(enddate).format('YYYY-MM-DD');
+               
+                $('#eventtime').text(starteventDate+" "+starttime+" to "+endeventDate+" "+endtime);
+                    
+        });
+        
+        
+</script>    

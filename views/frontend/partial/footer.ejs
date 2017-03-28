@@ -13,7 +13,7 @@
                     <p ng-bind="latestevent.startDate | date:'dd'">26</p>
                 </div>
                 <div class="event_info">
-                    <h6 ng-bind="latestevent.eventName"></h6>
+                    <a href="/event?id={{latestevent._id}}" ><h6 ng-bind="latestevent.eventName"></h6></a>
                     <p class="lastestevents-footer">{{ latestevent.description | limitTo: 20 }}{{latestevent.description.length > 20 ? '...' : ''}}<br/><span>{{ latestevent.eventLocation }}</span></p>
                    
                 </div>

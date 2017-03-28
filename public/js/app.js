@@ -778,6 +778,8 @@ app.controller('eventController',['$scope', '$http', function ($scope, $http, $l
         });
     };
     
+   
+    
 }]);
 
 

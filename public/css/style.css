@@ -2412,6 +2412,13 @@ li.btn.btn-xs.btn-info {
     line-height:1.4 !important;
     font-size:14px;
 }
+
+.event-venue {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: normal;
+    margin-bottom: 10px;
+}
 /* end event page css */
 /* friends page */
 #searchfrndbtn{

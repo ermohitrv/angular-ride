@@ -1268,7 +1268,7 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
                     },
                     {
                         $project : {
-                            //'_id':1,
+                            '_id':1,
                             'eventName': 1,
                             'eventLocation':1,
                             'eventLocationType':1,
@@ -1279,6 +1279,7 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
                             'endTime':1,
                             'userEmail':1,
                             "eventid": "$item.eventId", 
+                            "eventImage":1,
                             "count": { $size:"$item.eventId"}, 
                              month: { $month: "$startDate" }
                            
@@ -1356,7 +1357,7 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
                     },
                     {
                         $project : {
-                            //'_id':1,
+                            '_id':1,
                             'eventName': 1,
                             'eventLocation':1,
                             'eventLocationType':1,
@@ -1367,6 +1368,7 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
                             'endTime':1,
                             'userEmail':1,
                             "eventid": "$item.eventId", 
+                            "eventImage":1,
                             "count": { $size:"$item.eventId"}, 
                            
                             
@@ -2431,6 +2433,30 @@ router.get('/faq', function(req, res){
         message: middleware.clear_session_value(req.session, "message"),
         message_type: middleware.clear_session_value(req.session, "message_type"),
         page_url: globalConfig.base_url
+    });
+
+});
+
+
+router.get('/event', function(req, res){
+    
+    console.log("event id"+req.query.id);
+    Events.findOne({'_id':req.query.id},function (err, event) {
+        if(err){
+            
+        }
+        else{
+            res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+            res.render('event-detail', {
+                title: 'Event', 
+                user: req.user,
+                event:event,
+                session: req.session,
+                message: middleware.clear_session_value(req.session, "message"),
+                message_type: middleware.clear_session_value(req.session, "message_type"),
+                page_url: globalConfig.base_url
+            });
+        }
     });
 
 });

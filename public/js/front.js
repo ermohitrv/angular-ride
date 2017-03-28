@@ -682,6 +682,8 @@ function seteventsMarkers(userData) {
             var id = markerData._id;
             var encodename = encodeURI(markerData.eventName);
             var fun = "joinevent('"+id+"','"+encodename+"')";
+            var fun2 = "viewevent('"+id+"')";
+            var eventImage = markerData.eventImage;
             var name = markerData.eventName;
             var joinedpersons = markerData.count
             var lat = locLat;
@@ -692,7 +694,7 @@ function seteventsMarkers(userData) {
             var endeventDatemarker = moment(markerData.endDate).format('YYYY-MM-DD');
             var starttime = starteventDatemarker+' '+markerData.startTime;
             var endtime = endeventDatemarker+' '+markerData.endTime;
-            var html = '<div style="width:250px;height:140px;"><div class="googft-info-window"><b>Host: </b>'+host+'<br><b>Event Title: </b>'+name+'<br><b>Start Time: </b>'+starttime+'<br><b>End Time: </b>'+endtime+'<br><b>Venue Location: </b>'+location+'<br><b>Number of persons joined: </b>'+joinedpersons+'<br/><br/><a style="margin-left: 35%;" class="btn btn-primary" href="javascript:;" onclick='+fun+' >Join Event</a></div></div>';
+            var html = '<div style="width:250px;height:140px;"><div class="googft-info-window"><b>Host: </b>'+host+'<br><b>Event Title: </b>'+name+'<br><b>Start Time: </b>'+starttime+'<br><b>End Time: </b>'+endtime+'<br><b>Venue Location: </b>'+location+'<br><b>Number of persons joined: </b>'+joinedpersons+'<br/><br/><a style="margin-left: 15%;float:left" class="btn btn-primary" href="javascript:;" onclick='+fun+' >Join Event</a><a style="float:right" class="btn btn-primary" href="/event?id='+id+'">View Event</a></div></div>';
             var content = html;
             var myLatLng = new google.maps.LatLng(lat, long);
             points[i] = myLatLng;
@@ -795,3 +797,4 @@ function joinevent(eventid,eventname){
         $('#eventmodaltext').text(decodeURI(eventname));
     }
 }
+
