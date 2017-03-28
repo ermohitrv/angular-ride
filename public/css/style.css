@@ -2545,6 +2545,10 @@ li#header_inbox_bar i.fa.fa-times {
  float: right; 
 }
 
+.hours span.flip-clock-label {
+    left: 35px !important;
+}
+
 /***** CSS Magic to Highlight Stars on Hover *****/
 
 .rating > input:checked ~ label, /* show gold star when clicked */
