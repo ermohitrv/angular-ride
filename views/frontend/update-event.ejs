@@ -137,13 +137,15 @@
                 
             $("#startdate").datetimepicker({
                  minView : 2,
-                 format: 'yyyy-mm-dd'
+                 format: 'yyyy-mm-dd',
+                 startDate:new Date(),
 
             });
 
              $("#enddate").datetimepicker({
                  minView : 2,
-                 format: 'yyyy-mm-dd'
+                 format: 'yyyy-mm-dd',
+                 todayHighlight: false,
 
             });
 
@@ -165,8 +167,14 @@
                         startView: 1,
                         maxView: 1
             });
-    
+         
+            $('#startdate').change(function(){
+                var startdate = $('#startdate').val();
+                $('#enddate').datetimepicker('setStartDate',startdate );  /* set future end dates */
+
+            });
                 
+        
         });
             
             
