@@ -2494,7 +2494,7 @@ router.post('/get-shipping',  function (req, res){
                 res.json(shipping.shipping_price);
 
             }else{
-                Shipping.findOne({'shipping_country':req.body.params.country,'shipping_state':'*',"shipping_weightfrom" : { $lt : 40 }, "shipping_weightto" :{ $gt : 40 }},function (err, shipping) {
+                Shipping.findOne({'shipping_country':req.body.params.country,'shipping_state':'*',"shipping_weightfrom" : { $lt : req.body.params.weight }, "shipping_weightto" :{ $gt : req.body.params.weight }},function (err, shipping) {
                     if(shipping){
                         console.log("pppppp");
                         console.log(shipping);
