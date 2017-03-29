@@ -530,9 +530,11 @@ if(user){
 $(document).ready(function() { 
   $(window).load(function() { 
     var taxcost = $('#taxcost').text();
-    alert(taxcost);
+   
     var shippingcost = $('#shippingcost').text();
     var subtotal = '<%= subtotal %>';
+    alert(taxcost);
+    alert(shippingcost);
     var  ordertotal = parseFloat(subtotal) + +parseFloat(taxcost) + +parseFloat(shippingcost);
     $('#ordertotal').text(ordertotal);
     $('#shiptotalamount').val(ordertotal);
