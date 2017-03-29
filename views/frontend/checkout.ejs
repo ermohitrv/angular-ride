@@ -527,16 +527,27 @@ if(user){
 </div>
 <script>
    
-   
-$(document).load(function () {
+$(document).ready(function() { 
+  $(window).load(function() { 
     var taxcost = $('#taxcost').text();
+    alert(taxcost);
     var shippingcost = $('#shippingcost').text();
     var subtotal = '<%= subtotal %>';
     var  ordertotal = parseFloat(subtotal) + +parseFloat(taxcost) + +parseFloat(shippingcost);
     $('#ordertotal').text(ordertotal);
     $('#shiptotalamount').val(ordertotal);
-    
+  });
 });
+
+//$(document).load(function () {
+//    var taxcost = $('#taxcost').text();
+//    var shippingcost = $('#shippingcost').text();
+//    var subtotal = '<%= subtotal %>';
+//    var  ordertotal = parseFloat(subtotal) + +parseFloat(taxcost) + +parseFloat(shippingcost);
+//    $('#ordertotal').text(ordertotal);
+//    $('#shiptotalamount').val(ordertotal);
+//    
+//});
 
 //$( window ).load(function() {
 //    var taxcost = $('#taxcost').text();
