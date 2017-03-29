@@ -2469,7 +2469,7 @@ router.post('/respond-friend-request', function (req, res) {
                                                                         friendRequestSentTo: friendRequestTo,
                                                                         friendRequestStatus: friendReq.friendRequestApprovalStatus
                                                                     }, 
-                                                                    message: "friend request accepted ", 
+                                                                    message: "friend request accepted", 
                                                                     code: 400
                                                                 });
                                     }
@@ -2504,7 +2504,7 @@ router.post('/respond-friend-request', function (req, res) {
                                         friendRequestSentTo: friendRequestTo,
                                         friendRequestStatus: 'rejected'
                                     }, 
-                                    message: "friend request rejected ", 
+                                    message: "friend request rejected", 
                                     code: 400
                             });
                         }
