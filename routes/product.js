@@ -340,4 +340,13 @@ router.post('/get-events-list',  function(req, res){
     });
 });
 
+router.post('/calculate-cartamount', function(req, res, next) {	
+       var productid = req.body.params.productId;
+       req.session.cart[productid].quantity = req.body.params.quantity;
+       req.session.cart[productid].total_item_price = req.body.params.totalprice;
+        console.log(req.session.cart);
+        //res.send(true);
+        res.status(200).json({"total_cart_items": Object.keys(req.session.cart).length});
+});
+
 module.exports = router;

@@ -424,6 +424,29 @@ app.controller('cartController',['$scope', '$http','$sce', function ($scope, $ht
         $('#ordertotal').text(ordertotal);
         $('#shiptotalamount').val(ordertotal);
     }
+    
+     $scope.calculateCartAmount = function(productId,quantity,totalprice){
+        
+       
+        var data = { 
+            productId: productId, 
+            quantity: quantity,
+            totalprice:totalprice
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+       
+        $http.post('/product/calculate-cartamount',config).success(function (response, status, headers, config){
+                
+
+        }).error(function(err){
+               console.log('Oops! Error occur'+err);
+        }); 
+        
+        
+    };
 }]);
 
 /********************** shop controller  **********************/

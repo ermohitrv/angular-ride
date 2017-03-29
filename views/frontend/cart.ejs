@@ -38,10 +38,10 @@
                                 </div>
                             </td>
                             <td class="col-sm-1 col-md-1" style="text-align: center">
-                                <input style="width:70%" type="number" class="form-control quantitybox"  id="exampleInputquantity_<%= i %>" value="<%= sessionCart[productid].quantity %>" >
+                                <input style="width:70%" type="number" class="form-control quantitybox"  id="exampleInputquantity_<%= productid %>" value="<%= sessionCart[productid].quantity %>" >
                             </td>
-                            <td class="col-sm-1 col-md-1 text-center">$<strong  id="itemprice_<%= i %>"><%= sessionCart[productid].item_price %></strong></td>
-                            <td class="col-sm-1 col-md-1 text-center">$<strong class="subtotalitemprice" id="totalitemprice_<%= i %>"><%= sessionCart[productid].total_item_price %></strong></td>
+                            <td class="col-sm-1 col-md-1 text-center">$<strong  id="itemprice_<%= productid %>"><%= sessionCart[productid].item_price %></strong></td>
+                            <td class="col-sm-1 col-md-1 text-center">$<strong class="subtotalitemprice" id="totalitemprice_<%= productid %>"><%= sessionCart[productid].total_item_price %></strong></td>
                             <td class="col-sm-1 col-md-1">
                                     <button type="button" class="btn btn-danger removeproduct" id="<%= i %>" onclick="deleteRow(this.parentNode.parentNode.rowIndex,'<%= productid %>')">
                                     <span class="glyphicon glyphicon-remove"></span> Remove
@@ -211,6 +211,9 @@
         $('#sub_total').text(calsubtotalprice);
         //$('#final_total').text(calsubtotalprice + +shippingamount);
         $('#final_total').text(calsubtotalprice);
+        
+        var $scope = angular.element(document.getElementById("cart_checkoutpage")).scope(); // get scope of chatController
+        $scope.calculateCartAmount(rowid,quantityvalue,totalprice);
        
    });
     
