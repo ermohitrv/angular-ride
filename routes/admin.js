@@ -25,7 +25,8 @@ var Followers = require('../models/followers');
 var nodemailer      = require("nodemailer");
 var Contact    = require('../models/contact');
 var Orders    = require('../models/orders');
-
+var Tax    = require('../models/tax');
+var Shipping    = require('../models/shipping');
 
 
 var storage = multer.diskStorage({
@@ -661,6 +662,7 @@ router.post('/product/insert', cpUpload, middleware.restrict, function(req, res)
             productObj.product_brand        = product_brand;
             productObj.product_size         = product_size;
             productObj.product_image        = productimages;
+            productObj.product_weight       = req.body.frm_product_weight;
             
             console.log('productObj: '+productObj);
             
@@ -1890,6 +1892,286 @@ router.get('/get-order-list', middleware.restrict, function(req, res){
             res.json({});
         }
     });
+});
+
+/* route to add tax */
+router.get('/add-tax', middleware.restrict, function(req, res) {
+    res.render('tax_new', {
+        title: 'Tax', 
+        session: req.session,
+        message: '',
+        message_type: '',
+        editor: true,
+        user:req.user,
+        active:'add-tax'
+    });
+});
+
+
+router.post('/tax/insert', middleware.restrict, function(req, res) {
+    
+    
+    Tax.count({'tax_country': req.body.frm_tax_country,'tax_state':req.body.frm_tax_state}, function (err, tax) {
+        if(tax > 0 && req.body.frm_event_type != ""){
+            req.flash('message', "Tax already exists");
+            req.flash('message_type','danger');
+            res.redirect('/admin/list-tax'); // redirect to insert
+        }else{
+            var taxObj                    = new Tax();
+            taxObj.tax_country            = req.body.frm_tax_country;
+            taxObj.tax_state              = req.body.frm_tax_state;
+            taxObj.tax_price              = req.body.frm_tax;
+            taxObj.addded_on              = new Date();
+            
+            console.log('taxObj: '+taxObj);
+            taxObj.save(function (err) {
+                if(err){
+                    console.error("Error inserting document: " + err);
+                    req.flash('message', err);
+                    req.flash('message_type','danger');
+                    res.redirect('/admin/add-tax');
+                }else{
+                    req.flash('message', 'Tax created successfully!');
+                    req.flash('message_type','success');
+                    res.redirect('/admin/list-tax');
+                }
+            });
+        }
+    });
+});
+
+router.get('/list-tax', middleware.restrict, function(req, res){
+    res.render('list-tax', { 
+        message : req.flash('message'),
+        message_type : req.flash('message_type'),
+        user : req.user, 
+        title:'Admin | List Tax',
+        active:'list-tax'
+    });
+});
+
+router.get('/get-tax-list', middleware.restrict, function(req, res){
+    Tax.find({},function (err, taxList) {
+        if(taxList){
+            res.json(taxList);
+        }else{
+            res.json({});
+        }
+    });
+});
+router.get('/updatetax',  middleware.restrict, function(req, res) {
+    console.log("Update tax id : "+req.query.id);
+    //res.send(true);
+    
+    
+            Tax.findOne({'_id': req.query.id  },function (err, tax) {
+                if(!err){
+                    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+                    res.render('tax_update', {
+                        title: 'Update Tax',
+                        tax : tax,
+                        session: req.session,
+                        message: '',
+                        messageSuccess: '',
+                        editor: true,
+                        user:req.user,
+                        active:'update-tax'
+                    });
+                }else{
+                    console.log("Error while listing tax");
+                }
+            });
+        
+
+});
+    
+    
+router.post('/tax/update',  middleware.restrict, function (req, res){
+    
+        Tax.findOne({'_id': req.body.frm_tax_id }, function (err, taxinfo) {
+            if (!taxinfo) {
+                
+                res.redirect('/admin/updatetax');
+                
+            } else {
+                
+                taxinfo.tax_country     = req.body.frm_tax_country;
+                taxinfo.tax_state     = req.body.frm_tax_state;
+                taxinfo.tax_price     = req.body.frm_tax;
+               
+                taxinfo.save(function (err) {
+                    if (err) {
+                        
+                         res.redirect('/list-tax');
+                         
+                    } else {
+                            
+                        req.flash('message', 'Tax updated successfully!');
+                        req.flash('message_type','success');
+                        res.redirect('/admin/list-tax');
+                            
+                    }
+                });
+            }
+        });
+    
+    
+});
+
+router.post('/delete-tax', middleware.restrict, function(req, res) {
+        
+	// remove the article
+	 Tax.remove({ _id: req.body.uid } ,function(err, status){
+            if(err){
+              status = "error";
+            }
+            else{
+                status = "success";
+            }
+            res.send(status);
+          
+        });
+});
+
+/* Route to add shipping */
+router.get('/add-shipping', middleware.restrict, function(req, res) {
+    res.render('shipping_new', {
+        title: 'Shipping', 
+        session: req.session,
+        message: '',
+        message_type: '',
+        editor: true,
+        user:req.user,
+        active:'add-shipping'
+    });
+});
+
+router.post('/shipping/insert', middleware.restrict, function(req, res) {
+    
+    
+    Shipping.count({'shipping_country': req.body.frm_shipping_country,'shipping_state':req.body.frm_shipping_state,'shipping_weightfrom':req.body.frm_shipping_weightfrom,'shipping_weightto':req.body.frm_shipping_weightto}, function (err, tax) {
+        if(tax > 0 && req.body.frm_event_type != ""){
+            req.flash('message', "Shipping already exists");
+            req.flash('message_type','danger');
+            res.redirect('/admin/list-shipping'); // redirect to insert
+        }else{
+            var shippingObj                    = new Shipping();
+            shippingObj.shipping_country       = req.body.frm_shipping_country;
+            shippingObj.shipping_state         = req.body.frm_shipping_state;
+            shippingObj.shipping_price         = req.body.frm_shipping_cost;
+            shippingObj.shipping_weightfrom    = req.body.frm_shipping_weightfrom;
+            shippingObj.shipping_weightto      = req.body.frm_shipping_weightto;
+            
+            console.log('shippingObj: '+shippingObj);
+            shippingObj.save(function (err) {
+                if(err){
+                    console.error("Error inserting document: " + err);
+                    req.flash('message', err);
+                    req.flash('message_type','danger');
+                    res.redirect('/admin/add-shipping');
+                }else{
+                    req.flash('message', 'Shipping created successfully!');
+                    req.flash('message_type','success');
+                    res.redirect('/admin/list-shipping');
+                }
+            });
+        }
+    });
+});
+
+router.get('/list-shipping', middleware.restrict, function(req, res){
+    res.render('list-shipping', { 
+        message : req.flash('message'),
+        message_type : req.flash('message_type'),
+        user : req.user, 
+        title:'Admin | List Shipping',
+        active:'list-shipping'
+    });
+});
+
+router.get('/get-shipping-list', middleware.restrict, function(req, res){
+    Shipping.find({},function (err, shippingList) {
+        if(shippingList){
+            res.json(shippingList);
+        }else{
+            res.json({});
+        }
+    });
+});
+router.get('/updateshipping',  middleware.restrict, function(req, res) {
+    console.log("Update shipping id : "+req.query.id);
+    //res.send(true);
+    
+    
+            Shipping.findOne({'_id': req.query.id  },function (err, shipping) {
+                if(!err){
+                    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+                    res.render('shipping_update', {
+                        title: 'Update Shipping',
+                        shipping : shipping,
+                        session: req.session,
+                        message: '',
+                        messageSuccess: '',
+                        editor: true,
+                        user:req.user,
+                        active:'update-Shipping'
+                    });
+                }else{
+                    console.log("Error while listing shipping");
+                }
+            });
+        
+
+});
+    
+    
+router.post('/shipping/update',  middleware.restrict, function (req, res){
+    
+        Shipping.findOne({'_id': req.body.frm_shipping_id }, function (err, shippinginfo) {
+            if (!shippinginfo) {
+                
+                res.redirect('/admin/updateshipping');
+                
+            } else {
+                
+                shippinginfo.shipping_country    = req.body.frm_shipping_country;
+                shippinginfo.shipping_state     = req.body.frm_shipping_state;
+                shippinginfo.shipping_price     = req.body.frm_shipping_cost;
+                shippinginfo.shipping_weightfrom   = req.body.frm_shipping_weightfrom;
+                shippinginfo.shipping_weightto     = req.body.frm_shipping_weightto;
+               
+                shippinginfo.save(function (err) {
+                    if (err) {
+                        
+                         res.redirect('/list-shipping');
+                         
+                    } else {
+                            
+                        req.flash('message', 'Shipping updated successfully!');
+                        req.flash('message_type','success');
+                        res.redirect('/admin/list-shipping');
+                            
+                    }
+                });
+            }
+        });
+    
+    
+});
+
+router.post('/delete-shipping', middleware.restrict, function(req, res) {
+        
+	// remove the article
+	 Shipping.remove({ _id: req.body.uid } ,function(err, status){
+            if(err){
+              status = "error";
+            }
+            else{
+                status = "success";
+            }
+            res.send(status);
+          
+        });
 });
 
 module.exports = router;

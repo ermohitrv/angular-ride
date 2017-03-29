@@ -25,12 +25,13 @@ var Invitation = require('../models/invitation');
 var Reviews = require('../models/reviews');
 var Friends = require('../models/friends');
 var Followers = require('../models/followers');
-var nodemailer      = require("nodemailer");
-var moment      = require("moment");
-var multer      = require('multer');
-var Activity    = require('../models/activity');
+var nodemailer = require("nodemailer");
+var moment     = require("moment");
+var multer     = require('multer');
+var Activity   = require('../models/activity');
 var Contact    = require('../models/contact');
-
+var Tax        = require('../models/tax');
+var Shipping        = require('../models/shipping');
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -601,6 +602,7 @@ router.post('/checkout_action', function(req, res, next) {
         return;
     }
     console.log("Total amount"+req.session.total_cart_amount);
+    req.session.total_cart_amount = req.body.shiptotalamount;
     // new order doc
     var order_doc = { 
         order_total: req.session.total_cart_amount,
@@ -2460,5 +2462,53 @@ router.get('/event', function(req, res){
     });
 
 });
+
+router.post('/get-tax',  function (req, res){
+    
+        Tax.findOne({'tax_country':req.body.params.country,'tax_state':{ $regex : new RegExp(req.body.params.state, "i") } },function (err, tax) {
+            if(tax){
+
+                res.json(tax.tax_price);
+
+            }else{
+                Tax.findOne({'tax_country':req.body.params.country,'tax_state':'*' },function (err, tax) {
+                    if(tax){
+                        res.json(tax.tax_price);
+                    }else{
+                       res.json();
+                    }
+                });
+            }
+        });
+    
+});
+
+router.post('/get-shipping',  function (req, res){
+        console.log("weight"+req.body.params.weight);
+        console.log("country"+req.body.params.country);
+        
+        Shipping.findOne({'shipping_country':req.body.params.country,'shipping_state':{ $regex : new RegExp(req.body.params.state, "i") }},function (err, shipping) {
+            if(shipping){
+                console.log("qwqwqw");
+                console.log(shipping);
+                res.json(shipping.shipping_price);
+
+            }else{
+                Shipping.findOne({'shipping_country':req.body.params.country,'shipping_state':'*',"shipping_weightfrom" : { $lt : 40 }, "shipping_weightto" :{ $gt : 40 }},function (err, shipping) {
+                    if(shipping){
+                        console.log("pppppp");
+                        console.log(shipping);
+                        res.json(shipping.shipping_price);
+                    }else{
+                       console.log("rrrrr");
+                       console.log(shipping);
+                       res.json();
+                    }
+                });
+            }
+        });
+    
+});
+
 
 module.exports = router;

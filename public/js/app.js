@@ -356,6 +356,74 @@ app.controller('cartController',['$scope', '$http','$sce', function ($scope, $ht
         $scope.selectedOption = country;
     };    
         
+    $scope.calculateTax = function(country,state){
+        
+        $scope.taxprice = "0.00";
+        var data = { 
+            country: country, 
+            state: state
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+        if(localUserUsername){
+            $http.post('/get-tax',config).success(function (response, status, headers, config){
+                if(response != ""){
+                $scope.taxprice = response;
+                
+                }else{
+                    $scope.taxprice = "0.00";
+                    
+                }
+
+
+            }).error(function(err){
+               console.log('Oops! Error occur'+err);
+            }); 
+        }
+        
+    };  
+    
+    $scope.calculateShipping = function(country,state,weight){
+        
+        $scope.shippingprice = "0.00";
+        var data = { 
+            country: country, 
+            state: state,
+            weight:weight
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+        if(localUserUsername){
+            $http.post('/get-shipping',config).success(function (response, status, headers, config){
+                if(response != ""){
+                $scope.shippingprice = response;
+                
+                }else{
+                    $scope.shippingprice = "0.00";
+                   
+                }
+                $scope.calculateTotalPrice($scope.shippingprice);
+
+
+            }).error(function(err){
+               console.log('Oops! Error occur'+err);
+            }); 
+        }
+        
+    }; 
+    
+    $scope.calculateTotalPrice = function(shippingcost){
+        var taxcost = $('#taxcost').text();
+        //var shippingcost = $('#shippingcost').text();
+        var subtotal = $('#subtotalcheckout').text();
+        var  ordertotal = parseFloat(subtotal) + +parseFloat(taxcost) + +parseFloat(shippingcost);
+        $('#ordertotal').text(ordertotal);
+        $('#shiptotalamount').val(ordertotal);
+    }
 }]);
 
 /********************** shop controller  **********************/
@@ -709,6 +777,31 @@ app.controller('adminController',['$scope', '$http','$sce', function ($scope, $h
         });
     };
 
+    $scope.getTaxList= function(){
+       
+        $http.get('/admin/get-tax-list').success(function(taxlist){
+          
+           $scope.taxlist = taxlist;
+           
+        }).error(function(){
+            console.log('Oops! Error listing event-types-list');
+        });
+    };
+    
+    $scope.renderCountry = function(country){
+        $scope.selectedOption = country;
+    };
+    
+    $scope.getShippingList= function(){
+       
+        $http.get('/admin/get-shipping-list').success(function(shippinglist){
+          
+           $scope.shippinglist = shippinglist;
+           
+        }).error(function(){
+            console.log('Oops! Error listing shipping-list');
+        });
+    };
     
 }]);
 

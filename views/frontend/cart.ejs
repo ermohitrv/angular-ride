@@ -62,19 +62,19 @@
                             <td class="text-center"><h5>Subtotal</h5></td>
                             <td class="text-right"><h5>$<strong id="sub_total"><%= subtotal %></strong></h5></td>
                         </tr>
-                        <tr>
+<!--                        <tr>
                             <td>   </td>
                             <td>   </td>
                             <td>   </td>
                             <td class="text-center"><h5>Estimated shipping</h5></td>
                             <td class="text-right"><h5><strong>$6.94</strong></h5></td>
-                        </tr>
+                        </tr>-->
                         <tr>
                             <td>   </td>
                             <td>   </td>
                             <td>   </td>
                             <td class="text-center"><h3>Total</h3></td>
-                            <td class="text-right"><h3>$<strong id="final_total"><%= (subtotal+6.94) %></strong></h3></td>
+                            <td class="text-right"><h3>$<strong id="final_total"><%= (subtotal) %></strong></h3></td>
                         </tr>
                         <tr>
                             <td><a href="/gear"><button type="button" class="btn btn-warning continue_shoping">
@@ -189,7 +189,7 @@
        
         var quantityid = this.id;
         var quantityvalue = this.value;
-        var shippingamount = "6.94";
+        //var shippingamount = "6.94";
       
         var arrayData =  quantityid.split('_');
         var rowid = arrayData[1];
@@ -209,7 +209,8 @@
            
         });
         $('#sub_total').text(calsubtotalprice);
-        $('#final_total').text(calsubtotalprice + +shippingamount);
+        //$('#final_total').text(calsubtotalprice + +shippingamount);
+        $('#final_total').text(calsubtotalprice);
        
    });
     

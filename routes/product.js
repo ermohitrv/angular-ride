@@ -132,6 +132,7 @@ router.post('/addtocart', function(req, res, next) {
                 product_obj.total_item_price = product_price * product_quantity;
                 product_obj.product_image = product.product_image;
                 product_obj.product_brand = product.product_brand;
+                product_obj.total_item_weight = product.product_weight * product_quantity;
                 if(product.product_permalink){
                     product_obj.link = product.product_permalink;
                 }else{

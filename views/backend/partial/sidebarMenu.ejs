@@ -136,6 +136,34 @@
         </ul>
         </li>
         
+        <li class="treeview <% if(active == "list-tax" || active == "add-tax"){ %> active <% } %>">
+        <a href="#">
+            <i class="fa fa-users"></i> <span>Tax</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li <% if(active == "list-tax"){ %> class="active" <% } %>><a href="/admin/list-tax"><i class="fa fa-list"></i>List Tax</a></li>
+            <li <% if(active == "add-tax"){ %> class="active" <% } %>><a href="/admin/add-tax"><i class="fa fa-plus"></i>Add Tax</a></li>
+
+        </ul>
+        </li>
+        
+        <li class="treeview <% if(active == "list-shipping" || active == "add-shipping"){ %> active <% } %>">
+        <a href="#">
+            <i class="fa fa-users"></i> <span>Shipping</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li <% if(active == "list-shipping"){ %> class="active" <% } %>><a href="/admin/list-shipping"><i class="fa fa-list"></i>List Shipping</a></li>
+            <li <% if(active == "add-shipping"){ %> class="active" <% } %>><a href="/admin/add-shipping"><i class="fa fa-plus"></i>Add Shipping</a></li>
+
+        </ul>
+        </li>
+        
 <!--        <li class="treeview">
           <a href="#">
             <i class="fa fa-share"></i> <span>Multilevel</span>
