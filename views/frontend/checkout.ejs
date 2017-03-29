@@ -533,8 +533,8 @@ $(document).ready(function() {
    
     var shippingcost = $('#shippingcost').text();
     var subtotal = '<%= subtotal %>';
-    alert(taxcost);
-    alert(shippingcost);
+   // alert(taxcost);
+    //alert(shippingcost);
     var  ordertotal = parseFloat(subtotal) + +parseFloat(taxcost) + +parseFloat(shippingcost);
     $('#ordertotal').text(ordertotal);
     $('#shiptotalamount').val(ordertotal);
