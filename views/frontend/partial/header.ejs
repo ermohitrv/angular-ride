@@ -2,21 +2,21 @@
     if(user){
         var profileimageplacehold = "http://placehold.it/300?text="+user.local.firstName;
         var imagepath = profileimageplacehold;
-        if(user.local.profileImage == profileimageplacehold){ qqqw
+        if(user.local.profileImage == profileimageplacehold){ 
                 imagepath = user.local.profileImage;
         }
         else{
-                if(user.facebook.email != ""){gfgd
+                if(user.facebook.email != ""){
                 imagepath = user.local.profileImage;
                 }
-                else{erere
+                else{
                 imagepath = "/public/uploads/"+user.local.profileImage;
                 }
         }
     }
                     
 %>
-<%= imagepath %>
+
 <div class="header">
     <div class="header_top">
         <div class="container">
