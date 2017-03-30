@@ -1475,7 +1475,7 @@ router.post('/join-event', middleware.isLoggedIn, function (req, res){
 
 router.get('/latestevents',  function (req, res){
     
-    Events.find({ },function (err, latesteventsList) {
+    Events.find({'eventLocationType':'public' },function (err, latesteventsList) {
         if(!err){
             
             res.json(latesteventsList);

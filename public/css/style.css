@@ -2569,7 +2569,9 @@ li#header_inbox_bar i.fa.fa-times {
 
 @media (min-width: 768px){
 .modal-dialog {
-    width: 450px;
+    width: 590px;
     margin: 30px auto;
 }
+
 }
+

@@ -13,14 +13,16 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/var/www/html/rideprix/routes/index.js</file>
+            <file>file:/var/www/html/rideprix/views/frontend/checkout.ejs</file>
             <file>file:/var/www/html/rideprix/public/js/app.js</file>
-            <file>file:/var/www/html/rideprix/views/frontend/event-detail.ejs</file>
-            <file>file:/var/www/html/rideprix/views/frontend/user-profile.ejs</file>
-            <file>file:/var/www/html/rideprix/models/rproutes.js</file>
+            <file>file:/var/www/html/rideprix/views/frontend/cart.ejs</file>
+            <file>file:/var/www/html/rideprix/views/backend/partial/sidebarMenu.ejs</file>
+            <file>file:/var/www/html/rideprix/routes/product.js</file>
+            <file>file:/var/www/html/rideprix/routes/admin.js</file>
             <file>file:/var/www/html/rideprix/views/frontend/partial/profile-nav.ejs</file>
+            <file>file:/var/www/html/rideprix/views/frontend/profile.ejs</file>
             <file>file:/var/www/html/rideprix/routes/api.js</file>
             <file>file:/var/www/html/rideprix/public/css/style.css</file>
-            <file>file:/var/www/html/rideprix/models/user.js</file>
             <file>file:/var/www/html/rideprix/public/js/front.js</file>
         </group>
     </open-files>
