@@ -2584,3 +2584,6 @@ li#header_inbox_bar i.fa.fa-times {
     -o-transform: scale(1.1) rotate(-1.5deg);
 }
 
+#conntdown .flip-clock-wrapper ul{
+    width:50px !important;
+}
