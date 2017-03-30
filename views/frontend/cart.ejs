@@ -29,7 +29,13 @@
                         <tr id="productrow_<%= i %>">
                             <td class="col-sm-8 col-md-6">
                                 <div class="media">
-                                    <a class="thumbnail pull-left" href="/product/<%= sessionCart[productid].link %>"> <img class="media-object" src="/public/uploads/<%= sessionCart[productid].product_image[0] %>" style="width: 72px; height: auto;"> </a>
+                                    <a class="thumbnail pull-left" href="/product/<%= sessionCart[productid].link %>"> 
+                                        <% if(sessionCart[productid].product_image[0] != "" && sessionCart[productid].product_image[0] != undefined){ %>
+                                        <img class="media-object" src="/public/uploads/<%= sessionCart[productid].product_image[0] %>" style="width: 72px; height: auto;"> 
+                                        <% } else{%>
+                                        <img class="media-object" src="http://placehold.it/72x72" style="width: 72px; height: auto;"> 
+                                        <% } %>
+                                    </a>
                                     <div class="media-body">
                                         <h4 class="media-heading"><a href="/product/<%= sessionCart[productid].link %>"><%= sessionCart[productid].title %></a></h4>
 <!--                                        <h5 class="media-heading"> by <a href="#"><%= sessionCart[productid].product_brand %></a></h5>
