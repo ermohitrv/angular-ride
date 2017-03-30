@@ -31,7 +31,11 @@ if(user){
                         
                             <div class="form-group">
                                 <div class="col-sm-3 col-xs-3">
-                                    <img class="img-responsive" src="/public/uploads/<%= sessionCart[productid].product_image[0] %>" />
+                                    <% if(sessionCart[productid].product_image[0] != "" && sessionCart[productid].product_image[0] != undefined){ %>
+                                        <img class="img-responsive" src="/public/uploads/<%= sessionCart[productid].product_image[0] %>"> 
+                                        <% } else{%>
+                                        <img class="img-responsive" src="http://placehold.it/72x72" > 
+                                        <% } %>
                                 </div>
                                 <div class="col-sm-6 col-xs-6">
                                     <div class="col-xs-12"><b><%= sessionCart[productid].title %></b></div>
