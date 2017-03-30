@@ -7,22 +7,16 @@
                     <% if(result.product_image[0] != "" ){ %>
                     <a href="#" class="">
                     <img src="/public/uploads/<%= result.product_image[0] %>"   id="large_image"  class="magnify-image img-responsive largeimageuploaded zoom" alt="img"></a>
-                    <!--<img src="/public/images/error_bg.jpg" data-magnify-src="/public/images/error_bg.jpg" id="large_<%= result.product_image[0] %>"  class="magnify-image img-responsive largeimageuploaded zoom" alt="img"></a>-->
                     <% } else {%>
                     <a href="#" class="">
-                    <img src="/images/product1.jpg" data-magnify-src="large.jpg" class="magnify-image img-responsive" alt="img"></a>
+                    <img src="http://placehold.it/240X240" data-magnify-src="large.jpg" class="magnify-image img-responsive" alt="img"></a>
                     <% }%>
                 </div>
                 <div class="sp-thumbs sp-tb-active">
                     <% for(var productimg=0; productimg < result.product_image.length; productimg++) { %>
                     <a href="#" class="sp-current">
                     <img src="/public/uploads/<%= result.product_image[productimg] %>" id="small_<%= result.product_image[productimg] %>" class="img-responsive smallimageuploaded"  alt="img"></a>
-                    <!-- <a href="#" class="sp-current">
-                    <img src="/images/product1.jpg" class="img-responsive" alt="img"></a>
-                   <a href="#">
-                    <img src="/images/product1_2.jpg" class="img-responsive" alt="img"></a>
-                    <a href="#">
-                    <img src="/images/product1_3.jpg" class="img-responsive" alt="img"></a>-->
+                    
                     <% } %>
                 </div>
             </div>
