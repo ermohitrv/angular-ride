@@ -91,7 +91,7 @@ router.get('/shop/related-products-list', function (req, res){
             res.send(err);
         }
         else{
-           
+            
             res.header('Content-Type', 'text/html');
             res.render('widget/related-products',{
                 user: req.user,
@@ -112,6 +112,8 @@ router.post('/addtocart', function(req, res, next) {
     //var product_quantity = req.body.product_quantity ? parseInt(product_qty): 1;
     var product_qty = req.body.params.product_quantity;
     var product_quantity = req.body.params.product_quantity ? parseInt(product_qty): 1;
+    var product_color = req.body.params.product_color ? req.body.params.product_color :"black";
+    var product_size = req.body.params.product_size ? req.body.params.product_size :"Medium";
     var product_id = req.body.params.product_id;
     //var product_id_array = array();
     // setup cart object if it doesn't exist
@@ -144,6 +146,8 @@ router.post('/addtocart', function(req, res, next) {
                 product_obj.product_image = product.product_image;
                 product_obj.product_brand = product.product_brand;
                 product_obj.total_item_weight = product.product_weight * product_quantity;
+                product_obj.color = product_color;
+                product_obj.size =  product_size;
                 if(product.product_permalink){
                     product_obj.link = product.product_permalink;
                 }else{

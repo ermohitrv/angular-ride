@@ -21,7 +21,10 @@ $(document).on('click','.product-add-to-cart',function(){
     
     var product_id = $("#product_id").val();
     var quantity_box = $("#quantity_box").val();
-    angular.element(this).scope().addToCart(product_id,quantity_box);
+    var size_box = $("#size_box").val();
+    var color_box = $("#color_box").val();
+    
+    angular.element(this).scope().addToCart(product_id,quantity_box,size_box,color_box);
 });
 
 $(document).on('click','.smallimageuploaded',function(){

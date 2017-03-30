@@ -282,11 +282,13 @@ app.controller('productController',['$scope', '$http','$sce', function ($scope, 
     };
     
     /* function to add item to the cart */
-    $scope.addToCart = function(productId,quantity_box){
+    $scope.addToCart = function(productId,quantity_box,size_box,color_box){
         console.log(productId,quantity_box);
         var data = { 
             product_id: productId, 
-            product_quantity: quantity_box
+            product_quantity: quantity_box,
+            product_color: color_box,
+            product_size: size_box,         
         };
         var config = {
             params: data,

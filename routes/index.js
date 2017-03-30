@@ -673,6 +673,8 @@ router.post('/checkout_action', function(req, res, next) {
                             newOrdersProducts.product_item_price       = req.session.cart[productid].item_price;   
                             newOrdersProducts.product_total_item_price = req.session.cart[productid].total_item_price; 
                             newOrdersProducts.product_link             = req.session.cart[productid].link;
+                            newOrdersProducts.product_color            = req.session.cart[productid].color;
+                            newOrdersProducts.product_size             = req.session.cart[productid].size;
                             newOrdersProducts.save(function(err,orderproductsdata){
                                 if (err){
                                     console.log("route error caught 3");
