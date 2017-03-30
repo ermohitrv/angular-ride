@@ -669,12 +669,18 @@ function setMarkers(userData) {
         
         var profileimageplacehold = "http://placehold.it/300?text="+markerData.local.firstName;
         var imagepath = profileimageplacehold;
-        if(markerData.local.profileImage == profileimageplacehold){ 
-            
-                        imagepath = markerData.local.profileImage;
+        var facebookimage = markerData.local.profileImage;
+        if(markerData.local.profileImage == profileimageplacehold){            
+            imagepath = markerData.local.profileImage;
         }
-        else{
+        else{        
+            if(facebookimage.indexOf('https://') !== -1){
+                imagepath = markerData.local.profileImage;
+            }
+            else{
                 imagepath = "/public/uploads/"+markerData.local.profileImage;
+            }        
+               //imagepath = "/public/uploads/"+markerData.local.profileImage;
         }
         
         var name = markerData.local.firstName;
