@@ -221,7 +221,7 @@ router.post('/delete-user/', middleware.isAdminLoggedIn, function (req, res) {
         if (user) {
             user.remove(function (err) {
                 if (!err) {
-                    fs.unlink('public/uploads/' + user.local.profileImage); // delete user profile image
+                    //fs.unlink('public/uploads/' + user.local.profileImage); // delete user profile image
                     res.send('success');
                 } else {
                     res.send('error');
