@@ -13,6 +13,8 @@
             
             <form action="/signup" class="form-horizontal" method="post" id="signup_form">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <input type="hidden" name="usersignuploclat" id="usersignuploclat">
+                <input type="hidden" name="usersignuploclong" id="usersignuploclong">
                 <div class="form-group">
                     <div class="col-md-6 col-xs-12">
                         <label>First Name</label>

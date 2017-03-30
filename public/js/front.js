@@ -314,7 +314,19 @@ jQuery('#change_password_form').validate({
 //            }
          },
          submitHandler: function(form) {
-            form.submit();
+            var location = form.city.value+","+form.state.value+","+form.country.value;
+            var geocoder =  new google.maps.Geocoder();
+            geocoder.geocode( { 'address': location}, function(results, status) {
+                  if (status == google.maps.GeocoderStatus.OK) {
+                    console.log("location lat lng : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
+
+                    $('#usersignuploclat').val(results[0].geometry.location.lat());
+                    $('#usersignuploclong').val(results[0].geometry.location.lng());
+                    form.submit();
+            }});
+             
+             
+            //form.submit();
          }
     }); 
    
@@ -530,7 +542,17 @@ jQuery('#change_password_form').validate({
 
          },
          submitHandler: function(form) {
-            form.submit();
+            var location = form.city.value+","+form.state.value+","+form.country.value;
+            var geocoder =  new google.maps.Geocoder();
+            geocoder.geocode( { 'address': location}, function(results, status) {
+                  if (status == google.maps.GeocoderStatus.OK) {
+                    console.log("location lat lng : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
+
+                    $('#userloclat').val(results[0].geometry.location.lat());
+                    $('#userloclong').val(results[0].geometry.location.lng());
+                    form.submit();
+            }});
+           // form.submit();
          }
     }); 
     
@@ -619,6 +641,10 @@ function initialize(userData,maptype) {
 
 function setMarkers(userData) {
     //console.log('userData: '+JSON.stringify(userData));
+   // console.log(JSON.stringify(userData));  
+    var data = JSON.stringify(userData.data.users);
+    var parsedata =  JSON.parse(data);
+    console.log(parsedata); 
     var locations = [{  "lat":"57.015727",
                         "lon":"-106.498029",
                         "html":"<img src=\"http:\/\/placehold.it\/350x150\"  style=\"height: 35px;width: 35px;float:left; border: 1px solid;\" class=\"img-circle\"><a href=\"history.php?userId=29\"><h5 style=\"margin: 0;padding-left: 40px;\">Paul Joseph<\/h5><\/a><small style=\"margin: 0;padding-left: 5px;\">Canada<\/small>",
@@ -638,11 +664,25 @@ function setMarkers(userData) {
     var infowindow = new google.maps.InfoWindow({content: "temo"});
     var i = 0;
     var icon = new google.maps.MarkerImage("/images/maps-and-flags.png");
-    $.each(locations, function (index, markerData) {
-        var name = markerData.name;
-        var lat = markerData.lat;
-        var long = markerData.lon;
-        var content = markerData.html;
+    $.each(parsedata, function (index, markerData) {
+        if(markerData.local.locationLat != "" && markerData.local.locationLat != undefined && markerData.local.locationLng != "" && markerData.local.locationLng != undefined){
+        
+        var profileimageplacehold = "http://placehold.it/300?text="+markerData.local.firstName;
+        var imagepath = profileimageplacehold;
+        if(markerData.local.profileImage == profileimageplacehold){ 
+            
+                        imagepath = markerData.local.profileImage;
+        }
+        else{
+                imagepath = "/public/uploads/"+markerData.local.profileImage;
+        }
+        
+        var name = markerData.local.firstName;
+        var lat = markerData.local.locationLat;
+        var long = markerData.local.locationLng;
+        var html ='<img src="'+imagepath+'"  style=\"height: 35px;width: 35px;float:left; border: 1px solid;\" class=\"img-circle\"><a href=\"history.php?userId=29\"><h5 style=\"margin: 0;padding-left: 40px;\">'+name+'<\/h5><\/a><small style=\"margin: 0;padding-left: 5px;\">'+markerData.local.locationCity+'<\/small>';
+
+        var content = html;
         var myLatLng = new google.maps.LatLng(lat, long);
         points[i] = myLatLng;
         var marker = new google.maps.Marker({
@@ -657,6 +697,7 @@ function setMarkers(userData) {
             infowindow.open(map, this);
         });
         i++;
+        }
     });
 }
 
@@ -683,7 +724,10 @@ function seteventsMarkers(userData) {
             var encodename = encodeURI(markerData.eventName);
             var fun = "joinevent('"+id+"','"+encodename+"')";
             var fun2 = "viewevent('"+id+"')";
-            var eventImage = markerData.eventImage;
+            var eventImage = "http://placehold.it/350x150";
+            if(markerData.eventImage != "" && markerData.eventImage != undefined){
+                eventImage = markerData.eventImage;
+            }
             var name = markerData.eventName;
             var joinedpersons = markerData.count
             var lat = locLat;
@@ -694,7 +738,7 @@ function seteventsMarkers(userData) {
             var endeventDatemarker = moment(markerData.endDate).format('YYYY-MM-DD');
             var starttime = starteventDatemarker+' '+markerData.startTime;
             var endtime = endeventDatemarker+' '+markerData.endTime;
-            var html = '<div style="width:250px;height:140px;"><div class="googft-info-window"><b>Host: </b>'+host+'<br><b>Event Title: </b>'+name+'<br><b>Start Time: </b>'+starttime+'<br><b>End Time: </b>'+endtime+'<br><b>Venue Location: </b>'+location+'<br><b>Number of persons joined: </b>'+joinedpersons+'<br/><br/><a style="margin-left: 15%;float:left" class="btn btn-primary" href="javascript:;" onclick='+fun+' >Join Event</a><a style="float:right" class="btn btn-primary" href="/event?id='+id+'">View Event</a></div></div>';
+            var html = '<img src="'+eventImage+'"  style=\"height: 35px;width: 35px;float:left;margin-right:5px; border: 1px solid;\" class=\"img-circle\"><div style="width:300px;height:140px;"><div class="googft-info-window"><b>Host: </b>'+host+'<br><b>Event Title: </b>'+name+'<br><b>Start Time: </b>'+starttime+'<br><b style=\"margin-left:40px\">End Time: </b>'+endtime+'<br><b style=\"margin-left:40px\">Venue Location: </b>'+location+'<br><b style=\"margin-left:40px\">Number of persons joined: </b>'+joinedpersons+'<br/><br/><a style="margin-left: 15%;float:left" class="btn btn-primary" href="javascript:;" onclick='+fun+' >Join Event</a><a style="float:right" class="btn btn-primary" href="/event?id='+id+'">View Event</a></div></div>';
             var content = html;
             var myLatLng = new google.maps.LatLng(lat, long);
             points[i] = myLatLng;

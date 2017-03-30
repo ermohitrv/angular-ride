@@ -206,6 +206,7 @@ router.get('/accountdeactivated', function(req, res){
 /* Update profile route to render logged in user to update profile area */
 router.post('/update-profile', parseForm, csrfProtection, middleware.isLoggedIn, function (req, res){
     
+    
     if (req.body.email != "" && req.body.email != undefined) {
         User.findOne({'local.email': req.body.email}, function (err, user) {
             if (!user) {
@@ -213,7 +214,7 @@ router.post('/update-profile', parseForm, csrfProtection, middleware.isLoggedIn,
                 res.redirect('/update-profile');
                 
             } else {
-            
+                
                 user.local.firstName    = req.body.firstName;
                 user.local.lastName     = req.body.lastName;
                 user.local.dob          = req.body.dob;
@@ -228,6 +229,9 @@ router.post('/update-profile', parseForm, csrfProtection, middleware.isLoggedIn,
                 user.youtubeURL         = req.body.youtube_url;
                 user.instagramURL       = req.body.instagram_username;
                 user.skypeUsername      = req.body.skype_username;
+                user.skypeUsername      = req.body.skype_username;
+                user.local.locationLat  = req.body.userloclat;
+                user.local.locationLng  = req.body.userloclong;
 
                 user.save(function (err) {
                     if (err) {
@@ -488,9 +492,11 @@ router.get('/draw-users-map', function (req, res) {
                 'local.profileImage' : 1,
                 'local.locationLat'  : 1,
                 'local.locationLng'  : 1,
+                'facebook.email'  : 1,
             } 
         }]
         ,function (err, usersList) {
+            console.log(usersList);
         if(usersList){
             res.json({
                 success: true, 

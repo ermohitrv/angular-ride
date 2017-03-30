@@ -71,6 +71,8 @@ module.exports = function(passport) {
                 newUser.local.locationState     = req.body.state;
                 newUser.local.locationCountry   = req.body.country;
                 newUser.local.profileImage      = "http://placehold.it/300?text="+req.body.firstName;
+                newUser.local.locationLat       = req.body.usersignuploclat;
+                newUser.local.locationLng       = req.body.usersignuploclong;
                 
         	// save the user
                 newUser.save(function(err){
