@@ -14,7 +14,7 @@ result = results[i];
                 <!--<a href="/product/<%= result.product_permalink %>"><img src="/images/related_product.jpg" alt="img" class="img-responsive"></a>-->
             <% if(result.product_image[0] != "" && result.product_image[0] != undefined ){ %>
                 <!--<a href="/product/<%= result.product_permalink %>"><img  src="/public/uploads/<%= result.product_image[0] %>" alt="img" class="img-responsive" ></a>-->
-                <a href="/product/<%= result.product_permalink %>"><img  style="min-height:240px" src="<%= pageurl %><%= page_url %>/public/uploads/<%= result.product_image[0] %>" alt="img" class="img-responsive" ></a>
+                <a href="/product/<%= result.product_permalink %>"><img   src="<%= pageurl %><%= page_url %>/public/uploads/<%= result.product_image[0] %>" alt="img" class="img-responsive shopproductlistimg" ></a>
 
                 <% } else {%>
                 <a href="#"><img  src="http://placehold.it/240x240" alt="img" class="img-responsive" ></a>

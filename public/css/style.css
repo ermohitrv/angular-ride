@@ -2575,3 +2575,12 @@ li#header_inbox_bar i.fa.fa-times {
 
 }
 
+.shopproductlistimg{
+    min-height: 240px;
+    transform: scale(1.15) rotate(-1.5deg);
+    -webkit-transform: scale(1.1) rotate(-1.5deg);
+    -moz-transform: scale(1.1) rotate(-1.5deg);
+    -ms-transform: scale(1.1) rotate(-1.5deg);
+    -o-transform: scale(1.1) rotate(-1.5deg);
+}
+
