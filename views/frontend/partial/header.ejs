@@ -6,7 +6,12 @@
                 imagepath = user.local.profileImage;
         }
         else{
+                if(user.facebook.email != ""){
+                imagepath = user.local.profileImage;
+                }
+                else{
                 imagepath = "/public/uploads/"+user.local.profileImage;
+                }
         }
     }
                     
