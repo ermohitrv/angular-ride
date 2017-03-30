@@ -1,91 +1,99 @@
+<% var pageurl = page_url+"/l/240x240/" %>
 <div class="container">
     <div class="row product_listing">
         <div class="title"><h1> You May also Like </h1></div>
         <div class="listing">
+            <% if( results.length > 0 ){ %>
+            <% for(var i = 0; i < results.length; i++){ 
+            result = results[i];
+            %>
             <div class="col-lg-3 col-md-6 col-md-12">
                 <div class="item">
                     <div class="product">
                         <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left"><i class="glyphicon glyphicon-heart"></i> </a>
                         <div class="image">
                             <div class="quickview">
-                                <a data-toggle="modal" class="btn btn-xs btn-quickview" href="#" data-target="">Quick View</a>
+                                <a data-toggle="modal" class="btn btn-xs btn-quickview"  href="/product/<%= result.product_permalink %>" data-target="">Quick View</a>
                             </div>
-                            <a href="#"><img src="/images/related_product.jpg" alt="img" class="img-responsive"></a>
+                            <% if(result.product_image[0] != "" && result.product_image[0] != undefined ){ %>
+                                <!--<a href="/product/<%= result.product_permalink %>"><img  src="/public/uploads/<%= result.product_image[0] %>" alt="img" class="img-responsive" ></a>-->
+                                <a href="/product/<%= result.product_permalink %>"><img   src="<%= pageurl %><%= page_url %>/public/uploads/<%= result.product_image[0] %>" alt="img" class="img-responsive shopproductlistimg" ></a>
+
+                                <% } else {%>
+                                <a href="#"><img  src="http://placehold.it/240x240" alt="img" class="img-responsive shopproductlistimg" ></a>
+                            <% } %>
                         </div>
                         <div class="description">
-                            <h4><a href="#">Sequitur Mutationem </a></h4>
-                            <span class="size">XL / XXL / S </span>
+                            <% var producttitle =  result.product_title;
+                                var title = producttitle.substring(0,21);
+                            %>
+                            <h4><a href="/product/<%= result.product_permalink %>"><%= title %></a></h4>
+                            <% if(result.product_size != "") { %>
+                            <span class="size"><%= result.product_size %></span>
+                            <% } %>
                         </div>
-                        <div class="price"><span>$25</span></div>
+                        <div class="price"><span>$<%= result.product_price %></span></div>
                         <div class="action-control">
-                            <a class="btn btn-danger"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a>
+                            <!--<a class="btn btn-danger"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a>-->
+                        <button class="btn btn-danger product-add-to-cart" id="<%= result._id %>" type="button" data-toggle="modal" data-target="#myModal">
+                        <i class="glyphicon glyphicon-shopping-cart"> </i>Add to Cart
+                        </button>
+                        <input type="hidden" id="productidgear_<%= result._id %>" value="<%= result._id %>">
+                        <input type="hidden" id="quantityboxgear_<%= result._id %>" value="1">
+                        
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-md-12">
-                <div class="item">
-                    <div class="product">
-                        <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left"><i class="glyphicon glyphicon-heart"></i> </a>
-                        <div class="image">
-                            <div class="quickview">
-                                <a data-toggle="modal" class="btn btn-xs btn-quickview" href="#" data-target="">Quick View</a>
-                            </div>
-                            <a href="#"><img src="/images/related_product.jpg" alt="img" class="img-responsive"></a>
-                        </div>
-                        <div class="description">
-                            <h4><a href="#">Sequitur Mutationem </a></h4>
-                            <span class="size">XL / XXL / S </span>
-                        </div>
-                        <div class="price"><span>$25</span></div>
-                        <div class="action-control">
-                            <a class="btn btn-danger"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-md-12">
-                <div class="item">
-                    <div class="product">
-                        <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left"><i class="glyphicon glyphicon-heart"></i> </a>
-                        <div class="image">
-                            <div class="quickview">
-                                <a data-toggle="modal" class="btn btn-xs btn-quickview" href="#" data-target="">Quick View</a>
-                            </div>
-                            <a href="#"><img src="/images/related_product.jpg" alt="img" class="img-responsive"></a>
-                        </div>
-                        <div class="description">
-                            <h4><a href="#">Sequitur Mutationem </a></h4>
-                            <span class="size">XL / XXL / S </span>
-                        </div>
-                        <div class="price"><span>$25</span></div>
-                        <div class="action-control">
-                            <a class="btn btn-danger"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-md-12">
-                <div class="item">
-                    <div class="product">
-                        <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left"><i class="glyphicon glyphicon-heart"></i> </a>
-                        <div class="image">
-                            <div class="quickview">
-                                <a data-toggle="modal" class="btn btn-xs btn-quickview" href="#" data-target="">Quick View</a>
-                            </div>
-                            <a href="#"><img src="/images/related_product.jpg" alt="img" class="img-responsive"></a>
-                        </div>
-                        <div class="description">
-                            <h4><a href="#">Sequitur Mutationem </a></h4>
-                            <span class="size">XL / XXL / S </span>
-                        </div>
-                        <div class="price"><span>$25</span></div>
-                        <div class="action-control">
-                            <a class="btn btn-danger"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <% } %>
+            <% }else{ %>
+            <div class="alert alert-danger">No related Product found in shop!</div>
+            <% } %>
         </div>
     </div>
 </div>
+
+<!-- Bootstrap modal -->
+<div id="myModal" class="modal fade continueshoppingmodal" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add to Cart</h4>
+      </div>
+      <div class="modal-body">
+          <label>Product added to cart successfully!</label>
+                <div>
+                <table class="table table-hover">
+                        <tbody>
+                            <tr></tr>
+                            <tr>
+                                <td><a href="/gear"><button type="button" class="btn btn-warning continue_shoping">
+                                    <span class="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
+                                    </button></a>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><a  href="/cart"><button type="button" class="btn btn-success checkout_btn">
+                                        Checkout <span class="glyphicon glyphicon-play"></span>
+                                </button></a></td>
+                                </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+
+        </div>
+<!--      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>-->
+    </div>
+
+  </div>
+</div>
+<!-- end bootstrap modal -->

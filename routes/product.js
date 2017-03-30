@@ -85,13 +85,24 @@ router.get('/shop/products-detail/:id', function (req, res){
 
 /* shop route to render related products list called by angular function */
 router.get('/shop/related-products-list', function (req, res){
-    res.header('Content-Type', 'text/html');
-    res.render('widget/related-products',{
-        user: req.user,
-        session: req.session,
-        message: middleware.clear_session_value(req.session, "message"),
-        message_type: middleware.clear_session_value(req.session, "message_type"),
-    });
+    
+    Products.find({product_published:'true'},function (err, results) {
+        if(err){
+            res.send(err);
+        }
+        else{
+           
+            res.header('Content-Type', 'text/html');
+            res.render('widget/related-products',{
+                user: req.user,
+                results:results,
+                session: req.session,
+                message: middleware.clear_session_value(req.session, "message"),
+                message_type: middleware.clear_session_value(req.session, "message_type"),
+                page_url: globalConfig.base_url
+            });
+        }
+    }).sort({'product_added_date':-1}).limit(4);
 });
 
 // Admin section

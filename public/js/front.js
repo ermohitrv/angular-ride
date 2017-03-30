@@ -680,7 +680,6 @@ function setMarkers(userData) {
             else{
                 imagepath = "/public/uploads/"+markerData.local.profileImage;
             }        
-               //imagepath = "/public/uploads/"+markerData.local.profileImage;
         }
         
         var name = markerData.local.firstName;

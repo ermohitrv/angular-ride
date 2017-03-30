@@ -274,7 +274,8 @@ app.controller('productController',['$scope', '$http','$sce', function ($scope, 
     /* function to list all related products */
     $scope.relatedProducts = function(){
         $http.get('/product/shop/related-products-list').success(function(view){
-            $scope.relatedProductsView = view;
+            var text = $sce.trustAsHtml(view);
+            $scope.relatedProductsView = text;
         }).error(function(){
             console.log('Oops! Error listing related-products-list');
         });
