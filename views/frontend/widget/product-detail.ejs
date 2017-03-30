@@ -4,7 +4,7 @@
         <div class="col-lg-6 col-md-6 col-sm-6">
             <div class="main-image sp-wrap col-lg-12 no-padding">
                 <div class="sp-large">
-                    <% if(result.product_image[0] != "" ){ %>
+                    <% if(result.product_image[0] != "" && result.product_image[0] != undefined){ %>
                     <a href="#" class="">
                     <img src="/public/uploads/<%= result.product_image[0] %>"   id="large_image"  class="magnify-image img-responsive largeimageuploaded zoom" alt="img"></a>
                     <% } else {%>
