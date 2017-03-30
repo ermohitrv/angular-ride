@@ -1,5 +1,5 @@
 <% layout('layout') -%>
-
+<% var pageurl = page_url+"/l/240x240/" %>
 <div class="search_result" data-ng-controller="shopController" >
     <div class="overlay_bg"></div>
     <div class="container">
@@ -85,12 +85,12 @@
                                                 <a data-toggle="modal" class="btn btn-xs btn-quickview" href="#" data-target="">Quick View</a>
                                             </div>     
                                             
-                                            <img style="display:inline-block" ng-src="{{result.product_image[0]?('/public/uploads/'+ result.product_image[0]):'http://placehold.it/240x240'}}" alt="img" class="img-responsive"/>
+                                            <img style="display:inline-block" ng-src="{{result.product_image[0]?('<%= pageurl %><%= page_url %>/public/uploads/'+ result.product_image[0]):'http://placehold.it/240x240'}}" alt="img" class="img-responsive shopproductlistimg"/>
 
                                             </div>
                                         <div class="description">
                                             <h4><a href="#">{{ result.product_title }}</a></h4>
-                                            <span class="size">XL / XXL / S </span>
+                                            <!--<span data-ng-if="result.product_size != ''" class="size">{{result.product_size}}</span>-->
                                         </div>
                                         <div class="price"><span>${{result.product_price }}</span></div>
                                         <div class="action-control">
