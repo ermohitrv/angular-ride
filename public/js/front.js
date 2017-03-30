@@ -665,7 +665,7 @@ function setMarkers(userData) {
     var i = 0;
     var icon = new google.maps.MarkerImage("/images/maps-and-flags.png");
     $.each(parsedata, function (index, markerData) {
-        if(markerData.local.locationLat != "" && markerData.local.locationLat != undefined && markerData.local.locationLng != "" && markerData.local.locationLng != undefined){
+        if(markerData.local.firstName != "" && markerData.local.firstName != undefined && markerData.local.locationLat != "" && markerData.local.locationLat != undefined && markerData.local.locationLng != "" && markerData.local.locationLng != undefined){
         
         var profileimageplacehold = "http://placehold.it/300?text="+markerData.local.firstName;
         var imagepath = profileimageplacehold;
