@@ -22,7 +22,7 @@ result = results[i];
             </div>
             <div class="description">
                 <% var producttitle =  result.product_title;
-                var title = producttitle.substring(0,20);
+                var title = producttitle.substring(0,21);
                 %>
                 <h4><a href="/product/<%= result.product_permalink %>"><%= title %></a></h4>
                 <% if(result.product_size != "") { %>
