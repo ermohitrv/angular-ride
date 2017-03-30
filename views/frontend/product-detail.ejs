@@ -63,7 +63,9 @@ function submitReview(){
     
     var reviewdesc = $('#addReview').val();
     var productId  = $('#productId').val();
-    
+    if(reviewdesc == ""){
+        $('#errormessagereview').css('display','block');
+    }else{
      jQuery.ajax({
         type  : "POST",
         url   : "/sendreview",
@@ -87,6 +89,7 @@ function submitReview(){
             //$(".result_del").html('<div class="alert alert-success">User Deleted Successfully!</div>');
         }
     });
+    }
 }
 
 
