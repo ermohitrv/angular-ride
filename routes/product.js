@@ -45,7 +45,7 @@ router.get('/shop/products-list', function (req, res){
     var number_products = globalConfig.number_products_index ? globalConfig.number_products_index : 8;
     Products.find({product_published:'true'}).limit(number_products).exec(function (err, results) {
         if(!err){
-            res.render('widget/shop-products-list',{results: results});
+            res.render('widget/shop-products-list',{results: results,page_url: globalConfig.base_url});
         }else{
             res.send(err);
         }
