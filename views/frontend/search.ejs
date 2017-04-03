@@ -6,7 +6,7 @@
            <div class="title"><h1> Search </h1></div>
             <div class="listing searchlist">
                 <ul id="nav">
-			<li id="topli"    onclick="showtop()"    class="btn btn-xs btn-search" ><a  href="javascript:;">TOP</a></li>
+			<li id="topli"    onclick="showtop()"    class="btn btn-xs btn-search active" ><a  href="javascript:;">TOP</a></li>
 			<li id="gearli"   onclick="showgear()"   class="btn btn-xs btn-search" ><a  href="javascript:;">GEAR</a></li>
 			<li id="eventsli" onclick="showevents()" class="btn btn-xs btn-search" ><a  href="javascript:;">EVENTS</a></li>
                         <li id="peopleli" onclick="showpeople()" class="btn btn-xs btn-search" ><a  href="javascript:;">PEOPLE</a></li>
@@ -22,7 +22,7 @@
                     </div>                  
                     <div class="row">
                     <div   class="col-lg-12 col-md-12 col-md-12 noresult" data-ng-if="topproductresults.length == 0">
-                            No Results Found    
+                        <span>No Results Found</span>  
                     </div>                          
                     </div>
                     <div   class="col-lg-3 col-md-6 col-md-12" data-ng-if="topproductresults.length > 0" data-ng-repeat="result in topproductresults">
@@ -62,7 +62,7 @@
                     </div>                        
                     <div class="row">
                         <div   class="col-lg-12 col-md-12 col-md-12 noresult" data-ng-if="topeventresults.length == 0">
-                            No Results Found    
+                            <span>No Results Found</span>   
                         </div>                            
                     </div>
                     <div class="col-lg-3 col-md-6 col-md-12" data-ng-if="topeventresults.length > 0" data-ng-repeat="eventresult in topeventresults">
@@ -96,7 +96,7 @@
                     </div>                         
                     <div class="row">
                         <div   class="col-lg-12 col-md-12 col-md-12 noresult" data-ng-if="toppeopleresults.length == 0">
-                                No Results Found    
+                                 <span>No Results Found</span>     
                         </div>
                     </div>
                     <div   class="col-lg-3 col-md-6 col-md-12" data-ng-if="toppeopleresults.length > 0" data-ng-repeat="peopleresult in toppeopleresults">
@@ -169,7 +169,7 @@
                         <div class="row" data-ng-init="getSearch('<%= searchkey %>','searchkeyword')">
 
                         <div   class="col-lg-12 col-md-12 col-md-12 noresult" data-ng-if="shopProductscategorysearch.length == 0">
-                            No Results Found    
+                             <span>No Results Found</span>     
                         </div>
                             
                         </div>
@@ -256,7 +256,7 @@
                         <div class="row">
 
                         <div   class="col-lg-12 col-md-12 col-md-12 noresult" data-ng-if="eventResults.length == 0">
-                            No Results Found    
+                            <span>No Results Found</span>     
                         </div>
                             
                         </div>
@@ -334,9 +334,6 @@
                                 </div>
                             </div>
                             
-
-
-
                         </div>
                     </div>
 
@@ -344,7 +341,7 @@
                         <div class="row">
 
                         <div   class="col-lg-12 col-md-12 col-md-12 noresult" data-ng-if="peopleResults.length == 0">
-                            No Results Found    
+                            <span>No Results Found</span>     
                         </div>
                             
                         </div>
@@ -400,108 +397,7 @@
                         </div>
                     </div>
                 </div>
-            </section>
-           
-<!--            <div class="product_listing">
-                <div class="title"><h1>Search results</h1>
-                    <p>We've got {{shopProductscategorysearch.length}} results</p>
-                    
-                </div>
-                <select class="sortselectsearch" id="selectboxsortbyname"  ng-click="setOrder('name')">
-                        <option>Sort By Name</option>
-                        <option id="nameasc" value="asc">A to Z</option>
-                        <option id="namedesc" value="desc">Z to A</option>
-                </select>
-                <select class="sortselectsearch" id="selectboxsortbyprice"  ng-click="setOrder('price')">
-                        <option>Sort By Price</option>
-                        <option id="priceasc" value="asc">Low to high</option>
-                        <option id="pricedesc" value="desc">High to Low</option>
-                </select>
-                <div class="listing">
-                    <div class="col-lg-3 col-md-3 col-md-12" >
-                       
-                        <div class="categorieslist">
-                            <h3>Filter</h3>
-                            <h4>Categories</h4>
-                            <ul data-ng-init="getCategoriesListonsearch()">
-                            <li data-ng-if="categoryList.length > 0" data-ng-repeat="category in categoryList" id="{{ category._id }}"  ><a href="/categorysearch?catname={{ category.category_title }}" data-ng-bind="category.category_title"></a></li>
-                            <li data-ng-if="categoryList.length > 0" data-ng-repeat="category in categoryList" id="{{ category._id }}"  ><input ng-click="filtercheckboxsearch(category.category_title,'categorycheckbox')" class="checkboxfilter" id="{{ category.category_title }}" type="checkbox"><a href="" data-ng-click="getSearch(category.category_title,'category')" data-ng-bind="category.category_title"></a></li>
-
-                            </ul>
-
-                           <h4>Brands</h4>
-                            <div class="select_ride">
-                            <ul data-ng-init="getBrandsListonsearch()">
-                            <li data-ng-if="brandList.length > 0" data-ng-repeat="brand in brandList" id="{{ brand._id }}"  ><a href="/brandsearch?brandname={{ brand.brand_title }}" data-ng-bind="brand.brand_title"></a></li>
-                            <li data-ng-if="brandList.length > 0" data-ng-repeat="brand in brandList" id="{{ brand._id }}"  ><input ng-click="filtercheckboxsearch(brand.brand_title,'brandcheckbox')" class="checkboxfilter" id="{{ brand.brand_title }}" type="checkbox"><a href="" data-ng-click="getSearch(brand.brand_title,'brand')" data-ng-bind="brand.brand_title"></a></li>
-
-                            </ul>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="col-lg-9 col-md-9 col-md-12" ng-init="currentPage = 0; pageSize = 6;">
-                        <div class="row" data-ng-init="getSearch('<%= searchkey %>','searchkeyword')">
-
-                        <div   class="col-lg-12 col-md-12 col-md-12 noresult" data-ng-if="shopProductscategorysearch.length == 0">
-                            No Results Found    
-                        </div>
-                            
-                        </div>
-                            <div   class="col-lg-4 col-md-6 col-md-12" data-ng-if="shopProductscategorysearch.length > 0" data-ng-repeat="result in shopProductscategorysearch | orderBy : order |  startFrom:currentPage*pageSize | limitTo:pageSize">
-
-                            <div class="item">
-                                    <div class="product">
-                                        <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left"><i class="glyphicon glyphicon-heart"></i> </a>
-                                        <div class="image">
-                                            <div class="quickview">
-                                                <a data-toggle="modal" class="btn btn-xs btn-quickview" href="#" data-target="">Quick View</a>
-                                            </div>     
-                                            
-                                            <img style="display:inline-block" ng-src="{{result.product_image[0]?('<%= pageurl %><%= page_url %>/public/uploads/'+ result.product_image[0]):'http://placehold.it/240x240'}}" alt="img" class="img-responsive shopproductlistimg"/>
-
-                                            </div>
-                                        <div class="description">
-                                            <h4><a href="#">{{ result.product_title }}</a></h4>
-                                        </div>
-                                        <div class="price"><span>${{result.product_price }}</span></div>
-                                        <div class="action-control">
-                                        <button class="btn btn-danger product-add-to-cart" id="{{result._id }}" type="button" data-toggle="modal" data-target="#myModal">
-                                                    <i class="glyphicon glyphicon-shopping-cart"> </i>Add to Cart
-                                        </button>
-                                        <input type="hidden" id="productidgear_{{result._id }}" value="{{ result._id }}">
-                                        <input type="hidden" id="quantityboxgear_{{ result._id }}" value="1">
-                                        
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-12">
-
-                                <div aria-label="Page navigation" class="page_navigation">
-                                   <ul class="pagination">
-                                        <li>
-                                            <a ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1" href="javascript:void(0)" aria-label="Previous">
-                                                <span aria-hidden="true">&laquo;</span>
-                                            </a>
-                                        </li>
-                                        
-                                        <li>   
-                                            <a ng-disabled="currentPage >= shopProductscategorysearch.length/pageSize - 1" ng-click="currentPage=currentPage+1" href="javascript:void(0)" aria-label="Next">
-                                                <span aria-hidden="true">&raquo;</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>-->
+            </section> 
             </div>
         </div>
 </div>

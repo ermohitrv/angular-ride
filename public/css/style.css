@@ -2410,6 +2410,7 @@ li.btn.btn-xs.btn-search.active a {
   width: 100%;
   background: #fff;
   padding: 10px 20px;
+  margin-bottom: 30px;
 }
 .categorieslist h3 {
     margin: 5px 0 10px;
@@ -2461,6 +2462,12 @@ li.btn.btn-xs.btn-search.active a {
     padding: 0px 10px 0px 10px;
 }
 
+.noresult span {
+    background: #ccc;
+    padding: 5px 10px 5px 10px;
+    width: 99%;
+}
+
 .page_navigation {
     text-align: center;
     width: 100%;
@@ -2484,8 +2491,8 @@ li.btn.btn-xs.btn-search.active a {
 }
 .noresult{
     text-align: center;
-    color: #fff;
-    background: #ccc;
+    color: #3c3c3c;
+    /*background: #ccc;*/
     padding: 5px 0px 5px 0px;
 }
 
