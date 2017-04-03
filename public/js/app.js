@@ -513,28 +513,6 @@ app.controller('shopController',['$scope', '$http', '$sce',function ($scope, $ht
         });
     };
     
-    
-//    $scope.filtercheckboxsearch = function(Title){
-//       
-//        alert("success"+Title);
-//        var checkboxObj={};
-//        checkboxObj.title=[];
-//        //checkboxObj.fruitsDenied=[];
-//
-//        $("input:checkbox").each(function(){
-//            var $this = $(this);
-//
-//            if($this.is(":checked")){
-//                checkboxObj.title.push($this.attr("id"));
-//            }else{
-//                //checkboxObj.fruitsDenied.push($this.attr("id"));
-//            }
-//        });
-//        
-//        console.log(checkboxObj);
-//
-//    };
-
     $scope.getSearch = function(Title,searchtype){
       
         var data = { 
@@ -574,30 +552,6 @@ app.controller('shopController',['$scope', '$http', '$sce',function ($scope, $ht
                     //checkboxObj.fruitsDenied.push($this.attr("id"));
                 }
             });
-        
-//        if(checkboxtype == 'categorycheckbox'){
-//            $("input:checkbox").each(function(){
-//                var $this = $(this);
-//
-//                if($this.is(":checked")){
-//                    checkboxObj.cattitle.push($this.attr("id"));
-//                }else{
-//                    //checkboxObj.fruitsDenied.push($this.attr("id"));
-//                }
-//            });
-//        }
-//        if(checkboxtype == 'brandcheckbox'){
-//            $("input:checkbox").each(function(){
-//                var $this = $(this);
-//
-//                if($this.is(":checked")){
-//                    checkboxObj.brandstitle.push($this.attr("id"));
-//                }else{
-//                    //checkboxObj.fruitsDenied.push($this.attr("id"));
-//                }
-//            });
-//        }
-        
         
         var data = { 
             checkboxObj: checkboxObj, 
@@ -646,9 +600,77 @@ app.controller('shopController',['$scope', '$http', '$sce',function ($scope, $ht
         $scope.order = orderby;
     };
   
-    
-   
+    $scope.searchResults = function (searchKey,searchType) {
+       
+        var data = { 
+            searchKey: searchKey, 
+            searchType:searchType,
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
 
+        $http.post('/search-results',config).success(function(response, status, headers, config){
+           
+            if(searchType == "top"){
+                $scope.topproductresults = response[0].productResults;
+                $scope.topeventresults = response[1].eventResults;
+                $scope.toppeopleresults = response[2].peopleResults;
+            }
+            if(searchType == "events"){
+                $scope.eventResults = response;
+            }
+            if(searchType == "people"){
+                $scope.peopleResults = response;
+            }
+            
+        }).error(function(){
+            console.log('Oops! Error listing products-list');
+        });
+    }
+   
+     $scope.searchEvents = function(fromEventDate,toEventDate){
+        
+        var data = { 
+            fromEventDate: fromEventDate, 
+            toEventDate: toEventDate
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/search-events',config).success(function (response, status, headers, config){
+            
+             $scope.eventResults = response;
+            
+      
+        }).error(function(err){
+           console.log('Oops! Error occur'+err);
+        }); 
+    };
+    
+     $scope.searchPeople = function(city,state,country){
+        
+        var data = { 
+            city: city, 
+            state: state,
+            country: country
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/search-people',config).success(function (response, status, headers, config){
+            
+             $scope.peopleResults = response;
+            
+      
+        }).error(function(err){
+           console.log('Oops! Error occur'+err);
+        }); 
+    };
+    
 }]);
 
 /********************** admin controller  **********************/
@@ -1175,3 +1197,55 @@ app.directive('googleplace', function() {
         }
     };
 });
+
+
+app.directive('googleplacesearch', function() {
+    return {
+        require: 'ngModel',
+        link: function(scope, element, attrs, model) {
+            var options = {
+                types: [],
+               
+            };
+            
+            scope.gPlace = new google.maps.places.Autocomplete(element[0], options);
+            
+            var geocoder =  new google.maps.Geocoder();
+            
+            
+        
+            google.maps.event.addListener(scope.gPlace, 'place_changed', function() {
+                
+                var place = element.val();
+                scope.$apply(function() {
+                    model.$setViewValue(element.val());   
+                   
+                });
+                
+            geocoder.geocode( { 'address': place}, function(results, status) {
+                  if (status == google.maps.GeocoderStatus.OK) {
+                    var city = "";
+                    var state = "";
+                    var country = "";
+                    
+                    if(results[0].address_components[0].long_name){
+                        city = results[0].address_components[0].long_name;
+                    }
+                    if(results[0].address_components[2].long_name){
+                        state = results[0].address_components[2].long_name;
+                    }
+                    if(results[0].address_components[3].long_name){
+                        country = results[0].address_components[2].long_name;
+                    }
+                    
+                    var $scope = angular.element(document.getElementById("searchresult_page")).scope(); // get scope of shop controller
+                    $scope.searchPeople(city,state,country);
+                    
+            }});
+                
+                
+            });
+        }
+    };
+});
+

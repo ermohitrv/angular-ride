@@ -18,18 +18,17 @@
                     
 %>
 <section id="profile">
-  <% include partial/profile-nav.ejs %>
+  <% if(user){ %>
+     <% include partial/profile-nav.ejs  %>
+  <% } %>
   <div id="user-profile" class="container" ng-controller="friendsController" ng-init="friendStatus('<%= userprofile.local.email %>')">
-      <div id="main">
+      <div id="main" style="margin-top:-15px">
          <!-- start:breadcrumb -->
      
          <ol class="breadcrumb">
             <li><a href="/">Home</a></li>
             <li class="active">Profile</li>
             <li class="active"><%= userprofile.local.firstName+' '+userprofile.local.lastName %></li>
-<!--            <li class="active"  id="addfriend"  data-ng-if="friendstatus.friendRequestApprovalStatus != 'accept' && friendstatus.friendRequestApprovalStatus != 'pending'"><a href="javascript:void(0);" ng-click="sendRequest('<%= userprofile.local.username %>')" class="btn btn-primary">Add Friend</a></li>
-            <li class="active"  id="requestsent"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending'"><a href="javascript:void(0)" class="btn btn-primary" >Request Sent</a></li>         
-            <li class="active"  id="friends" ng-mouseenter="changeFriendButtonText('enter')" ng-mouseleave="changeFriendButtonText('leave')" data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept'"><a href="javascript:void(0)" ng-click="unFriendprofile('<%= userprofile.local.username %>','<%= user.local.username %>')"  class="btn btn-success" id="friendtext">Friends</a></li>-->
 
          </ol>
          <!-- end:breadcrumb -->   
@@ -112,26 +111,10 @@
                     <div class="panel-heading">
                      <header class="panel-title">
                         <div class="text-center">
-<!--                         <% if(user.local.username != userprofile.local.username){ %>   
-                        <div style="float:left;width:50%">
-                        <li class="active friendsul"  id="addfriend"  data-ng-if="friendstatus.friendRequestApprovalStatus != 'accept' && friendstatus.friendRequestApprovalStatus != 'pending'"><a href="javascript:void(0);" ng-click="sendRequest('<%= userprofile.local.username %>')" class="btn btn-primary">Add Friend</a></li>
-                        <li class="active friendsul"  id="requestsent"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending' && friendstatus.friendRequestSentBy == '<%= user.local.username %>'"><a href="javascript:void(0)" class="btn btn-primary" >Request Sent</a></li>         
-                       
-                        <li class="friendsmenuli friendsul" data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending' && friendstatus.friendRequestSentTo == '<%= user.local.username %>'"><a class="alisting btn btn-primary">Pending Approval<b class="caret"></b></a>
-                             <ul class="friendssubmenu">
-                                <li  class="active friendsul approval"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending' && friendstatus.friendRequestSentTo == '<%= user.local.username %>'"><a ng-click="requestactionfromProfile('accept','<%= userprofile.local.username %>')">Accept</a></li>         
-                                <li  class="active friendsul approval"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending' && friendstatus.friendRequestSentTo == '<%= user.local.username %>'"><a ng-click="requestactionfromProfile('reject','<%= userprofile.local.username %>')"  >Reject</a></li>         
-                             </ul>
-                        </li>
-                        <li class="active friendsul"  id="friends" ng-mouseenter="changeFriendButtonText('enter')" ng-mouseleave="changeFriendButtonText('leave')" data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept'"><a href="javascript:void(0)" ng-click="unFriendprofile('<%= userprofile.local.username %>','<%= user.local.username %>')"  class="btn btn-success" id="friendtext">Friends</a></li>
-                        </div>
-                        <div ng-init="followStatus('<%= userprofile.local.username %>')">
-                            <li class="active friendsul" data-ng-if="followstatus == 0"  id="follow"><a href="javascript:void(0);" ng-click="followUser('<%= userprofile.local.username %>')" class="btn btn-primary">Follow</a></li>
-                            <li class="active friendsul" data-ng-if="followstatus == 1" ng-mouseenter="changeFollowButtonText('enter')" ng-mouseleave="changeFollowButtonText('leave')"  id="follow"><a href="javascript:void(0);"  ng-click="unFollow('<%= userprofile.local.username %>','<%= user.local.username %>')" class="btn btn-primary" id="followtext">Following&nbsp;&nbsp;<i id="followingtick" class="fa fa-check" aria-hidden="true"></i></a></li>
 
-                        </div>
-                         <% } %>-->
-                        <% if(user.local.username != userprofile.local.username){ %>   
+                        <% 
+                        if(user){
+                        if(user.local.username != userprofile.local.username){ %>   
                         <div style="float:left;width:50%">
                         <li class="active friendsul"  id="addfriend"  data-ng-if="friendstatus.friendRequestApprovalStatus != 'accept' && friendstatus.friendRequestApprovalStatus != 'pending'"><a href="javascript:void(0);" ng-click="sendRequest('<%= userprofile.local.email %>')" class="btn btn-primary">Add Friend</a></li>
                         <li class="active friendsul"  id="requestsent"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending' && friendstatus.friendRequestSentBy == '<%= user.local.email %>'"><a href="javascript:void(0)" class="btn btn-primary" >Request Sent</a></li>         
@@ -149,7 +132,7 @@
                             <li class="active friendsul" data-ng-if="followstatus == 1" ng-mouseenter="changeFollowButtonText('enter')" ng-mouseleave="changeFollowButtonText('leave')"  id="follow"><a href="javascript:void(0);"  ng-click="unFollow('<%= userprofile.local.email %>','<%= user.local.email %>')" class="btn btn-primary" id="followtext">Following<!--&nbsp;&nbsp;<i id="followingtick" class="fa fa-check" aria-hidden="true"></i>--></a></li>
 
                         </div>
-                         <% } %>
+                         <% }} %>
                         </div>
                      </header>
                     </div>

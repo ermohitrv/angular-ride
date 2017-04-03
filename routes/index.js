@@ -83,8 +83,9 @@ router.get('/profile', middleware.isLoggedIn, function (req, res){
 });
 
 /* Profile route to render logged in user to profile area */
-router.get('/profile/:username', middleware.isLoggedIn,function (req, res){
+router.get('/profile/:username', function (req, res){
     var profileusername = req.params.username;
+    
     console.log('username: '+profileusername);
     User.findOne({'local.username': new RegExp(["^", profileusername, "$"].join(""), "i")}, function (err, userprofile) {
         if (err) {
@@ -1578,7 +1579,7 @@ router.post('/sendrequest',middleware.isLoggedIn, function(req, res){
  
 });
 
-router.post('/friendstatus',middleware.isLoggedIn, function(req, res){
+router.post('/friendstatus', function(req, res){
     var profileuseremail = req.body.params.profileuseremail;
     
     Friends.findOne({$and : [{ $or : [ { 'friendRequestSentTo' : req.user.local.email }, { 'friendRequestSentBy' : req.user.local.email} ] },{ $or : [ { 'friendRequestSentTo' : profileuseremail }, { 'friendRequestSentBy' : profileuseremail}]}]}, function(err, friendinfo){
@@ -2518,5 +2519,139 @@ router.post('/get-shipping',  function (req, res){
     
 });
 
+router.post('/search-results', function(req, res){
+    var searchKey  = req.body.params.searchKey;
+    var searchType = req.body.params.searchType;
+    console.log("serach key : "+searchKey);
+    console.log("serach type : "+searchType);
+   
+    if(searchType == "top"){
+        var topresults = [];
+        User.find({$or :[{ 'local.firstName': new RegExp(searchKey, 'i') }, {'local.lastName': new RegExp(searchKey, 'i')}]}, function(err, peopleResults){
+            
+            
+        Products.find({'product_title': new RegExp(searchKey, 'i')}, function(err1, productResults){
+
+            if(!err1){
+                //console.log(productResults);
+                
+                
+                var dataObjproducts = { 'productResults':  productResults};
+                topresults.push(dataObjproducts);
+
+        
+        Events.find({'eventName': new RegExp(searchKey, 'i')}, function(err2, eventResults){
+
+            if(!err2){
+                // console.log(eventResults);
+                var dataObjevents = { 'eventResults':  eventResults};
+                topresults.push(dataObjevents);
+
+            }else{
+                console.log("no results");
+                res.json({});
+
+            }
+            var dataObjpeople = { 'peopleResults':  peopleResults};
+            topresults.push(dataObjpeople);
+            
+            res.json(topresults);
+            
+            
+        }).sort({'startDate':-1}).limit(4);
+        }else{
+                console.log("no results");
+                res.json({});
+
+            }
+        }).sort({'product_added_date':-1}).limit(4);
+    }).sort({'accountCreationDate':-1}).limit(4);
+       
+    }
+    if(searchType == "events"){
+        var eventresults = [];
+
+        Events.find({'eventName': new RegExp(searchKey, 'i')}, function(err, eventResults){
+
+            if(!err){
+
+                res.json(eventResults);
+
+            }else{
+                console.log("no results");
+                res.json({});
+
+            }
+           
+            
+        }).sort({'startDate':-1}).limit(4);
+        
+    }
+    
+    if(searchType == "people"){
+        var peopleresults = [];
+
+        User.find({$or :[{ 'local.firstName': new RegExp(searchKey, 'i') }, {'local.lastName': new RegExp(searchKey, 'i')}]}, function(err, peopleResults){
+
+            if(!err){
+
+                res.json(peopleResults);
+
+            }else{
+                console.log("no results");
+                res.json({});
+
+            }
+           
+            
+        });
+        
+    }
+    
+     
+});
+
+
+router.post('/search-events', function(req, res){
+    var fromEventDate = req.body.params.fromEventDate;
+    var toEventDate = req.body.params.toEventDate;
+    
+    //fromEventDate = fromEventDate.toISOString();
+    //toEventDate = toEventDate.toISOString();
+    
+    console.log(fromEventDate+" "+toEventDate);
+    //res.send(true);
+    Events.find({startDate: {$gte: fromEventDate, $lte: toEventDate}}, function(err, eventResults){
+
+            if(!err){               
+                res.json(eventResults);
+            }else{
+                console.log("no results");
+                res.json({});
+            }
+          
+    }).sort({'startDate':-1});
+    
+});
+
+router.post('/search-people', function(req, res){
+    
+    var city = req.body.params.city;
+    var state = req.body.params.state;
+    var country = req.body.params.country;
+    
+    
+    User.find({$or :[{ 'local.locationCity': new RegExp(city, 'i') }, {'local.locationState': new RegExp(state, 'i')},{'local.locationCountry': new RegExp(country, 'i')}]}, function(err, peopleResults){
+
+            if(!err){               
+                res.json(peopleResults);
+            }else{
+                console.log("no results");
+                res.json({});
+            }
+          
+    });
+    
+});
 
 module.exports = router;

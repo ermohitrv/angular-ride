@@ -1857,6 +1857,7 @@ button.continue_shoping, button.checkout_btn {
   width: 100%;
   font-family: 'Open Sans', sans-serif;
   position: relative;
+  
 }
 .listing{
   float: left;
@@ -2279,16 +2280,130 @@ body.profile a.navbar-brand.logo{    max-width: 200px;}
     color: #2d2e30;
 }
 
+.search_listing {
+    float: left;
+    width: 100%;
+    font-family: 'Open Sans', sans-serif;
+    position: relative;
+}
+
+.searchlist{
+    text-align:center;
+}
+
+div#topproductresults {
+    background: rgba(204, 204, 204, 0.11);
+    padding: 0px 0px 30px 0px;
+}
+
+div#topeventresults {
+    background: rgba(204, 204, 204, 0.11);
+    padding: 0px 0px 30px 0px;
+    margin-top:5%;
+}
+
+div#toppeopleresults {
+    background: rgba(204, 204, 204, 0.11);
+    padding: 0px 0px 30px 0px;
+    margin-top: 5%;
+}
+
+.btn-search {
+    color: #fff;
+    border-color: #46b8da;
+}
+
+li.btn.btn-xs.btn-search {
+    padding: 5px 10px 5px 10px;
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.btn-search:hover {
+    color: #fff;
+    background-color: #31b0d5;
+    border-color: #269abc;
+}
+
+.btn-search:hover a {
+    color: #fff;
+    text-decoration:none;
+}
+
+li.btn.btn-xs.btn-search.active {
+    padding: 5px 10px 5px 10px;
+    font-size: 18px;
+    margin-right: 10px;
+    border-color: #46b8da;
+    background: #46b8da;
+}
+
+li.btn.btn-xs.btn-search.active a {
+    color: #fff;
+    text-decoration:none;
+}
 
 /* search result page */
 .search_result{
   float: left;
   width: 100%;
   padding: 40px 0;
-  background: url(../images/search_bg.jpg) no-repeat;
+  background: #fff;
   background-size: cover;
   background-attachment: fixed;
   position: relative;
+  border-top: 1px solid #ddd;
+}
+.search_result .title h1 {
+    color: #000;
+}
+.gear_listing p {
+    color: #444 !important;
+}
+.gear_listing {
+    float: left;
+    width: 100%;
+    font-family: 'Open Sans', sans-serif;
+    position: relative;
+    background: rgba(204, 204, 204, 0.11);
+}
+.gear_listing .item {
+    display: block;
+    height: auto;
+    margin-bottom: 15px;
+    height: 480px;
+}
+.event_listing p {
+    color: #444 !important;
+}
+.event_listing {
+    float: left;
+    width: 100%;
+    font-family: 'Open Sans', sans-serif;
+    position: relative;
+    background: rgba(204, 204, 204, 0.11);
+}
+.event_listing .item {
+    display: block;
+    height: auto;
+    margin-bottom: 15px;
+    height: 480px;
+}
+.people_listing p {
+    color: #444 !important;
+}
+.people_listing {
+    float: left;
+    width: 100%;
+    font-family: 'Open Sans', sans-serif;
+    position: relative;
+    background: rgba(204, 204, 204, 0.11);
+}
+.people_listing .item {
+    display: block;
+    height: auto;
+    margin-bottom: 15px;
+    height: 480px;
 }
 .categorieslist{
   float: left;
@@ -2337,6 +2452,15 @@ body.profile a.navbar-brand.logo{    max-width: 200px;}
   color: #fff;
   text-align: center;
 }
+
+.searchpagelocation {
+    font-size: 16px;
+    font-weight: bold;
+    color: #454545;
+    word-wrap: break-word;
+    padding: 0px 10px 0px 10px;
+}
+
 .page_navigation {
     text-align: center;
     width: 100%;
@@ -2365,6 +2489,11 @@ body.profile a.navbar-brand.logo{    max-width: 200px;}
     padding: 5px 0px 5px 0px;
 }
 
+.seeall{
+    text-align: center;
+    padding: 20px 0px 5px 0px;
+}
+
 /* event page css */
 
 .btncreateevent{
@@ -2391,7 +2520,7 @@ li.btn.btn-xs.btn-info {
     font-size: 22px;
 }
 .events_page {
-    background: #000;
+    background: #fff;
     border-top: 1px solid #ddd;
     padding: 60px 0;
     float: left;

@@ -1,10 +1,408 @@
 <% layout('layout') -%>
 <% var pageurl = page_url+"/l/240x240/" %>
-<div class="search_result" data-ng-controller="shopController" >
-    <div class="overlay_bg"></div>
+<div class="search_result" id="searchresult_page" data-ng-controller="shopController" >
     <div class="container">
-        <div class="row">
-            <div class="product_listing">
+        <div class="row search_listing">
+           <div class="title"><h1> Search </h1></div>
+            <div class="listing searchlist">
+                <ul id="nav">
+			<li id="topli"    onclick="showtop()"    class="btn btn-xs btn-search" ><a  href="javascript:;">TOP</a></li>
+			<li id="gearli"   onclick="showgear()"   class="btn btn-xs btn-search" ><a  href="javascript:;">GEAR</a></li>
+			<li id="eventsli" onclick="showevents()" class="btn btn-xs btn-search" ><a  href="javascript:;">EVENTS</a></li>
+                        <li id="peopleli" onclick="showpeople()" class="btn btn-xs btn-search" ><a  href="javascript:;">PEOPLE</a></li>
+		
+		</ul>
+                
+            </div>
+            <section id="topresults" ng-init="searchResults('<%= searchkey %>','top')">
+               
+                <div class="col-lg-12 col-md-9 col-md-12" id="topproductresults" >
+                    <div   class="col-lg-12 col-md-12 col-md-12 seeall">
+                                    <h3>GEARS</h3>    
+                    </div>                  
+                    <div class="row">
+                    <div   class="col-lg-12 col-md-12 col-md-12 noresult" data-ng-if="topproductresults.length == 0">
+                            No Results Found    
+                    </div>                          
+                    </div>
+                    <div   class="col-lg-3 col-md-6 col-md-12" data-ng-if="topproductresults.length > 0" data-ng-repeat="result in topproductresults">
+                        <div class="item">
+                            <div class="product">
+                                <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left"><i class="glyphicon glyphicon-heart"></i> </a>
+                                <div class="image">
+                                    <div class="quickview">
+                                        <a data-toggle="modal" class="btn btn-xs btn-quickview" href="/product/{{result.product_permalink}}" data-target="">Quick View</a>
+                                    </div>     
+
+                                    <img style="display:inline-block" ng-src="{{result.product_image[0]?('<%= pageurl %><%= page_url %>/public/uploads/'+ result.product_image[0]):'http://placehold.it/240x240'}}" alt="img" class="img-responsive shopproductlistimg"/>
+                                </div>
+                                <div class="description">
+                                    <h4><a href="/product/{{result.product_permalink}}">{{ result.product_title }}</a></h4>
+                                </div>
+                                <div class="price"><span>${{result.product_price }}</span></div>
+                                <div class="action-control">
+                                    <button class="btn btn-danger product-add-to-cart" id="{{result._id }}" type="button" data-toggle="modal" data-target="#myModal">
+                                        <i class="glyphicon glyphicon-shopping-cart"> </i>Add to Cart
+                                    </button>
+                                    <input type="hidden" id="productidgear_{{result._id }}" value="{{ result._id }}">
+                                    <input type="hidden" id="quantityboxgear_{{ result._id }}" value="1"> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div   class="col-lg-12 col-md-12 col-md-12 seeall" data-ng-if="topproductresults.length > 4">
+                        <label><a  onclick="showgear()" href="javascript:;">See all</a></label>    
+                    </div>        
+                </div>
+               
+              
+                <div class="col-lg-12 col-md-9 col-md-12" id="topeventresults">
+                    <div class="col-lg-12 col-md-12 col-md-12 seeall">
+                        <h3>EVENTS</h3>    
+                    </div>                        
+                    <div class="row">
+                        <div   class="col-lg-12 col-md-12 col-md-12 noresult" data-ng-if="topeventresults.length == 0">
+                            No Results Found    
+                        </div>                            
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-md-12" data-ng-if="topeventresults.length > 0" data-ng-repeat="eventresult in topeventresults">
+                        <div class="item">
+                            <div class="product">
+                                <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left"><i class="glyphicon glyphicon-heart"></i> </a>
+                                <div class="image">
+                                    <div class="quickview">
+                                        <a data-toggle="modal" class="btn btn-xs btn-quickview" href="/event?id={{eventresult._id}}" data-target="">Quick View</a>
+                                    </div>     
+                                    <img style="display:inline-block" ng-src="{{eventresult.eventImage?('<%= pageurl %><%= page_url %>/'+ eventresult.eventImage):'http://placehold.it/240x240'}}" alt="img" class="img-responsive shopproductlistimg"/>
+                                </div>
+                            <div class="description">
+                                <h4><a href="/event?id={{eventresult._id}}">{{ eventresult.eventName }}</a></h4>
+                            </div>
+                            <div class="searchpagelocation"><span>{{eventresult.eventLocation }}</span></div>
+                            <div class="action-control">
+                                <a href="/event?id={{eventresult._id}}" class="btn btn-danger">View Event</a>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div   class="col-lg-12 col-md-12 col-md-12 seeall" data-ng-if="topeventresults.length > 4">
+                        <label><a  onclick="showevents()" href="javascript:;">See all</a></label>    
+                    </div>
+                </div>
+                
+                <div class="col-lg-12 col-md-9 col-md-12" id="toppeopleresults">
+                    <div   class="col-lg-12 col-md-12 col-md-12 seeall">
+                        <h3>PEOPLE</h3>    
+                    </div>                         
+                    <div class="row">
+                        <div   class="col-lg-12 col-md-12 col-md-12 noresult" data-ng-if="toppeopleresults.length == 0">
+                                No Results Found    
+                        </div>
+                    </div>
+                    <div   class="col-lg-3 col-md-6 col-md-12" data-ng-if="toppeopleresults.length > 0" data-ng-repeat="peopleresult in toppeopleresults">
+                        <div class="item">
+                            <div class="product">
+                                <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left"><i class="glyphicon glyphicon-heart"></i> </a>
+                                <div class="image">
+                                    <div class="quickview">
+                                        <a data-toggle="modal" class="btn btn-xs btn-quickview" href="/profile/{{peopleresult.local.username}}" data-target="">Quick View</a>
+                                    </div>     
+                                    <img style="display:inline-block" ng-src="{{peopleresult.local.profileImage == 'http://placehold.it/300?text='+peopleresult.local.firstName ? peopleresult.local.profileImage : '/public/uploads/'+peopleresult.local.profileImage }}" alt="img" class="img-responsive shopproductlistimg"/>
+
+                                </div>
+                                <div class="description">
+                                    <h4><a href="#">{{ peopleresult.local.firstName }}&nbsp;{{ peopleresult.local.lastName }}</a></h4>
+                                </div>
+                                <div class="searchpagelocation"><span>{{peopleresult.local.locationCity }}&nbsp;{{peopleresult.local.locationState }}&nbsp;{{peopleresult.local.locationCountry }}</span></div>
+                                <div class="action-control">
+                                    <a href="/profile/{{peopleresult.local.username}}" class="btn btn-danger">View Profile</a>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div   class="col-lg-12 col-md-12 col-md-12 seeall" data-ng-if="toppeopleresults.length > 4">
+                        <label><a  onclick="showpeople()" href="javascript:;">See all</a></label>    
+                    </div>
+                </div>               
+            </section>
+           
+            <section id="gearresults">
+                <div class="gear_listing">
+                <div class="title"><h1></h1>
+                    <p>We've got {{shopProductscategorysearch.length}} results</p>
+                    
+                </div>
+                <select class="sortselectsearch" id="selectboxsortbyname"  ng-click="setOrder('name')">
+                        <option>Sort By Name</option>
+                        <option id="nameasc" value="asc">A to Z</option>
+                        <option id="namedesc" value="desc">Z to A</option>
+                </select>
+                <select class="sortselectsearch" id="selectboxsortbyprice"  ng-click="setOrder('price')">
+                        <option>Sort By Price</option>
+                        <option id="priceasc" value="asc">Low to high</option>
+                        <option id="pricedesc" value="desc">High to Low</option>
+                </select>
+                <div class="listing">
+                    <div class="col-lg-3 col-md-3 col-md-12" >
+                       
+                        <div class="categorieslist">
+                            <h3>Filter</h3>
+                            <h4>Categories</h4>
+                            <ul data-ng-init="getCategoriesListonsearch()">
+                            <li data-ng-if="categoryList.length > 0" data-ng-repeat="category in categoryList" id="{{ category._id }}"  ><input ng-click="filtercheckboxsearch(category.category_title,'categorycheckbox')" class="checkboxfilter" id="{{ category.category_title }}" type="checkbox"><a href="" data-ng-click="getSearch(category.category_title,'category')" data-ng-bind="category.category_title"></a></li>
+
+                            </ul>
+
+                           <h4>Brands</h4>
+                            <div class="select_ride">
+                            <ul data-ng-init="getBrandsListonsearch()">
+                            <li data-ng-if="brandList.length > 0" data-ng-repeat="brand in brandList" id="{{ brand._id }}"  ><input ng-click="filtercheckboxsearch(brand.brand_title,'brandcheckbox')" class="checkboxfilter" id="{{ brand.brand_title }}" type="checkbox"><a href="" data-ng-click="getSearch(brand.brand_title,'brand')" data-ng-bind="brand.brand_title"></a></li>
+
+                            </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                               
+                    <div class="col-lg-9 col-md-9 col-md-12" ng-init="currentPage = 0; pageSize = 6;">
+                        <div class="row" data-ng-init="getSearch('<%= searchkey %>','searchkeyword')">
+
+                        <div   class="col-lg-12 col-md-12 col-md-12 noresult" data-ng-if="shopProductscategorysearch.length == 0">
+                            No Results Found    
+                        </div>
+                            
+                        </div>
+                            <div   class="col-lg-4 col-md-6 col-md-12" data-ng-if="shopProductscategorysearch.length > 0" data-ng-repeat="result in shopProductscategorysearch | orderBy : order |  startFrom:currentPage*pageSize | limitTo:pageSize">
+
+                            <div class="item">
+                                    <div class="product">
+                                        <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left"><i class="glyphicon glyphicon-heart"></i> </a>
+                                        <div class="image">
+                                            <div class="quickview">
+                                                <a data-toggle="modal" class="btn btn-xs btn-quickview" href="#" data-target="">Quick View</a>
+                                            </div>     
+                                            
+                                            <img style="display:inline-block" ng-src="{{result.product_image[0]?('<%= pageurl %><%= page_url %>/public/uploads/'+ result.product_image[0]):'http://placehold.it/240x240'}}" alt="img" class="img-responsive shopproductlistimg"/>
+
+                                            </div>
+                                        <div class="description">
+                                            <h4><a href="#">{{ result.product_title }}</a></h4>
+                                        </div>
+                                        <div class="price"><span>${{result.product_price }}</span></div>
+                                        <div class="action-control">
+                                        <button class="btn btn-danger product-add-to-cart" id="{{result._id }}" type="button" data-toggle="modal" data-target="#myModal">
+                                                    <i class="glyphicon glyphicon-shopping-cart"> </i>Add to Cart
+                                        </button>
+                                        <input type="hidden" id="productidgear_{{result._id }}" value="{{ result._id }}">
+                                        <input type="hidden" id="quantityboxgear_{{ result._id }}" value="1">
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-12">
+
+                                <div aria-label="Page navigation" class="page_navigation">
+                                   <ul class="pagination">
+                                        <li>
+                                            <a ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1" href="javascript:void(0)" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                        
+                                        <li>   
+                                            <a ng-disabled="currentPage >= shopProductscategorysearch.length/pageSize - 1" ng-click="currentPage=currentPage+1" href="javascript:void(0)" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="eventsresults" ng-init="searchResults('<%= searchkey %>','events')">
+                <div class="event_listing">
+                <div class="title"><h1></h1>
+                    <p>We've got {{eventResults.length}} results</p>
+                    
+                </div>
+
+                <div class="listing">
+                    <div class="col-lg-3 col-md-3 col-md-12" >
+                       
+                        <div class="categorieslist">
+                            <h3>Filter</h3>
+                            <h4>Search by Date:</h4>
+                            <div class="form-group">
+                                    <div class="col-md-6 col-xs-12">
+                                        <input  value="" type="text" placeholder="From" id="startdate" class="form-control" name="eventstartDate">
+                                    </div>
+                                    <div class="col-md-6 col-xs-12">
+                                        <input  value="" type="text" placeholder="To" id="enddate" class="form-control" name="eventendDate" onchange="searchevents()">
+                                    </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-9 col-md-9 col-md-12" ng-init="currentPage = 0; pageSize = 6;">
+                        <div class="row">
+
+                        <div   class="col-lg-12 col-md-12 col-md-12 noresult" data-ng-if="eventResults.length == 0">
+                            No Results Found    
+                        </div>
+                            
+                        </div>
+                            <div   class="col-lg-4 col-md-6 col-md-12" data-ng-if="eventResults.length > 0" data-ng-repeat="result in eventResults | orderBy : order |  startFrom:currentPage*pageSize | limitTo:pageSize">
+
+                            <div class="item">
+                                    <div class="product">
+                                        <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left"><i class="glyphicon glyphicon-heart"></i> </a>
+                                        <div class="image">
+                                            <div class="quickview">
+                                                <a data-toggle="modal" class="btn btn-xs btn-quickview" href="/event?id={{result._id}}" data-target="">Quick View</a>
+                                            </div>     
+                                            
+                                            <img style="display:inline-block" ng-src="{{result.eventImage?('<%= pageurl %><%= page_url %>/'+ result.eventImage):'http://placehold.it/240x240'}}" alt="img" class="img-responsive shopproductlistimg"/>
+
+                                            </div>
+                                        <div class="description">
+                                            <h4><a href="/event?id={{result._id}}">{{ result.eventName }}</a></h4>
+                                        </div>
+                                        <div class="price"><span>{{result.eventLocation }}</span></div>
+                                        <div class="action-control">
+                                            
+                                            <a href="/event?id={{result._id}}" class="btn btn-danger">View Event</a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-12">
+
+                                <div aria-label="Page navigation" class="page_navigation">
+                                   <ul class="pagination">
+                                        <li>
+                                            <a ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1" href="javascript:void(0)" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                        
+                                        <li>   
+                                            <a ng-disabled="currentPage >= eventResults.length/pageSize - 1" ng-click="currentPage=currentPage+1" href="javascript:void(0)" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="peopleresults" ng-init="searchResults('<%= searchkey %>','people')">
+                
+                <div class="people_listing">
+                <div class="title"><h1></h1>
+                    <p>We've got {{peopleResults.length}} results</p>
+                    
+                </div>
+
+                <div class="listing">
+                    <div class="col-lg-3 col-md-3 col-md-12" >
+                       
+                        <div class="categorieslist">
+                            <h3>Filter</h3>
+                            <h4>Search by city:</h4>
+                            <div class="event_search_location">
+                             <div class="form-group">
+                                    <div class="col-md-12 col-xs-12">
+                                     <input type="text" placeholder="Please enter city" class="form-control" name="peoplesearchLocation" id="peoplesearchLocation"   ng-model="searchPlace" googleplacesearch />
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                            
+
+
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-9 col-md-9 col-md-12" ng-init="currentPage = 0; pageSize = 6;">
+                        <div class="row">
+
+                        <div   class="col-lg-12 col-md-12 col-md-12 noresult" data-ng-if="peopleResults.length == 0">
+                            No Results Found    
+                        </div>
+                            
+                        </div>
+                            <div   class="col-lg-4 col-md-6 col-md-12" data-ng-if="peopleResults.length > 0" data-ng-repeat="resultpeople in peopleResults | orderBy : order |  startFrom:currentPage*pageSize | limitTo:pageSize">
+
+                            <div class="item">
+                                    <div class="product">
+                                        <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left"><i class="glyphicon glyphicon-heart"></i> </a>
+                                        <div class="image">
+                                            <div class="quickview">
+                                                <a data-toggle="modal" class="btn btn-xs btn-quickview" href="/profile/{{resultpeople.local.username}}" data-target="">Quick View</a>
+                                            </div>     
+                                            
+                                            <img style="display:inline-block" ng-src="{{resultpeople.local.profileImage == 'http://placehold.it/300?text='+resultpeople.local.firstName ? resultpeople.local.profileImage : '/public/uploads/'+resultpeople.local.profileImage }}" alt="img" class="img-responsive shopproductlistimg"/>
+
+                                            </div>
+                                        <div class="description">
+                                            <h4><a href="/profile/{{resultpeople.local.username}}">{{ resultpeople.local.firstName }}&nbsp;{{ resultpeople.local.lastName }}</a></h4>
+                                        </div>
+                                        
+                                        <div class="searchpagelocation"><span>{{resultpeople.local.locationCity }}&nbsp;{{resultpeople.local.locationState }}&nbsp;{{resultpeople.local.locationCountry }}</span></div>
+
+                                        <div class="action-control">
+                                            
+                                            <a href="/profile/{{resultpeople.local.username}}" class="btn btn-danger">View Profile</a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-12">
+
+                                <div aria-label="Page navigation" class="page_navigation">
+                                   <ul class="pagination">
+                                        <li>
+                                            <a ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1" href="javascript:void(0)" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                        
+                                        <li>   
+                                            <a ng-disabled="currentPage >= peopleResults.length/pageSize - 1" ng-click="currentPage=currentPage+1" href="javascript:void(0)" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+           
+<!--            <div class="product_listing">
                 <div class="title"><h1>Search results</h1>
                     <p>We've got {{shopProductscategorysearch.length}} results</p>
                     
@@ -26,43 +424,20 @@
                             <h3>Filter</h3>
                             <h4>Categories</h4>
                             <ul data-ng-init="getCategoriesListonsearch()">
-                            <!--<li data-ng-if="categoryList.length > 0" data-ng-repeat="category in categoryList" id="{{ category._id }}"  ><a href="/categorysearch?catname={{ category.category_title }}" data-ng-bind="category.category_title"></a></li>-->
+                            <li data-ng-if="categoryList.length > 0" data-ng-repeat="category in categoryList" id="{{ category._id }}"  ><a href="/categorysearch?catname={{ category.category_title }}" data-ng-bind="category.category_title"></a></li>
                             <li data-ng-if="categoryList.length > 0" data-ng-repeat="category in categoryList" id="{{ category._id }}"  ><input ng-click="filtercheckboxsearch(category.category_title,'categorycheckbox')" class="checkboxfilter" id="{{ category.category_title }}" type="checkbox"><a href="" data-ng-click="getSearch(category.category_title,'category')" data-ng-bind="category.category_title"></a></li>
 
                             </ul>
-<!--                            <ul>
-                                <li><a href="#">Men</a></li>
-                                <li><a href="#">Women</a></li>
-                                <li><a href="#">Boy</a></li>
-                                <li><a href="#">Girl</a></li>
-                            </ul>-->
+
                            <h4>Brands</h4>
                             <div class="select_ride">
                             <ul data-ng-init="getBrandsListonsearch()">
-                            <!--<li data-ng-if="brandList.length > 0" data-ng-repeat="brand in brandList" id="{{ brand._id }}"  ><a href="/brandsearch?brandname={{ brand.brand_title }}" data-ng-bind="brand.brand_title"></a></li>-->
+                            <li data-ng-if="brandList.length > 0" data-ng-repeat="brand in brandList" id="{{ brand._id }}"  ><a href="/brandsearch?brandname={{ brand.brand_title }}" data-ng-bind="brand.brand_title"></a></li>
                             <li data-ng-if="brandList.length > 0" data-ng-repeat="brand in brandList" id="{{ brand._id }}"  ><input ng-click="filtercheckboxsearch(brand.brand_title,'brandcheckbox')" class="checkboxfilter" id="{{ brand.brand_title }}" type="checkbox"><a href="" data-ng-click="getSearch(brand.brand_title,'brand')" data-ng-bind="brand.brand_title"></a></li>
 
                             </ul>
                             </div>
-                           <!--  <h4>Ride Experience</h4>
-                            <div class="select_ride">
-                                <form>
-                                    <p><input type="checkbox"> <label>novice</label></p>
-                                    <p><input type="checkbox"> <label>intermediate</label></p>
-                                   <p> <input type="checkbox"> <label>expert</label></p>
-                                </form>
-                            </div>
-                            <h4>Ride Category</h4>
-                            <div class="select_ride">
-                                <form>
-                                    <p><input type="checkbox"> <label>superSport</label></p>
-                                    <p><input type="checkbox"> <label>cruiser</label></p>
-                                    <p><input type="checkbox"> <label>dual</label></p>
-                                    <p><input type="checkbox"> <label>sport</label></p>
-                                    <p><input type="checkbox"> <label>touring</label></p>
-                                   <p> <input type="checkbox"> <label>scooter</label></p>
-                                </form>
-                            </div>-->
+
                         </div>
                     </div>
 
@@ -75,7 +450,6 @@
                             
                         </div>
                             <div   class="col-lg-4 col-md-6 col-md-12" data-ng-if="shopProductscategorysearch.length > 0" data-ng-repeat="result in shopProductscategorysearch | orderBy : order |  startFrom:currentPage*pageSize | limitTo:pageSize">
-                    <!--<div class="col-lg-4 col-md-6 col-md-12" data-ng-if="shopProductscategorysearch.length > 0" dir-paginate="result in shopProductscategorysearch | itemsPerPage:2">-->
 
                             <div class="item">
                                     <div class="product">
@@ -90,11 +464,9 @@
                                             </div>
                                         <div class="description">
                                             <h4><a href="#">{{ result.product_title }}</a></h4>
-                                            <!--<span data-ng-if="result.product_size != ''" class="size">{{result.product_size}}</span>-->
                                         </div>
                                         <div class="price"><span>${{result.product_price }}</span></div>
                                         <div class="action-control">
-                                            <!--<a class="btn btn-danger"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a>-->
                                         <button class="btn btn-danger product-add-to-cart" id="{{result._id }}" type="button" data-toggle="modal" data-target="#myModal">
                                                     <i class="glyphicon glyphicon-shopping-cart"> </i>Add to Cart
                                         </button>
@@ -106,133 +478,8 @@
                                 </div>
                             </div>
                             
-                            
-                            
-<!--                            <div class="col-lg-4 col-md-6 col-md-12">
-                                <div class="item">
-                                    <div class="product">
-                                        <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left"><i class="glyphicon glyphicon-heart"></i> </a>
-                                        <div class="image">
-                                            <div class="quickview">
-                                                <a data-toggle="modal" class="btn btn-xs btn-quickview" href="#" data-target="">Quick View</a>
-                                            </div>
-                                            <a href="#"><img src="images/related_product.jpg" alt="img" class="img-responsive"></a>
-                                        </div>
-                                        <div class="description">
-                                            <h4><a href="#">Sequitur Mutationem </a></h4>
-                                            <span class="size">XL / XXL / S </span>
-                                        </div>
-                                        <div class="price"><span>$25</span></div>
-                                        <div class="action-control">
-                                            <a class="btn btn-danger"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-md-12">
-                                <div class="item">
-                                    <div class="product">
-                                        <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left"><i class="glyphicon glyphicon-heart"></i> </a>
-                                        <div class="image">
-                                            <div class="quickview">
-                                                <a data-toggle="modal" class="btn btn-xs btn-quickview" href="#" data-target="">Quick View</a>
-                                            </div>
-                                            <a href="#"><img src="images/related_product.jpg" alt="img" class="img-responsive"></a>
-                                        </div>
-                                        <div class="description">
-                                            <h4><a href="#">Sequitur Mutationem </a></h4>
-                                            <span class="size">XL / XXL / S </span>
-                                        </div>
-                                        <div class="price"><span>$25</span></div>
-                                        <div class="action-control">
-                                            <a class="btn btn-danger"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-md-12">
-                                <div class="item">
-                                    <div class="product">
-                                        <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left"><i class="glyphicon glyphicon-heart"></i> </a>
-                                        <div class="image">
-                                            <div class="quickview">
-                                                <a data-toggle="modal" class="btn btn-xs btn-quickview" href="#" data-target="">Quick View</a>
-                                            </div>
-                                            <a href="#"><img src="images/related_product.jpg" alt="img" class="img-responsive"></a>
-                                        </div>
-                                        <div class="description">
-                                            <h4><a href="#">Sequitur Mutationem </a></h4>
-                                            <span class="size">XL / XXL / S </span>
-                                        </div>
-                                        <div class="price"><span>$25</span></div>
-                                        <div class="action-control">
-                                            <a class="btn btn-danger"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-md-12">
-                                <div class="item">
-                                    <div class="product">
-                                        <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left"><i class="glyphicon glyphicon-heart"></i> </a>
-                                        <div class="image">
-                                            <div class="quickview">
-                                                <a data-toggle="modal" class="btn btn-xs btn-quickview" href="#" data-target="">Quick View</a>
-                                            </div>
-                                            <a href="#"><img src="images/related_product.jpg" alt="img" class="img-responsive"></a>
-                                        </div>
-                                        <div class="description">
-                                            <h4><a href="#">Sequitur Mutationem </a></h4>
-                                            <span class="size">XL / XXL / S </span>
-                                        </div>
-                                        <div class="price"><span>$25</span></div>
-                                        <div class="action-control">
-                                            <a class="btn btn-danger"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-md-12">
-                                <div class="item">
-                                    <div class="product">
-                                        <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left"><i class="glyphicon glyphicon-heart"></i> </a>
-                                        <div class="image">
-                                            <div class="quickview">
-                                                <a data-toggle="modal" class="btn btn-xs btn-quickview" href="#" data-target="">Quick View</a>
-                                            </div>
-                                            <a href="#"><img src="images/related_product.jpg" alt="img" class="img-responsive"></a>
-                                        </div>
-                                        <div class="description">
-                                            <h4><a href="#">Sequitur Mutationem </a></h4>
-                                            <span class="size">XL / XXL / S </span>
-                                        </div>
-                                        <div class="price"><span>$25</span></div>
-                                        <div class="action-control">
-                                            <a class="btn btn-danger"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>-->
                             <div class="col-md-12">
-<!--                                <div aria-label="Page navigation" class="page_navigation">
-                                  <ul class="pagination">
-                                    <li>
-                                      <a href="#" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                      </a>
-                                    </li>
-                                    <li><a href="#">1</a></li>
-                                    <li><a href="#">2</a></li>
-                                    <li><a href="#">3</a></li>
-                                    <li><a href="#">4</a></li>
-                                    <li><a href="#">5</a></li>
-                                    <li>
-                                      <a href="#" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                      </a>
-                                    </li>
-                                  </ul>
-                                </div>-->
+
                                 <div aria-label="Page navigation" class="page_navigation">
                                    <ul class="pagination">
                                         <li>
@@ -248,22 +495,15 @@
                                         </li>
                                     </ul>
 
-<!--                                <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
-                                    Previous
-                                </button>
-                                {{currentPage+1}}/{{shopProductscategorysearch.length/pageSize}}
-                                <button ng-disabled="currentPage >= shopProductscategorysearch.length/pageSize - 1" ng-click="currentPage=currentPage+1">
-                                    Next
-                                </button>-->
+
                                 </div>
 
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>-->
             </div>
         </div>
-    </div>
 </div>
 
 
@@ -312,4 +552,76 @@ $(document).on('click','.product-add-to-cart',function(){
     angular.element(this).scope().addToCartfromshop(product_id,quantity_box);
 });
 
+$(document).ready(function(){
+    $('#topresults').css('display','block');
+    $('#gearresults').css('display','none');
+    $('#eventsresults').css('display','none');
+    $('#peopleresults').css('display','none');
+    
+    
+    $("#startdate").datetimepicker({
+        minView : 2,
+        format: 'yyyy-mm-dd',
+        startDate:new Date(),
+        autoclose:true
+       
+    });
+
+    $("#enddate").datetimepicker({
+        minView : 2,
+        format: 'yyyy-mm-dd',
+        autoclose:true
+                
+    });
+    
+    $("#startdate").datetimepicker().datetimepicker("setDate", new Date());
+
+    $('#startdate').change(function(){
+           var startdate = $('#startdate').val();
+           $('#enddate').datetimepicker('setStartDate',startdate );  /* set future end dates */
+
+    });
+    
+    $('.btn-search').click(function(){
+        $('.btn-search').removeClass('active');
+        $(this).addClass('active');
+    });
+            
+});
+
+
+function showtop(){
+    $('#topresults').css('display','block');
+    $('#gearresults').css('display','none');
+    $('#eventsresults').css('display','none');
+    $('#peopleresults').css('display','none');
+}
+function showgear(){
+    $('#topresults').css('display','none');
+    $('#gearresults').css('display','block');
+    $('#eventsresults').css('display','none');
+    $('#peopleresults').css('display','none');
+}
+function showevents(){
+    $('#topresults').css('display','none');
+    $('#gearresults').css('display','none');
+    $('#eventsresults').css('display','block');
+    $('#peopleresults').css('display','none');
+}
+
+function showpeople(){
+    $('#topresults').css('display','none');
+    $('#gearresults').css('display','none');
+    $('#eventsresults').css('display','none');
+    $('#peopleresults').css('display','block');
+}
+
+function searchevents(){
+    var fromEventDate = $('#startdate').val();
+    var toEventDate = $('#enddate').val();
+    
+    var $scope = angular.element(document.getElementById("searchresult_page")).scope(); // get scope of shop controller
+    $scope.searchEvents(fromEventDate,toEventDate);
+    
+}
 </script>
