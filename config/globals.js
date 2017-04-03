@@ -46,7 +46,7 @@ module.exports = {
         'clientID'        : '1624372031202122', // your App ID
         'clientSecret'    : 'db55897a815b7d440644efe084d542f9', // your App Secret
         'callbackURL'     : websiteUrl+'/auth/facebook/callback',
-        'profileURL'      : 'https://graph.facebook.com/v2.5/me?fields=first_name,last_name,email,type=large'
+        'profileURL'      : 'https://graph.facebook.com/v2.5/me?fields=first_name,last_name,email'
     },
     
     //shop section configs
