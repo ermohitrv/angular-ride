@@ -107,7 +107,12 @@
                                     <div class="quickview">
                                         <a data-toggle="modal" class="btn btn-xs btn-quickview" href="/profile/{{peopleresult.local.username}}" data-target="">Quick View</a>
                                     </div>     
-                                    <img style="display:inline-block" ng-src="{{peopleresult.local.profileImage == 'http://placehold.it/300?text='+peopleresult.local.firstName ? peopleresult.local.profileImage : '/public/uploads/'+peopleresult.local.profileImage }}" alt="img" class="img-responsive shopproductlistimg"/>
+                                    <!--<img style="display:inline-block" ng-src="{{peopleresult.local.profileImage == 'http://placehold.it/300?text='+peopleresult.local.firstName ? peopleresult.local.profileImage : '/public/uploads/'+peopleresult.local.profileImage }}" alt="img" class="img-responsive shopproductlistimg"/>-->
+                                    <img style="display:inline-block" ng-src="{{ peopleresult.facebook.email == undefined ?  peopleresult.local.profileImage == 'http://placehold.it/300?text='+peopleresult.local.firstName ? peopleresult.local.profileImage : '/public/uploads/'+peopleresult.local.profileImage :  peopleresult.local.profileImage }}" alt="img" class="img-responsive shopproductlistimg"/>
+
+<!--                                    <img style="display:inline-block" data-ng-if="peopleresult.local.profileImage == 'http://placehold.it/300?text='+peopleresult.local.firstName" src="{{peopleresult.local.profileImage}}" alt="img" class="img-responsive shopproductlistimg"/>
+                                    <img style="display:inline-block" data-ng-if="peopleresult.facebook.email != '' && peopleresult.facebook.email != 'undefined'" src="{{peopleresult.local.profileImage}}" alt="img" class="img-responsive shopproductlistimg"/>
+                                    <img style="display:inline-block" data-ng-if="peopleresult.local.profileImage != ''" src="/public/uploads/{{peopleresult.local.profileImage}}" alt="img" class="img-responsive shopproductlistimg"/>-->
 
                                 </div>
                                 <div class="description">
