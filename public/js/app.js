@@ -233,6 +233,8 @@ app.controller('menuController',['$scope', '$http', function ($scope, $http) {
             $scope.stopwatch = time;
             
         }
+        
+        
  
 }]);
 
@@ -634,7 +636,7 @@ app.controller('shopController',['$scope', '$http', '$sce',function ($scope, $ht
         
         var data = { 
             fromEventDate: fromEventDate, 
-            toEventDate: toEventDate
+            toEventDate: toEventDate,
         };
         var config = {
             params: data,

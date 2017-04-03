@@ -2615,22 +2615,19 @@ router.post('/search-results', function(req, res){
 router.post('/search-events', function(req, res){
     var fromEventDate = req.body.params.fromEventDate;
     var toEventDate = req.body.params.toEventDate;
-    
-    //fromEventDate = fromEventDate.toISOString();
-    //toEventDate = toEventDate.toISOString();
-    
-    console.log(fromEventDate+" "+toEventDate);
-    //res.send(true);
+   
     Events.find({startDate: {$gte: fromEventDate, $lte: toEventDate}}, function(err, eventResults){
 
-            if(!err){               
-                res.json(eventResults);
-            }else{
-                console.log("no results");
-                res.json({});
-            }
-          
+                if(!err){               
+                    res.json(eventResults);
+                }else{
+                    console.log("no results");
+                    res.json({});
+                }
+
     }).sort({'startDate':-1});
+   
+   
     
 });
 
