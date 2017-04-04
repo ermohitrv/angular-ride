@@ -1204,29 +1204,35 @@ app.controller('friendsController',['$scope', '$http', function ($scope, $http, 
         //alert(userprofileemail+" "+counttype);
         var data = { 
             counttype         : counttype, 
-            userprofileemail  : userprofileemail, 
+            userprofileemail  : 'tester@rvtech.com' 
         };
         var config = {
             params: data,
             headers: { 'Accept': 'application/json' }
         };
         
-//        $http.post('/count-friends',config).success(function (response, status, headers, config){
-//            
-////            if(response.status == "success" && counttype == "friends"){
-////                
-////                $scope.totalFriends = response.countfriends;
-////                
-////            }
-////            if(response.status == "success" && counttype == "followers"){
-////                $scope.totalFollowers = response.countfollowers;
-////            }
-//
-//            }).error(function(err){
-//                
-//               console.log('Oops! Error occur'+err);
-//               
-//        }); 
+        $http.post('/count-friends',config).success(function (response, status, headers, config){
+            
+            if(response.status == "success" && counttype == "friends"){
+                if(response.countfriends == 1){
+                    $scope.totalFriends = response.countfriends+" Friend";
+                }
+                else if(response.countfriends > 1){
+                $scope.totalFriends = response.countfriends+" Friends";
+                }
+                
+            }
+            if(response.status == "success" && counttype == "followers"){
+               
+                $scope.totalFollowers = response.countfollowers; 
+                
+            }
+
+            }).error(function(err){
+                
+               console.log('Oops! Error occur'+err);
+               
+        }); 
 
     };
     

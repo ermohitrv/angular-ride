@@ -2777,31 +2777,31 @@ router.post('/invite-friend', function(req, res){
 router.post('/count-friends' , function(req, res) {
     
     var counttype = req.body.params.counttype;
-    var userprofileemail = req.body.parmas.userprofileemail;
+    var userprofileemail = req.body.params.userprofileemail;
     
-    console.log("userprofileemail wewew"+userprofileemail);
-    res.send(true);
-//    if(counttype == "friends"){
-//        Friends.count({$and : [{ $or : [ { 'friendRequestSentTo' : userprofileemail }, { 'friendRequestSentBy' : userprofileemail} ] },{ $or : [ { 'friendRequestApprovalStatus' : 'accept'}]}]}, function(err, countfriends){
-//            
-//            console.log(countfriends)
-//             if(err){
-//                 res.status(200).json({"status": "error"}); 
-//            }else{
-//                 res.status(200).json({"status": "success","countfriends": countfriends}); 
-//            }
-//        }); 
-//    }
-//    if(counttype == "followers"){
-//        Followers.count({'followTo':userprofileemail}, function(err, countfollowers){
-//
-//             if(err){
-//                 res.status(200).json({"status": "error"}); 
-//            }else{
-//                 res.status(200).json({"status": "success","countfollowers": countfollowers}); 
-//            }
-//        }); 
-//    }
+    console.log("userprofileemail"+userprofileemail);
+    //res.send(true);
+    if(counttype == "friends"){
+        Friends.count({$and : [{ $or : [ { 'friendRequestSentTo' : userprofileemail }, { 'friendRequestSentBy' : userprofileemail} ] },{ $or : [ { 'friendRequestApprovalStatus' : 'accept'}]}]}, function(err, countfriends){
+            
+            console.log(countfriends)
+             if(err){
+                 res.status(200).json({"status": "error"}); 
+            }else{
+                 res.status(200).json({"status": "success","countfriends": countfriends}); 
+            }
+        }); 
+    }
+    if(counttype == "followers"){
+        Followers.count({'followTo':userprofileemail}, function(err, countfollowers){
+
+             if(err){
+                 res.status(200).json({"status": "error"}); 
+            }else{
+                 res.status(200).json({"status": "success","countfollowers": countfollowers}); 
+            }
+        }); 
+    }
     
 });
 
