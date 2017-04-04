@@ -1953,7 +1953,7 @@ router.post('/get-eventsinvitation-list', middleware.isLoggedIn, function (req, 
       Invitation.aggregate(
         [   
             {
-                $match:{'invitationSentTo': req.user.local.username ,'invitationApprovalStatus' : 'pending'}
+                $match:{'invitationSentTo': req.user.local.email ,'invitationApprovalStatus' : 'pending'}
             },
            
             {
@@ -1984,7 +1984,7 @@ router.post('/get-eventsinvitation-list', middleware.isLoggedIn, function (req, 
         ]
         ,function (err, eventsInvitation) {
         if(eventsInvitation){
-              console.log(eventsInvitation);
+              
               //res.send(eventsInvitation);
              res.status(200).json({"status": "success","eventsInvitation":eventsInvitation});
         }
