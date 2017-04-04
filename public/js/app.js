@@ -1150,6 +1150,86 @@ app.controller('friendsController',['$scope', '$http', function ($scope, $http, 
         });  
     };
     
+    $scope.listEventsInvite = function(userprofileemail){
+        
+        var data = { 
+            userprofileemail: userprofileemail, 
+        }; 
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+    $http.post('/list-events-invite',config).success(function (response, status, headers, config){
+            
+            $scope.eventsinviteList = response;
+           
+            
+        }).error(function(err){
+           console.log('Oops! Error occur'+err);
+        });  
+    };
+    
+    
+    $scope.inviteFriend = function(userprofileemail){
+        var selectedeventArray = [];
+        $("input:checkbox[name=selectevent]:checked").each(function(){
+            
+            selectedeventArray.push($(this).val());
+        });
+        
+         var data = { 
+            userprofileemail  : userprofileemail, 
+            selectedeventArray: selectedeventArray
+        };
+        var config = {
+            params: data,
+            headers: { 'Accept': 'application/json' }
+        };
+        
+        $http.post('/invite-friend',config).success(function (response, status, headers, config){
+            if(response == "success"){
+                $('.selecteventcheckbox').attr('checked', false);
+                $('.selectalleventcheckbox').attr('checked', false);
+            }
+
+            }).error(function(err){
+                
+               console.log('Oops! Error occur'+err);
+               
+        }); 
+
+    };
+    
+    $scope.countFriendsFollowers = function(userprofileemail,counttype){
+        //alert(userprofileemail+" "+counttype);
+        var data = { 
+            counttype         : counttype, 
+            userprofileemail  : userprofileemail, 
+        };
+        var config = {
+            params: data,
+            headers: { 'Accept': 'application/json' }
+        };
+        
+//        $http.post('/count-friends',config).success(function (response, status, headers, config){
+//            
+////            if(response.status == "success" && counttype == "friends"){
+////                
+////                $scope.totalFriends = response.countfriends;
+////                
+////            }
+////            if(response.status == "success" && counttype == "followers"){
+////                $scope.totalFollowers = response.countfollowers;
+////            }
+//
+//            }).error(function(err){
+//                
+//               console.log('Oops! Error occur'+err);
+//               
+//        }); 
+
+    };
+    
 }]);
 
 app.directive('bindUnsafeHtml', ['$compile', function ($compile) {

@@ -108,14 +108,14 @@
      
                <!-- start:user info -->
                <div class="panel panel-default">
-                    <div class="panel-heading">
+                    <div class="panel-heading" style="border-bottom:none;height:40px">
                      <header class="panel-title">
                         <div class="text-center">
 
                         <% 
                         if(user){
                         if(user.local.username != userprofile.local.username){ %>   
-                        <div style="float:left;width:50%">
+                        <div>
                         <li class="active friendsul"  id="addfriend"  data-ng-if="friendstatus.friendRequestApprovalStatus != 'accept' && friendstatus.friendRequestApprovalStatus != 'pending'"><a href="javascript:void(0);" ng-click="sendRequest('<%= userprofile.local.email %>')" class="btn btn-primary">Add Friend</a></li>
                         <li class="active friendsul"  id="requestsent"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending' && friendstatus.friendRequestSentBy == '<%= user.local.email %>'"><a href="javascript:void(0)" class="btn btn-primary" >Request Sent</a></li>         
                        
@@ -132,6 +132,7 @@
                             <li class="active friendsul" data-ng-if="followstatus == 1" ng-mouseenter="changeFollowButtonText('enter')" ng-mouseleave="changeFollowButtonText('leave')"  id="follow"><a href="javascript:void(0);"  ng-click="unFollow('<%= userprofile.local.email %>','<%= user.local.email %>')" class="btn btn-primary" id="followtext">Following<!--&nbsp;&nbsp;<i id="followingtick" class="fa fa-check" aria-hidden="true"></i>--></a></li>
 
                         </div>
+                        <div data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept' && eventsinviteList.length > 0"><li  class="active friendsul"><a href="javascript:void(0);" class="btn btn-primary" data-toggle="modal" data-target="#eventsinvitemodal">Invite</a></li></div>
                          <% }} %>
                         </div>
                      </header>
@@ -139,7 +140,7 @@
                   <div class="panel-heading">
                      <header class="panel-title">
                         <div class="text-center">
-                           <strong>Rider</strong>
+                           <strong></strong>
                         </div>
                      </header>
                   </div>
@@ -149,6 +150,8 @@
                         <h3><%= userprofile.local.firstName+' '+userprofile.local.lastName %></h3>
                         <small class="label label-warning"><%= userprofile.local.locationCountry %></small>
                         <p><%= userprofile.userBio  %></p>
+                        <p data-ng-init="countFriendsFollowers('<%= userprofile.local.email %>','friends')"><span>2&nbsp;</span>Friends</p>
+                        <p data-ng-init="countFriendsFollowers('<%= userprofile.local.email %>','followers')">Followed by <span>10&nbsp;</span> people</p>
                         <p class="sosmed-author">
                            <% if(userprofile.facebookURL) { %><a href="#"><i class="fa fa-facebook" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook"></i></a><% } %>
                            <% if(userprofile.twitterURL) { %><a href="#"><i class="fa fa-twitter" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"></i></a><% } %>
@@ -198,5 +201,47 @@
             </div>
          </div>
       </div>
+        <% 
+        if(user){
+        if(user.local.username != userprofile.local.username){ %>   
+        <div class="modal fade in" id="eventsinvitemodal" role="dialog" aria-labelledby="eventsinvitemodal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="modalbtnclose">&times;</button>
+                            <h4 class="modal-title">Events: <span id="eventmodaltext"></span></h4>
+                                 </div>
+                            <div class="modal-body" data-ng-init="listEventsInvite('<%= userprofile.local.email %>')">
+                                <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
+                                        <thead>
+                                            <tr role="row">
+                                                <th style="width:12%" class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"></th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Event Name</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Select All&nbsp;&nbsp;<input ng-model="all" class="selectalleventcheckbox"type="checkbox" id="selectallevent" name="selectallevent"  /></th>
+                                            </tr>
+                                        </thead>
+                                       
+                                        <tbody>
+                                            <tr data-ng-if="eventsinviteList.length > 0" data-ng-repeat="eventsinvite in eventsinviteList" id="{{ eventsinvite._id }}" role="row" class="odd">
+                                                
+                                                <td><img class="eventimage" src="/{{eventsinvite.eventImage}}"/></td>
+                                                <td data-ng-bind="eventsinvite.eventName"></td>                                               
+                                                <td>
+                                                  <input data-ng-if="eventsinvite.isInvited == 0" ng-checked="all" ng-model="selected[eventsinvite._id]" type="checkbox" id="selectevent" name="selectevent" class="selecteventcheckbox"   value="{{ eventsinvite._id }}" />
+                                                  <label data-ng-if="eventsinvite.isInvited > 0">Invited</label>
+                                                </td>
+                                               
+                                            </tr>                                           
+                                        </tbody>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+       
+                          <button type="button" class="btn btn-primary" data-dismiss="modal" id="modalbtnok" data-ng-click="inviteFriend('<%= userprofile.local.email %>')">Send Invitation</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% }} %>
    </div>
 </section>

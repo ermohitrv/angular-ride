@@ -1847,30 +1847,30 @@ router.post('/unfriend',middleware.isLoggedIn, function(req, res){
 router.get('/send-invitation',middleware.isLoggedIn, function(req, res){
    
     var eventId = req.query.eventId;
-    var username   = req.user.local.username;
+    var useremail   = req.user.local.email;
   
-   Friends.find({$and : [{ $or : [ { 'friendRequestSentTo' : username }, { 'friendRequestSentBy' : username} ] },{ $or : [ { 'friendRequestApprovalStatus' : 'accept'}]}]}, function(err, friendsdata){
+   Friends.find({$and : [{ $or : [ { 'friendRequestSentTo' : useremail }, { 'friendRequestSentBy' : useremail} ] },{ $or : [ { 'friendRequestApprovalStatus' : 'accept'}]}]}, function(err, friendsdata){
          
         if(friendsdata){
             for(var i = 0; i < friendsdata.length; i++ ){
-            var friendsusername = "";
+            var friendsuseremail = "";
             console.log(friendsdata[i].friendRequestSentBy+" "+friendsdata[i].friendRequestSentTo);
-            if(friendsdata[i].friendRequestSentBy == username){
-                friendsusername = friendsdata[i].friendRequestSentTo;
+            if(friendsdata[i].friendRequestSentBy == useremail){
+                friendsuseremail = friendsdata[i].friendRequestSentTo;
             }
-            else if(friendsdata[i].friendRequestSentTo == username){
-                friendsusername = friendsdata[i].friendRequestSentBy;
+            else if(friendsdata[i].friendRequestSentTo == useremail){
+                friendsuseremail = friendsdata[i].friendRequestSentBy;
             }
-            console.log("friendsusername"+friendsusername);
-            User.findOne({'local.username': friendsusername}, function (err, userdata) {
+            console.log("friendsuseremail"+friendsuseremail);
+            User.findOne({'local.email': friendsuseremail}, function (err, userdata) {
             
-                Invitation.findOne({'invitationSentTo': friendsusername,'eventId':eventId}, function (err, joineventsdata) {
+                Invitation.findOne({'invitationSentTo': friendsuseremail,'eventId':eventId}, function (err, joineventsdata) {
                     if (!joineventsdata) {
 
                         var objInvitation               = new Invitation();
                         objInvitation.eventId           = eventId;
-                        objInvitation.invitationSentTo  = userdata.local.username;
-                        objInvitation.invitationSentBy  = username;
+                        objInvitation.invitationSentTo  = userdata.local.email;
+                        objInvitation.invitationSentBy  = useremail;
 
 
                         objInvitation.save(function (err) {
@@ -1880,8 +1880,8 @@ router.get('/send-invitation',middleware.isLoggedIn, function(req, res){
                         }
                         else{   
                                 var objActivity  = new Activity();
-                                objActivity.notificationTo = userdata.local.username;
-                                objActivity.notificationBy = req.user.local.username;
+                                objActivity.notificationTo = userdata.local.email;
+                                objActivity.notificationBy = req.user.local.email;
                                 objActivity.notificationType = "invitation";
                                 objActivity.save(function (err) {
                                 
@@ -2648,6 +2648,160 @@ router.post('/search-people', function(req, res){
             }
           
     });
+    
+});
+
+router.post('/list-events-invite', function(req, res){
+    
+//    Events.find({'userEmail':new RegExp(req.user.local.email, 'i')}, function(err, eventResults){
+//
+//            if(!err){               
+//                res.json(eventResults);
+//            }else{
+//                console.log("no results");
+//                res.json({});
+//            }
+//          
+//    });
+      
+      var userprofileemail = req.body.params.userprofileemail;
+      Events.aggregate([
+                    {
+                        $match:{'userEmail': new RegExp(req.user.local.email, 'i')}
+                    },
+                    {
+                        $lookup:
+                                {
+                                    from: "invitations",
+                                    localField: "_id",
+                                    foreignField: "eventId",
+                                    as: "childs"
+                                 }
+                    },
+                    {
+                        $project:
+                                {
+                                   
+                                    '_id':1,
+                                    'eventName':1,
+                                    'eventImage':1,
+                                    
+                                    "childs": {
+                                       "$filter": {
+                                           "input": "$childs",
+                                           "as": "child",
+                                           "cond": { "$eq": [ "$$child.invitationSentTo", userprofileemail ] }
+                                       }
+                                    }
+                                    
+                                }
+                    },
+                     
+                    {
+                        $project:
+                                {
+                                   
+                                    '_id':1,
+                                    'eventName':1,
+                                    'eventImage':1,            
+                                    "isInvited": { $size: "$childs" }
+                                    
+                                }
+                    }
+            
+        ]
+        ,function (err, eventResults) {
+           
+        if(!err){
+            res.json(eventResults);
+        }else{
+            res.json({});
+        }
+    });
+
+
+});
+
+router.post('/invite-friend', function(req, res){
+    
+    var userprofileemail    = req.body.params.userprofileemail;
+    var selectedeventArray = req.body.params.selectedeventArray;
+    console.log(selectedeventArray);
+    var eventId = "";
+    for(var i = 0; i < selectedeventArray.length; i++){
+    var eventId = selectedeventArray[i];
+    
+    console.log("eventId"+eventId);
+    Events.findOne({'_id': eventId}, function (err, event) {
+    Invitation.findOne({'invitationSentTo': userprofileemail,'eventId':event._id}, function (err, invitationeventsdata) {
+                    if (!invitationeventsdata) {
+
+                        var objInvitation               = new Invitation();
+                        objInvitation.eventId           = event._id;
+                        objInvitation.invitationSentTo  = userprofileemail;
+                        objInvitation.invitationSentBy  = req.user.local.email;
+
+
+                        objInvitation.save(function (err) {
+                        if(err){
+                                console.log("invitation send error");
+                                 
+                        }
+                        else{   
+                                var objActivity  = new Activity();
+                                objActivity.notificationTo = userprofileemail;
+                                objActivity.notificationBy = req.user.local.email;
+                                objActivity.notificationType = "invitation";
+                                objActivity.save(function (err) {
+                                
+                                    console.log("invitation send");
+                                });
+                        }
+
+                    });
+                    }else{
+
+                        console.log("Invitation already sent");
+
+                    }
+    });
+    });
+   
+    }
+    
+    res.json("success");
+    
+});
+
+
+router.post('/count-friends' , function(req, res) {
+    
+    var counttype = req.body.params.counttype;
+    var userprofileemail = req.body.parmas.userprofileemail;
+    
+    console.log("userprofileemail wewew"+userprofileemail);
+    res.send(true);
+//    if(counttype == "friends"){
+//        Friends.count({$and : [{ $or : [ { 'friendRequestSentTo' : userprofileemail }, { 'friendRequestSentBy' : userprofileemail} ] },{ $or : [ { 'friendRequestApprovalStatus' : 'accept'}]}]}, function(err, countfriends){
+//            
+//            console.log(countfriends)
+//             if(err){
+//                 res.status(200).json({"status": "error"}); 
+//            }else{
+//                 res.status(200).json({"status": "success","countfriends": countfriends}); 
+//            }
+//        }); 
+//    }
+//    if(counttype == "followers"){
+//        Followers.count({'followTo':userprofileemail}, function(err, countfollowers){
+//
+//             if(err){
+//                 res.status(200).json({"status": "error"}); 
+//            }else{
+//                 res.status(200).json({"status": "success","countfollowers": countfollowers}); 
+//            }
+//        }); 
+//    }
     
 });
 

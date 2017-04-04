@@ -14,22 +14,17 @@
         <group>
             <file>file:/var/www/html/rideprix/views/frontend/checkout.ejs</file>
             <file>file:/var/www/html/rideprix/views/frontend/cart.ejs</file>
-            <file>file:/var/www/html/rideprix/models/products.js</file>
-            <file>file:/var/www/html/rideprix/models/events.js</file>
-            <file>file:/var/www/html/rideprix/views/frontend/classified.ejs</file>
             <file>file:/var/www/html/rideprix/views/frontend/events.ejs</file>
             <file>file:/var/www/html/rideprix/views/frontend/partial/profile-nav.ejs</file>
             <file>file:/var/www/html/rideprix/views/frontend/search.ejs</file>
-            <file>file:/var/www/html/rideprix/views/frontend/product-detail.ejs</file>
             <file>file:/var/www/html/rideprix/routes/api.js</file>
             <file>file:/var/www/html/rideprix/public/css/style.css</file>
             <file>file:/var/www/html/rideprix/public/js/front.js</file>
             <file>file:/var/www/html/rideprix/routes/index.js</file>
-            <file>file:/var/www/html/rideprix/views/frontend/search%20(copy).ejs</file>
             <file>file:/var/www/html/rideprix/public/js/app.js</file>
             <file>file:/var/www/html/rideprix/routes/product.js</file>
             <file>file:/var/www/html/rideprix/routes/admin.js</file>
-            <file>file:/var/www/html/rideprix/models/user.js</file>
+            <file>file:/var/www/html/rideprix/views/frontend/user-profile.ejs</file>
         </group>
     </open-files>
 </project-private>
