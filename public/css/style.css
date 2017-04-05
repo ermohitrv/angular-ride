@@ -2763,10 +2763,11 @@ li#header_inbox_bar i.fa.fa-times {
 .description-wrap .description h4 {
   margin: 0 0 10px;
 }
-.description-wrap{
-    display:inline-block;
-    width:100%;
-    padding:20px 0px;
+.description-wrap {
+ display: inline-block;
+ min-height: 160px;
+ padding: 20px 0;
+ width: 100%;
 }
 .description-wrap .action-control {
   padding: 0;
