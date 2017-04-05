@@ -36,6 +36,7 @@
 
                                     <img style="display:inline-block" ng-src="{{result.product_image[0]?('<%= pageurl %><%= page_url %>/public/uploads/'+ result.product_image[0]):'http://placehold.it/240x240'}}" alt="img" class="img-responsive shopproductlistimg"/>
                                 </div>
+                                <div class="description-wrap">
                                 <div class="description">
                                     <h4><a href="/product/{{result.product_permalink}}">{{ result.product_title }}</a></h4>
                                 </div>
@@ -46,6 +47,7 @@
                                     </button>
                                     <input type="hidden" id="productidgear_{{result._id }}" value="{{ result._id }}">
                                     <input type="hidden" id="quantityboxgear_{{ result._id }}" value="1"> 
+                                </div>
                                 </div>
                             </div>
                         </div>
@@ -75,12 +77,14 @@
                                     </div>     
                                     <img style="display:inline-block" ng-src="{{eventresult.eventImage?('<%= pageurl %><%= page_url %>/'+ eventresult.eventImage):'http://placehold.it/240x240'}}" alt="img" class="img-responsive shopproductlistimg"/>
                                 </div>
+                            <div class="description-wrap">
                             <div class="description">
                                 <h4><a href="/event?id={{eventresult._id}}">{{ eventresult.eventName }}</a></h4>
                             </div>
                             <div class="searchpagelocation"><span>{{eventresult.eventLocation }}</span></div>
                             <div class="action-control">
                                 <a href="/event?id={{eventresult._id}}" class="btn btn-danger">View Event</a>
+                            </div>
                             </div>
                             </div>
                         </div>
@@ -115,6 +119,7 @@
                                     <img style="display:inline-block" data-ng-if="peopleresult.local.profileImage != ''" src="/public/uploads/{{peopleresult.local.profileImage}}" alt="img" class="img-responsive shopproductlistimg"/>-->
 
                                 </div>
+                                <div class="description-wrap">
                                 <div class="description">
                                     <h4><a href="#">{{ peopleresult.local.firstName }}&nbsp;{{ peopleresult.local.lastName }}</a></h4>
                                 </div>
@@ -123,6 +128,7 @@
                                     <a href="/profile/{{peopleresult.local.username}}" class="btn btn-danger">View Profile</a>
                                     
                                 </div>
+                                 </div>
                             </div>
                         </div>
                     </div>
@@ -191,6 +197,7 @@
                                             <img style="display:inline-block" ng-src="{{result.product_image[0]?('<%= pageurl %><%= page_url %>/public/uploads/'+ result.product_image[0]):'http://placehold.it/240x240'}}" alt="img" class="img-responsive shopproductlistimg"/>
 
                                             </div>
+                                        <div class="description-wrap">
                                         <div class="description">
                                             <h4><a href="/product/{{result.product_permalink}}">{{ result.product_title }}</a></h4>
                                         </div>
@@ -202,6 +209,7 @@
                                         <input type="hidden" id="productidgear_{{result._id }}" value="{{ result._id }}">
                                         <input type="hidden" id="quantityboxgear_{{ result._id }}" value="1">
                                         
+                                        </div>
                                         </div>
                                     </div>
                                 </div>
@@ -278,6 +286,7 @@
                                             <img style="display:inline-block" ng-src="{{result.eventImage?('<%= pageurl %><%= page_url %>/'+ result.eventImage):'http://placehold.it/240x240'}}" alt="img" class="img-responsive shopproductlistimg"/>
 
                                             </div>
+                                        <div class="description-wrap">
                                         <div class="description">
                                             <h4><a href="/event?id={{result._id}}">{{ result.eventName }}</a></h4>
                                         </div>
@@ -286,6 +295,7 @@
                                             
                                             <a href="/event?id={{result._id}}" class="btn btn-danger">View Event</a>
 
+                                        </div>
                                         </div>
                                     </div>
                                 </div>
@@ -363,6 +373,7 @@
                                             <img style="display:inline-block" ng-src="{{resultpeople.local.profileImage == 'http://placehold.it/300?text='+resultpeople.local.firstName ? resultpeople.local.profileImage : '/public/uploads/'+resultpeople.local.profileImage }}" alt="img" class="img-responsive shopproductlistimg"/>
 
                                             </div>
+                                        <div class="description-wrap">
                                         <div class="description">
                                             <h4><a href="/profile/{{resultpeople.local.username}}">{{ resultpeople.local.firstName }}&nbsp;{{ resultpeople.local.lastName }}</a></h4>
                                         </div>
@@ -373,6 +384,7 @@
                                             
                                             <a href="/profile/{{resultpeople.local.username}}" class="btn btn-danger">View Profile</a>
 
+                                        </div>
                                         </div>
                                     </div>
                                 </div>

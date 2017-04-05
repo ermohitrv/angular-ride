@@ -2725,3 +2725,65 @@ li#header_inbox_bar i.fa.fa-times {
 #conntdown .flip-clock-wrapper ul{
     width:50px !important;
 }
+
+
+.search_listing .product {
+ background: #fff none repeat scroll 0 0;
+ border: medium none;
+ box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+ cursor: pointer;
+ display: block;
+ height: auto;
+ min-height: auto;
+ position: relative;
+ text-align: center;
+ transition: all 0.3s ease 0s;
+}
+
+.search_listing .product:hover{
+ border: medium none;
+}
+.search_listing .product::after {
+ background-color: #c9302c;
+ bottom: 0;
+ content: "";
+ height: 4px;
+ left: 0;
+ position: absolute;
+ right: 0;
+ transition: all 0.5s ease 0s;
+ width: 0;
+}
+.search_listing .product:hover::after {
+ width: 100%;
+}
+.search_listing .product:hover .action-control button ,.search_listing .product:hover .action-control a{
+ background-color: #c9302c;
+}
+.description-wrap .description h4 {
+  margin: 0 0 10px;
+}
+.description-wrap{
+    display:inline-block;
+    width:100%;
+    padding:20px 0px;
+}
+.description-wrap .action-control {
+  padding: 0;
+}
+.description-wrap .price {
+  margin-bottom: 10px;font-size:14px;
+}
+.item .description-wrap h4 a {
+ 
+  font-size: 14px;
+  
+}
+.searchpagelocation {
+  margin-bottom: 10px;
+}
+.description-wrap .action-control .btn-danger {
+  font-size: 16px;
+  min-width: 140px;
+  padding: 8px 20px;
+}

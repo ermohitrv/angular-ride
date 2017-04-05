@@ -8,8 +8,8 @@ var globalConfig    = require('../config/globals.js');
 var nodemailer      = require("nodemailer");
 var friends         = require('../models/friends');
 var Events          = require('../models/events');
-var Joinevents = require('../models/joinevents');
-var moment      = require("moment");
+var Joinevents      = require('../models/joinevents');
+var moment          = require("moment");
 var FCM = require('fcm-node');
 var serverKey = 'AAAAFYFV6mc:APA91bFB4RWwB7eaQL_AsyFvg1Dy_TWP-S4g9tWmn5XsaCcS-vR_MNMZbAjsHtziRxNtIZKHBF9bTFWOtvLhdXDJFjppLWf0_tYaktvMEuNzTciCUTpD8qTWuKee5bID0EP4pUo-EFuE';
 var fcm = new FCM(serverKey);
@@ -2701,6 +2701,127 @@ router.post('/get-friends-list', function(req, res){
 
 });
 
+
+router.get('/send-location', function(req, res){
+    
+//    var route               = 1;
+//        var email               = req.body.email;
+//        var currentLocationLat  = req.body.currentLocationLat;
+//        var currentLocationLong = req.body.currentLocationLong;
+    
+        var email                  = 'preeti_dev@rvtechnologies.co.in';
+        var currentlocationLat     = '40';
+        var currentlocationLng     = '-73';
+    
+        var jsonRoute =  jsonRoutePoints();
+        var points = 0;
+        var isRouteCompleted = "ONGOING";
+       
+        if(email != "" && email != undefined){
+        RpRoutes.findOne({$and : [{ $or : [ { 'isRouteCompleted' : 'CREATED' }, { 'isRouteCompleted' : 'ONGOING'} ] },{ $or : [ { email : { $regex : new RegExp(email, "i")}}]}]}, function(err, getrproutes){
+                    if(err){
+                        console.log("route error caught 1");
+                                res.json({ 
+                                    success: false, 
+                                    data: null, 
+                                    message: err, 
+                                    code: 400
+                                });
+                       
+                    }
+                    else{
+                        
+                       var route = getrproutes.route;
+                       var startinglocationLat = getrproutes.startinglocationLat;
+                       var startinglocationLng = getrproutes.startinglocationLng;
+                       var endinglocationLat   = getrproutes.endinglocationLat;
+                       var endinglocationLng   = getrproutes.endinglocationLng;
+                       
+                        // function to calculate distance completed
+                        var distanceCompleted = distance_completed(startinglocationLat,startinglocationLng,currentlocationLat,currentlocationLng);
+                       
+                        // function to calculate total distance
+                        var totalDistance = total_distance(startinglocationLat,startinglocationLng,endinglocationLat,endinglocationLng);
+                        var diffDistance = totalDistance - distanceCompleted; //calculate near distance
+                        var distInmeters = diffDistance/1000;  // distance in meters
+                        var roundDist = Math.round(distInmeters);
+                        console.log("distancecompleted : "+distanceCompleted);
+                        console.log("totaldistance : "+totalDistance);
+                        console.log("diffDistance : "+diffDistance);
+                        console.log("distInmeters : "+distInmeters);
+                        console.log("roundDist : "+roundDist);
+                        if(roundDist <= 10 ){   
+                            isRouteCompleted = "COMPLETED";
+                        }
+                        else{
+                            isRouteCompleted = "ONGOING";
+                        }
+                        
+                        var pointsperkm = jsonRoute.routes.route1.pointsPerKm;    
+                        var bonuspoints = jsonRoute.routes.route1.bonusPoints;
+                        points += distanceCompleted * pointsperkm;
+                        points += bonuspoints;
+                       
+                        RpRoutes.update({ 
+                                'email': { $regex : new RegExp(email, "i") } ,
+                                'route': route
+                            },
+                            { 
+                                $set:   { 
+                                            'totalDistanceCompleted': distanceCompleted,
+                                            'points':points
+                                        } 
+                            },
+                            { multi: true },
+                        function(err, rprouteinfo){
+
+                             if (err){
+                                console.log("route error caught 3");
+                                res.json({ 
+                                    success: false, 
+                                    data: null, 
+                                    message: err, 
+                                    code: 400
+                                });
+                            }else{
+
+
+                                res.json({ 
+                                    success: true,
+                                    data: 
+                                        {
+
+                                            email       :email,
+                                            route       :route,
+                                            isRouteCompleted :isRouteCompleted,
+                                            points      : points
+
+                                        },
+                                    message: globalConfig.successUpdate, 
+                                    code: 200
+                                });
+                            }
+                        }); 
+                       
+                       
+                    }
+
+        });
+    }
+    else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+    }    
+        //res.send(jsonroute.routes);
+    
+    
+});
+
+
 // 32 character random string token
 function random_token(){
   var text = "";
@@ -2710,4 +2831,72 @@ function random_token(){
       text += possible.charAt(Math.floor(Math.random() * possible.length));
   return text; 
 }
+
+
+function jsonRoutePoints(){
+var jsonarray = {
+                        "routes":{
+                                    route1: 
+                                        {                                       
+                                         "pointsPerKm":10,
+                                         "pointsAddingFriend":10,
+                                         "pointsUsingAppEveryday":10,
+                                         "bonusPoints":1000,
+                                         "nailStealingPoints":10,
+                                         "nailExtraPoints":10                                       
+                                     },
+//                                    route2: 
+//                                        {
+//                                         "numberofroutes":3,
+//                                         "TotalDistance ":25,
+//                                         "pointsperkm":10,
+//                                         "pointsaddingfriend":10,
+//                                         "pointsusingappeveryday":10,
+//                                         "bonuspoints":1500,
+//                                         "nailstealingpoints":10,
+//                                         "nailextrapoints":10
+//                                        }
+                                       
+                                }
+};
+ return jsonarray;
+}
+
+function distance_completed(startlat,startlon,currentlat,currentlon){
+                    
+                    /* get distance between 2 positions */
+                    var unit = "K";
+                    var radlat1 = Math.PI * currentlat/180;
+                    var radlat2 = Math.PI * startlat/180;
+                    var theta = currentlon-startlon;
+                    var radtheta = Math.PI * theta/180;
+                    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+                    dist = Math.acos(dist);
+                    dist = dist * 180/Math.PI;
+                    dist = dist * 60 * 1.1515;
+                    if (unit=="K") { dist = dist * 1.609344; } //kilometers
+                    if (unit=="N") { dist = dist * 0.8684; } //nautical miles
+                    
+                    return dist;
+}
+
+function total_distance(startlat,startlon,endlat,endlon){
+                    
+                    /* get distance between 2 positions */
+                    var unit = "K";
+                    var radlat1 = Math.PI * endlat/180;
+                    var radlat2 = Math.PI * startlat/180;
+                    var theta = endlon-startlon;
+                    var radtheta = Math.PI * theta/180;
+                    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+                    dist = Math.acos(dist);
+                    dist = dist * 180/Math.PI;
+                    dist = dist * 60 * 1.1515;
+                    if (unit=="K") { dist = dist * 1.609344; } //kilometers
+                    if (unit=="N") { dist = dist * 0.8684; } //nautical miles
+                    
+                    return dist;
+}
+
+
 module.exports = router;
