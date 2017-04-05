@@ -132,7 +132,7 @@
                             <li class="active friendsul" data-ng-if="followstatus == 1" ng-mouseenter="changeFollowButtonText('enter')" ng-mouseleave="changeFollowButtonText('leave')"  id="follow"><a href="javascript:void(0);"  ng-click="unFollow('<%= userprofile.local.email %>','<%= user.local.email %>')" class="btn btn-primary" id="followtext">Following<!--&nbsp;&nbsp;<i id="followingtick" class="fa fa-check" aria-hidden="true"></i>--></a></li>
 
                         </div>
-                        <div data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept' && eventsinviteList.length > 0"><li  class="active friendsul"><a href="javascript:void(0);" class="btn btn-primary" data-toggle="modal" data-target="#eventsinvitemodal">Invite</a></li></div>
+                        <div data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept' && eventsinviteList.length > 0"><li  data-ng-click="listEventsInvite('<%= userprofile.local.email %>')" class="active friendsul"><a href="javascript:void(0);" class="btn btn-primary" data-ng-click="" data-toggle="modal" data-target="#eventsinvitemodal">Invite</a></li></div>
                          <% }} %>
                         </div>
                      </header>
