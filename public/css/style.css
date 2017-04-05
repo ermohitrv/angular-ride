@@ -2781,7 +2781,8 @@ li#header_inbox_bar i.fa.fa-times {
   
 }
 .searchpagelocation {
-  margin-bottom: 10px;
+ margin-bottom: 10px;
+ font-size: 14px;
 }
 .description-wrap .action-control .btn-danger {
   font-size: 16px;
