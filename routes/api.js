@@ -2713,19 +2713,19 @@ router.get('/send-location', function(req, res){
         var currentlocationLat     = '40';
         var currentlocationLng     = '-73';
     
-        var jsonRoute =  jsonRoutePoints();
+        
         var points = 0;
         var isRouteCompleted = "ONGOING";
        
         if(email != "" && email != undefined){
         RpRoutes.findOne({$and : [{ $or : [ { 'isRouteCompleted' : 'CREATED' }, { 'isRouteCompleted' : 'ONGOING'} ] },{ $or : [ { email : { $regex : new RegExp(email, "i")}}]}]}, function(err, getrproutes){
-                    if(err){
+                    if(!getrproutes){
                         console.log("route error caught 1");
                                 res.json({ 
-                                    success: false, 
+                                    success: true, 
                                     data: null, 
-                                    message: err, 
-                                    code: 400
+                                    message: "No ongoing route", 
+                                    code: 200
                                 });
                        
                     }
@@ -2757,6 +2757,7 @@ router.get('/send-location', function(req, res){
                             isRouteCompleted = "ONGOING";
                         }
                         
+                        var jsonRoute =  jsonRoutePoints(route);
                         var pointsperkm = jsonRoute.routes.route1.pointsPerKm;    
                         var bonuspoints = jsonRoute.routes.route1.bonusPoints;
                         points += distanceCompleted * pointsperkm;
@@ -2769,7 +2770,8 @@ router.get('/send-location', function(req, res){
                             { 
                                 $set:   { 
                                             'totalDistanceCompleted': distanceCompleted,
-                                            'points':points
+                                            'points':points,
+                                            //'isRouteCompleted':isRouteCompleted
                                         } 
                             },
                             { multi: true },
@@ -2833,32 +2835,74 @@ function random_token(){
 }
 
 
-function jsonRoutePoints(){
-var jsonarray = {
-                        "routes":{
-                                    route1: 
-                                        {                                       
-                                         "pointsPerKm":10,
-                                         "pointsAddingFriend":10,
-                                         "pointsUsingAppEveryday":10,
-                                         "bonusPoints":1000,
-                                         "nailStealingPoints":10,
-                                         "nailExtraPoints":10                                       
-                                     },
-//                                    route2: 
-//                                        {
-//                                         "numberofroutes":3,
-//                                         "TotalDistance ":25,
-//                                         "pointsperkm":10,
-//                                         "pointsaddingfriend":10,
-//                                         "pointsusingappeveryday":10,
-//                                         "bonuspoints":1500,
-//                                         "nailstealingpoints":10,
-//                                         "nailextrapoints":10
-//                                        }
-                                       
-                                }
-};
+function jsonRoutePoints(route){
+    if(route == "1"){
+        var jsonarray = {
+                            "routes":{
+                                        route1: 
+                                               {                                       
+                                                    "pointsPerKm":10,
+                                                    "pointsAddingFriend":10,
+                                                    "pointsUsingAppEveryday":10,
+                                                    "bonusPoints":1000,
+                                                    "nailStealingPoints":10,
+                                                    "nailExtraPoints":10                                       
+                                                },
+
+                                        }
+        };
+    }
+    if(route == "2"){
+        var jsonarray = {
+                            "routes":{
+                                        route1: 
+                                               {                                       
+                                                    "pointsPerKm":10,
+                                                    "pointsAddingFriend":10,
+                                                    "pointsUsingAppEveryday":10,
+                                                    "bonusPoints":1000,
+                                                    "nailStealingPoints":10,
+                                                    "nailExtraPoints":10                                       
+                                                },
+
+                                        }
+        };
+    }
+    if(route == "3"){
+        var jsonarray = {
+                            "routes":{
+                                        route1: 
+                                               {                                       
+                                                    "pointsPerKm":10,
+                                                    "pointsAddingFriend":10,
+                                                    "pointsUsingAppEveryday":10,
+                                                    "bonusPoints":1000,
+                                                    "nailStealingPoints":10,
+                                                    "nailExtraPoints":10                                       
+                                                },
+
+                                        }
+        };
+    }
+    if(route == "4"){
+        var jsonarray = {
+                            "routes":{
+                                        route1: 
+                                               {                                       
+                                                    "pointsPerKm":10,
+                                                    "pointsAddingFriend":10,
+                                                    "pointsUsingAppEveryday":10,
+                                                    "bonusPoints":1000,
+                                                    "nailStealingPoints":10,
+                                                    "nailExtraPoints":10                                       
+                                                },
+
+                                        }
+        };
+    }
+    
+    
+    
  return jsonarray;
 }
 

@@ -2788,3 +2788,21 @@ li#header_inbox_bar i.fa.fa-times {
   min-width: 140px;
   padding: 8px 20px;
 }
+
+.searchheading h3 {
+ font-size: 30px;
+ position: relative;
+}
+.searchheading {
+ padding: 15px;
+ text-align: left;
+}
+.searchheading h3::after {
+ background-color: #ce0000;
+ bottom: -5px;
+ content: "";
+ height: 3px;
+ left: 0;
+ position: absolute;
+ width: 50px;
+}
