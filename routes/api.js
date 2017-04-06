@@ -255,11 +255,11 @@ router.post('/login', function(req, res){
     var password    = req.body.password;
     var fcmToken    = req.body.fcmToken;
     //var fcmToken   = "test";
-    console.log(email);
+    
     console.log("fcmToken : "+fcmToken);
     if( ( email != "" && email != undefined ) && ( password != "" && password != undefined ) ){
         User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function(err, user) {
-            console.log(new RegExp(email, "i"));
+            
             if (err){
                 res.json({ 
                     success: false, 
