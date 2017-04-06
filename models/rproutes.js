@@ -15,9 +15,8 @@ var routeCompleted   = 'CREATED COMPLETED ONGOING FAILED'.split(' ');
 var rproutesSchema = mongoose.Schema({
         email                      : {type: String, default: ''},
         route                      : {type: String, default: ''},
-        numberofRoutescompleted    : {type: String, default: ''},
+        numberofRoutescompleted    : {type: Number, default: 0},
         totalDistanceCompleted     : {type: String, default: ''},
-        //bonusPoints                : {type: String, default: ''},
         startinglocationLat        : {type: String, default: ''},
         startinglocationLng        : {type: String, default: ''},
         endinglocationLat          : {type: String, default: ''},
@@ -30,49 +29,17 @@ var rproutesSchema = mongoose.Schema({
         isRouteCompleted           : {type: String,enum: routeCompleted, default: 'FAILED'},
         invitedFriends: { 
             friendsList            : {type : Array, default : [] },
-        },
-        useNails: { 
-            activenailStatus       : {type: String, enum: useNails, default: 'INACTIVE'},
-            nailsthrownAt          : {type: String, default: false},
-            nailsthrownBy          : {type: String, default: false},
-        },
-        usePatches: { 
-            activepatchesStatus    : {type: String, enum: usePatches, default: 'INACTIVE'},
-            patchesusedBy          : {type: String, default: false},
-        },
-        watchVideo: { 
-            activevideoStatus      : {type: String, enum: watchVideo, default: 'INACTIVE'},
-            numberofvideos         : {type: String, default: false},
-        },
-        useOil: { 
-            activeoilStatus        : {type: String, enum: useOil, default: 'INACTIVE'},
-            oilthrownAt            : {type: String, default: false},
-            oilthrownBy            : {type: String, default: false},
-        },
-        useWrench: { 
-            activewrenchStatus     : {type: String, enum: useWrench, default: 'INACTIVE'},
-            wrenchusedBy           : {type: String, default: false},
-        },
-        usecar: { 
-            activecarStatus        : {type: String, enum: usecar, default: 'INACTIVE'},
-            carthrownAt            : {type: String, default: false},
-            carthrownBy            : {type: String, default: false},
-        },
-        towTruck: {
-            activetowtruckStatus   : {type: String, enum: towTruck, default: 'INACTIVE'}, 
-            towtruckusedBy         : {type: String, default: false},
-        },
-        policeCar: { 
-            activepolicecarStatus  : {type: String, enum: policeCar, default: 'INACTIVE'},
-            policecarthrownAt      : {type: String, default: false},
-            policecarthrownBy      : {type: String, default: false},
-        },
-        odometer: {
-            activeodometerStatus   : {type: String, enum: odometer, default: 'INACTIVE'}, 
-            odometerusedBy         : {type: String, default: false},
-        },
-        helmets                    : {type: String, default: false}, 
-        points                     : {type: String, default: false},    
+        },        
+        nailsthrownAt              : {type: Array, default : []},
+        patchesusedBy              : {type : Array, default : []},
+        numberofvideos             : {type: Number, default: 0},
+        oilthrownAt                : {type : Array, default : []},
+        wrenchusedBy               : {type : Array, default : []},
+        carthrownAt                : {type : Array, default : []},
+        towtruckusedBy             : {type : Array, default : []},
+        policecarthrownAt          : {type : Array, default : []},
+        odometerusedBy             : {type : Array, default : []},
+        points                     : {type: String, default: '0'},    
         purchasetire               : {type: String, default: false},
         lastModifiedDate           : {type: Date, default: Date.now()},        
 });
