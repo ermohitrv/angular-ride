@@ -255,9 +255,11 @@ router.post('/login', function(req, res){
     var password    = req.body.password;
     var fcmToken    = req.body.fcmToken;
     //var fcmToken   = "test";
+    console.log(email);
     console.log("fcmToken : "+fcmToken);
     if( ( email != "" && email != undefined ) && ( password != "" && password != undefined ) ){
         User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function(err, user) {
+            console.log(new RegExp(email, "i"));
             if (err){
                 res.json({ 
                     success: false, 
@@ -2754,7 +2756,9 @@ router.post('/get-friends-list', function(req, res){
 
 });
 
-
+/*
+ * Api route to send location and calculate points
+ */
 router.post('/send-location', function(req, res){
 //    var route               = 1;
         var email               = req.body.email;
@@ -2768,7 +2772,7 @@ router.post('/send-location', function(req, res){
         
        
         var isRouteCompleted = "ONGOING";
-       
+        /* Find ongoing route of user */
         if(email != "" && email != undefined){
         RpRoutes.findOne({$and : [{ $or : [ { 'isRouteCompleted' : 'CREATED' }, { 'isRouteCompleted' : 'ONGOING'} ] },{ $or : [ { email : { $regex : new RegExp(email, "i")}}]}]}, function(err, getrproutes){
                     if(!getrproutes){
@@ -2827,6 +2831,7 @@ router.post('/send-location', function(req, res){
                             isRouteCompleted = "ONGOING";
                         }
                         
+                        /* conditions to check which subroute is completed */
                         if(Math.round(distanceCompleted) == jsonRoute.routes.distanceSubRoute1){
                             numberOfSubRoutesCompleted = 1;
                         }
@@ -2900,6 +2905,9 @@ router.post('/send-location', function(req, res){
     
 });
 
+/*
+ * api route to use nails for ongoing route
+ */
 router.post('/use-nails', function(req, res){
         console.log("email : "+req.body.email);
         var email          = req.body.email;
@@ -2907,7 +2915,7 @@ router.post('/use-nails', function(req, res){
         
         
     if(email != "" && email != undefined){
-        
+        /* find ongoing route of user */
         RpRoutes.findOne({$and : [{ $or : [ { 'isRouteCompleted' : 'CREATED' }, { 'isRouteCompleted' : 'ONGOING'} ] },{ $or : [ { email : { $regex : new RegExp(email, "i")}}]}]}, function(err, getrproutes){
             if(!getrproutes){
                     res.json({ 
@@ -2921,9 +2929,9 @@ router.post('/use-nails', function(req, res){
                 var route = getrproutes.route;
                 //var points = getrproutes.points;
                 var jsonRoute =   RouteFunction.jsonRoutePoints(route);
-                var nailStealingPoints = jsonRoute.routes.nailStealingPoints;
-                var nailExtraPoints = jsonRoute.routes.nailExtraPoints; 
-                var points  =  +getrproutes.points+ +nailStealingPoints+ +nailExtraPoints;
+                var nailStealingPoints = jsonRoute.routes.nailStealingPoints;   //get nail stealing points of current route
+                var nailExtraPoints = jsonRoute.routes.nailExtraPoints;         //get nail extra points of current route
+                var points  =  +getrproutes.points+ +nailStealingPoints+ +nailExtraPoints;  // addition  of points
                 
                 console.log("last points : "+getrproutes.points);
                 console.log("nailStealingPoints : "+nailStealingPoints);
@@ -2988,13 +2996,15 @@ router.post('/use-nails', function(req, res){
     
 });
 
-
+/*
+ * Api route to watch video and update nails and patched in routetools table
+ */
 router.post('/watch-video', function(req, res){
     
     var email = req.body.email;
     
     if(email != "" && email != undefined){
-        
+        /* find current ongoing route of user */
         RpRoutes.findOne({$and : [{ $or : [ { 'isRouteCompleted' : 'CREATED' }, { 'isRouteCompleted' : 'ONGOING'} ] },{ $or : [ { email : { $regex : new RegExp(email, "i")}}]}]}, function(err, getrproutes){
             if(!getrproutes){
                     res.json({ 
@@ -3006,7 +3016,7 @@ router.post('/watch-video', function(req, res){
             }
             else{
                 var route = getrproutes.route;
-                var numberOfVideos = getrproutes.numberofvideos + 1;
+                var numberOfVideos = getrproutes.numberofvideos + 1;  // get number of watched videos for current route and add 1 more video
               
                 RpRoutes.update({ 
                                 'email': { $regex : new RegExp(email, "i") } ,
