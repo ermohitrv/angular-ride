@@ -993,6 +993,9 @@ router.post('/search', function(req, res){
     }
 });
 
+/*
+ * Api route to send friend request
+ */
 // save friend request
 router.post('/send-friend-request', function (req, res) {
     
@@ -1618,199 +1621,6 @@ router.post('/stop-route', function (req, res) {
        
 });
 
-
-/* API stop endpoint to be used by mobile device for rproutes  */
-/*router.post('/stop-route', function (req, res) {
-        
-        var Points        = require('../models/points');
-        console.log("******* stop rproutes*********");
-       //res.send(true);
-       
-        var isRouteCompleted  = 'ONGOING';
-        var lastModifiedDate  = Date.now();
-        
-        var email                  = req.body.email;
-        //var totalDistanceCompleted = req.body.totalDistanceCompleted;
-        var currentlocationLat     = req.body.currentlocationLat;
-        var currentlocationLng     = req.body.currentlocationLng;
-        //var startinglocationLat    = req.body.startinglocationLat;
-        //var startinglocationLng    = req.body.startinglocationLng;
-        var endinglocationLat      = req.body.endinglocationLat;
-        var endinglocationLng      = req.body.endinglocationLng;
-
-//        var email                  = 'preeti_dev@rvtechnologies.co.in';
-//        var totalDistanceCompleted = '10';
-//        var currentlocationLat     = '1.2393';
-//        var currentlocationLng     = '1.8184';
-//        var startinglocationLat    = '1.2393';
-//        var startinglocationLng    = '1.8184';
-//        var endinglocationLat      = '2.2393';
-//        var endinglocationLng      = '2.8184';
-
-//                    var currentlat = currentlocationLat;
-//                    var endlat = endinglocationLat;
-//                    var currentlon = currentlocationLng;
-//                    var endlon = endinglocationLng;
-//                    var unit = "K";
-//                    var radlat1 = Math.PI * currentlat/180;
-//                    var radlat2 = Math.PI * endlat/180;
-//                    var theta = currentlon-endlon;
-//                    var radtheta = Math.PI * theta/180;
-//                    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-//                    dist = Math.acos(dist);
-//                    dist = dist * 180/Math.PI;
-//                    dist = dist * 60 * 1.1515;
-//                    if (unit=="K") { dist = dist * 1.609344; } //kilometers
-//                    if (unit=="N") { dist = dist * 0.8684; } //nautical miles
-//                    
-//                    var distInmeters = dist/1000;
-//                    var roundDist = Math.round(distInmeters);
-//                    if(roundDist <= 10 ){
-//                            isRouteCompleted = 'COMPLETED';
-//                    }else{
-//                            isRouteCompleted = 'ONGOING';
-//                    }
-//                    
-//                    console.log("round distance****"+roundDist);
-        
-        if(email != "" && email != undefined){
-           
-            RpRoutes.findOne({ 'email' :  { $regex : new RegExp(email, "i") },'isRouteCompleted': 'ONGOING' }, function(err, getrproutes) {
-            // if there are any errors, return the error
-            if (err) {
-                    console.log("route error caught 1");
-                    res.json({ 
-                        success: false, 
-                        data: null, 
-                        message: err, 
-                        code: 400
-                    });
-                }
-            else {
-                 
-                if(getrproutes){   // if user exist with that email
-                
-                RpRoutes.update({ 
-                                'email': { $regex : new RegExp(email, "i") } 
-                            },
-                            { 
-                                $set:   { 
-                                            //'numberofRoutescompleted': subRoutescompleted ,
-                                            //'totalDistanceCompleted':totalDistanceCompleted,
-                                            'currentlocationLat': currentlocationLat,
-                                            'currentlocationLng': currentlocationLng ,
-                                            //'startinglocationLat': startinglocationLat,
-                                            //'startinglocationLng': startinglocationLng ,
-                                            'endinglocationLat': endinglocationLat,
-                                            'endinglocationLng': endinglocationLng ,
-                                            'activeStatus':'ACTIVE',
-                                            'isRouteCompleted': 'ONGOING',
-                                             'lastModifiedDate': lastModifiedDate,
-                                        } 
-                            },
-                            { multi: true },
-                function(err, rprouteinfo){
-
-                     if (err){
-                        console.log("route error caught 3");
-                        res.json({ 
-                            success: false, 
-                            data: null, 
-                            message: err, 
-                            code: 400
-                        });
-                    }else{
-                        
-                        
-                        res.json({ 
-                            success: true,
-                            data: 
-                                {
-                                   
-                                    email       :email,
-                                    route       :rprouteinfo.route,
-                                    //points      :points,
-                                    isRouteCompleted :isRouteCompleted
-                                   
-                                },
-                            message: globalConfig.successUpdate, 
-                            code: 200
-                        });
-                    }
-                });    
-
-                }
-                else{ 
-                var riderproute = '1';    
-               
-               
-                RpRoutes.findOne({ 'email' :  { $regex : new RegExp(email, "i") },'isRouteCompleted': 'COMPLETED' }, function(err, getrproutescomplete) {
-                    
-                    riderproute = +getrproutescomplete.route+ +1; //get next route
-                    console.log("riderproute"+riderproute);
-                // if there is no user with that email
-                // create the user
-                var newRpRoutes                        = new RpRoutes();
-                newRpRoutes.email                      = email;
-                newRpRoutes.route                      = riderproute;
-               // newRpRoutes.totalDistanceCompleted     = totalDistanceCompleted;
-                newRpRoutes.currentlocationLat         = currentlocationLat;    
-                newRpRoutes.currentlocationLng         = currentlocationLng;  
-                //newRpRoutes.startinglocationLat        = startinglocationLat,
-                //newRpRoutes.startinglocationLng        = startinglocationLng ,
-                newRpRoutes.endinglocationLat          = endinglocationLat,
-                newRpRoutes.endinglocationLng          = endinglocationLng ,
-                newRpRoutes.activeStatus               = 'ACTIVE';
-                newRpRoutes.isRouteCompleted           = 'ONGOING';
-
-                newRpRoutes.lastModifiedDate           = lastModifiedDate,
-        	// save the newRpRoutes
-                newRpRoutes.save(function(err){
-                    if (err){
-                        console.log("route error caught 3");
-                        res.json({ 
-                            success: false, 
-                            data: null, 
-                            message: err, 
-                            code: 400
-                        });
-                    }else{
-                        
-                        
-                        res.json({ 
-                            success: true,
-                            data: 
-                                {
-                                    email       :email,
-                                    route       :riderproute,
-                                    //points    :points,
-                                    isRouteCompleted :isRouteCompleted
-                                   
-                                },
-                            message: globalConfig.successRegister, 
-                            code: 200
-                        });
-                    }
-                });
-            }).sort({ "lastModifiedDate": -1});
-            } 
-                
-                }
-           
-            });
-          
-       }
-    else{
-        res.json({ 
-            success: false, 
-            data: null, 
-            message: "missing parameters", 
-            code: 400
-        });
-    }
-       
-});*/
-
 /* API end point to create event for mobile users */
 router.post('/create-event', function (req, res) {
         
@@ -2189,7 +1999,9 @@ router.post('/list-all-events', function (req, res) {
       
 });
 
-
+/*
+ * Api route to join event
+ */
 router.post('/join-event', function (req, res){
     
    var eventId = req.body.eventId;
@@ -2573,6 +2385,9 @@ router.post('/respond-friend-request', function (req, res) {
     }
 });
 
+/*
+ * Api route to get friend request lists for mobile
+ */
 router.post('/get-friendrequests-list', function(req, res){
    
     var email = req.body.email;
@@ -2679,7 +2494,9 @@ router.post('/get-friendrequests-list', function(req, res){
 //        
 //    });
 //});
-
+/*
+ * Api route to  show friends list for logged in user
+ */
 router.post('/get-friends-list', function(req, res){
      
     var email = req.body.email;
@@ -2810,18 +2627,8 @@ router.post('/send-location', function(req, res){
                        
                         // function to calculate total distance
                         var totalDistance = RouteFunction.calculateDistance(startinglocationLat,startinglocationLng,endinglocationLat,endinglocationLng);
-                       
-                       
-                       
-//                        //function to calculate current distcance complete
-//                        var currentdistanceCompleted = RouteFunction.currentdistanceCompleted(lastCurrentLocationLat,lastCurrentLocationLng,currentLocationLat,currentLocationLong);
-//
-//                        // function to calculate distance completed
-//                        var distanceCompleted = RouteFunction.distanceCompleted(startinglocationLat,startinglocationLng,currentLocationLat,currentLocationLong);
-//                       
-//                        // function to calculate total distance
-//                        var totalDistance = RouteFunction.totalDistance(startinglocationLat,startinglocationLng,endinglocationLat,endinglocationLng);
-                        
+                    
+                    
                         var diffDistance = totalDistance - distanceCompleted; //calculate near distance
                         var distInmeters = diffDistance/1000;  // distance in meters
                         var roundDist = Math.round(distInmeters);
@@ -3067,7 +2874,7 @@ router.post('/watch-video', function(req, res){
                                     code: 400
                                 });
                             }else{
-
+                                /* add 1 nail and patch on watching video in route table */
                                 RouteFunction.updateRouteTools(email,'watchvideo',route);
                                 
                                 res.json({ 
@@ -3157,8 +2964,9 @@ router.post('/use-oil', function(req, res){
                                     code: 400
                                 });
                             }else{
-                               
+                                 /* add update number of oil in route table */
                                 RouteFunction.updateRouteTools(email,'oilThrow',route);
+                                /* update points for oilthrownAt user */
                                 RouteFunction.updateRouteStealingPoints(oilThrownAt,oilStealingPoints);
                                 
                                 res.json({ 
@@ -3250,7 +3058,7 @@ router.post('/use-car', function(req, res){
                                     code: 400
                                 });
                             }else{
-                                 
+                                /* update route tools when car is thrown */ 
                                 RouteFunction.updateRouteTools(email,'carThrow',route);
                                 RouteFunction.updateRouteStealingPoints(carThrownAt,carStealingPoints);
                                 
@@ -3343,7 +3151,7 @@ router.post('/use-policecar', function(req, res){
                                     code: 400
                                 });
                             }else{
-                                
+                                /* update route tools when police car is thrown */
                                 RouteFunction.updateRouteTools(email,'policecarThrow',route);
                                 RouteFunction.updateRouteStealingPoints(policecarThrownAt,policecarStealingPoints);
                                 
@@ -3426,6 +3234,7 @@ router.post('/use-patch', function(req, res){
                                 });
                             }else{
                                 
+                                /* update patches in route tools for user patchesusedBy */
                                 RouteFunction.updateRouteTools(patchesusedBy,'usePatch',route);
                                 
                                 res.json({ 
@@ -3507,7 +3316,7 @@ router.post('/use-wrench', function(req, res){
                                     code: 400
                                 });
                             }else{
-                               
+                                /* update wrench for user wrenchusedBy */
                                 RouteFunction.updateRouteTools(wrenchusedBy,'useWrench',route);
                                 res.json({ 
                                     success: true,
@@ -3587,7 +3396,7 @@ router.post('/use-towtruck', function(req, res){
                                     code: 400
                                 });
                             }else{
-                                
+                                /* update towtruck for user towtruckusedBy */
                                 RouteFunction.updateRouteTools(towtruckusedBy,'useTowTruck',route);
                                 res.json({ 
                                     success: true,
@@ -3668,6 +3477,7 @@ router.post('/use-odometer', function(req, res){
                                     code: 400
                                 });
                             }else{
+                                /* update odomter for user odometerusedBy */
                                 RouteFunction.updateRouteTools(odometerusedBy,'useOdometer',route);
                                 res.json({ 
                                     success: true,
