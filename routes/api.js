@@ -2874,7 +2874,7 @@ router.post('/send-location', function(req, res){
                                 $set:   { 
                                             'totalDistanceCompleted': distanceCompleted,
                                             'points':Math.round(points * 100) / 100,
-                                            //'isRouteCompleted':isRouteCompleted,
+                                            'isRouteCompleted':isRouteCompleted,
                                             'currentlocationLat': currentLocationLat,
                                             'currentlocationLng': currentLocationLong,
                                             'numberofRoutescompleted': numberOfSubRoutesCompleted,

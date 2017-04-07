@@ -393,11 +393,9 @@ this.updateRouteStealingPoints=function (ThrownAt,StealingPoints){
             if(!err){
                     
                     var obj = {};  
-                    console.log("points : "+getrproutes.points);
-                    console.log("StealingPoints : "+StealingPoints);
                     var points = getrproutes.points - StealingPoints;
                     obj['points']   =  points;
-                    console.log("Sdsd : "+points);
+                    
                     
                     RpRoutes.update({ 
                             'email': { $regex : new RegExp(ThrownAt, "i") } ,
