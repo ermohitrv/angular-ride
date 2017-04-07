@@ -14,7 +14,7 @@ var routeCompleted   = 'CREATED COMPLETED ONGOING FAILED'.split(' ');
 
 var rproutesSchema = mongoose.Schema({
         email                      : {type: String, default: ''},
-        route                      : {type: String, default: ''},
+        route                      : {type: Number, default: 0},
         numberofRoutescompleted    : {type: Number, default: 0},
         totalDistanceCompleted     : {type: String, default: ''},
         startinglocationLat        : {type: String, default: ''},

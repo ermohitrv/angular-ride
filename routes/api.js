@@ -10,11 +10,11 @@ var friends         = require('../models/friends');
 var Events          = require('../models/events');
 var Joinevents      = require('../models/joinevents');
 var moment          = require("moment");
-var RouteFunction = require("./routefunction.js");
-var RouteTools = require("../models/routetools");
-var FCM = require('fcm-node');
-var serverKey = 'AAAAFYFV6mc:APA91bFB4RWwB7eaQL_AsyFvg1Dy_TWP-S4g9tWmn5XsaCcS-vR_MNMZbAjsHtziRxNtIZKHBF9bTFWOtvLhdXDJFjppLWf0_tYaktvMEuNzTciCUTpD8qTWuKee5bID0EP4pUo-EFuE';
-var fcm = new FCM(serverKey);
+var RouteFunction   = require("./routefunction.js");
+var RouteTools      = require("../models/routetools");
+var FCM             = require('fcm-node');
+var serverKey       = 'AAAAFYFV6mc:APA91bFB4RWwB7eaQL_AsyFvg1Dy_TWP-S4g9tWmn5XsaCcS-vR_MNMZbAjsHtziRxNtIZKHBF9bTFWOtvLhdXDJFjppLWf0_tYaktvMEuNzTciCUTpD8qTWuKee5bID0EP4pUo-EFuE';
+var fcm             = new FCM(serverKey);
 
 /* API endpoint to be used by mobile device to see all users list */
 router.get('/listusers', function(req, res) {
@@ -604,47 +604,75 @@ router.post('/init-add-route', function(req, res){
 //    var ending_locationLat   = "1.5532";
 //    var ending_locationLng   = "0.4221";
       
-    
-    objRoute.email                  = email;
-    objRoute.route                  = '1';
-    
-    objRoute.startinglocationLat    = starting_locationLat;
-    objRoute.startinglocationLng    = starting_locationLng;
-    
-    objRoute.endinglocationLat      = ending_locationLat;
-    objRoute.endinglocationLng      = ending_locationLng;
-   
-   
-    objRoute.isRouteCompleted       = 'CREATED';
-    //objRoute.rproute1.invitedFriends.push( { "email":"invite2@gmail.com" } );
-     
-    objRoute.save(function(err){
-        if (err){
-            res.json({
-                success: false, 
-                data: null, 
-                message: err, 
-                code: 400
-            });
-        }else {
+    RpRoutes.findOne({ 'email' :  { $regex : new RegExp(email, "i") },'isRouteCompleted':'COMPLETED' }, function (err, rpRoute){
             
-            res.json({
-                success: true, 
-                data: {
-                    
-                    rproute1 : {
-                        locationLat : starting_locationLat,
-                        locationLng : starting_locationLng,
-                        activeStatus: 'INACTIVE',
-                        invitedFriends: [],
-                    },
-                    
-                }, 
-                message: "route 1 added successfully", 
-                code: 200
+            if(rpRoute){
+                objRoute.route = rpRoute.route  + 1;
+            }else{
+                objRoute.route              = 1;
+            }
+
+            objRoute.email                  = email;
+            objRoute.startinglocationLat    = starting_locationLat;
+            objRoute.startinglocationLng    = starting_locationLng;
+            objRoute.endinglocationLat      = ending_locationLat;
+            objRoute.endinglocationLng      = ending_locationLng;
+            objRoute.isRouteCompleted       = 'CREATED';
+            //objRoute.rproute1.invitedFriends.push( { "email":"invite2@gmail.com" } );
+
+            objRoute.save(function(err,routeCreateInfo){
+                if (err){
+                    res.json({
+                        success: false, 
+                        data: null, 
+                        message: err, 
+                        code: 400
+                    });
+                }else {
+                    /*
+                    * Nails, Patches are unlocked on route 1 for signup user
+                    */
+                    if(routeCreateInfo.route == 1){
+                        
+                        RouteFunction.addRouteTools(email,"addNailsPatches");
+                    }
+                    /*
+                    * Oil, Wrench are unlocked on route 4 for signup user
+                    */
+                    else if(routeCreateInfo.route == 4){
+                        RouteFunction.addRouteTools(email,"addOilWrench");
+                    }
+                    /*
+                    * Tow Truck is unlocked on route 7 for signup user
+                    */
+                    else if(routeCreateInfo.route == 7){
+                        RouteFunction.addRouteTools(email,"addTowTruck");
+                    }
+                    /*
+                    * Police car odometer is unlocked on route 10 for signup user
+                    */
+                    else if(routeCreateInfo.route == 10){
+                        RouteFunction.addRouteTools(email,"addPolicecarOdometer");
+                    }
+
+                    res.json({
+                        success: true, 
+                        data: {
+
+                            rproute1 : {
+                                locationLat : starting_locationLat,
+                                locationLng : starting_locationLng,
+                                activeStatus: 'INACTIVE',
+                                invitedFriends: [],
+                            },
+
+                        }, 
+                        message: "route "+routeCreateInfo.route+" added successfully", 
+                        code: 200
+                    });
+                }
             });
-        }
-    });
+    }).sort({'lastModifiedDate':-1});
 });
 
 /* API endpoint to be used by mobile device for iniviting friend for route */
@@ -1327,28 +1355,20 @@ router.post('/start-route', function (req, res) {
             else {
                  
                 if(getrproutes){   // if user exist with that email
-                    
+                    var route = getrproutes.route;
                     console.log("starting location : "+getrproutes.startinglocationLat);
                     var currentlat = currentlocationLat;
                     var startlat = getrproutes.startinglocationLat;
                     var currentlon = currentlocationLng;
                     var startlon = getrproutes.startinglocationLng;
-                    /* get distance between 2 positions */
-                    var unit = "K";
-                    var radlat1 = Math.PI * currentlat/180;
-                    var radlat2 = Math.PI * startlat/180;
-                    var theta = currentlon-startlon;
-                    var radtheta = Math.PI * theta/180;
-                    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-                    dist = Math.acos(dist);
-                    dist = dist * 180/Math.PI;
-                    dist = dist * 60 * 1.1515;
-                    if (unit=="K") { dist = dist * 1.609344; } //kilometers
-                    if (unit=="N") { dist = dist * 0.8684; } //nautical miles
                     
-                    var distInmeters = dist/1000;
+                    //function to calculate distance remaining to check whether route is completed or not
+                    var distanceStarted = RouteFunction.calculateDistance(startlat,startlon,currentlat,currentlon);
+                       
+                    var distInmeters = distanceStarted/1000;  // distance in meters
                     var roundDist = Math.round(distInmeters);
-                    if(roundDist <= 10 ){
+
+                    if(roundDist <= globalConfig.nearbyDistance ){
                        
                     console.log("round distance****"+roundDist);
                 
@@ -1377,79 +1397,27 @@ router.post('/start-route', function (req, res) {
                             code: 400
                         });
                     }else{
-                        
-                        RouteTools.findOne({'email':{ $regex : new RegExp(email, "i") }}, function(err, getrptools){
-                            if(getrptools){
-                                res.json({ 
-                                    success: true,
-                                    data: 
-                                        {
+                           
+                            res.json({ 
+                                success: true,
+                                data: 
+                                    {
 
-                                            email       :email,
-                                            route       :getrproutes.route,
-                                            isRouteCompleted :'ONGOING'
+                                        email       :email,
+                                        route       :getrproutes.route,
+                                        isRouteCompleted :'ONGOING'
 
-                                        },
-                                    message: globalConfig.successUpdate, 
-                                    code: 200
-                                });
-                            }
-                            else{
-                                var RouteToolsobj = new RouteTools();
-                                RouteToolsobj.email           = email;
-                                RouteToolsobj.numberOfNails   = 10;
-                                RouteToolsobj.numberOfPatches = 10;
-                                RouteToolsobj.save(function(err1,rptoolsdata){
-                                    if(err1){
-                                        res.json({ 
-                                                success: false,
-                                                data: null,
-                                                message: err1, 
-                                                code: 400
-                                        });
-                                    }else{
-                                        res.json({ 
-                                            success: true,
-                                            data: 
-                                                {
-
-                                                    email       :email,
-                                                    route       :getrproutes.route,
-                                                    isRouteCompleted :'ONGOING'
-
-                                                },
-                                            message: globalConfig.successUpdate, 
-                                            code: 200
-                                        });
-                                        
-                                    }
-                                    
-                                    
-                                });
-                                
-                            }
-                        });
-
-//                        res.json({ 
-//                            success: true,
-//                            data: 
-//                                {
-//                                   
-//                                    email       :email,
-//                                    route       :getrproutes.route,
-//                                    isRouteCompleted :'ONGOING'
-//                                   
-//                                },
-//                            message: globalConfig.successUpdate, 
-//                            code: 200
-//                        });
+                                    },
+                                message: globalConfig.successUpdate, 
+                                code: 200
+                            });
                     }
                 });   
                 }else{
                             res.json({ 
                             success: true,
                             data: null,
-                            message: "You can start route nearby 10m location", 
+                            message: "You can start route nearby "+globalConfig.nearbyDistance+" location", 
                             code: 200
                         });
                     }
@@ -1520,32 +1488,66 @@ router.post('/stop-route', function (req, res) {
             else {
                  
                 if(getrproutes){   // if user exist with that email
-                    var currentlat = currentlocationLat;
-                    var endlat = getrproutes.endinglocationLat;
-                    var currentlon = currentlocationLng;
-                    var endlon = getrproutes.endinglocationLng;
-                    /* get distance between 2 positions */
-                    var unit = "K";
-                    var radlat1 = Math.PI * currentlat/180;
-                    var radlat2 = Math.PI * endlat/180;
-                    var theta = currentlon-endlon;
-                    var radtheta = Math.PI * theta/180;
-                    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-                    dist = Math.acos(dist);
-                    dist = dist * 180/Math.PI;
-                    dist = dist * 60 * 1.1515;
-                    if (unit=="K") { dist = dist * 1.609344; } //kilometers
-                    if (unit=="N") { dist = dist * 0.8684; } //nautical miles
+
                     
-                    var distInmeters = dist/1000;
-                    var roundDist = Math.round(distInmeters);
-                    if(roundDist <= 10 ){
-                            isRouteCompleted = 'COMPLETED';
-                    }else{
-                            isRouteCompleted = 'ONGOING';
-                    }
+                        var route = getrproutes.route;
+                        var points = getrproutes.points;
+                        var numberOfSubRoutesCompleted = 0;
+                        var currentlat = currentlocationLat;
+                        var endlat = getrproutes.endinglocationLat;
+                        var currentlon = currentlocationLng;
+                        var endlon = getrproutes.endinglocationLng;
+                        var startLat = getrproutes.startinglocationLat;
+                        var startLng= getrproutes.startinglocationLng;
+                       
+                        //function to calculate distance remaining to check whether route is completed or not
+                        var distanceRemaining = RouteFunction.calculateDistance(currentlat,currentlon,endlat,endlon);
+                        // To calculate completed distance till now to calculate  points
+                        var distanceCompleted = RouteFunction.calculateDistance(startLat,startLng,currentlat,currentlon);
+                       
+                        var distInmeters = distanceRemaining/1000;  // distance in meters
+                        var roundDist = Math.round(distInmeters);
+                        console.log("distInmeters : "+distInmeters);
+                        console.log("roundDist : "+roundDist);
+                        
+                        var jsonRoute =   RouteFunction.jsonRoutePoints(route);  // call function to get route points
+                        var pointsperkm = jsonRoute.routes.pointsPerKm;   // get points per km according to route
+                        points += distanceCompleted  * pointsperkm;
+                        
+                        if(roundDist <= globalConfig.nearbyDistance ){
+                            console.log("completed");
+                            isRouteCompleted = "COMPLETED";
+                            var bonuspoints = jsonRoute.routes.bonusPoints;   // get bonus points according to route
+                            points += bonuspoints;
+                            
+                           // RouteFunction.updateRouteTools(email,'addHelmets',route);
+                        }
+                        else{
+                            console.log("ongoing");
+                            isRouteCompleted = "ONGOING";
+                        }
+                        
+                        /* conditions to check which subroute is completed */
+                        if(Math.round(distanceCompleted) == jsonRoute.routes.distanceSubRoute1 && route <= 7){
+                            numberOfSubRoutesCompleted = 1;
+                            RouteFunction.updateRouteTools(email,'addHelmets',route);
+                        }
+                        if(Math.round(distanceCompleted) == jsonRoute.routes.distanceSubRoute2 && route <= 7){
+                            numberOfSubRoutesCompleted = 2;
+                            RouteFunction.updateRouteTools(email,'addHelmets',route);
+                        }
+                        if(Math.round(distanceCompleted) == jsonRoute.routes.distanceSubRoute3 && route <= 7){
+                            numberOfSubRoutesCompleted = 3;
+                            RouteFunction.updateRouteTools(email,'addHelmets',route);
+                        }
+                        if(Math.round(distanceCompleted) == jsonRoute.routes.distanceSubRoute1 && route >= 8 && route <= 10){
+                            numberOfSubRoutesCompleted = 1;
+                            RouteFunction.updateRouteTools(email,'addHelmets',route);
+                        }
                     
-                    console.log("round distance****"+roundDist);
+                    
+                    
+                console.log("round distance****"+roundDist);
                 RpRoutes.update({ 
                                 'email': { $regex : new RegExp(email, "i") } 
                             },
@@ -2768,7 +2770,9 @@ router.post('/send-location', function(req, res){
 //        var email                  = 'preeti_dev@rvtechnologies.co.in';
 //        var currentLocationLat     = '40';
 //        var currentLocationLong     = '-73';
-    
+        var locationarray = [];
+        locationarray.push(parseFloat(currentLocationLat));
+        locationarray.push(parseFloat(currentLocationLong));
         
        
         var isRouteCompleted = "ONGOING";
@@ -2797,14 +2801,27 @@ router.post('/send-location', function(req, res){
                        var lastCurrentLocationLat = getrproutes.currentlocationLat;
                        var lastCurrentLocationLng = getrproutes.currentlocationLng;
                        
+                       
                         //function to calculate current distcance complete
-                        var currentdistanceCompleted = RouteFunction.currentdistanceCompleted(lastCurrentLocationLat,lastCurrentLocationLng,currentLocationLat,currentLocationLong);
-
-                        // function to calculate distance completed
-                        var distanceCompleted = RouteFunction.distanceCompleted(startinglocationLat,startinglocationLng,currentLocationLat,currentLocationLong);
+                        var currentdistanceCompleted = RouteFunction.calculateDistance(lastCurrentLocationLat,lastCurrentLocationLng,currentLocationLat,currentLocationLong);
+                        
+                        // To calculate completed distance till now to calculate  points
+                        var distanceCompleted = RouteFunction.calculateDistance(startinglocationLat,startinglocationLng,currentLocationLat,currentLocationLong);
                        
                         // function to calculate total distance
-                        var totalDistance = RouteFunction.totalDistance(startinglocationLat,startinglocationLng,endinglocationLat,endinglocationLng);
+                        var totalDistance = RouteFunction.calculateDistance(startinglocationLat,startinglocationLng,endinglocationLat,endinglocationLng);
+                       
+                       
+                       
+//                        //function to calculate current distcance complete
+//                        var currentdistanceCompleted = RouteFunction.currentdistanceCompleted(lastCurrentLocationLat,lastCurrentLocationLng,currentLocationLat,currentLocationLong);
+//
+//                        // function to calculate distance completed
+//                        var distanceCompleted = RouteFunction.distanceCompleted(startinglocationLat,startinglocationLng,currentLocationLat,currentLocationLong);
+//                       
+//                        // function to calculate total distance
+//                        var totalDistance = RouteFunction.totalDistance(startinglocationLat,startinglocationLng,endinglocationLat,endinglocationLng);
+                        
                         var diffDistance = totalDistance - distanceCompleted; //calculate near distance
                         var distInmeters = diffDistance/1000;  // distance in meters
                         var roundDist = Math.round(distInmeters);
@@ -2818,13 +2835,13 @@ router.post('/send-location', function(req, res){
                         var pointsperkm = jsonRoute.routes.pointsPerKm;   // get points per km according to route
                         points += currentdistanceCompleted  * pointsperkm;
                         
-                        if(roundDist <= 10 ){
+                        if(roundDist <= globalConfig.nearbyDistance ){
                             console.log("completed");
                             isRouteCompleted = "COMPLETED";
                             var bonuspoints = jsonRoute.routes.bonusPoints;   // get bonus points according to route
                             points += bonuspoints;
                             
-                            RouteFunction.addHelmets(email);
+                            //RouteFunction.updateRouteTools(email,'addHelmets');
                         }
                         else{
                             console.log("ongoing");
@@ -2832,14 +2849,21 @@ router.post('/send-location', function(req, res){
                         }
                         
                         /* conditions to check which subroute is completed */
-                        if(Math.round(distanceCompleted) == jsonRoute.routes.distanceSubRoute1){
+                        if(Math.round(distanceCompleted) == jsonRoute.routes.distanceSubRoute1 && route <= 7){
                             numberOfSubRoutesCompleted = 1;
+                            RouteFunction.updateRouteTools(email,'addHelmets',route);
                         }
-                        if(Math.round(distanceCompleted) == jsonRoute.routes.distanceSubRoute2){
+                        if(Math.round(distanceCompleted) == jsonRoute.routes.distanceSubRoute2 && route < 7){
                             numberOfSubRoutesCompleted = 2;
+                            RouteFunction.updateRouteTools(email,'addHelmets',route);
                         }
-                        if(Math.round(distanceCompleted) == jsonRoute.routes.distanceSubRoute3){
+                        if(Math.round(distanceCompleted) == jsonRoute.routes.distanceSubRoute3 && route < 7){
                             numberOfSubRoutesCompleted = 3;
+                            RouteFunction.updateRouteTools(email,'addHelmets',route);
+                        }
+                        if(Math.round(distanceCompleted) == jsonRoute.routes.distanceSubRoute1 && route >= 8 && route <= 10){
+                            numberOfSubRoutesCompleted = 1;
+                            RouteFunction.updateRouteTools(email,'addHelmets',route);
                         }
                         
                         RpRoutes.update({ 
@@ -2853,7 +2877,9 @@ router.post('/send-location', function(req, res){
                                             //'isRouteCompleted':isRouteCompleted,
                                             'currentlocationLat': currentLocationLat,
                                             'currentlocationLng': currentLocationLong,
-                                            'numberofRoutescompleted': numberOfSubRoutesCompleted
+                                            'numberofRoutescompleted': numberOfSubRoutesCompleted,
+                                            'lastModifiedDate': new Date(),
+                                            'location':locationarray
                                         } 
                             },
                             { multi: true },
@@ -2961,7 +2987,8 @@ router.post('/use-nails', function(req, res){
                                 });
                             }else{
 
-                                RouteFunction.updateNailsPatches(email,'nailsthrow');
+                                RouteFunction.updateRouteTools(email,'nailsthrow',route);
+                                RouteFunction.updateRouteStealingPoints(nailsThrownAt,'nails',nailStealingPoints);
                                 
                                 res.json({ 
                                     success: true,
@@ -3041,7 +3068,7 @@ router.post('/watch-video', function(req, res){
                                 });
                             }else{
 
-                                RouteFunction.updateNailsPatches(email,'watchvideo');
+                                RouteFunction.updateRouteTools(email,'watchvideo',route);
                                 
                                 res.json({ 
                                     success: true,
@@ -3074,6 +3101,607 @@ router.post('/watch-video', function(req, res){
     }
     
 });
+
+/*
+ *Api route to throw oil and update route table
+ */
+router.post('/use-oil', function(req, res){
+        console.log("email : "+req.body.email);
+        var email          = req.body.email;
+        var oilThrownAt  = req.body.oilThrownAt;
+        
+        
+    if(email != "" && email != undefined){
+        /* find ongoing route of user */
+        RpRoutes.findOne({$and : [{ $or : [ { 'isRouteCompleted' : 'CREATED' }, { 'isRouteCompleted' : 'ONGOING'} ] },{ $or : [ { email : { $regex : new RegExp(email, "i")}}]}]}, function(err, getrproutes){
+            if(!getrproutes){
+                    res.json({ 
+                                success: true, 
+                                data: null, 
+                                message: "No ongoing route", 
+                                code: 200
+                    });
+            }
+            else{
+                var route = getrproutes.route;
+                //var points = getrproutes.points;
+                var jsonRoute =   RouteFunction.jsonRoutePoints(route);
+                var oilStealingPoints = jsonRoute.routes.oilStealingPoints;   //get oil stealing points of current route
+                var oilBonusPoints = jsonRoute.routes.oilBonusPoints;         //get oil extra points of current route
+                var points  =  +getrproutes.points+ +oilStealingPoints+ +oilBonusPoints;  // addition  of points
+                
+                console.log("last points : "+getrproutes.points);
+                console.log("oilStealingPoints : "+oilStealingPoints);
+                console.log("oilBonusPoints : "+oilBonusPoints);
+                console.log(" Points : "+points);
+                RpRoutes.update({ 
+                                'email': { $regex : new RegExp(email, "i") } ,
+                                'route': route
+                            },
+                            {
+                                "$addToSet": {oilthrownAt: [ oilThrownAt]},
+                                "$set": { 
+                                   "points": Math.round(points * 100) / 100,
+                                   "lastModifiedDate": new Date()
+                                }
+                            },
+                            
+                            { multi: true },
+                        function(err, rprouteinfo){
+
+                             if (err){
+                                res.json({ 
+                                    success: false, 
+                                    data: null, 
+                                    message: err, 
+                                    code: 400
+                                });
+                            }else{
+                               
+                                RouteFunction.updateRouteTools(email,'oilThrow',route);
+                                RouteFunction.updateRouteStealingPoints(oilThrownAt,oilStealingPoints);
+                                
+                                res.json({ 
+                                    success: true,
+                                    data: 
+                                        {
+
+                                            email         :email,
+                                            route         :route,
+                                            oilThrownAt :oilThrownAt,
+                                            points        :Math.round(points * 100) / 100,
+
+                                        },
+                                    message: globalConfig.successUpdate, 
+                                    code: 200
+                                });
+                            }
+                        }); 
+                
+                
+            }
+          
+        });
+    }
+    else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+    }
+    
+});
+
+
+/*
+ *Api route to throw oil update nails and patched in routetools table
+ */
+router.post('/use-car', function(req, res){
+        console.log("email : "+req.body.email);
+        var email          = req.body.email;
+        var carThrownAt  = req.body.carThrownAt;
+        
+        
+    if(email != "" && email != undefined){
+        /* find ongoing route of user */
+        RpRoutes.findOne({$and : [{ $or : [ { 'isRouteCompleted' : 'CREATED' }, { 'isRouteCompleted' : 'ONGOING'} ] },{ $or : [ { email : { $regex : new RegExp(email, "i")}}]}]}, function(err, getrproutes){
+            if(!getrproutes){
+                    res.json({ 
+                                success: true, 
+                                data: null, 
+                                message: "No ongoing route", 
+                                code: 200
+                    });
+            }
+            else{
+                var route = getrproutes.route;
+                //var points = getrproutes.points;
+                var jsonRoute =   RouteFunction.jsonRoutePoints(route);
+                var carStealingPoints = jsonRoute.routes.carStealingPoints;   //get car stealing points of current route
+                var carBonusPoints = jsonRoute.routes.carBonusPoints;         //get car bonus points of current route
+                var points  =  +getrproutes.points+ +carStealingPoints+ +carBonusPoints;  // addition  of points
+                
+                console.log("last points : "+getrproutes.points);
+                console.log("carStealingPoints : "+carStealingPoints);
+                console.log("carBonusPoints : "+carBonusPoints);
+                console.log(" Points : "+points);
+                RpRoutes.update({ 
+                                'email': { $regex : new RegExp(email, "i") } ,
+                                'route': route
+                            },
+                            {
+                                "$addToSet": {carthrownAt: [ carThrownAt]},
+                                "$set": { 
+                                   "points": Math.round(points * 100) / 100,
+                                   "lastModifiedDate": new Date()
+                                }
+                            },
+                            
+                            { multi: true },
+                        function(err, rprouteinfo){
+
+                             if (err){
+                                res.json({ 
+                                    success: false, 
+                                    data: null, 
+                                    message: err, 
+                                    code: 400
+                                });
+                            }else{
+                                 
+                                RouteFunction.updateRouteTools(email,'carThrow',route);
+                                RouteFunction.updateRouteStealingPoints(carThrownAt,carStealingPoints);
+                                
+                                res.json({ 
+                                    success: true,
+                                    data: 
+                                        {
+
+                                            email         :email,
+                                            route         :route,
+                                            carThrownAt   :carThrownAt,
+                                            points        :Math.round(points * 100) / 100,
+
+                                        },
+                                    message: globalConfig.successUpdate, 
+                                    code: 200
+                                });
+                            }
+                        }); 
+                
+                
+            }
+          
+        });
+    }
+    else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+    }
+    
+});
+
+
+/*
+ *Api route to throw oil update nails and patched in routetools table
+ */
+router.post('/use-policecar', function(req, res){
+        console.log("email : "+req.body.email);
+        var email          = req.body.email;
+        var policecarThrownAt  = req.body.policecarThrownAt;
+        
+        
+    if(email != "" && email != undefined){
+        /* find ongoing route of user */
+        RpRoutes.findOne({$and : [{ $or : [ { 'isRouteCompleted' : 'CREATED' }, { 'isRouteCompleted' : 'ONGOING'} ] },{ $or : [ { email : { $regex : new RegExp(email, "i")}}]}]}, function(err, getrproutes){
+            if(!getrproutes){
+                    res.json({ 
+                                success: true, 
+                                data: null, 
+                                message: "No ongoing route", 
+                                code: 200
+                    });
+            }
+            else{
+                var route = getrproutes.route;
+                //var points = getrproutes.points;
+                var jsonRoute =   RouteFunction.jsonRoutePoints(route);
+                var policecarStealingPoints = jsonRoute.routes.policecarStealingPoints;   //get car stealing points of current route
+                var policecarBonusPoints = jsonRoute.routes.policecarBonusPoints;         //get car bonus points of current route
+                var points  =  +getrproutes.points+ +policecarStealingPoints+ +policecarBonusPoints;  // addition  of points
+                
+                console.log("last points : "+getrproutes.points);
+                console.log("carStealingPoints : "+policecarStealingPoints);
+                console.log("carBonusPoints : "+policecarBonusPoints);
+                console.log(" Points : "+points);
+                RpRoutes.update({ 
+                                'email': { $regex : new RegExp(email, "i") } ,
+                                'route': route
+                            },
+                            {
+                                "$addToSet": {policecarthrownAt: [ policecarThrownAt]},
+                                "$set": { 
+                                   "points": Math.round(points * 100) / 100,
+                                   "lastModifiedDate": new Date()
+                                }
+                            },
+                            
+                            { multi: true },
+                        function(err, rprouteinfo){
+
+                             if (err){
+                                res.json({ 
+                                    success: false, 
+                                    data: null, 
+                                    message: err, 
+                                    code: 400
+                                });
+                            }else{
+                                
+                                RouteFunction.updateRouteTools(email,'policecarThrow',route);
+                                RouteFunction.updateRouteStealingPoints(policecarThrownAt,policecarStealingPoints);
+                                
+                                res.json({ 
+                                    success: true,
+                                    data: 
+                                        {
+
+                                            email         :email,
+                                            route         :route,
+                                            policecarThrownAt   :policecarThrownAt,
+                                            points        :Math.round(points * 100) / 100,
+
+                                        },
+                                    message: globalConfig.successUpdate, 
+                                    code: 200
+                                });
+                            }
+                        }); 
+                
+                
+            }
+          
+        });
+    }
+    else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+    }
+    
+});
+
+/*
+ *Api route to use patch and update in route table
+ */
+router.post('/use-patch', function(req, res){
+        console.log("email : "+req.body.email);
+        var email          = req.body.email;
+        var patchesusedBy  = req.body.patchesusedBy;
+        
+        
+    if(email != "" && email != undefined){
+        /* find ongoing route of user */
+        RpRoutes.findOne({$and : [{ $or : [ { 'isRouteCompleted' : 'CREATED' }, { 'isRouteCompleted' : 'ONGOING'} ] },{ $or : [ { email : { $regex : new RegExp(email, "i")}}]}]}, function(err, getrproutes){
+            if(!getrproutes){
+                    res.json({ 
+                                success: true, 
+                                data: null, 
+                                message: "No ongoing route", 
+                                code: 200
+                    });
+            }
+            else{
+                var route = getrproutes.route;
+                var points = getrproutes.points;
+                RpRoutes.update({ 
+                                'email': { $regex : new RegExp(email, "i") } ,
+                                'route': route
+                            },
+                            {
+                                "$addToSet": {patchesusedBy: [ patchesusedBy]},
+                                "$set": { 
+                                   "lastModifiedDate": new Date()
+                                }
+                            },
+                            
+                            { multi: true },
+                        function(err, rprouteinfo){
+
+                             if (err){
+                                res.json({ 
+                                    success: false, 
+                                    data: null, 
+                                    message: err, 
+                                    code: 400
+                                });
+                            }else{
+                                
+                                RouteFunction.updateRouteTools(patchesusedBy,'usePatch',route);
+                                
+                                res.json({ 
+                                    success: true,
+                                    data: 
+                                        {
+
+                                            email         :email,
+                                            route         :route,
+                                            patchesusedBy :patchesusedBy,
+                                            points        :Math.round(points * 100) / 100,
+
+                                        },
+                                    message: globalConfig.successUpdate, 
+                                    code: 200
+                                });
+                            }
+                        }); 
+                
+                
+            }
+          
+        });
+    }
+    else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+    }
+    
+});
+
+
+/*
+ *Api route to use wrench and update in route table
+ */
+router.post('/use-wrench', function(req, res){
+        console.log("email : "+req.body.email);
+        var email          = req.body.email;
+        var wrenchusedBy  = req.body.wrenchusedBy;
+        
+        
+    if(email != "" && email != undefined){
+        /* find ongoing route of user */
+        RpRoutes.findOne({$and : [{ $or : [ { 'isRouteCompleted' : 'CREATED' }, { 'isRouteCompleted' : 'ONGOING'} ] },{ $or : [ { email : { $regex : new RegExp(email, "i")}}]}]}, function(err, getrproutes){
+            if(!getrproutes){
+                    res.json({ 
+                                success: true, 
+                                data: null, 
+                                message: "No ongoing route", 
+                                code: 200
+                    });
+            }
+            else{
+                var route = getrproutes.route;
+                var points = getrproutes.points;
+                RpRoutes.update({ 
+                                'email': { $regex : new RegExp(email, "i") } ,
+                                'route': route
+                            },
+                            {
+                                "$addToSet": {wrenchusedBy: [ wrenchusedBy]},
+                                "$set": { 
+                                   "lastModifiedDate": new Date()
+                                }
+                            },
+                            
+                            { multi: true },
+                        function(err, rprouteinfo){
+
+                             if (err){
+                                res.json({ 
+                                    success: false, 
+                                    data: null, 
+                                    message: err, 
+                                    code: 400
+                                });
+                            }else{
+                               
+                                RouteFunction.updateRouteTools(wrenchusedBy,'useWrench',route);
+                                res.json({ 
+                                    success: true,
+                                    data: 
+                                        {
+
+                                            email         :email,
+                                            route         :route,
+                                            wrenchusedBy  :wrenchusedBy,
+                                            points        :Math.round(points * 100) / 100,
+
+                                        },
+                                    message: globalConfig.successUpdate, 
+                                    code: 200
+                                });
+                            }
+                        }); 
+                
+                
+            }
+          
+        });
+    }
+    else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+    }
+    
+});
+
+/*
+ *Api route to use towtruck and update in route table
+ */
+router.post('/use-towtruck', function(req, res){
+        console.log("email : "+req.body.email);
+        var email          = req.body.email;
+        var towtruckusedBy  = req.body.towtruckusedBy;
+        
+        
+    if(email != "" && email != undefined){
+        /* find ongoing route of user */
+        RpRoutes.findOne({$and : [{ $or : [ { 'isRouteCompleted' : 'CREATED' }, { 'isRouteCompleted' : 'ONGOING'} ] },{ $or : [ { email : { $regex : new RegExp(email, "i")}}]}]}, function(err, getrproutes){
+            if(!getrproutes){
+                    res.json({ 
+                                success: true, 
+                                data: null, 
+                                message: "No ongoing route", 
+                                code: 200
+                    });
+            }
+            else{
+                var route = getrproutes.route;
+                var points = getrproutes.points;
+                RpRoutes.update({ 
+                                'email': { $regex : new RegExp(email, "i") } ,
+                                'route': route
+                            },
+                            {
+                                "$addToSet": {towtruckusedBy: [ towtruckusedBy]},
+                                "$set": { 
+                                   "lastModifiedDate": new Date()
+                                }
+                            },
+                            
+                            { multi: true },
+                        function(err, rprouteinfo){
+
+                             if (err){
+                                res.json({ 
+                                    success: false, 
+                                    data: null, 
+                                    message: err, 
+                                    code: 400
+                                });
+                            }else{
+                                
+                                RouteFunction.updateRouteTools(towtruckusedBy,'useTowTruck',route);
+                                res.json({ 
+                                    success: true,
+                                    data: 
+                                        {
+
+                                            email         :email,
+                                            route         :route,
+                                            towtruckusedBy:towtruckusedBy,
+                                            points        :Math.round(points * 100) / 100,
+
+                                        },
+                                    message: globalConfig.successUpdate, 
+                                    code: 200
+                                });
+                            }
+                        }); 
+                
+                
+            }
+          
+        });
+    }
+    else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+    }
+    
+});
+
+
+/*
+ *Api route to use odometer and update in route table
+ */
+router.post('/use-odometer', function(req, res){
+        console.log("email : "+req.body.email);
+        var email          = req.body.email;
+        var odometerusedBy = req.body.odometerusedBy;
+        
+        
+    if(email != "" && email != undefined){
+        /* find ongoing route of user */
+        RpRoutes.findOne({$and : [{ $or : [ { 'isRouteCompleted' : 'CREATED' }, { 'isRouteCompleted' : 'ONGOING'} ] },{ $or : [ { email : { $regex : new RegExp(email, "i")}}]}]}, function(err, getrproutes){
+            if(!getrproutes){
+                    res.json({ 
+                                success: true, 
+                                data: null, 
+                                message: "No ongoing route", 
+                                code: 200
+                    });
+            }
+            else{
+                var route = getrproutes.route;
+                var points = getrproutes.points;
+                RpRoutes.update({ 
+                                'email': { $regex : new RegExp(email, "i") } ,
+                                'route': route
+                            },
+                            {
+                                "$addToSet": {towtruckusedBy: [ towtruckusedBy]},
+                                "$set": { 
+                                   "lastModifiedDate": new Date()
+                                }
+                            },
+                            
+                            { multi: true },
+                        function(err, rprouteinfo){
+
+                             if (err){
+                                res.json({ 
+                                    success: false, 
+                                    data: null, 
+                                    message: err, 
+                                    code: 400
+                                });
+                            }else{
+                                RouteFunction.updateRouteTools(odometerusedBy,'useOdometer',route);
+                                res.json({ 
+                                    success: true,
+                                    data: 
+                                        {
+
+                                            email         :email,
+                                            route         :route,
+                                            odometerusedBy:odometerusedBy,
+                                            points        :Math.round(points * 100) / 100,
+
+                                        },
+                                    message: globalConfig.successUpdate, 
+                                    code: 200
+                                });
+                            }
+                        }); 
+                
+                
+            }
+          
+        });
+    }
+    else{
+        res.json({ 
+            success: false, 
+            data: null, 
+            message: "missing parameters", 
+            code: 400
+        });
+    }
+    
+});
+
 
 // 32 character random string token
 function random_token(){

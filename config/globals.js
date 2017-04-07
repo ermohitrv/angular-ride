@@ -20,7 +20,10 @@ module.exports = {
 //    frontendSignupDisabled : 'Sorry, Registrations are closed. Please check back later!',
 
     randomString      : randomString(),
-    
+    nearbyDistance    : 10,
+    numberOfFreeTools : 10,
+    numberOfHelmetsPerLevelCompletion :60,
+    numberOfHelmetsPerSubRouteCompletion :20,
     //signup email configs
     signupEmailSubject : 'Signup on RidePrix',
     
