@@ -388,11 +388,13 @@ this.addRouteTools=function (email,tooltype){
 /* function to add tools in routetools table on creating a new route */
 this.updateRouteStealingPoints=function (ThrownAt,StealingPoints){
     
-        
+        console.log();
         RpRoutes.findOne({'email': { $regex : new RegExp(ThrownAt, "i") }}, function(err, getrproutes){
             if(!err){
                     
-                    var obj = {};       
+                    var obj = {};  
+                    console.log("points : "+getrproutes.points);
+                    console.log("StealingPoints : "+StealingPoints);
                     var points = getrproutes.points - StealingPoints;
                     obj['points']   =  points;
                     console.log("Sdsd : "+points);

@@ -2988,7 +2988,7 @@ router.post('/use-nails', function(req, res){
                             }else{
 
                                 RouteFunction.updateRouteTools(email,'nailsthrow',route);
-                                RouteFunction.updateRouteStealingPoints(nailsThrownAt,'nails',nailStealingPoints);
+                                RouteFunction.updateRouteStealingPoints(nailsThrownAt,nailStealingPoints);
                                 
                                 res.json({ 
                                     success: true,
