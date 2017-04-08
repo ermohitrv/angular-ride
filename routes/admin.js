@@ -2208,8 +2208,10 @@ router.post('/respond-contact', middleware.restrict, function(req, res) {
                                         subject: "Response from Rideprix",
                                         html   : html
                             };
+                          
+                        nodemailer.mail(mailOptions);
                     }
-                     });
+                    });
                 
                 // status = "success";
                 // res.send(status);
@@ -2247,6 +2249,8 @@ router.post('/respond-suggestion', middleware.restrict, function(req, res) {
                                     subject: "Response from Rideprix",
                                     html   : html
                         };
+                        
+                        nodemailer.mail(mailOptions);
                         status = "success";
                         res.send(status);
                     }
