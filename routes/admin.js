@@ -2194,7 +2194,7 @@ router.post('/respond-contact', middleware.restrict, function(req, res) {
               status = "error";
             }
             else{
-                
+                console.log("email : "+contactInfo.contactEmail);
                 Contact.update({ _id: req.body.uid}, { $set: { respondStatus: 'respond'} }, { multi: false }, function (err, updateContact) {
                     if(err){
                         status = "error";
