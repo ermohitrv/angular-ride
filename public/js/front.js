@@ -613,6 +613,8 @@ jQuery('#change_password_form').validate({
             
          }
     });
+    
+    
     //code to make ajax request to check if username exists or not
     var checkUsernameSuccess = function(response){
         switch (response) {

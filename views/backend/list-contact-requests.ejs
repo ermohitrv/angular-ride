@@ -85,19 +85,23 @@
                                                     <div class="modal fade" id="respond_{{  contacts._id }}" role="dialog" aria-labelledby="respondBox" aria-hidden="true">
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">
+                                                              <form id="respond-contact-form" method="post" action="/admin/respond-contact">
                                                               <div class="modal-header">
                                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                                                 <h4 class="modal-title">{{ contacts.contactName }}:</h4>
                                                               </div>
                                                               <div class="modal-body">
                                                                   <h4>Write a comment</h4>
+                                                                  <input type="hidden" id="contactId" name="contactId" value="{{ contacts._id }}"/>
                                                                   <textarea class="formtextarea" id="contactRespondMessage" name="contactRespondMessage" ></textarea>
-                                                                   <label id="errormessage" class="error" style="display:none">This field is mandatory.</label>
+                                                                   <!--<label id="errormessage" class="error" style="display:none">This field is mandatory.</label>-->
                                                               </div>
                                                               <div class="modal-footer">
                                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                                                <a uid="{{ contacts._id }}" href="javascript:;" class="btn btn-danger respond_this_contact btn" id="respond">Send</a>
+                                                                <button type="submit" class="btn btn-danger btn">Send</button>
+                                                                <!--<a uid="{{ contacts._id }}" href="javascript:;" class="btn btn-danger respond_this_contact btn" id="respond">Send</a>-->
                                                               </div>
+                                                            </form>  
                                                             </div>
                                                         </div>
                                                     </div>
@@ -124,7 +128,9 @@
     </section>
   </div>
   <!-- /.content-wrapper -->
-   <script data-cfasync="false"  >
+<script data-cfasync="false"  >
+    
+    
 $(function(){
     $(document).on('click', 'a.respond_this_contact' ,function(){
         var uid = $(this).attr('uid');

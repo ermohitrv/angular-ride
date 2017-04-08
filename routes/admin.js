@@ -2189,13 +2189,13 @@ router.post('/respond-contact', middleware.restrict, function(req, res) {
         var contactRespondMessage = req.body.contactRespondMessage;
         var status = "";
         
-	Contact.findOne({ _id: req.body.uid } ,function(err, contactInfo){
+	Contact.findOne({ _id: req.body.contactId } ,function(err, contactInfo){
             if(err){
               status = "error";
             }
             else{
                 console.log("email : "+contactInfo.contactEmail);
-                Contact.update({ _id: req.body.uid}, { $set: { respondStatus: 'respond'} }, { multi: false }, function (err, updateContact) {
+                Contact.update({ _id: req.body.contactId}, { $set: { respondStatus: 'respond'} }, { multi: false }, function (err, updateContact) {
                     if(err){
                         status = "error";
                     }else{
@@ -2211,8 +2211,11 @@ router.post('/respond-contact', middleware.restrict, function(req, res) {
                     }
                      });
                 
-                 status = "success";
-                 res.send(status);
+                // status = "success";
+                // res.send(status);
+                req.flash('message', 'Your message has been sent successfully!');
+                req.flash('message_type','success');
+                res.redirect('/admin/list-contact-requests');
             }
             //res.send(status);
           
