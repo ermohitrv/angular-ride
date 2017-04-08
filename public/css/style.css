@@ -399,6 +399,7 @@ a.learn_more {
 	float: left;
 	width: 100%;
 	margin-top: 100px;
+        padding-bottom: 30px;
 }
 #top_rider p {
 	color: #fff;
