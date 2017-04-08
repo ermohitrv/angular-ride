@@ -2229,14 +2229,14 @@ router.post('/respond-suggestion', middleware.restrict, function(req, res) {
         var suggestionRespondMessage = req.body.suggestionRespondMessage;
         var status = "";
         
-	Suggestion.findOne({ _id: req.body.uid } ,function(err, suggestionInfo){
+	Suggestion.findOne({ _id: req.body.suggestionId } ,function(err, suggestionInfo){
             if(err){
               status = "error";
             }
             else{
                 
                 
-                Suggestion.update({ _id: req.body.uid}, { $set: { respondStatus: 'respond'} }, { multi: false }, function (err, suggestionUpdate) {
+                Suggestion.update({ _id: req.body.suggestionId}, { $set: { respondStatus: 'respond'} }, { multi: false }, function (err, suggestionUpdate) {
                     if(err){
                          status = "error";
                     }else{
@@ -2251,12 +2251,14 @@ router.post('/respond-suggestion', middleware.restrict, function(req, res) {
                         };
                         
                         nodemailer.mail(mailOptions);
-                        status = "success";
-                        res.send(status);
+                        
                     }
      
                 });
                 
+                req.flash('message', 'Your message has been sent successfully!');
+                req.flash('message_type','success');
+                res.redirect('/admin/list-suggestions');
                 
                 
             }
