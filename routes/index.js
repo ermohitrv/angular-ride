@@ -2405,7 +2405,7 @@ router.post('/submit-contactform', function(req, res){
                 
                 var mailOptionsadmin = {
                             from   : "Motorcycle <no-reply@motorcycle.com>", 
-                            to     :  'preeti_dev@rvtechnologies.co.in',
+                            to     : globalConfig.adminEmail,
                             subject: req.body.contactSubject,
                             html   : htmladmin
                 };
