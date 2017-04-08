@@ -1,4 +1,17 @@
 <% layout('layoutAdmin') -%>
+<style>
+.formtextarea{
+        width:100%;
+        padding: 5px 0px 5px 5px;
+        height:100px;
+}
+.modal-open {
+    overflow: auto !important;
+}
+.modal-backdrop {
+    position: relative !important;
+}
+</style>
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -25,9 +38,7 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <h3>
-<!--                                        <div class="pull-left">Reviews</div>
-                                        <div class="pull-right"><input data-ng-model="search_user.event_type" type="text" class="form-control" placeholder="Search review"></div>
-                                        <div class="clearfix"></div>-->
+
                                     </h3>
                                 <div class="result_del"></div>
                                 <% if (message.length > 0) { %>
@@ -42,8 +53,11 @@
                                             <tr role="row">
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Contact Name</th>
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Contact Email</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Location</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Phone</th>
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Subject</th>
-                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Description</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Message</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -54,15 +68,43 @@
                                                     <span data-ng-bind="contacts.contactEmail"></span>
                                                 </td>
                                                 <td>
+                                                    <span data-ng-bind="contacts.contactLocation"></span>
+                                                </td>
+                                                <td>
+                                                    <span data-ng-bind="contacts.contactPhone"></span>
+                                                </td>
+                                                <td>
                                                     <span data-ng-bind="contacts.contactSubject"></span>
                                                 </td>
                                                 <td>
                                                     <span data-ng-bind="contacts.contactDescription"></span>
                                                 </td>
-                                               
+                                                <td>
+                                                    
+                                                    <a  data-toggle="modal" data-target="#respond_{{ contacts._id }}" title="Respond"  class="" href="javascript:;">Respond</a>
+                                                    <div class="modal fade" id="respond_{{  contacts._id }}" role="dialog" aria-labelledby="respondBox" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                              <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                <h4 class="modal-title">{{ contacts.contactName }}:</h4>
+                                                              </div>
+                                                              <div class="modal-body">
+                                                                  <h4>Write a comment</h4>
+                                                                  <textarea class="formtextarea" id="contactRespondMessage" name="contactRespondMessage" ></textarea>
+                                                                   <label id="errormessage" class="error" style="display:none">This field is mandatory.</label>
+                                                              </div>
+                                                              <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                                                <a uid="{{ contacts._id }}" href="javascript:;" class="btn btn-danger respond_this_contact btn" id="respond">Send</a>
+                                                              </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
                                             <tr  data-ng-if="contactlist.length <= 0">
-                                                <td colspan="5" style="text-align: center">No results found</td>
+                                                <td colspan="7" style="text-align: center">No results found</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -82,3 +124,42 @@
     </section>
   </div>
   <!-- /.content-wrapper -->
+   <script data-cfasync="false"  >
+$(function(){
+    $(document).on('click', 'a.respond_this_contact' ,function(){
+        var uid = $(this).attr('uid');
+        var contactRespondMessage = $('#contactRespondMessage').val();
+        
+        if(contactRespondMessage != "" && uid != undefined && uid != null){
+
+            respond_contact(uid,contactRespondMessage);
+        }else{
+            $('#errormessage').css('display','block');
+        }
+        
+    });
+});
+
+function respond_contact(uid,contactRespondMessage){
+    
+    
+    jQuery.ajax({
+        type  : "POST",
+        url   : "/admin/respond-contact",
+        data  : {'uid' : uid,'contactRespondMessage':contactRespondMessage},
+        timeout: 3000,
+        success: function(data){
+             if(data === 'error'){
+                $(".result_del").html('<div class="alert alert-danger">Error Occured!</div>');
+            }else{
+                $('#respond_'+uid).hide();              
+                $('.modal-backdrop.in').css('opacity','0');
+                $(".result_del").html('<div class="alert alert-success">Your message has been sent successfully!</div>');
+            }
+        },
+        error : function(err){
+        }
+    });
+}
+</script>
+  

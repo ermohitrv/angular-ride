@@ -559,16 +559,23 @@ jQuery('#change_password_form').validate({
     /* validate contact form */
     jQuery("#contact_form").validate({
         rules: {
-            contactname: {
+            contactName: {
                 required: true,
                 minlength: 5,
                 maxlength: 20,
             },
-            contactemail: {
+            contactEmail: {
                 required: true,
                 email:true
             },
-            contactdescription: {
+            contactLocation: {
+                required: true,
+            },
+            contactPhone: {
+                required: true,
+                maxlength: 12,
+            },
+            contactDescription: {
                 required: true,
                 maxlength: 200,
             },
@@ -579,6 +586,33 @@ jQuery('#change_password_form').validate({
          }
     });
    
+   /* validate suggestion form */
+    jQuery("#suggestion_form").validate({
+        rules: {
+            suggestionName: {
+                required: true,
+                minlength: 5,
+                maxlength: 20,
+            },
+            suggestionEmail: {
+                required: true,
+                email:true
+            },
+           
+            suggestionPhone: {
+                required: true,
+                maxlength: 12,
+            },
+            suggestionDescription: {
+                required: true,
+                maxlength: 200,
+            },
+
+        },
+        messages: { 
+            
+         }
+    });
     //code to make ajax request to check if username exists or not
     var checkUsernameSuccess = function(response){
         switch (response) {
@@ -847,3 +881,25 @@ function joinevent(eventid,eventname){
     }
 }
 
+function initializeContactMap(){
+       
+        var myLatLng = {lat: -25.363, lng: 131.044};
+        var content = '<div style="width:300px"><h5 style="margin: 0;padding-left: 40px;">Woodford, Woodford Green IG8 0PY, UK<\/h5></div>';
+
+        var infowindow = new google.maps.InfoWindow({content: "temo"});
+        var map = new google.maps.Map(document.getElementById('map-canvas-contact'), {
+          zoom: 4,
+          center: myLatLng
+        });
+
+        var marker = new google.maps.Marker({
+          position: myLatLng,
+          map: map,
+          title: 'Organisation Location'
+        });
+        
+        google.maps.event.addListener(marker, 'click', function () {
+                infowindow.setContent(content);
+                infowindow.open(map, this);
+        });
+}

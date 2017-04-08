@@ -32,6 +32,8 @@ var Activity   = require('../models/activity');
 var Contact    = require('../models/contact');
 var Tax        = require('../models/tax');
 var Shipping        = require('../models/shipping');
+var Suggestion    = require('../models/suggestion');
+
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -2373,11 +2375,13 @@ router.get('/privacy-policy', function(req, res){
 router.post('/submit-contactform', function(req, res){
     
     
-    var objContact  = new Contact();
-    objContact.contactName        = req.body.contactname;
-    objContact.contactEmail       = req.body.contactemail;
-    objContact.contactSubject     = req.body.contactsubject;
-    objContact.contactDescription = req.body.contactdescription;
+    var objContact                = new Contact();
+    objContact.contactName        = req.body.contactName;
+    objContact.contactEmail       = req.body.contactEmail;
+    objContact.contactLocation    = req.body.contactLocation;
+    objContact.contactPhone       = req.body.contactPhone;
+    objContact.contactSubject     = req.body.contactSubject;
+    objContact.contactDescription = req.body.contactDescription;
     objContact.save(function (err) {
             if(err){
                 
@@ -2803,6 +2807,74 @@ router.post('/count-friends' , function(req, res) {
         }); 
     }
     
+});
+/*
+ * Suggestion form
+ */
+router.get('/suggestion', function(req, res){ 
+    res.render('suggestion', { 
+        user : req.user, 
+        title:'Suggestion',
+        session: req.session,
+        message : req.flash('message'),
+        message_type : req.flash('message_type'),
+        page_url: globalConfig.base_url });
+});
+
+/*
+ * submit Suggestion form
+ */
+router.post('/submit-suggestionform', function(req, res){
+    
+    
+    var objSuggestion                   = new Suggestion();
+    objSuggestion.suggestionName        = req.body.suggestionName;
+    objSuggestion.suggestionEmail       = req.body.suggestionEmail;
+    objSuggestion.suggestionPhone       = req.body.suggestionPhone;
+    objSuggestion.suggestionDescription = req.body.suggestionDescription;
+    objSuggestion.save(function (err) {
+            if(err){
+                
+                req.flash('messageSuccess', '');
+                res.redirect('/suggestion'); 
+            }  
+            else{
+                
+                /* Email from admin to contact user*/
+                var html = 'Hello '+req.body.suggestionName+',<br>Your query submitted succesfully.<br> Thankyou for suggesting us.<br><br>';
+                            html += '<br>Thank you, Team Motorcycle';
+                
+                var mailOptions = {
+                            from   : "Motorcycle <no-reply@motorcycle.com>", 
+                            to     :  req.body.suggestionEmail,
+                            subject: "Suggestion",
+                            html   : html
+                };
+                 
+                 /* Email from contact user to admin */
+                var htmladmin = 'Hello,<br>'+req.body.suggestionDescription+'<br><br>';
+                            htmladmin += '<br>Thank you, '+ req.body.suggestionName;
+                
+                var mailOptionsadmin = {
+                            from   : "Motorcycle <no-reply@motorcycle.com>", 
+                            to     : globalConfig.adminEmail,
+                            subject: "Suggestion",
+                            html   : htmladmin
+                };
+                
+                
+                nodemailer.mail(mailOptionsadmin);
+                nodemailer.mail(mailOptions);
+                
+                
+                
+                req.flash('message', 'Message submitted successfully!!');
+                req.flash('message_type','success');
+                res.redirect('/suggestion');
+            }
+            
+    });
+   
 });
 
 module.exports = router;

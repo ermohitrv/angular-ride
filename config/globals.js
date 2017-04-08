@@ -24,6 +24,7 @@ module.exports = {
     numberOfFreeTools : 10,
     numberOfHelmetsPerLevelCompletion :60,
     numberOfHelmetsPerSubRouteCompletion :20,
+    adminEmail :"preeti_dev@rvtechnologies.co.in",
     //signup email configs
     signupEmailSubject : 'Signup on RidePrix',
     

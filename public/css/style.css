@@ -2807,3 +2807,32 @@ li#header_inbox_bar i.fa.fa-times {
  position: absolute;
  width: 50px;
 }
+.contactsuggestionlink{
+    color: #fff;
+    text-transform: uppercase;
+    margin-top: 0;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.contactsuggestionlink:hover{
+    color:#fff;
+}
+#suggestion_form input.form-control {
+    border: 2px solid #ffffff;
+    border-radius: 3px;
+    color: #000;
+    height: 45px;
+}
+
+#suggestion_form label {
+    color: #fff;
+}
+
+#suggestion_form textarea.form-control {
+    height: 150px;
+}
+
+#suggestion_form .error {
+    color: #ff0000;
+}

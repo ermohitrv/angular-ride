@@ -27,6 +27,7 @@ var Contact    = require('../models/contact');
 var Orders    = require('../models/orders');
 var Tax    = require('../models/tax');
 var Shipping    = require('../models/shipping');
+var Suggestion    = require('../models/suggestion');
 
 
 var storage = multer.diskStorage({
@@ -104,7 +105,7 @@ router.get('/list-contact-requests', middleware.isAdminLoggedIn, function(req, r
 
 /* Route for List Suggestions */
 router.get('/list-suggestions', middleware.isAdminLoggedIn, function(req, res){
-    res.render('list-suggestions', { user : req.user, title:'Admin | List Suggestions',active:'list-suggestions'});
+    res.render('list-suggestions', { user : req.user, message : req.flash('message'),message_type : req.flash('message_type'), title:'Admin | List Suggestions',active:'list-suggestions'});
 });
 
 
@@ -2170,6 +2171,89 @@ router.post('/delete-shipping', middleware.restrict, function(req, res) {
                 status = "success";
             }
             res.send(status);
+          
+        });
+});
+
+router.get('/get-suggestions-list', middleware.restrict, function(req, res){
+    Suggestion.find({},function (err, suggestionList) {
+        if(suggestionList){
+            res.json(suggestionList);
+        }else{
+            res.json({});
+        }
+    });
+});
+
+router.post('/respond-contact', middleware.restrict, function(req, res) {
+        var contactRespondMessage = req.body.contactRespondMessage;
+        var status = "";
+        
+	Contact.findOne({ _id: req.body.uid } ,function(err, contactInfo){
+            if(err){
+              status = "error";
+            }
+            else{
+                
+                Contact.update({ _id: req.body.uid}, { $set: { respondStatus: 'respond'} }, { multi: false }, function (err, updateContact) {
+                    if(err){
+                        status = "error";
+                    }else{
+                            var html = 'Hello '+contactInfo.contactName+',<br>'+req.body.contactRespondMessage+'<br><br>';
+                                        html += '<br>Thank you, Team Motorcycle';
+
+                            var mailOptions = {
+                                        from   : "Motorcycle <no-reply@motorcycle.com>", 
+                                        to     : contactInfo.contactEmail,
+                                        subject: "Response from Rideprix",
+                                        html   : html
+                            };
+                    }
+                     });
+                
+                 status = "success";
+                 res.send(status);
+            }
+            //res.send(status);
+          
+        });
+});
+
+
+router.post('/respond-suggestion', middleware.restrict, function(req, res) {
+        var suggestionRespondMessage = req.body.suggestionRespondMessage;
+        var status = "";
+        
+	Suggestion.findOne({ _id: req.body.uid } ,function(err, suggestionInfo){
+            if(err){
+              status = "error";
+            }
+            else{
+                
+                
+                Suggestion.update({ _id: req.body.uid}, { $set: { respondStatus: 'respond'} }, { multi: false }, function (err, suggestionUpdate) {
+                    if(err){
+                         status = "error";
+                    }else{
+                        var html = 'Hello '+suggestionInfo.suggestionName+',<br>'+req.body.suggestionRespondMessage+'<br><br>';
+                                    html += '<br>Thank you, Team Motorcycle';
+
+                        var mailOptions = {
+                                    from   : "Motorcycle <no-reply@motorcycle.com>", 
+                                    to     :  suggestionInfo.suggestionEmail,
+                                    subject: "Response from Rideprix",
+                                    html   : html
+                        };
+                        status = "success";
+                        res.send(status);
+                    }
+     
+                });
+                
+                
+                
+            }
+            
           
         });
 });

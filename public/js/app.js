@@ -111,7 +111,20 @@ app.controller('homeController', ['$scope', '$http', function ($scope, $http) {
         });
     };
 
-    
+    $scope.drawContactLocation = function(eventmonth){
+        
+            var widthScreen = $(document).width();
+            if (widthScreen > 768) {
+                
+                if (window.google && google.maps) {
+                    // Map script is already loaded
+                    initializeContactMap();
+                } else {
+                    initializeContactMap();
+                }
+            
+         }
+    };
     
 }]);
 
@@ -850,6 +863,17 @@ app.controller('adminController',['$scope', '$http','$sce', function ($scope, $h
            
         }).error(function(){
             console.log('Oops! Error listing shipping-list');
+        });
+    };
+    
+    $scope.getsuggestionList= function(){
+       
+        $http.get('/admin/get-suggestions-list').success(function(suggestionList){
+          
+           $scope.suggestionList = suggestionList;
+           
+        }).error(function(){
+            console.log('Oops! Error listing suggestion list');
         });
     };
     
