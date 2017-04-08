@@ -2390,23 +2390,23 @@ router.post('/submit-contactform', function(req, res){
             }  
             else{
                 
-                var html = 'Hello '+req.body.contactname+',<br>Your query submitted succesfully.<br> Thankyou for contacting us.<br><br>';
+                var html = 'Hello '+req.body.contactName+',<br>Your query submitted succesfully.<br> Thankyou for contacting us.<br><br>';
                             html += '<br>Thank you, Team Motorcycle';
                 
                 var mailOptions = {
                             from   : "Motorcycle <no-reply@motorcycle.com>", 
-                            to     :  req.body.contactemail,
+                            to     :  req.body.contactEmail,
                             subject: "Contact",
                             html   : html
                 };
 
-                var htmladmin = 'Hello,<br>'+req.body.contactdescription+'<br><br>';
-                            htmladmin += '<br>Thank you, '+ req.body.contactname;
+                var htmladmin = 'Hello,<br>'+req.body.contactDescription+'<br><br>';
+                            htmladmin += '<br>Thank you, '+ req.body.contactName;
                 
                 var mailOptionsadmin = {
                             from   : "Motorcycle <no-reply@motorcycle.com>", 
                             to     :  'preeti_dev@rvtechnologies.co.in',
-                            subject: req.body.contactsubject,
+                            subject: req.body.contactSubject,
                             html   : htmladmin
                 };
                 
