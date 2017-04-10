@@ -328,13 +328,16 @@ router.post('/order/statusupdate', middleware.restrict, function(req, res) {
             req.flash('message_type','success');
             res.redirect('/admin/list-orders');
         }else{
+            console.log("name :"+orderInfo.order_firstname);
+            console.log("id :"+orderInfo._id);
+             var firstName = orderInfo.order_firstname;
             if(orderInfo.order_status == "Processing"){
                 var orderstatus = "Processed";
             }
             else{
                 orderstatus = "Completed";
             }
-            var html = 'Hello '+orderInfo.order_firstname+',<br><b>Your order with id "'+orderInfo._id+'" has been '+orderstatus+'</b><br><br>';
+            var html = 'Hello '+firstName+',<br><br/><b>Your order with id "'+orderId+'" has been '+orderstatus+'.</b><br><br>';
                                     html += '<br>Thank you, Team Motorcycle';
 
             var mailOptions = {
