@@ -669,7 +669,7 @@ router.post('/checkout_action', function(req, res, next) {
                         });
                     }else{
                         req.session.order_id = orderdata._id;
-                        var date =  new Date();
+                        var date = moment(orderdata.order_date).format('YYYY-MM-DD');
                         html += 'Hello, '+req.user.local.firstName+' '+req.user.local.lastName;
                         html += '<h4>Order Details</h4>'
                         html += '<table><tr><td>Order Id: </td>'+orderdata._id+'<td></td></tr><tr><td>Placed On: </td><td>'+date+'</td></tr></table>';
@@ -703,10 +703,10 @@ router.post('/checkout_action', function(req, res, next) {
                         
                             });
                             
-                            html += '<tr><td style="width:50%">'+req.session.cart[productid].title+'</td><td>'+req.session.cart[productid].item_price+'</td><td>'+req.session.cart[productid].quantity+'</td><td>'+req.session.cart[productid].total_item_price+'</td></tr>';
+                            html += '<tr><td style="width:50%">'+req.session.cart[productid].title+'</td><td>'+req.session.cart[productid].item_price+'</td><td>'+req.session.cart[productid].quantity+'</td><td>$'+req.session.cart[productid].total_item_price+'</td></tr>';
                         }
                         
-                            html += '<tr><td></td><td></td><td>Total</td><td>'+req.session.total_cart_amount+'</td></tr></table>';
+                            html += '<tr><td></td><td></td><td>Total</td><td>$'+req.session.total_cart_amount+'</td></tr></table>';
                             html += '<h4>Billing Address:</h4>';
                             html += '<table class="vieworder"><tr><td><b>Name :</b></td><td>'+req.user.local.firstName+' '+req.user.local.lastName+'</td></tr><tr><td><b>Email :</b></td><td>'+req.user.local.email+'</td></tr><tr><td><b>Address :</b></td><td>'+req.user.local.locationCity+' '+req.user.local.locationState+' '+req.user.local.locationCountry+' '+req.user.local.locationZipcode+'</td></tr></table>';
                     }
@@ -748,8 +748,8 @@ router.post('/checkout_action', function(req, res, next) {
 
                     var mailOptions = {
                                                         from   : "Motorcycle <no-reply@motorcycle.com>", 
-                                                        to     :  'preeti_dev@rvtechnologies.co.in',
-                                                        subject: "Order Status",
+                                                        to     :  req.user.local.email,
+                                                        subject: "Order Confirmation",
                                                         html   : emailBody
                     };
                         
