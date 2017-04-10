@@ -19,7 +19,7 @@
                 <select class="selectbox" name="frm_orderstatus">
                  <option name="Pending" <% if(result[0].order_status == 'Pending'){ %> selected='selected' <% } %> value="Pending">Pending</option>
                  <option name="Processing" <% if(result[0].order_status == 'Processing'){ %> selected='selected' <% } %> value="Processing">Processing</option>
-                 <option name="Complete" <% if(result[0].order_status == 'Complete'){ %> selected='selected' <% } %> value="Complete">Complete</option> 
+                 <option name="Completed" <% if(result[0].order_status == 'Completed'){ %> selected='selected' <% } %> value="Completed">Complete</option> 
                 </select>
                 </td>
             </tr>

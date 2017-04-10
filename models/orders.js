@@ -1,5 +1,5 @@
 var mongoose         = require('mongoose');
-var orderStatus       = 'Pending Processing Complete'.split(' ');
+var orderStatus       = 'Pending Processing Completed'.split(' ');
 
 var ordersSchema = mongoose.Schema({
         order_total                : {type: String, default: ''},
