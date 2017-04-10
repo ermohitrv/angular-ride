@@ -674,7 +674,7 @@ router.post('/checkout_action', function(req, res, next) {
                         html += '<h4>Order Details</h4>'
                         html += '<table><tr><td>Order Id: </td>'+orderdata._id+'<td></td></tr><tr><td>Placed On: </td><td>'+date+'</td></tr></table>';
                                                       
-                        html += '<table style="width:100%"><th>Product: </th><th>Unit Price</th><th>Quantity</th><th>Total Price</th>';
+                        html += '<table style="width:100%"><td><b>Product: </b></td><td><b>Unit Price</b></td><td><b>Quantity</b></td><td><b>Total Price</b></td>';
                         
                         if(req.user != ""){
                         for(var i = 0; i < req.session.productids.length; i++){ 
@@ -703,7 +703,7 @@ router.post('/checkout_action', function(req, res, next) {
                         
                             });
                             
-                            html += '<tr><td style="width:50%">'+req.session.cart[productid].title+'</td><td>'+req.session.cart[productid].item_price+'</td><td>'+req.session.cart[productid].quantity+'</td><td>$'+req.session.cart[productid].total_item_price+'</td></tr>';
+                            html += '<tr><td style="width:50%">'+req.session.cart[productid].title+'</td><td>$'+req.session.cart[productid].item_price+'</td><td>'+req.session.cart[productid].quantity+'</td><td>$'+req.session.cart[productid].total_item_price+'</td></tr>';
                         }
                         
                             html += '<tr><td></td><td></td><td>Total</td><td>$'+req.session.total_cart_amount+'</td></tr></table>';
