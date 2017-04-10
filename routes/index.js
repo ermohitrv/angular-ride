@@ -669,9 +669,12 @@ router.post('/checkout_action', function(req, res, next) {
                         });
                     }else{
                         req.session.order_id = orderdata._id;
-                        var html = '<table  style="width:100%"><tbody><tr><td width="10" style="padding:7px 0">&nbsp;</td><td style="padding:7px 0"><span style="color:#555454;></span><p style="border-bottom:1px solid #d6d4d4;margin:3px 0 7px;text-transform:uppercase;font-weight:500;font-size:18px;padding-bottom:10px">Order details</p><span style="color:#777"> <span style="color:#333"><strong>Order:</strong></span> <span>'+orderdata._id+'</span> Placed on '+orderdata.order_date+'<br><br><span style="color:#333"><strong>Payment:</strong></span> Bank wire </span></td><td width="10" style="padding:7px 0">&nbsp;</td></tr></tbody></table>'
+                        var date =  new Date();
+                        html += 'Hello, '+req.user.local.firstName+' '+req.user.local.lastName;
+                        html += '<h4>Order Details</h4>'
+                        html += '<table><tr><td>Order Id: </td>'+orderdata._id+'<td></td></tr><tr><td>Placed On: </td><td>'+date+'</td></tr></table>';
                                                       
-                        html += '<table><th>Product</th><th>Unit Price</th><th>Quantity</th><th>Total Price</th>';
+                        html += '<table style="width:100%"><th>Product: </th><th>Unit Price</th><th>Quantity</th><th>Total Price</th>';
                         
                         if(req.user != ""){
                         for(var i = 0; i < req.session.productids.length; i++){ 
@@ -700,11 +703,11 @@ router.post('/checkout_action', function(req, res, next) {
                         
                             });
                             
-                            html += '<tr><td>'+req.session.cart[productid].title+'</td><td>'+req.session.cart[productid].item_price+'</td><td>'+req.session.cart[productid].quantity+'</td><td>'+req.session.cart[productid].total_item_price+'</td></tr>';
+                            html += '<tr><td style="width:50%">'+req.session.cart[productid].title+'</td><td>'+req.session.cart[productid].item_price+'</td><td>'+req.session.cart[productid].quantity+'</td><td>'+req.session.cart[productid].total_item_price+'</td></tr>';
                         }
                         
                             html += '<tr><td></td><td></td><td>Total</td><td>'+req.session.total_cart_amount+'</td></tr></table>';
-                            html += '<h4>Billing Address</h4>';
+                            html += '<h4>Billing Address:</h4>';
                             html += '<table class="vieworder"><tr><td><b>Name :</b></td><td>'+req.user.local.firstName+' '+req.user.local.lastName+'</td></tr><tr><td><b>Email :</b></td><td>'+req.user.local.email+'</td></tr><tr><td><b>Address :</b></td><td>'+req.user.local.locationCity+' '+req.user.local.locationState+' '+req.user.local.locationCountry+' '+req.user.local.locationZipcode+'</td></tr></table>';
                     }
                     if(req.body.ship_email!=""){
@@ -733,7 +736,7 @@ router.post('/checkout_action', function(req, res, next) {
                                 }
                         
                             });
-                        html += '<h4>Shipping Address</h4>';  
+                        html += '<h4>Shipping Address:</h4>';  
                         html += '<table><tr><td><b>Name :</b></td><td>'+req.body.ship_firstname+' '+req.body.ship_lastname+'</td></tr><tr><td><b>Email :</b></td><td>'+req.body.ship_email+'</td></tr><tr><td><b>Address :</b></td><td>'+req.body.ship_addr1+' '+req.body.ship_city+' '+req.body.ship_state+' '+req.body.ship_country+','+req.body.ship_postcode+'</td></tr></table>';
 
                     }
