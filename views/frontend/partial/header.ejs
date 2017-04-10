@@ -1,19 +1,9 @@
 <% 
     if(user){
-        var profileimageplacehold = "http://placehold.it/300?text="+user.local.firstName;
-        var imagepath = profileimageplacehold;
-        if(user.local.profileImage == profileimageplacehold){ 
-                imagepath = user.local.profileImage;
-        }
-        else{
-                if(user.facebook.email != "" && user.facebook.email != undefined){
-                imagepath = user.local.profileImage;
-                }
-                else{
-                imagepath = "/public/uploads/"+user.local.profileImage;
-                }
-        }
+        var imagepath = user.local.profileImage;
+
     }
+    
                     
 %>
 <div class="header">

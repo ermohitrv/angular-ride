@@ -70,7 +70,7 @@ module.exports = function(passport) {
                 newUser.local.locationZipcode   = req.body.zipcode;
                 newUser.local.locationState     = req.body.state;
                 newUser.local.locationCountry   = req.body.country;
-                newUser.local.profileImage      = "http://placehold.it/300?text="+req.body.firstName;
+                newUser.local.profileImage      = "http://placehold.it/300";
                 newUser.local.locationLat       = req.body.usersignuploclat;
                 newUser.local.locationLng       = req.body.usersignuploclong;
                 

@@ -1,21 +1,9 @@
 <% layout('layout') -%>
 <% 
     if(userprofile){
-        var profileimageplacehold = "http://placehold.it/300?text="+userprofile.local.firstName;
-        var imagepath = profileimageplacehold;
-        if(userprofile.local.profileImage == profileimageplacehold){ 
-                imagepath = userprofile.local.profileImage;
-        }
-        else{
-                if(userprofile.facebook.email != "" && userprofile.facebook.email != undefined){
-                imagepath = userprofile.local.profileImage;
-                }
-                else{
-                imagepath = "/public/uploads/"+userprofile.local.profileImage;
-                }
-        }
-    }
-                    
+        var imagepath = userprofile.local.profileImage;
+
+    }               
 %>
 <section id="profile">
   <% if(user){ %>

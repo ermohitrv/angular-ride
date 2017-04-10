@@ -704,19 +704,19 @@ function setMarkers(userData) {
         if(markerData.local.firstName != "" && markerData.local.firstName != undefined && markerData.local.locationLat != "" && markerData.local.locationLat != undefined && markerData.local.locationLng != "" && markerData.local.locationLng != undefined){
         
         var profileimageplacehold = "http://placehold.it/300?text="+markerData.local.firstName;
-        var imagepath = profileimageplacehold;
-        var facebookimage = markerData.local.profileImage;
-        if(markerData.local.profileImage == profileimageplacehold){            
-            imagepath = markerData.local.profileImage;
-        }
-        else{        
-            if(facebookimage.indexOf('https://') !== -1){
-                imagepath = markerData.local.profileImage;
-            }
-            else{
-                imagepath = "/public/uploads/"+markerData.local.profileImage;
-            }        
-        }
+        var imagepath = markerData.local.profileImage;
+        //var facebookimage = markerData.local.profileImage;
+//        if(markerData.local.profileImage == profileimageplacehold){            
+//            imagepath = markerData.local.profileImage;
+//        }
+//        else{        
+//            if(facebookimage.indexOf('https://') !== -1){
+//                imagepath = markerData.local.profileImage;
+//            }
+//            else{
+//                imagepath = "/public/uploads/"+markerData.local.profileImage;
+//            }        
+//        }
         
         var name = markerData.local.firstName;
         var lat = markerData.local.locationLat;

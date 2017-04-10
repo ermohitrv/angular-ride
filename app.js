@@ -143,7 +143,7 @@ app.post('/profileimage', cpUpload, function (req, res, next) {
         //saving into database
         User.findOne({'local.email': req.user.local.email}, function (err, user) {
 
-            user.local.profileImage = fileName;
+            user.local.profileImage = '/public/uploads/'+fileName;
             user.save(function (err) {
                 if (err) {
                     console.log('File not uploaded, not saved to DB!');

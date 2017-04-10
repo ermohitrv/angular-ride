@@ -1,20 +1,10 @@
 <% layout('layout') -%>
 <% 
     if(user){
-        var profileimageplacehold = "http://placehold.it/300?text="+user.local.firstName;
-        var imagepath = profileimageplacehold;
-        if(user.local.profileImage == profileimageplacehold){ 
-                imagepath = user.local.profileImage;
-        }
-        else{
-                if(user.facebook.email != "" && user.facebook.email != undefined){
-                imagepath = user.local.profileImage;
-                }
-                else{
-                imagepath = "/public/uploads/"+user.local.profileImage;
-                }
-        }
+        var imagepath = user.local.profileImage;
+
     }
+    
                     
 %>
 <section id="profile" data-ng-controller="profileController">
@@ -558,7 +548,7 @@
                     <div class="form-group">
                         <div class="col-sm-5">
                             <% if(user.local.profileImage !== undefined && user.local.profileImage !== null && user.local.profileImage !== ""){ %>
-                            <img src="/public/uploads/<%= user.local.profileImage %>" class="image-circle">
+                            <img src="<%= user.local.profileImage %>" class="image-circle">
                             <% } %>
                         </div>
                         <div class="col-sm-7">
