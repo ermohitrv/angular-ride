@@ -33,6 +33,7 @@ var Contact    = require('../models/contact');
 var Tax        = require('../models/tax');
 var Shipping        = require('../models/shipping');
 var Suggestion    = require('../models/suggestion');
+var EmailTemplate   = require("./emailTemplate.js");
 
 
 var storage = multer.diskStorage({
@@ -2393,12 +2394,13 @@ router.post('/submit-contactform', function(req, res){
                 
                 var html = 'Hello '+req.body.contactName+',<br>Your query submitted succesfully.<br> Thankyou for contacting us.<br><br>';
                             html += '<br>Thank you, Team Motorcycle';
+               
                 
                 var mailOptions = {
                             from   : "Motorcycle <no-reply@motorcycle.com>", 
                             to     :  req.body.contactEmail,
                             subject: "Contact",
-                            html   : html
+                            html   : htmlBody
                 };
 
                 var htmladmin = 'Hello,<br>'+req.body.contactDescription+'<br><br>';
@@ -2844,23 +2846,27 @@ router.post('/submit-suggestionform', function(req, res){
                 /* Email from admin to contact user*/
                 var html = 'Hello '+req.body.suggestionName+',<br>Your query submitted succesfully.<br> Thankyou for suggesting us.<br><br>';
                             html += '<br>Thank you, Team Motorcycle';
+                            
+                var emailBody = EmailTemplate.emailMessage(html);
                 
                 var mailOptions = {
                             from   : "Motorcycle <no-reply@motorcycle.com>", 
                             to     :  req.body.suggestionEmail,
                             subject: "Suggestion",
-                            html   : html
+                            html   :  emailBody
                 };
                  
                  /* Email from contact user to admin */
                 var htmladmin = 'Hello,<br>'+req.body.suggestionDescription+'<br><br>';
                             htmladmin += '<br>Thank you, '+ req.body.suggestionName;
                 
+                var emailBodyAdmin = EmailTemplate.emailMessage(htmladmin);
+                 
                 var mailOptionsadmin = {
                             from   : "Motorcycle <no-reply@motorcycle.com>", 
                             to     : globalConfig.adminEmail,
                             subject: "Suggestion",
-                            html   : htmladmin
+                            html   : emailBodyAdmin
                 };
                 
                 
