@@ -1,6 +1,10 @@
 <% 
     if(user){
         var imagepath = user.local.profileImage;
+        var profileimageplacehold = "http://placehold.it/300";
+        if(user.local.profileImage == profileimageplacehold){ 
+                imagepath = user.local.profileImage+"?text="+user.local.firstName;
+        }
 
     }
     
