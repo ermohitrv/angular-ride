@@ -179,12 +179,12 @@ router.post('/change-password', function(req, res){
                 user.save(function(err){
                     if (!err){
                         html = 'Your password updated successfully!';
-                        var nodemailer = require("nodemailer");
+                         var emailBody = EmailTemplate.emailMessage(html);
                         nodemailer.mail({
                             from   : "RidePrix <info@rideprix.com>",
                             to     : user.local.email,
                             subject: "RidePrix password update notification",
-                            html   : html // html body
+                            html   : emailBody // html body
                         });
                         req.flash('messageSuccess', 'Your password updated successfully!');
                         res.redirect('/update-profile');
@@ -1454,12 +1454,14 @@ router.post('/join-event', middleware.isLoggedIn, function (req, res){
                           
                         var html = 'Hello,<br>You are successfully registered to the event.<br><br><b>Event Title : </b>'+eventsdata.eventName+'<br><b>Host by : </b>'+eventsdata.eventHost+'<br><b>Started on : </b>'+starttime+'<br><b>Ended on : </b>'+endtime+'<br><b>Venue Location : </b>'+eventsdata.eventLocation+'<br><br>';
                             html += '<br>Thank you, Team Motorcycle';
-                
+                            
+                        var emailBody = EmailTemplate.emailMessage(html);
+                        
                         var mailOptions = {
                             from   : "Motorcycle <no-reply@motorcycle.com>", 
                             to     :  req.user.local.email,
                             subject: "Join Events",
-                            html   : html
+                            html   : emailBody
                         };
 
                         nodemailer.mail(mailOptions);
@@ -2395,22 +2397,24 @@ router.post('/submit-contactform', function(req, res){
                 var html = 'Hello '+req.body.contactName+',<br>Your query submitted succesfully.<br> Thankyou for contacting us.<br><br>';
                             html += '<br>Thank you, Team Motorcycle';
                
-                
+                var emailBody = EmailTemplate.emailMessage(html);
                 var mailOptions = {
                             from   : "Motorcycle <no-reply@motorcycle.com>", 
                             to     :  req.body.contactEmail,
-                            subject: "Contact",
-                            html   : htmlBody
+                            subject: "Rideprix",
+                            html   :  emailBody
                 };
-
+        
                 var htmladmin = 'Hello,<br>'+req.body.contactDescription+'<br><br>';
                             htmladmin += '<br>Thank you, '+ req.body.contactName;
+                            
+                var emailBodyAdmin = EmailTemplate.emailMessage(htmladmin);
                 
                 var mailOptionsadmin = {
                             from   : "Motorcycle <no-reply@motorcycle.com>", 
                             to     : globalConfig.adminEmail,
                             subject: req.body.contactSubject,
-                            html   : htmladmin
+                            html   : emailBodyAdmin
                 };
                 
                 nodemailer.mail(mailOptionsadmin);

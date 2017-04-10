@@ -1889,12 +1889,12 @@ router.post('/userupdate',  middleware.restrict, function (req, res){
                             var html = 'Hello '+userinfo.local.firstName+', <br><br><b>Your rideprix account is '+accountstatus+'.</b><br>';
                             
                             html += '<br>Thank you, Team Motorcycle';
-
+                            var emailBody = EmailTemplate.emailMessage(html);
                             var mailOptions = {
                                 from   : "Motorcycle <no-reply@motorcycle.com>", 
                                 to     :  userinfo.local.email,
                                 subject: "Rideprix Account "+accountstatus,
-                                html   : html
+                                html   : emailBody
                             };
 
                             nodemailer.mail(mailOptions);
@@ -2281,12 +2281,12 @@ router.post('/respond-contact', middleware.restrict, function(req, res) {
                     }else{
                             var html = 'Hello '+contactInfo.contactName+',<br>'+req.body.contactRespondMessage+'<br><br>';
                                         html += '<br>Thank you, Team Motorcycle';
-
+                            var emailBody = EmailTemplate.emailMessage(html);
                             var mailOptions = {
                                         from   : "Motorcycle <no-reply@motorcycle.com>", 
                                         to     : contactInfo.contactEmail,
                                         subject: "Response from Rideprix",
-                                        html   : html
+                                        html   : emailBody
                             };
                           
                         nodemailer.mail(mailOptions);
@@ -2322,12 +2322,12 @@ router.post('/respond-suggestion', middleware.restrict, function(req, res) {
                     }else{
                         var html = 'Hello '+suggestionInfo.suggestionName+',<br>'+req.body.suggestionRespondMessage+'<br><br>';
                                     html += '<br>Thank you, Team Motorcycle';
-
+                        var emailBody = EmailTemplate.emailMessage(html);
                         var mailOptions = {
                                     from   : "Motorcycle <no-reply@motorcycle.com>", 
                                     to     :  suggestionInfo.suggestionEmail,
                                     subject: "Response from Rideprix",
-                                    html   : html
+                                    html   : emailBody
                         };
                         
                         nodemailer.mail(mailOptions);
