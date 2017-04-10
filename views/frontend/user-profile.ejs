@@ -140,7 +140,7 @@
                      <div class="text-center" id="author">
                         <img src="<%= imagepath %>">
                         <h3><%= userprofile.local.firstName+' '+userprofile.local.lastName %></h3>
-                        <small class="label label-warning"><%= userprofile.local.locationCountry %></small>
+                        <small class="label label-warning"><%= userprofile.local.locationCity %>,&nbsp;<%= userprofile.local.locationState %>,&nbsp;<%= userprofile.local.locationCountry %></small>
                         <p><%= userprofile.userBio  %></p>
                         <p data-ng-init="countFriendsFollowers('<%= userprofile.local.email %>','friends')"><span>{{totalFriends}}</span></p>
                         <p data-ng-init="countFriendsFollowers('<%= userprofile.local.email %>','followers')">Followed by <span>{{totalFollowers}}</span> people</p>

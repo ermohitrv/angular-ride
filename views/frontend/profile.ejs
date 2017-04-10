@@ -249,7 +249,7 @@
                      <div class="text-center" id="author">
                         <img src="<%= imagepath %>">
                         <h3><%= user.local.firstName+' '+user.local.lastName %></h3>
-                        <small class="label label-warning"><%= user.local.locationCountry %></small>
+                        <small class="label label-warning"><%= user.local.locationCity %>,&nbsp;<%= user.local.locationState %>,&nbsp;<%= user.local.locationCountry %></small>
                         <p><%= user.userBio %></p>
                         <p data-ng-init="countFriendsFollowers('<%= user.local.email %>','friends')"><span>{{totalFriends}}</span></p>
                         <p data-ng-init="countFriendsFollowers('<%= user.local.email %>','followers')">Followed by <span>{{totalFollowers}}</span> people</p>
