@@ -47,6 +47,7 @@
                                     <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
                                         <thead>
                                             <tr role="row">
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"></th>
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Title</th>
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Description</th>
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Date Added</th>
@@ -55,6 +56,11 @@
                                         </thead>
                                         <tbody>
                                             <tr data-ng-if="brandsList.length > 0" data-ng-repeat="brand in brandsList | filter: search_user | orderBy:'brand_added_date'" id="{{ brand._id }}" role="row" class="odd">
+                                                
+                                                <td style="width:10%">
+                                                    <img style="display:inline-block;" ng-src="{{brand.brand_image?'/public/uploads/'+brand.brand_image:'http://placehold.it/100X70'}}" alt="img" class="img-responsive"/>
+
+                                                </td>
                                                 
                                                 <td>{{ brand.brand_title }}</td>
                                                 <td>

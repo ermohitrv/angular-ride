@@ -877,6 +877,25 @@ app.controller('adminController',['$scope', '$http','$sce', function ($scope, $h
         });
     };
     
+    $scope.getOrderDetail = function(id){
+        var data = { 
+            order_id: id
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/admin/view-order-detail',config).success(function (response, status, headers, config){
+           
+            var text = $sce.trustAsHtml(response);
+            $scope.orderDetailView = response;
+           
+            
+        }).error(function(err){
+           console.log('Oops! Error occur'+err);
+        }); 
+    };
+    
 }]);
 
 app.controller('eventController',['$scope', '$http', function ($scope, $http, $location, $routeParams) {

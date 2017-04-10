@@ -28,7 +28,7 @@ var Orders    = require('../models/orders');
 var Tax    = require('../models/tax');
 var Shipping    = require('../models/shipping');
 var Suggestion    = require('../models/suggestion');
-
+var mongoose         = require('mongoose');
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -126,7 +126,7 @@ router.get('/get-users-list', middleware.isAdminLoggedIn, function(req, res){
 
 /* Route for List Suggestions */
 router.get('/get-brands-list', middleware.isAdminLoggedIn, function(req, res){
-    Brands.find({'brand_title':{$ne:null}},{_id:1,brand_title:1,brand_description:1,brand_added_date:1},function (err, brandsList) {
+    Brands.find({'brand_title':{$ne:null}},{_id:1,brand_image:1,brand_title:1,brand_description:1,brand_added_date:1},function (err, brandsList) {
         if(brandsList){
             res.json(brandsList);
         }else{
@@ -319,11 +319,38 @@ router.get('/order/delete/:id', middleware.restrict, function(req, res) {
 
 // update order status
 router.post('/order/statusupdate', middleware.restrict, function(req, res) {
-	var orders_index = req.orders_index;
+    var orderId = req.body.orderId;
+    console.log("orderId : "+orderId);
+    
+    Orders.update({_id: orderId},{$set: {order_status: req.body.frm_orderstatus} }, { multi: false }, function (err, orderInfo) {
+        if(err){
+            req.flash('message', '');
+            req.flash('message_type','success');
+            res.redirect('/admin/list-orders');
+        }else{
+            if(orderInfo.order_status == "Processing"){
+                var orderstatus = "Processed";
+            }
+            else{
+                orderstatus = "Completed";
+            }
+            var html = 'Hello '+orderInfo.order_firstname+',<br><b>Your order with id "'+orderInfo._id+'" has been '+orderstatus+'</b><br><br>';
+                                    html += '<br>Thank you, Team Motorcycle';
 
-    req.db.orders.update({_id: req.body.order_id},{$set: {order_status: req.body.status} }, { multi: false }, function (err, numReplaced) {
-        res.status(200).json({message: 'Status successfully updated'});
-  	});
+            var mailOptions = {
+                                    from   : "Motorcycle <no-reply@motorcycle.com>", 
+                                    to     :  orderInfo.order_email,
+                                    subject: "Order Status",
+                                    html   : html
+            };
+                        
+            nodemailer.mail(mailOptions);
+            
+            req.flash('message', 'Status Successfully Updated!');
+            req.flash('message_type','success');
+            res.redirect('/admin/list-orders');
+        }
+    });
 });
 
 // Admin section
@@ -1886,13 +1913,56 @@ router.get('/get-contacts-list', middleware.restrict, function(req, res){
 });
 
 router.get('/get-order-list', middleware.restrict, function(req, res){
-    Orders.find({},function (err, orderList) {
-        if(orderList){
-            res.json(orderList);
-        }else{
-            res.json({});
-        }
-    });
+//    Orders.find({},function (err, orderList) {
+//        if(orderList){
+//            res.json(orderList);
+//        }else{
+//            res.json({});
+//        }
+//    });
+
+
+       Orders.aggregate(
+                [   
+                   
+                    
+                    {
+                        $lookup:
+                                {
+                                    from: "ordersproducts",
+                                    localField: "_id",
+                                    foreignField: "order_id",
+                                    as: "item"
+                         }
+                    },
+                    {
+                        $project : {
+                            '_id':1,
+                            'order_firstname': 1,
+                            'order_lastname':1,
+                            'order_status':1,
+                            'order_email': 1,
+                            'order_total':1,
+                            "count": { $size:"$item.order_id"}, 
+                             
+                        } 
+                    }
+                      
+                ]
+                ,function (err, orderList) {
+                if(orderList){
+                       
+                       res.json(orderList);
+                }
+                else{
+                   
+                   res.json({});
+                
+                }
+            });
+
+
+
 });
 
 /* route to add tax */
@@ -2265,6 +2335,96 @@ router.post('/respond-suggestion', middleware.restrict, function(req, res) {
             
           
         });
+});
+
+/*
+ * View order detail page to show shipping and product info 
+ */
+router.get('/view-order-detail/:id', middleware.isAdminLoggedIn, function(req, res){
+    var orderId = req.params.id;
+    res.render('view-orderdetail', { 
+        user : req.user, 
+        orderId : orderId,
+        title:'Admin | View Order Detail',
+        active:'view-orderdetail'
+    });
+});
+
+/*
+ * get data for View order detail page shipping and product info 
+ */
+router.post('/view-order-detail', middleware.isAdminLoggedIn, function(req, res){
+    var order_id = req.body.params.order_id;
+    console.log('order_id: '+order_id);
+    if(order_id != ""){
+        
+          Orders.aggregate(
+                [   
+                    {
+                        $match:{_id: mongoose.Types.ObjectId(order_id) }
+                    },
+                    
+                    {
+                        $lookup:
+                                {
+                                    from: "ordersproducts",
+                                    localField: "_id",
+                                    foreignField: "order_id",
+                                    as: "item"
+                         }
+                    },
+                    {
+                        $lookup:
+                                {
+                                    from: "ordershippings",
+                                    localField: "_id",
+                                    foreignField: "order_id",
+                                    as: "item1"
+                         }
+                    },
+                    //{ "$unwind": "$item" },
+                    {
+                        $project : {
+                            '_id':1,
+                            'order_firstname': 1,
+                            'order_lastname':1,
+                            'order_status':1,
+                            'order_email': 1,
+                            'order_total':1,
+                            'order_addr1':1,
+                            'order_addr2':1,
+                            'order_city':1,
+                            'order_state':1,
+                            'order_country':1,
+                            'order_postcode':1,
+                            'order_total':1,
+                            'order_date':1,
+                            "count": { $size:"$item.order_id"}, 
+                            'item1':"$item1",
+                            'item':"$item",
+                            
+                                                         
+                        } 
+                    },
+                    
+                ]
+                ,function (err, orderDetail) {
+                if(orderDetail){
+                       console.log(JSON.stringify(orderDetail));
+                        console.log(JSON.stringify(orderDetail[0].item));
+                       
+                       res.render('widget/view-order-detail',{result: orderDetail,products:orderDetail[0].item});
+                }
+                else{
+                   res.json({});
+                }
+            });
+        
+        
+        
+    }else{
+        res.json({null:'0'});
+    }
 });
 
 module.exports = router;

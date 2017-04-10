@@ -40,32 +40,34 @@
                                     <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
                                         <thead>
                                             <tr role="row">
-                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">First Name</th>
-                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Last Name</th>
-                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Email</th>
-                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Address</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Customer Name</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Customer Email</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Items Count</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Amount</th>
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Order Status</th>
-                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Price</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Action</th>
+                                                
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr data-ng-if="orderlist.length > 0" data-ng-repeat="orders in orderlist | orderBy:'addedOn'" id="{{ orders._id }}" role="row" class="odd">
                                                 
-                                                <td><span data-ng-bind="orders.order_firstname"></span></td>
-                                                <td>
-                                                    <span data-ng-bind="orders.order_lastname"></span>
-                                                </td>
+                                                <td><span data-ng-bind="orders.order_firstname+' '+orders.order_lastname"></span></td>
+                                                
                                                 <td>
                                                     <span data-ng-bind="orders.order_email"></span>
                                                 </td>
                                                 <td>
-                                                    <span>{{orders.order_addr1}}{{orders.order_addr2}}{{orders.order_state}},&nbsp;{{orders.order_country}}<br/>{{orders.order_postcode}}</span>
+                                                    <span data-ng-bind="orders.count"></span>
+                                                </td>
+                                                <td>
+                                                    <span>${{orders.order_total | number: 2}}</span>
                                                 </td>
                                                 <td>
                                                     <span data-ng-bind="orders.order_status"></span>
                                                 </td>
                                                 <td>
-                                                    <span data-ng-bind="'$'+orders.order_total"></span>
+                                                    <a href="view-order-detail/{{ orders._id }}">View Order Detail Page</a>
                                                 </td>
                                                
                                             </tr>

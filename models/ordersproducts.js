@@ -1,8 +1,9 @@
 var mongoose         = require('mongoose');
-
+var Schema = mongoose.Schema;
+var  ObjectId = Schema.ObjectId;
 
 var ordersproductsSchema = mongoose.Schema({
-        order_id                   : {type: String, default: ''},
+        order_id                   : {type: ObjectId},
         product_title              : {type: String, default: ''},
         product_quantity           : {type: String, default: ''},
         product_color              : {type: String, default: ''},

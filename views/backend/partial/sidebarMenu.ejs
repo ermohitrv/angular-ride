@@ -59,7 +59,7 @@
             <li <% if(active == "add-product"){ %> class="active" <% } %>><a href="/admin/product/new"><i class="fa fa-plus"></i> Add Product</a></li>
           </ul>
         </li>
-        <li class="treeview <% if(active == "list-orders" || active == "add-brand" || active == "list-brands" ){ %> active <% } %>">
+        <li class="treeview <% if(active == "list-orders" || active == "view-orderdetail" || active == "add-brand" || active == "list-brands" ){ %> active <% } %>">
           <a href="#">
             <i class="fa  fa-shopping-cart"></i> <span>Order Management</span>
             <span class="pull-right-container">
@@ -67,7 +67,7 @@
             </span>
           </a>
           <ul class="active treeview-menu">
-            <li <% if(active == "list-orders"){ %> class="active" <% } %>><a href="/admin/list-orders"><i class="fa fa-list"></i> List Orders</a></li>
+            <li <% if(active == "list-orders" || active == "view-orderdetail"){ %> class="active" <% } %>><a href="/admin/list-orders"><i class="fa fa-list"></i> List Orders</a></li>
             <li <% if(active == "list-brands" || active == "add-brand"){ %> class="active" <% } %>>
                 <a href="#"><i class="fa fa-circle-o"></i>  <span>Brands </span>
                     <span class="pull-right-container">

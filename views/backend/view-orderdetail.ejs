@@ -1,0 +1,15 @@
+<% layout('layoutAdmin') -%>
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>View Order Detail</h1>
+        <ol class="breadcrumb">
+            <li><a href="/admin"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">View Order Detail</li>
+        </ol>
+    </section>
+    <section class="content" id="adminController" data-ng-controller="adminController">
+        <div class="row" data-ng-init="getOrderDetail('<%= orderId %>')">
+            <div bind-unsafe-html="orderDetailView"></div>
+        </div>
+    </section>
+</div>
