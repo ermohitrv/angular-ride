@@ -29,6 +29,7 @@ var Tax    = require('../models/tax');
 var Shipping    = require('../models/shipping');
 var Suggestion    = require('../models/suggestion');
 var mongoose         = require('mongoose');
+var EmailTemplate   = require("./emailTemplate.js");
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -339,12 +340,12 @@ router.post('/order/statusupdate', middleware.restrict, function(req, res) {
             }
             var html = 'Hello '+firstName+',<br><br/><b>Your order with id "'+orderId+'" has been '+orderstatus+'.</b><br><br>';
                                     html += '<br>Thank you, Team Motorcycle';
-
+            var emailBody = EmailTemplate.emailMessage(html);
             var mailOptions = {
                                     from   : "Motorcycle <no-reply@motorcycle.com>", 
                                     to     :  email,
                                     subject: "Order Status",
-                                    html   : html
+                                    html   : emailBody
             };
                         
             nodemailer.mail(mailOptions);
