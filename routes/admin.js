@@ -332,15 +332,16 @@ router.post('/order/statusupdate', middleware.restrict, function(req, res) {
         }else{
              var firstName = order.order_firstname;
              var email     = order.order_email;
-            if(orderInfo.order_status == "Processing"){
-                var orderstatus = "Processed";
-            }
-            else if(orderInfo.order_status == "Pending"){
-                var orderstatus = "Processed";
-            }
-            else if(orderInfo.order_status == "Completed"){
-                var orderstatus = "Completed";
-            }
+             var orderstatus = req.body.frm_orderstatus;
+//            if(orderInfo.order_status == "Processing"){
+//                var orderstatus = "Processed";
+//            }
+//            else if(orderInfo.order_status == "Pending"){
+//                var orderstatus = "Processed";
+//            }
+//            else if(orderInfo.order_status == "Completed"){
+//                var orderstatus = "Completed";
+//            }
             var html = 'Hello '+firstName+',<br><br/><b>Your order with id "'+orderId+'" has been '+orderstatus+'.</b><br><br>';
                                     html += '<br>Thank you, Team Motorcycle';
             var emailBody = EmailTemplate.emailMessage(html);
