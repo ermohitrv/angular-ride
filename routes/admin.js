@@ -329,9 +329,7 @@ router.post('/order/statusupdate', middleware.restrict, function(req, res) {
             req.flash('message_type','success');
             res.redirect('/admin/list-orders');
         }else{
-            console.log("name :"+order.order_firstname);
-            console.log("id :"+order._id);
-             var firstName = orderInfo.order_firstname;
+             var firstName = order.order_firstname;
             if(orderInfo.order_status == "Processing"){
                 var orderstatus = "Processed";
             }
