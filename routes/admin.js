@@ -339,7 +339,7 @@ router.post('/order/statusupdate', middleware.restrict, function(req, res) {
 
             var mailOptions = {
                                     from   : "Motorcycle <no-reply@motorcycle.com>", 
-                                    to     :  orderInfo.order_email,
+                                    to     :  'preeti_dev@rvtechnologies.co.in',
                                     subject: "Order Status",
                                     html   : html
             };
