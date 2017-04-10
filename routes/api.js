@@ -596,6 +596,7 @@ router.post('/init-add-route', function(req, res){
     
     var ending_locationLat   = req.body.ending_locationLat;
     var ending_locationLng   = req.body.ending_locationLng;
+    var route                = req.body.route;
 
 //    var email                = "test@gmail.com";
 //    var starting_locationLat = "1.2393";
@@ -604,14 +605,15 @@ router.post('/init-add-route', function(req, res){
 //    var ending_locationLat   = "1.5532";
 //    var ending_locationLng   = "0.4221";
       
-    RpRoutes.findOne({ 'email' :  { $regex : new RegExp(email, "i") },'isRouteCompleted':'COMPLETED' }, function (err, rpRoute){
-            
-            if(rpRoute){
-                objRoute.route = rpRoute.route  + 1;
-            }else{
-                objRoute.route              = 1;
-            }
-
+    RpRoutes.findOne({ 'email' :  { $regex : new RegExp(email, "i") },route:route}, function (err, rpRoute){
+//            
+//            if(rpRoute){
+//                objRoute.route = rpRoute.route  + 1;
+//            }else{
+//                objRoute.route              = 1;
+//            }
+            if(!rpRoute){
+            objRoute.route                  = route;
             objRoute.email                  = email;
             objRoute.startinglocationLat    = starting_locationLat;
             objRoute.startinglocationLng    = starting_locationLng;
@@ -664,6 +666,8 @@ router.post('/init-add-route', function(req, res){
                                 locationLng : starting_locationLng,
                                 activeStatus: 'INACTIVE',
                                 invitedFriends: [],
+                                route:      route,
+                                routestatus: "created"
                             },
 
                         }, 
@@ -672,6 +676,15 @@ router.post('/init-add-route', function(req, res){
                     });
                 }
             });
+        }else{
+            res.json({
+                        success: true, 
+                        data: null, 
+                        message: "route "+route+" already created", 
+                        routestatus:"exist",
+                        code: 200
+            });
+        }
     }).sort({'lastModifiedDate':-1});
 });
 
