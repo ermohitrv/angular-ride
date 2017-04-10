@@ -612,6 +612,7 @@ router.post('/checkout_action', function(req, res, next) {
     }
     console.log("Total amount"+req.session.total_cart_amount);
     req.session.total_cart_amount = req.body.shiptotalamount;
+    console.log("ship email : "+req.body.ship_email);
     // new order doc
     var order_doc = { 
         order_total: req.session.total_cart_amount,
@@ -757,7 +758,7 @@ router.get('/checkout_return', function(req, res, next) {
         if(data.PAYMENTSTATUS == "Pending"){
             payment_approved = true;
             payment_message = "Your payment was successfully completed";
-            payment_status = data.PAYMENTSTATUS + " - Reason: " + data.PENDINGREASON;
+            payment_status = data.PAYMENTSTATUS;
             
             // clear the cart
             if(req.session.cart){
