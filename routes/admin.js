@@ -330,6 +330,7 @@ router.post('/order/statusupdate', middleware.restrict, function(req, res) {
             res.redirect('/admin/list-orders');
         }else{
              var firstName = order.order_firstname;
+             var email     = order.order_email;
             if(orderInfo.order_status == "Processing"){
                 var orderstatus = "Processed";
             }
@@ -341,7 +342,7 @@ router.post('/order/statusupdate', middleware.restrict, function(req, res) {
 
             var mailOptions = {
                                     from   : "Motorcycle <no-reply@motorcycle.com>", 
-                                    to     :  'preeti_dev@rvtechnologies.co.in',
+                                    to     :  email,
                                     subject: "Order Status",
                                     html   : html
             };
