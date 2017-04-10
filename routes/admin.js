@@ -322,14 +322,15 @@ router.post('/order/statusupdate', middleware.restrict, function(req, res) {
     var orderId = req.body.orderId;
     console.log("orderId : "+orderId);
     
+    Orders.findOne({_id: orderId},  function (err, order) {
     Orders.update({_id: orderId},{$set: {order_status: req.body.frm_orderstatus} }, { multi: false }, function (err, orderInfo) {
         if(err){
             req.flash('message', '');
             req.flash('message_type','success');
             res.redirect('/admin/list-orders');
         }else{
-            console.log("name :"+orderInfo.order_firstname);
-            console.log("id :"+orderInfo._id);
+            console.log("name :"+order.order_firstname);
+            console.log("id :"+order._id);
              var firstName = orderInfo.order_firstname;
             if(orderInfo.order_status == "Processing"){
                 var orderstatus = "Processed";
@@ -353,6 +354,7 @@ router.post('/order/statusupdate', middleware.restrict, function(req, res) {
             req.flash('message_type','success');
             res.redirect('/admin/list-orders');
         }
+    });
     });
 });
 
