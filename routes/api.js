@@ -1379,8 +1379,12 @@ router.post('/start-route', function (req, res) {
                     var startlon = getrproutes.startinglocationLng;
                     
                     //function to calculate distance remaining to check whether route is completed or not
+                    if(getrproutes.isRouteCompleted == "CREATED"){
                     var distanceStarted = RouteFunction.calculateDistance(startlat,startlon,currentlat,currentlon);
-                       
+                    } 
+                    else{
+                    var distanceStarted = RouteFunction.calculateDistance(getrproutes.currentlocationLat,getrproutes.currentlocationLng,currentlat,currentlon);
+                    }
                     var distInmeters = distanceStarted * 1000;  // distance in meters
                     var roundDist = Math.round(distInmeters);
 
@@ -1421,7 +1425,7 @@ router.post('/start-route', function (req, res) {
 
                                         email       :email,
                                         route       :getrproutes.route,
-                                        isRouteCompleted :'ONGOING'
+                                        isRouteCompleted :'ONGOING',
 
                                     },
                                 message: globalConfig.successUpdate, 
