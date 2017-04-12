@@ -37,18 +37,19 @@
                                         <div class="clearfix"></div>
                                     </h3>
                                 <div class="result_del"></div>
-<!--                                <% if (message.length > 0) { %>
+                                <% if (message.length > 0) { %>
                                     <% if (message_type == "success"){ %>
                                         <div class="alert alert-success"><%= message %></div>
                                     <% }else{ %>
                                         <div class="alert alert-danger"><%= message %></div>
                                     <% } %>
-                                <% } %>-->
+                                <% } %>
                                     <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
                                         <thead>
                                             <tr role="row">
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Title</th>
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Description</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Products Count</th>
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Date Added</th>
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Action</th>
                                             </tr>
@@ -59,6 +60,9 @@
                                                 
                                                 <td>
                                                     <span>{{ category.category_description }}</span>
+                                                </td>
+                                                <td>
+                                                    <span>{{ category.count }}</span>
                                                 </td>
                                                 <td>
                                                     <span data-ng-bind="category.category_added_date | date:'yyyy-MM-dd hh:mm:ss' "></span>

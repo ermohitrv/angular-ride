@@ -565,85 +565,21 @@ router.get('/products/filter/:search', middleware.restrict, function(req, res, n
 });
 
 // insert product form
-router.get('/product/new', middleware.restrict, function(req, res) {
-    res.render('product_new', {
-        title: 'New product', 
-        session: req.session,
-        product_title: middleware.clear_session_value(req.session, "product_title"),
-        product_description: middleware.clear_session_value(req.session, "product_description"),
-        product_price: middleware.clear_session_value(req.session, "product_price"),
-        product_permalink: middleware.clear_session_value(req.session, "product_permalink"),
-        message: middleware.clear_session_value(req.session, "message"),
-        message_type: middleware.clear_session_value(req.session, "message_type"),
-        editor: true,
-        user:req.user,
-        active:'add-product'
-    });
-});
-
-// insert new product form action
-/*router.post('/product/insert',  middleware.restrict, function(req, res) {
-    //console.log('product_category: '+product_category);
-    //console.log('product_brand: '+product_brand);
-    //console.log('product_size: '+product_size);
-  
-    
-    
-    Products.count({'product_permalink': req.body.frm_product_permalink}, function (err, product) {
-        if(product > 0 && req.body.frm_product_permalink != ""){
-
-            req.flash('message', globalConfig.productExists);
-            req.flash('message_type','danger');
-            // redirect to insert
-            res.redirect('/admin/insert');
-        }else{
-            
-            var product_category,product_brand,product_size = ""; 
-            for (var key in req.body) {
-                item = req.body[key];
-                if(key.indexOf('frm_product_category') != -1){
-                    product_category = item;
-                }
-                if(key.indexOf('frm_product_brand') != -1){
-                    product_brand = item;
-                }
-                if(key.indexOf('frm_product_size') != -1){
-                    product_size = item;
-                }
-            }
-            
-            var productObj = new Products();
-            productObj.product_permalink    = req.body.frm_product_permalink;
-            productObj.product_title        = req.body.frm_product_title;
-            productObj.product_price        = req.body.frm_product_price;
-            productObj.product_description  = req.body.frm_product_description;
-            productObj.product_short_description = req.body.frm_product_short_description;
-            productObj.product_published    = req.body.frm_product_published;
-            productObj.product_featured     = req.body.frm_product_featured;
-            productObj.product_sku          = req.body.frm_product_sku;
-            productObj.product_added_date   = new Date();
-            productObj.product_rating       = 0;
-            productObj.product_category     = product_category;
-            productObj.product_brand        = product_brand;
-            productObj.product_size         = product_size;
-            
-            console.log('productObj: '+productObj);
-            
-            productObj.save(function (err) {
-                if(err){
-                    console.error("Error inserting document: " + err);
-                    req.flash('message', globalConfig.productCreateError+' '+err);
-                    req.flash('message_type','danger');
-                    res.redirect('/admin/insert');
-                }else{
-                    req.flash('message', globalConfig.productCreateSuccess);
-                    req.flash('message_type','success');
-                    res.redirect('/admin/list-products');
-                }
-            });
-        }
-    });
-});*/
+//router.get('/product/new', middleware.restrict, function(req, res) {
+//    res.render('product_new', {
+//        title: 'New product', 
+//        session: req.session,
+//        product_title: middleware.clear_session_value(req.session, "product_title"),
+//        product_description: middleware.clear_session_value(req.session, "product_description"),
+//        product_price: middleware.clear_session_value(req.session, "product_price"),
+//        product_permalink: middleware.clear_session_value(req.session, "product_permalink"),
+//        message: middleware.clear_session_value(req.session, "message"),
+//        message_type: middleware.clear_session_value(req.session, "message_type"),
+//        editor: true,
+//        user:req.user,
+//        active:'add-product'
+//    });
+//});
 
 // insert new product form action
 var cpUpload = upload.fields([{name: 'upload_file', maxCount: 10}]);
@@ -684,7 +620,7 @@ router.post('/product/insert', cpUpload, middleware.restrict, function(req, res)
                     product_size = item;
                 }
             }
-            
+            console.log("sdsds : "+product_category);
             var productObj = new Products();
             productObj.product_permalink    = req.body.frm_product_permalink;
             productObj.product_title        = req.body.frm_product_title;
@@ -722,124 +658,171 @@ router.post('/product/insert', cpUpload, middleware.restrict, function(req, res)
 
 // render the editor
 router.get('/product/edit/:id', middleware.restrict, function(req, res) {
-	var db = req.db;
-        var classy = require("markdown-it-classy");
-	var markdownit = req.markdownit;
-	markdownit.use(classy);
-
-    middleware.get_images(req.params.id, req, res, function (images){
+//	var db = req.db;
+//        var classy = require("markdown-it-classy");
+//	var markdownit = req.markdownit;
+//	markdownit.use(classy);
+    console.log("product id : "+req.params.id);
+    //middleware.get_images(req.params.id, req, res, function (images){
         Products.findOne({_id: req.params.id}, function (err, result) {
-            res.render('product_edit', { 
-                title: 'Edit product', 
-                "result": result,
-                images: images,          
-                session: req.session,
-                message: middleware.clear_session_value(req.session, "message"),
-                message_type: middleware.clear_session_value(req.session, "message_type"),
-                //config: req.config.get('application'),
-                editor: true,
-                user:req.user,
-                active:'add-product'
-                //helpers: req.handlebars.helpers
+            Categories.find({ }, function (err, catresults) {
+
+                Brands.find({ }, function (err, brandresults) {   
+                    console.log(result);
+                    res.render('product_edit', { 
+                        title: 'Edit product', 
+                        "result": result,
+                        "catresults":catresults,
+                        "brandresults":brandresults,
+                       // images: images,          
+                        session: req.session,
+                        message: middleware.clear_session_value(req.session, "message"),
+                        message_type: middleware.clear_session_value(req.session, "message_type"),
+                        editor: true,
+                        user:req.user,
+                        active:'add-product'
+                    });
+                });
             });
         });
-    });
+    //});
 });
 
 // Update an existing product form action
-router.post('/product/update', middleware.restrict, function(req, res) {
-  	var db = req.db;
-	var products_index = req.products_index;
- 
- 	Products.count({'product_permalink': req.body.frm_product_permalink, $not: { _id: req.body.frm_product_id }}, function (err, product) {
-		if(product > 0 && req.body.frm_product_permalink != ""){
-			// permalink exits
-			req.session.message = "Permalink already exists. Pick a new one.";
-			req.session.message_type = "danger";
-			
-			// keep the current stuff
-			req.session.product_title = req.body.frm_product_title;
-			req.session.product_description = req.body.frm_product_description;
-			req.session.product_price = req.body.frm_product_price;
-			req.session.product_permalink = req.body.frm_product_permalink;
-            req.session.product_featured = req.body.frm_product_featured;
-				
-			// redirect to insert
-			res.redirect('/edit/' + req.body.frm_product_id);
-		}else{
-			//db.products.findOne({_id: req.body.frm_product_id}, function (err, article) {
-            middleware.get_images(req.body.frm_product_id, req, res, function (images){
-                var product_doc = {
-                    product_title: req.body.frm_product_title,
-                    product_description: req.body.frm_product_description,
-                    product_published: req.body.frm_product_published,
-                    product_price: req.body.frm_product_price,
-                    product_permalink: req.body.frm_product_permalink,
-                    product_featured: req.body.frm_product_featured
-                }
-                
-                // if no featured image
-                if(!product_doc.product_image){
-                    if(images.length > 0){
-                        product_doc["product_image"] = images[0].path;
-                    }else{
-                        product_doc["product_image"] = "/uploads/placeholder.png";
-                    }
-                }
-                
-                Products.update({_id: req.body.frm_product_id},{ $set: product_doc}, {},  function (err, numReplaced) {
-                    if(err){
-                        console.error("Failed to save product: " + err)
-                        req.session.message = "Failed to save. Please try again";
-                        req.session.message_type = "danger";
-                        res.redirect('/edit/' + req.body.frm_product_id);
-                    }else{
-                        // create lunr doc
-                        var lunr_doc = { 
-                            product_title: req.body.frm_product_title,
-                            product_description: req.body.frm_product_description,
-                            id: req.body.frm_product_id
-                        };
-                        
-                        // update the index
-                        products_index.update(lunr_doc, false);
-                        
-                        req.session.message = "Successfully saved";
-                        req.session.message_type = "success";
-                        res.redirect('/admin/product/edit/' + req.body.frm_product_id);
-                    }
-                });
-			});
-		}
-	});
+//router.post('/product/update', middleware.restrict, function(req, res) {
+//  	var db = req.db;
+//	var products_index = req.products_index;
+// 
+// 	Products.count({'product_permalink': req.body.frm_product_permalink, $not: { _id: req.body.frm_product_id }}, function (err, product) {
+//		if(product > 0 && req.body.frm_product_permalink != ""){
+//			// permalink exits
+//			req.session.message = "Permalink already exists. Pick a new one.";
+//			req.session.message_type = "danger";
+//			
+//			// keep the current stuff
+//			req.session.product_title = req.body.frm_product_title;
+//			req.session.product_description = req.body.frm_product_description;
+//			req.session.product_price = req.body.frm_product_price;
+//			req.session.product_permalink = req.body.frm_product_permalink;
+//            req.session.product_featured = req.body.frm_product_featured;
+//				
+//			// redirect to insert
+//			res.redirect('/edit/' + req.body.frm_product_id);
+//		}else{
+//			//db.products.findOne({_id: req.body.frm_product_id}, function (err, article) {
+//            middleware.get_images(req.body.frm_product_id, req, res, function (images){
+//                var product_doc = {
+//                    product_title: req.body.frm_product_title,
+//                    product_description: req.body.frm_product_description,
+//                    product_published: req.body.frm_product_published,
+//                    product_price: req.body.frm_product_price,
+//                    product_permalink: req.body.frm_product_permalink,
+//                    product_featured: req.body.frm_product_featured
+//                }
+//                
+//                // if no featured image
+//                if(!product_doc.product_image){
+//                    if(images.length > 0){
+//                        product_doc["product_image"] = images[0].path;
+//                    }else{
+//                        product_doc["product_image"] = "/uploads/placeholder.png";
+//                    }
+//                }
+//                
+//                Products.update({_id: req.body.frm_product_id},{ $set: product_doc}, {},  function (err, numReplaced) {
+//                    if(err){
+//                        console.error("Failed to save product: " + err)
+//                        req.session.message = "Failed to save. Please try again";
+//                        req.session.message_type = "danger";
+//                        res.redirect('/edit/' + req.body.frm_product_id);
+//                    }else{
+//                        // create lunr doc
+//                        var lunr_doc = { 
+//                            product_title: req.body.frm_product_title,
+//                            product_description: req.body.frm_product_description,
+//                            id: req.body.frm_product_id
+//                        };
+//                        
+//                        // update the index
+//                        products_index.update(lunr_doc, false);
+//                        
+//                        req.session.message = "Successfully saved";
+//                        req.session.message_type = "success";
+//                        res.redirect('/admin/product/edit/' + req.body.frm_product_id);
+//                    }
+//                });
+//			});
+//		}
+//	});
+//});
+/*
+ * Update product 
+ */
+var cpUploadEditProduct = upload.fields([{name: 'product_edit_upload_file', maxCount: 10}]);
+router.post('/product/update',cpUploadEditProduct, middleware.restrict, function(req, res) {
+    var imagesarray = req.files['product_edit_upload_file'];
+    var productimages = [];
+    if(req.files['product_edit_upload_file']){
+    for(var img=0; img < imagesarray.length; img++){
+        var imgname = imagesarray[img].filename;
+        productimages.push(imgname);
+    }
+    }
+    Products.findOne({_id: req.body.frm_product_edit_id},  function (err, product) {
+        var productimg = product.product_image;
+        for(var i = 0; i < productimg.length; i++){
+            productimages.push(productimg[i]);
+        }
+    var product_doc = {
+                    product_title: req.body.frm_product_edit_title,
+                    product_category: req.body.frm_product_edit_category,
+                    product_brand: req.body.frm_product_edit_brand,
+                    product_size: req.body.frm_product_edit_size,
+                    product_weight: req.body.frm_product_edit_weight,
+                    product_sku: req.body.frm_product_edit_sku,
+                    product_short_description: req.body.frm_product_edit_shortdesc,
+                    product_description: req.body.frm_product_edit_longdesc,
+                    product_published: req.body.frm_product_edit_published,
+                    product_price: req.body.frm_product_edit_price,
+//                    product_permalink: req.body.frm_product_edit_permalink,
+                    product_featured: req.body.frm_product_edit_featured,
+                    product_image:productimages
+    }
+   
+    Products.update({_id: req.body.frm_product_edit_id},{ $set: product_doc}, {},  function (err, numReplaced) {
+    if(err){
+            console.error("Failed to save product: " + err)
+            req.session.message = "Failed to save. Please try again";
+            req.session.message_type = "danger";
+            res.redirect('/admin/product/edit/' + req.body.frm_product_edit_id);
+    }else{                     
+            req.flash('message', 'Product Updated Successfully!');
+            req.flash('message_type','success');
+            res.redirect('/admin/list-products');            
+        }
+    });
+    });
+		
 });
 
 // delete product
-router.get('/product/delete/:id', middleware.restrict, function(req, res) {
-    var rimraf = require('rimraf');
-	var products_index = req.products_index;
-	
+router.get('/product/delete', middleware.restrict, function(req, res) {
+      console.log("id: "+req.query.id);
+      //res.send(true);
 	// remove the article
-	Products.remove({_id: req.params.id}, {}, function (err, numRemoved) {      
-        // delete any images and folder
-            rimraf("public/uploads/" + req.params.id, function(err) {
-
-                // create lunr doc
-                var lunr_doc = { 
-                    product_title: req.body.frm_product_title,
-                    product_description: req.body.frm_product_description,
-                    id: req.body.frm_product_id
-                };
-
+	Products.remove({_id: req.query.id}, function (err, numRemoved) {      
+            if(err){
+                req.flash('message', '');
+                req.flash('message_type','success');
+                res.redirect('/admin/list-products'); 
+            }else{
                 // remove the index
-                products_index.remove(lunr_doc, false);
-
                 // redirect home
-                req.session.message = "Product successfully deleted";
-                req.session.message_type = "success";
-                res.redirect('/admin/list-products');
-            });
-  	});
+                req.flash('message', 'Product Deleted Successfully!');
+                req.flash('message_type','success');
+                res.redirect('/admin/list-products'); 
+            }   
+        });
 });
 
 // insert brand form
@@ -1330,12 +1313,38 @@ router.post('/category/insert',  middleware.restrict, function(req, res) {
 
 /* Route for List categories by Angular */
 router.get('/get-categories-list', middleware.restrict, function(req, res){
-    Categories.aggregate([{$sort: {'category_added_date': 1}}], function (err, categoryList) {
-        if(categoryList){
-            res.json(categoryList);
-        }else{
-            res.json({});
-        }
+    Categories.aggregate(
+                        [
+                            {
+                                $lookup:
+                                        {
+                                            from: "products",
+                                            localField: "category_title",
+                                            foreignField: "product_category",
+                                            as: "item"
+                                 }
+                            },
+                            {
+                                $project : {
+                                    '_id':1,
+                                    'category_title': 1,
+                                    'category_short_description':1,
+                                    'category_description':1,
+                                    'category_added_date': 1,
+                                    "count": { $size:"$item.product_category"}, 
+                                } 
+                            },
+                            {
+                                $sort: {'category_added_date': 1}
+                            }
+                        ], function (err, categoryList) {
+                            
+                        if(categoryList){
+                            console.log(categoryList);
+                            res.json(categoryList);
+                        }else{
+                            res.json({});
+                        }
     });
 });
 
@@ -1447,7 +1456,7 @@ router.post('/delete-category/', middleware.restrict, function(req, res) {
         });
 });
 
-/* update category */
+/* Route to show update category page */
 router.get('/updatecategory', middleware.restrict, function(req, res) {
     //res.send(true);
     
@@ -1473,11 +1482,12 @@ router.get('/updatecategory', middleware.restrict, function(req, res) {
 
 });
 
-
+/*
+ * Route to update category in database
+ */
 router.post('/category/update', middleware.restrict, function(req, res) {
     
    
-    
     Categories.findOne({'_id': req.body.frm_category_id}, function (err, categorydata) {
         
         if(categorydata) {
@@ -1486,6 +1496,7 @@ router.post('/category/update', middleware.restrict, function(req, res) {
                             },
                             { 
                                 $set:   { 
+                                            'category_title': req.body.frm_category_title ,
                                             'category_short_description': req.body.frm_category_short_description ,
                                             'category_description':req.body.frm_category_description,
                                         } 
@@ -1496,32 +1507,38 @@ router.post('/category/update', middleware.restrict, function(req, res) {
                      if (err){
                        
                     }else{
-                        
-                        console.log('update category');
-                         res.render('list-categories', { 
-                            message : 'Category Updated Successfully!',
-                            message_type : 'success',
-                            user : req.user, 
-                            title:'Admin | List Categories',
-                            active:'list-category'
+                        /* Update category title in product table */
+                        if(req.body.frm_category_title != req.body.frm_hidden_category_title){ 
+                        Products.update({ 'product_category': { $regex : new RegExp(req.body.frm_hidden_category_title, "i") } },{  $set:   {  'product_category': req.body.frm_category_title }},{ multi: true },function(err, productInfo){
+                            if(err){
+                                req.flash('message', '');
+                                req.flash('message_type','success');
+                                res.redirect('/admin/list-categories');
+                            }else{
+                                req.flash('message', 'Category Updated Successfully!');
+                                req.flash('message_type','success');
+                                res.redirect('/admin/list-categories');
+                            }
+
                         });
-                        
-                        
+                        }else{
+                            req.flash('message', 'Category Updated Successfully!');
+                            req.flash('message_type','success');
+                            res.redirect('/admin/list-categories');
+
+                        }                       
                     }
                 });
         }
-        else{
-            
+        else{    
             console.log("error");
         }
-       
-
     });
-
+   
 });
 
 
-/* update category */
+/* Route to show update brand page */
 router.get('/updatebrand', middleware.restrict, function(req, res) {
     console.log("sdasdsd"+req.query.id);
     //res.send(true);
@@ -1548,6 +1565,10 @@ router.get('/updatebrand', middleware.restrict, function(req, res) {
 
 });
 
+/*
+ * 
+ * Route to  update brand in database
+ */
 var cpUploadupdatebrand = upload.fields([{name: 'frm_brand_image', maxCount: 1}]);
 router.post('/brand/update', cpUploadupdatebrand, middleware.restrict, function(req, res) {
    
@@ -1645,6 +1666,9 @@ router.get('/list-eventtypes', middleware.restrict, function(req, res){
     });
 });
 
+/*
+ * Route to show add event type page
+ */
 router.get('/add-eventtype', middleware.restrict, function(req, res) {
     res.render('eventtype_new', {
         title: 'New event type', 
@@ -1657,7 +1681,9 @@ router.get('/add-eventtype', middleware.restrict, function(req, res) {
     });
 });
 
-
+/*
+ * Route to insert new event type 
+ */
 router.post('/eventtype/insert', middleware.restrict, function(req, res) {
     
     
@@ -1689,6 +1715,9 @@ router.post('/eventtype/insert', middleware.restrict, function(req, res) {
     });
 });
 
+/*
+ * Route to show update event type page
+ */
 router.get('/updateeventtype',  middleware.restrict, function(req, res) {
     console.log("Update event type id : "+req.query.id);
     //res.send(true);
@@ -1715,6 +1744,9 @@ router.get('/updateeventtype',  middleware.restrict, function(req, res) {
 
     });
 
+/*
+ * Route to update event type page
+ */
 router.post('/eventtype/update',  middleware.restrict, function (req, res){
     
         EventTypes.findOne({'_id': req.body.frm_event_type_id }, function (err, eventtypeinfo) {
@@ -1746,6 +1778,9 @@ router.post('/eventtype/update',  middleware.restrict, function (req, res){
     
 });
 
+/*
+ * Route to delete event type 
+ */
 router.post('/delete-eventtype/', middleware.restrict, function(req, res) {
         
 	// remove the article
@@ -1761,6 +1796,9 @@ router.post('/delete-eventtype/', middleware.restrict, function(req, res) {
         });
 });
 
+/*
+ * Route to show list reviews page
+ */
 router.get('/list-reviews', middleware.restrict, function(req, res){
     res.render('list-reviews', { 
         message : req.flash('message'),
@@ -1771,6 +1809,9 @@ router.get('/list-reviews', middleware.restrict, function(req, res){
     });
 });
 
+/* 
+ * Route to get reviews from database to show on list reviews page
+ */
 router.get('/get-reviews-list', middleware.restrict, function(req, res){
     Reviews.find({},function (err, reviewsList) {
         if(reviewsList){
@@ -1781,6 +1822,9 @@ router.get('/get-reviews-list', middleware.restrict, function(req, res){
     });
 });
 
+/*
+ * Route to update review in database
+ */
 router.get('/updatereview',  middleware.restrict, function (req, res){
     
         Reviews.findOne({'_id': req.query.id }, function (err, reviewinfo) {
@@ -1810,6 +1854,9 @@ router.get('/updatereview',  middleware.restrict, function (req, res){
     
 });
 
+/*
+ * Route to delete review from database
+ */
 router.post('/delete-review/', middleware.restrict, function(req, res) {
         
 	// remove the article
@@ -1825,6 +1872,9 @@ router.post('/delete-review/', middleware.restrict, function(req, res) {
         });
 });
 
+/*
+ * Route to show update user page in admin
+ */
 router.get('/update-user',  middleware.restrict, function(req, res) {
     
             User.findOne({'_id': req.query.id  },function (err, userdata) {
@@ -1846,7 +1896,9 @@ router.get('/update-user',  middleware.restrict, function(req, res) {
             });
 });
 
-
+/*
+ * Route to update user and save in collection from admin
+ */
 router.post('/userupdate',  middleware.restrict, function (req, res){
         
         var accountenable = "";
@@ -1897,7 +1949,7 @@ router.post('/userupdate',  middleware.restrict, function (req, res){
                                 html   : emailBody
                             };
 
-                            nodemailer.mail(mailOptions);
+                            nodemailer.mail(mailOptions); //send account status email to user
                         }    
                         req.flash('message', 'User updated successfully!');
                         req.flash('message_type','success');
@@ -1911,7 +1963,9 @@ router.post('/userupdate',  middleware.restrict, function (req, res){
     
 });
     
-    
+/*
+ * Route to get all contacts requests
+ */    
 router.get('/get-contacts-list', middleware.restrict, function(req, res){
     Contact.find({},function (err, contactList) {
         if(contactList){
@@ -1921,16 +1975,10 @@ router.get('/get-contacts-list', middleware.restrict, function(req, res){
         }
     });
 });
-
+/*
+ * Route to get orders list from collections
+ */
 router.get('/get-order-list', middleware.restrict, function(req, res){
-//    Orders.find({},function (err, orderList) {
-//        if(orderList){
-//            res.json(orderList);
-//        }else{
-//            res.json({});
-//        }
-//    });
-
 
        Orders.aggregate(
                 [   
@@ -1988,7 +2036,9 @@ router.get('/add-tax', middleware.restrict, function(req, res) {
     });
 });
 
-
+/*
+ * Route to insert new tax rule in collection
+ */
 router.post('/tax/insert', middleware.restrict, function(req, res) {
     
     
@@ -2021,6 +2071,9 @@ router.post('/tax/insert', middleware.restrict, function(req, res) {
     });
 });
 
+/*
+ * Route to show list tax page in admin
+ */
 router.get('/list-tax', middleware.restrict, function(req, res){
     res.render('list-tax', { 
         message : req.flash('message'),
@@ -2031,6 +2084,9 @@ router.get('/list-tax', middleware.restrict, function(req, res){
     });
 });
 
+/*
+ * Route to get tax list in admin
+ */
 router.get('/get-tax-list', middleware.restrict, function(req, res){
     Tax.find({},function (err, taxList) {
         if(taxList){
@@ -2040,6 +2096,9 @@ router.get('/get-tax-list', middleware.restrict, function(req, res){
         }
     });
 });
+/*
+ * Route to show update tax info 
+ */
 router.get('/updatetax',  middleware.restrict, function(req, res) {
     console.log("Update tax id : "+req.query.id);
     //res.send(true);
@@ -2066,7 +2125,9 @@ router.get('/updatetax',  middleware.restrict, function(req, res) {
 
 });
     
-    
+/*
+ * Route to update tax from admin in collection
+ */    
 router.post('/tax/update',  middleware.restrict, function (req, res){
     
         Tax.findOne({'_id': req.body.frm_tax_id }, function (err, taxinfo) {
@@ -2098,7 +2159,9 @@ router.post('/tax/update',  middleware.restrict, function (req, res){
     
     
 });
-
+/*
+ * Route to delete tax from collection
+ */
 router.post('/delete-tax', middleware.restrict, function(req, res) {
         
 	// remove the article
@@ -2127,6 +2190,9 @@ router.get('/add-shipping', middleware.restrict, function(req, res) {
     });
 });
 
+/*
+ * Route to insert new shipping rule  in collection
+ */
 router.post('/shipping/insert', middleware.restrict, function(req, res) {
     
     
@@ -2160,6 +2226,9 @@ router.post('/shipping/insert', middleware.restrict, function(req, res) {
     });
 });
 
+/*
+ * Route to list shipping page in admin
+ */
 router.get('/list-shipping', middleware.restrict, function(req, res){
     res.render('list-shipping', { 
         message : req.flash('message'),
@@ -2170,6 +2239,9 @@ router.get('/list-shipping', middleware.restrict, function(req, res){
     });
 });
 
+/*
+ * Route to get shipping from collection
+ */
 router.get('/get-shipping-list', middleware.restrict, function(req, res){
     Shipping.find({},function (err, shippingList) {
         if(shippingList){
@@ -2179,6 +2251,9 @@ router.get('/get-shipping-list', middleware.restrict, function(req, res){
         }
     });
 });
+/*
+ * Route to show update shipping page
+ */
 router.get('/updateshipping',  middleware.restrict, function(req, res) {
     console.log("Update shipping id : "+req.query.id);
     //res.send(true);
@@ -2205,7 +2280,9 @@ router.get('/updateshipping',  middleware.restrict, function(req, res) {
 
 });
     
-    
+/*
+ * Route to update shipping and save into database
+ */    
 router.post('/shipping/update',  middleware.restrict, function (req, res){
     
         Shipping.findOne({'_id': req.body.frm_shipping_id }, function (err, shippinginfo) {
@@ -2240,6 +2317,9 @@ router.post('/shipping/update',  middleware.restrict, function (req, res){
     
 });
 
+/*
+ * Route to delete shipping
+ */
 router.post('/delete-shipping', middleware.restrict, function(req, res) {
         
 	// remove the article
@@ -2255,6 +2335,9 @@ router.post('/delete-shipping', middleware.restrict, function(req, res) {
         });
 });
 
+/*
+ * get suggestions list to show in list suggestions tab
+ */
 router.get('/get-suggestions-list', middleware.restrict, function(req, res){
     Suggestion.find({},function (err, suggestionList) {
         if(suggestionList){
@@ -2264,7 +2347,9 @@ router.get('/get-suggestions-list', middleware.restrict, function(req, res){
         }
     });
 });
-
+/*
+ * response from admin to contact users
+ */
 router.post('/respond-contact', middleware.restrict, function(req, res) {
         var contactRespondMessage = req.body.contactRespondMessage;
         var status = "";
@@ -2289,7 +2374,7 @@ router.post('/respond-contact', middleware.restrict, function(req, res) {
                                         html   : emailBody
                             };
                           
-                        nodemailer.mail(mailOptions);
+                        nodemailer.mail(mailOptions); //send response email to customer from admin
                     }
                     });
                 
@@ -2304,7 +2389,9 @@ router.post('/respond-contact', middleware.restrict, function(req, res) {
         });
 });
 
-
+/*
+ * Suggestion Response from admin to cutomer
+ */
 router.post('/respond-suggestion', middleware.restrict, function(req, res) {
         var suggestionRespondMessage = req.body.suggestionRespondMessage;
         var status = "";
@@ -2435,6 +2522,25 @@ router.post('/view-order-detail', middleware.isAdminLoggedIn, function(req, res)
     }else{
         res.json({null:'0'});
     }
+});
+
+/*
+ * Delete product image 
+ */
+router.post('/delete-productimage', middleware.isAdminLoggedIn, function(req, res){
+    
+    console.log("image id : "+req.body.params.imageName);
+    console.log("productId : "+req.body.params.productId);
+      
+    Products.update({_id: req.body.params.productId},  { $pull: { 'product_image':req.body.params.imageName} }, {},  function (err, numReplaced) {
+    if(err){
+             res.json("error");
+           
+    }else{                     
+           res.json("success");
+        }
+    });
+    //res.send(true);
 });
 
 module.exports = router;

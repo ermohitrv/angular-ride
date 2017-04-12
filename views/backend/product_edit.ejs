@@ -15,6 +15,7 @@ div#image_preview {
     display: inline-block;
     font-size: 0;
     width:200px;
+    opacity: 1;
 }
 .img-wrap .close {
     position: absolute;
@@ -45,11 +46,11 @@ div#image_preview {
 <div class="content-wrapper" data-ng-controller="adminController">
     <section class="content-header">
       <h1>
-        Add Product
+        Edit Product
       </h1>
       <ol class="breadcrumb">
         <li><a href="/admin"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Add Product</li>
+        <li class="active">Edit Product</li>
       </ol>
     </section>
     <section class="content" data-ng-init="getBrandsList()">
@@ -58,117 +59,118 @@ div#image_preview {
             <div class="col-lg-12">
                 <div class="box">
                     <div class="box-body">
-                        <form method="post" class="form-horizontal" id="insert_form" action="/admin/product/insert" data-toggle="validator" enctype="multipart/form-data">
+                        <form method="post" class="form-horizontal" id="insert_form" action="/admin/product/update" data-toggle="validator" enctype="multipart/form-data">
+                            <input type="hidden" id="frm_product_edit_id" name="frm_product_edit_id" value="<%= result._id %>" />
                             <div class="col-lg-12">
                                 <div class="page-header">
                                     <div class="pull-right">
                                         <button id="frm_edit_product_save" class="btn btn-success" type="submit">Submit <i class="fa fa-plus"></i></button>
                                     </div>
-                                    <h2>New product</h2>
+                                    <h2>Edit product</h2>
                                 </div>
                                 <div class="form-group">
-                                    <label for="frm_product_title" class="col-sm-2 control-label">Product title *</label>
+                                    <label for="frm_product_edit_title" class="col-sm-2 control-label">Product title *</label>
                                     <div class="col-sm-10">
-                                        <input type="text" name="frm_product_title" id="frm_product_title" class="form-control" minlength="5" maxlength="200" value="" required/>
+                                        <input type="text" name="frm_product_edit_title" id="frm_product_title" class="form-control" minlength="5" maxlength="200" value="<%= result.product_title %>" required/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="frm_product_published" class="col-sm-2 control-label">Category *</label>
+                                    <label for="frm_product_edit_category" class="col-sm-2 control-label">Category *</label>
                                     <div class="col-sm-6">
                                         <!--<div id="magicsuggest-category"></div>-->
-                                        <select class="selectbox" name="frm_product_category" multiple>
+                                           
+                                            <select class="selectbox" name="frm_product_edit_category" multiple >
                                             <option>Please select category</option>
                                             <% if( catresults.length > 0 ){ %>
                                             <% for(var i = 0; i < catresults.length; i++){ %>
-                                            <option id="<%= catresults[i].category_title  %>" value="<%= catresults[i].category_title  %>"><%= catresults[i].category_title  %></option>
+                                            <option <% if(result.product_category[i] == catresults[i].category_title ){%>selected<%}%>  id="<%= catresults[i].category_title  %>" value="<%= catresults[i].category_title  %>"><%= catresults[i].category_title  %></option>
                                             <% }} %>
                                         </select>
                                     </div>
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="frm_product_published" class="col-sm-2 control-label">Brand *</label>
+                                    <label for="frm_product_edit_brand" class="col-sm-2 control-label">Brand *</label>
                                     <div class="col-sm-6">
                                         <!--<div id="magicsuggest-brand"></div>-->
-                                        <select class="selectbox" name="frm_product_brand">
+                                        <select class="selectbox" name="frm_product_edit_brand">
                                             <option>Please select Brand</option>
                                             <% if( brandresults.length > 0 ){ %>
                                             <% for(var j = 0; j < brandresults.length; j++){ %>
-                                            <option id="<%= brandresults[j].brand_title  %>" value="<%= brandresults[j].brand_title  %>"><%= brandresults[j].brand_title  %></option>
+                                            <option <% if(result.product_brand == brandresults[j].brand_title ){%>selected<% } %> id="<%= brandresults[j].brand_title  %>" value="<%= brandresults[j].brand_title  %>"><%= brandresults[j].brand_title  %></option>
                                             <% }} %>
                                         </select>
                                     </div>
                                 </div>
+                                <% var  productSize = ['Small', 'Medium', 'Large', 'X-Large', '2X-Large', '3X-Large']; %>
                                 <div class="form-group">
-                                    <label for="frm_product_size" class="col-sm-2 control-label">Size *</label>
+                                    <label for="frm_product_edit_size" class="col-sm-2 control-label">Size *</label>
                                     <div class="col-sm-6">
-                                        <!--<div id="magicsuggest-size"></div>-->
-                                        <select class="selectbox" name="frm_product_size" multiple>
+                                        <select class="selectbox" name="frm_product_edit_size" multiple>
                                             <option>Please select Size</option>
-                                            <option   value="Small">Small</option>
-                                            <option   value="Medium">Medium</option>
-                                            <option   value="Large">Large</option>
-                                            <option   value="X-Large">X-Large</option>
-                                            <option   value="2X-Large">2X-Large</option>
-                                            <option   value="3X-Large">3X-Large</option>
-
+                                            <% if( productSize.length > 0 ){ %>
+                                            <% for(var j = 0; j < productSize.length; j++){ %>
+                                            <option <% if(result.product_size[j] == productSize[j]){%>selected<% } %>  value="<%= productSize[j] %>"><%= productSize[j] %></option>                                      
+                                            <% }} %>
                                         </select>
+                                        <!--<div id="magicsuggest-size"></div>-->
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="frm_product_weight" class="col-sm-2 control-label">Weight(In KG) *</label>
+                                    <label for="frm_product_edit_weight" class="col-sm-2 control-label">Weight(In KG) *</label>
                                     <div class="col-sm-6">
-                                        <input type="text" name="frm_product_weight" class="form-control" minlength="1" maxlength="20" value="" required/>
+                                        <input type="text" name="frm_product_edit_weight" class="form-control" minlength="1" maxlength="20" value="<%= result.product_weight %>" required/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="frm_product_title" class="col-sm-2 control-label">Product SKU *</label>
+                                    <label for="frm_product_edit_sku" class="col-sm-2 control-label">Product SKU *</label>
                                     <div class="col-sm-6">
-                                        <input type="text" name="frm_product_sku" class="form-control" minlength="5" maxlength="200" value="" required/>
+                                        <input type="text" name="frm_product_edit_sku" class="form-control" minlength="5" maxlength="200" value="<%= result.product_sku %>" required/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="frm_product_price" class="col-sm-2 control-label">Product price *</label>
+                                    <label for="frm_product_edit_price" class="col-sm-2 control-label">Product price *</label>
                                     <div class="col-sm-6">
                                         <div class="input-group">
                                             <span class="input-group-addon">$</span>
-                                            <input type="number" name="frm_product_price" class="form-control" value="" required/>
+                                            <input type="number" name="frm_product_edit_price" class="form-control" value="<%= result.product_price %>" required/>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="frm_product_published" class="col-sm-2 control-label">Status</label>
+                                    <label for="frm_product_edit_published" class="col-sm-2 control-label">Status</label>
                                     <div class="col-sm-6">
-                                        <select class="form-control" id="frm_product_published" name="frm_product_published">
-                                            <option value="true" selected>Published</option>
-                                            <option value="false">Draft</option>
+                                        <select class="form-control" id="frm_product_edit_published" name="frm_product_edit_published">
+                                            <option <% if(result.product_published == true ){%>selected<% } %> value="true" selected>Published</option>
+                                            <option <% if(result.product_published == false ){%>selected<% } %> value="false">Draft</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="frm_product_published" class="col-sm-2 control-label">Featured</label>
+                                    <label for="frm_product_edit_featured" class="col-sm-2 control-label">Featured</label>
                                     <div class="col-sm-10">
-                                        <input type="checkbox" id="frm_product_featured" name="frm_product_featured">
+                                        <input type="checkbox" id="frm_product_edit_featured" name="frm_product_edit_featured">
                                     </div>
                                 </div>
                                 <div class="form-group" id="editor-wrapper">
-                                    <label for="editor" class="col-sm-2 control-label">Product short description (Markdown) *</label>
+                                    <label for="frm_product_edit_shortdesc" class="col-sm-2 control-label">Product short description (Markdown) *</label>
                                     <div class="col-sm-10">
-                                        <textarea id="editor" minlength="2" rows="5" name="frm_product_short_description" class="form-control" required></textarea>
+                                        <textarea id="editor" minlength="2" rows="5" name="frm_product_edit_shortdesc" class="form-control" required><%= result.product_short_description %></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group" id="editor-wrapper">
-                                    <label for="editor" class="col-sm-2 control-label">Product description (Markdown) *</label>
+                                    <label for="frm_product_edit_longdesc" class="col-sm-2 control-label">Product description (Markdown) *</label>
                                     <div class="col-sm-10">
-                                        <textarea id="editor" minlength="5" rows="10" name="frm_product_description" class="form-control" required></textarea>
+                                        <textarea id="editor" minlength="5" rows="10" name="frm_product_edit_longdesc" class="form-control" required><%= result.product_description %></textarea>
+                                        
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Permalink</label>
                                     <div class="col-sm-10">
                                         <div class="input-group" style="width:100%">
-                                            <input type="text"  disabled="disabled" class="form-control frm_product_permalink">
-                                            <input type="hidden" class="form-control frm_product_permalink" name="frm_product_permalink">
+                                            <input type="text"  disabled="disabled" class="form-control frm_product_edit_permalink" value="<%= result.product_permalink %>"
+                                            <input type="hidden" class="form-control frm_product_edit_permalink" name="frm_product_edit_permalink" value="<%= result.product_permalink %>" >
                                         </div>
                                     </div>
                                 </div>
@@ -176,14 +178,22 @@ div#image_preview {
                                     <label class="col-sm-2 control-label">Upload Files</label>
                                     <div class="col-sm-10">
                                         <div class="input-group" style="width:100%">
-                                        <input type="file" id="upload_file" name="upload_file" onchange="preview_image(this);" multiple/>                                        </div>
-
+                                        <input type="file" id="product_edit_upload_file" name="product_edit_upload_file" onchange="preview_image(this);" multiple/>
+                                        </div>
                                     </div>
                                 </div>
                                 
                             </div>
                         </form>
-                        <div id="image_preview"></div>
+                        <% var length =  result.product_image.length; %>
+                        
+                        <div id="image_preview">
+                        <% for(var i = 0; i < length; i++){ %>
+                        <div class="img-wrap" id="<%= i %>"><span class="close" ng-click="deleteProductImage('<%= i %>','<%= result.product_image[i] %>','<%= result._id %>')">&times;</span><img src="/public/uploads/<%= result.product_image[i] %>"></div>
+                        <% } %>
+                        </div>
+                        <!--<div id="image_preview"></div>-->
+                       
                     </div>
                 </div>
             </div>
@@ -191,35 +201,16 @@ div#image_preview {
     </section>
 </div>
 <script>
-$(function() {
-//    var ms_category =  $('#magicsuggest-category').magicSuggest({
-//        placeholder: 'Type category name...',
-//        name: 'frm_product_category',
-//        data: ['SuperSport', 'Cruiser', 'Dual', 'Sport', 'Touring', 'Scooter']
+//$(function() {   
+//    var ms_size =  $('#magicsuggest-size').magicSuggest({
+//        placeholder: 'Type size name...',
+//        name: 'frm_product_edit_size',
+//        data: ['Small', 'Medium', 'Large', 'X-Large', '2X-Large', '3X-Large']
 //    });
-//   
-//    ms_category.setName('frm_product_category');
-    
-//    setTimeout(function(){
-//        var brandslist = $('.brandslist').text().split(',');
-//        var ms_brand =  $('#magicsuggest-brand').magicSuggest({
-//            placeholder: 'Type brand name...',
-//            name: 'frm_product_brand',
-//            data: brandslist
-//        });
-//        ms_brand.setName('frm_product_brand');
-//    },1000);
-    
-    var ms_size =  $('#magicsuggest-size').magicSuggest({
-        placeholder: 'Type size name...',
-        name: 'frm_product_size',
-        data: ['Small', 'Medium', 'Large', 'X-Large', '2X-Large', '3X-Large']
-    });
-    ms_size.setName('frm_product_size');
-});
+//    ms_size.setName('frm_product_size');
+//});
 </script>
 <script>
-
 /* upload multiple files and show in image preview*/
 var upload_array = [];
 function preview_image(myFile) 
@@ -227,16 +218,14 @@ function preview_image(myFile)
    var file = myFile.files[0];  
    var filename = file.name;
    upload_array.push(filename); 
-
         var total_file=document.getElementById("upload_file").files.length;
         for(var i=0;i<total_file;i++)
         {
             $('#image_preview').append('<div class="img-wrap"><img src="'+URL.createObjectURL(event.target.files[i])+'"></div>');
    
             console.log(upload_array);
-           
+             
         }
-        
-        
+          
 }
 </script>

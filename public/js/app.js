@@ -896,6 +896,25 @@ app.controller('adminController',['$scope', '$http','$sce', function ($scope, $h
         }); 
     };
     
+    $scope.deleteProductImage = function(imageId,imageName,productId){
+        var data = { 
+            imageName: imageName,
+            productId:productId
+        };
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.post('/admin/delete-productimage',config).success(function (response, status, headers, config){
+           if(response == "success"){
+               $( "#"+imageId).remove();
+           }
+            
+        }).error(function(err){
+           console.log('Oops! Error occur'+err);
+        }); 
+    };
+    
 }]);
 
 app.controller('eventController',['$scope', '$http', function ($scope, $http, $location, $routeParams) {

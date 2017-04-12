@@ -65,8 +65,8 @@
                                                 </td>
                                                 <td>
                                                     <a target="_blank" title="View profile" class="btn" href="/product/{{ product.product_permalink }}"><i class="fa fa-eye"></i></a>
-                                                    <!--<a title="Update" class="click_me_view btn" href="product/{{ product.product_permalink }}"><i class="fa fa-pencil"></i></a>--> 
-                                                    <!--<a data-toggle="modal" data-target="#confirmDelete_{{ product._id }}" title="Delete"  class="" href="javascript:;"><i class="fa fa-remove"></i></a>-->
+                                                    <a title="Update" class="click_me_view btn" href="product/edit/{{ product._id }}"><i class="fa fa-pencil"></i></a> 
+                                                    <a data-toggle="modal" data-target="#confirmDelete_{{ product._id }}" title="Delete"  class="" href="javascript:;"><i class="fa fa-remove"></i></a>
                                                     <div class="modal fade" id="confirmDelete_{{  product._id }}" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">
@@ -79,7 +79,7 @@
                                                               </div>
                                                               <div class="modal-footer">
                                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                                                <a pid="{{ product._id }}" href="/admin/product/delete/?id={{ product._id }}"  class="btn btn-danger delete_this btn" id="confirm">Delete</a>
+                                                                <a pid="{{ product._id }}" href="/admin/product/delete?id={{ product._id }}"  class="btn btn-danger delete_this btn" id="confirm">Delete</a>
                                                               </div>
                                                             </div>
                                                         </div>
