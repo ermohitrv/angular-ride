@@ -784,7 +784,7 @@ router.post('/product/update',cpUploadEditProduct, middleware.restrict, function
                     product_description: req.body.frm_product_edit_longdesc,
                     product_published: req.body.frm_product_edit_published,
                     product_price: req.body.frm_product_edit_price,
-//                    product_permalink: req.body.frm_product_edit_permalink,
+                    product_permalink: req.body.frm_product_edit_permalink,
                     product_featured: req.body.frm_product_edit_featured,
                     product_image:productimages
     }
