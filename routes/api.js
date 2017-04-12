@@ -671,7 +671,7 @@ router.post('/init-add-route', function(req, res){
                             },
 
                         }, 
-                        message: "route "+routeCreateInfo.route+" added successfully", 
+                        message: "route "+route+" added successfully", 
                         code: 200
                     });
                 }
