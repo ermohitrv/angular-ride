@@ -600,7 +600,7 @@ router.get('/checkout', csrfProtection, function(req, res, next) {
 
 
 // The homepage of the site
-router.post('/checkout_action', function(req, res, next) {
+/*router.post('/checkout_action', function(req, res, next) {
     var html = "";
     var config = req.config.get('application');
     var paypal = require('paypal-express-checkout').init(config.paypal_username, config.paypal_password, config.paypal_signature, config.base_url + '/checkout_return', config.base_url + '/checkout_cancel', true);
@@ -644,14 +644,7 @@ router.post('/checkout_action', function(req, res, next) {
         middleware.order_with_paypal(req, res);
     }else if(req.user){
         console.log("product length"+req.session.productids.length);
-        // no order ID so we create a new one
-        /*req.db.orders.insert(order_doc, function (err, newDoc) {
-            // set the order ID in the session
-            req.session.order_id = newDoc._id;
-            
-            // send the order to Paypal
-            middleware.order_with_paypal(req, res);
-        });*/
+       
         
                 var newOrders                        = new Orders();
                 newOrders.order_total                = ordertotalprice;
@@ -679,7 +672,7 @@ router.post('/checkout_action', function(req, res, next) {
                         req.session.order_id = orderdata._id;
                         var date = moment(orderdata.order_date).format('YYYY-MM-DD');
                         html += 'Hello, '+req.user.local.firstName+' '+req.user.local.lastName;
-                        html += '<h4>Order Details</h4>'
+                        html += '<h4>Order Details</h4>';
                         html += '<table><tr><td>Order Id: </td>'+orderdata._id+'<td></td></tr><tr><td>Placed On: </td><td>'+date+'</td></tr></table>';
                                                       
                         html += '<table style="width:100%"><td><b>Product: </b></td><td><b>Unit Price</b></td><td><b>Quantity</b></td><td><b>Total Price</b></td>';
@@ -747,6 +740,174 @@ router.post('/checkout_action', function(req, res, next) {
                         html += '<h4>Shipping Address:</h4>';  
                         html += '<table><tr><td><b>Name :</b></td><td>'+req.body.ship_firstname+' '+req.body.ship_lastname+'</td></tr><tr><td><b>Email :</b></td><td>'+req.body.ship_email+'</td></tr><tr><td><b>Address :</b></td><td>'+req.body.ship_addr1+' '+req.body.ship_city+' '+req.body.ship_state+' '+req.body.ship_country+','+req.body.ship_postcode+'</td></tr></table>';
 
+                    }
+                    
+                    
+                    html += '<br>Thank you, Team Motorcycle';
+                                                        
+                    var emailBody = EmailTemplate.emailMessage(html);
+
+                    var mailOptions = {
+                                                        from   : "Motorcycle <no-reply@motorcycle.com>", 
+                                                        to     :  req.user.local.email,
+                                                        subject: "Order Confirmation",
+                                                        html   : emailBody
+                    };
+                        
+                    nodemailer.mail(mailOptions);                               
+
+                        middleware.order_with_paypal(req, res);
+                    } 
+                });
+    }
+});*/
+
+router.post('/checkout_action', function(req, res, next) {
+    var html = "";
+    var config = req.config.get('application');
+    var paypal = require('paypal-express-checkout').init(config.paypal_username, config.paypal_password, config.paypal_signature, config.base_url + '/checkout_return', config.base_url + '/checkout_cancel', true);
+    
+    // if there is no items in the cart then render a failure
+    if(!req.session.cart){
+        req.session.message = "The are no items in your cart. Please add some items before checking out";
+        req.session.message_type = "danger";
+        res.redirect("/cart");
+        return;
+    }
+    console.log("ordertotalhiddenprice : "+req.body.ordertotalhiddenprice);
+    console.log("taxhiddenprice : "+req.body.taxhiddenprice);
+    console.log("shippinghiddenprice : "+req.body.shippinghiddenprice);
+    req.session.total_cart_amount = req.body.shiptotalamount;
+    var ordertotalprice = req.body.ordertotalhiddenprice;
+    var taxprice = req.body.taxhiddenprice;
+    var shippingprice = req.body.shippinghiddenprice;
+    // new order doc
+    var order_doc = { 
+        order_total: req.session.total_cart_amount,
+        ship_cost: req.body.shippinghiddenprice,
+        tax_cost: req.body.taxhiddenprice,
+        order_email: req.body.ship_email,
+        order_firstname: req.body.ship_firstname,
+        order_lastname: req.body.ship_lastname,
+        order_addr1: req.body.ship_addr1,
+        order_addr2: req.body.ship_addr2,
+        order_country: req.body.ship_country,
+        order_state: req.body.ship_state,
+        order_postcode: req.body.ship_postcode,
+        order_status: "Processing",
+        order_date: new Date(),
+        order_products: req.session.cart
+    };
+	
+    if(req.user && req.session.order_id){
+        // we have an order ID (probably from a failed/cancelled payment previosuly) so lets use that.
+        
+        // send the order to Paypal
+        middleware.order_with_paypal(req, res);
+    }else if(req.user){
+        console.log("product length"+req.session.productids.length);
+       
+        
+                var newOrders                        = new Orders();
+                newOrders.order_total                = ordertotalprice;
+                newOrders.ship_cost                  = shippingprice;
+                newOrders.tax_cost                   = taxprice;
+                newOrders.order_email                = req.user.local.email;
+                newOrders.order_firstname            = req.user.local.firstName;
+                newOrders.order_lastname             = req.user.local.lastName;    
+                newOrders.order_country              = req.user.local.locationCountry;
+                newOrders.order_state                = req.user.local.locationState;
+                newOrders.order_city                 = req.user.local.locationCity;
+                newOrders.order_postcode             = req.user.local.locationZipcode;
+                newOrders.order_status               = 'Processing';
+
+                newOrders.save(function(err,orderdata){
+                    if (err){
+                        console.log("route error caught 3");
+                        res.json({ 
+                            success: false, 
+                            data: null, 
+                            message: err, 
+                            code: 400
+                        });
+                    }else{
+                        req.session.order_id = orderdata._id;
+                        var date = moment(orderdata.order_date).format('YYYY-MM-DD');
+                        html += 'Hello, '+req.user.local.firstName+' '+req.user.local.lastName;
+                        html += '<h4>Order Details</h4>';
+                        html += '<div><p>Order Id : '+orderdata._id+'</p><p>Placed On: '+date+'</p></div>';
+                                                      
+                        html += '<div class="main"><table width="100%" cellspacing="0" cellpadding="0"><tbody><tr><th align="left" style="padding: 5px 5px">Products:</th><th align="left" style="padding: 5px 5px">Unit Price</th><th align="left" style="padding: 5px 5px">Quantity</th><th align="left" style="padding: 5px 5px">Total Price</th></tr>';
+                        
+                        if(req.user != ""){
+                        for(var i = 0; i < req.session.productids.length; i++){ 
+                            var productid = req.session.productids[i];
+                            var newOrdersProducts                      = new OrdersProducts();
+                            newOrdersProducts.order_id                 = orderdata._id;
+                            newOrdersProducts.product_title            = req.session.cart[productid].title;
+                            newOrdersProducts.product_quantity         = req.session.cart[productid].quantity;
+                            newOrdersProducts.product_item_price       = req.session.cart[productid].item_price;   
+                            newOrdersProducts.product_total_item_price = req.session.cart[productid].total_item_price; 
+                            newOrdersProducts.product_link             = req.session.cart[productid].link;
+                            newOrdersProducts.product_color            = req.session.cart[productid].color;
+                            newOrdersProducts.product_size             = req.session.cart[productid].size;
+                            newOrdersProducts.save(function(err,orderproductsdata){
+                                if (err){
+                                    console.log("route error caught 3");
+                                    res.json({ 
+                                        success: false, 
+                                        data: null, 
+                                        message: err, 
+                                        code: 400
+                                    });
+                                }else{
+                                    console.log("products orders saved");
+                                }
+                        
+                            });
+                            html += '<tr><td style="padding: 5px 5px">'+req.session.cart[productid].title+'</td><td style="padding: 5px 5px">$'+req.session.cart[productid].item_price+'</td><td style="padding: 5px 5px">'+req.session.cart[productid].quantity+'</td><td style="padding: 5px 5px">$'+req.session.cart[productid].total_item_price+'</td></tr>';
+                        }
+                        
+                           html += '<tr><td style="padding: 5px 5px">&nbsp;</td><td style="padding: 5px 5px">&nbsp;</td><td style="padding: 5px 5px"><strong>Sub Total</strong></td><td style="padding: 5px 5px">$'+ordertotalprice+'</td></tr>';
+                           
+                           html += '<tr><td style="padding: 5px 5px">&nbsp;</td><td style="padding: 5px 5px">&nbsp;</td><td style="padding: 5px 5px"><strong>Estimated Shipping</strong></td><td style="padding: 5px 5px">$'+shippingprice+'</td></tr>';
+                           html += '<tr><td style="padding: 5px 5px">&nbsp;</td><td style="padding: 5px 5px">&nbsp;</td><td style="padding: 5px 5px"><strong>Estimated Tax</strong></td><td style="padding: 5px 5px">$'+taxprice+'</td></tr>';
+                           html += '<tr><td style="padding: 5px 5px">&nbsp;</td><td style="padding: 5px 5px">&nbsp;</td><td style="padding: 5px 5px"><strong>Total</strong></td><td style="padding: 5px 5px">$'+req.session.total_cart_amount+'</td></tr></tbody></table>';
+                        
+                           
+                           html += '<table width="100%" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td><h4>Billing Address:</h4><table width="100%" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td><b>Name :</b></td><td>'+req.user.local.firstName+' '+req.user.local.lastName+'</td></tr><tr><td><b>Email :</b></td><td><a href="" target="_blank">'+req.user.local.email+'</a></td></tr><tr><td><b>Address :</b></td><td>'+req.user.local.locationCity+' '+req.user.local.locationState+' '+req.user.local.locationCountry+' '+req.user.local.locationZipcode+'</td></tr></tbody></table></td>';
+                           
+                        
+                    }
+                    if(req.body.ship_email!=""){
+                            var newOrdersShipping                            = new OrdersShipping();
+                            newOrdersShipping.order_id                       = orderdata._id;
+                            newOrdersShipping.order_shipemail                = req.body.ship_email;
+                            newOrdersShipping.order_shipfirstname            = req.body.ship_firstname;
+                            newOrdersShipping.order_shiplastname             = req.body.ship_lastname;   
+                            newOrdersShipping.order_shipadd1                 = req.body.ship_addr1;
+                            newOrdersShipping.order_shipadd2                 = req.body.ship_addr2;
+                            newOrdersShipping.order_shipcity                 = req.body.ship_city;
+                            newOrdersShipping.order_shipcountry              = req.body.ship_country;
+                            newOrdersShipping.order_shipstate                = req.body.ship_state;
+                            newOrdersShipping.order_shippostcode             = req.body.ship_postcode;
+                            newOrdersShipping.save(function(err,orderproductsdata){
+                                if (err){
+                                    console.log("route error caught 3");
+                                    res.json({ 
+                                        success: false, 
+                                        data: null, 
+                                        message: err, 
+                                        code: 400
+                                    });
+                                }else{
+                                    console.log("shipping address saved");
+                                }
+                        
+                            });
+                            
+                       html += '<td><h4>Billing Address:</h4><table width="100%" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td><b>Name :</b></td><td>'+req.body.ship_firstname+' '+req.body.ship_lastname+'</td></tr><tr><td><b>Email :</b></td><td><a href="" target="_blank">'+req.body.ship_email+'</a></td></tr><tr><td><b>Address :</b></td><td>'+req.body.ship_addr1+' '+req.body.ship_city+' '+req.body.ship_state+' '+req.body.ship_country+','+req.body.ship_postcode+'</td></tr></tbody></table></td></tr></tbody></table></div>';     
+                     
                     }
                     
                     
