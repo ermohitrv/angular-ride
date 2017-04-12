@@ -61,7 +61,7 @@
                                                     <span>{{ product.product_description }}</span>
                                                 </td>
                                                 <td>
-                                                    <span>{{ product.product_added_date }}</span>
+                                                    <span data-ng-bind="product.product_added_date | date:'yyyy-MM-dd hh:mm:ss' "></span>
                                                 </td>
                                                 <td>
                                                     <a target="_blank" title="View profile" class="btn" href="/product/{{ product.product_permalink }}"><i class="fa fa-eye"></i></a>
