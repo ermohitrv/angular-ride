@@ -1,6 +1,7 @@
 <% layout('layoutAdmin') -%>
 <!-- Content Wrapper. Contains page content -->
 <script type="text/javascript" src="/public/js/jquery.form.js"></script>
+<% var  productSize = ['Small', 'Medium', 'Large', 'X-Large', '2X-Large', '3X-Large']; %>
 <style>
 div#image_preview {
     margin-left:18%;
@@ -74,6 +75,7 @@ div#image_preview {
                                         <input type="text" name="frm_product_edit_title" id="frm_product_title" class="form-control" minlength="5" maxlength="200" value="<%= result.product_title %>" required/>
                                     </div>
                                 </div>
+                               
                                 <div class="form-group">
                                     <label for="frm_product_edit_category" class="col-sm-2 control-label">Category *</label>
                                     <div class="col-sm-6">
@@ -82,8 +84,8 @@ div#image_preview {
                                             <select class="selectbox" name="frm_product_edit_category" multiple >
                                             <option>Please select category</option>
                                             <% if( catresults.length > 0 ){ %>
-                                            <% for(var i = 0; i < catresults.length; i++){ %>
-                                            <option <% if(result.product_category[i] == catresults[i].category_title ){%>selected<%}%>  id="<%= catresults[i].category_title  %>" value="<%= catresults[i].category_title  %>"><%= catresults[i].category_title  %></option>
+                                            <% for(var i = 0; i < catresults.length; i++){ %>            
+                                            <option  <%= result.product_category.indexOf(catresults[i].category_title) >= 0 ? 'selected' : '' %>   id="<%= catresults[i].category_title  %>" value="<%= catresults[i].category_title  %>"><%= catresults[i].category_title  %></option>
                                             <% }} %>
                                         </select>
                                     </div>
@@ -102,7 +104,7 @@ div#image_preview {
                                         </select>
                                     </div>
                                 </div>
-                                <% var  productSize = ['Small', 'Medium', 'Large', 'X-Large', '2X-Large', '3X-Large']; %>
+                               
                                 <div class="form-group">
                                     <label for="frm_product_edit_size" class="col-sm-2 control-label">Size *</label>
                                     <div class="col-sm-6">
@@ -110,8 +112,8 @@ div#image_preview {
                                             <option>Please select Size</option>
                                             <% if( productSize.length > 0 ){ %>
                                             <% for(var j = 0; j < productSize.length; j++){ %>
-                                            <option <% if(result.product_size[j] == productSize[j]){%>selected<% } %>  value="<%= productSize[j] %>"><%= productSize[j] %></option>                                      
-                                            <% }} %>
+                                            <option <%= result.product_size.indexOf(productSize[j]) >= 0 ? 'selected' : '' %>  value="<%= productSize[j] %>"><%= productSize[j] %></option>                                                             
+                                            <%  }} %>
                                         </select>
                                         <!--<div id="magicsuggest-size"></div>-->
                                     </div>
