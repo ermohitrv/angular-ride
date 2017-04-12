@@ -605,14 +605,14 @@ router.post('/init-add-route', function(req, res){
 //    var ending_locationLat   = "1.5532";
 //    var ending_locationLng   = "0.4221";
       
-    RpRoutes.findOne({ 'email' :  { $regex : new RegExp(email, "i") },route:route}, function (err, rpRoute){
+   // RpRoutes.findOne({ 'email' :  { $regex : new RegExp(email, "i") },route:route}, function (err, rpRoute){
 //            
 //            if(rpRoute){
 //                objRoute.route = rpRoute.route  + 1;
 //            }else{
 //                objRoute.route              = 1;
 //            }
-            if(!rpRoute){
+            //if(!rpRoute){
             objRoute.route                  = route;
             objRoute.email                  = email;
             objRoute.startinglocationLat    = starting_locationLat;
@@ -676,16 +676,16 @@ router.post('/init-add-route', function(req, res){
                     });
                 }
             });
-        }else{
-            res.json({
-                        success: true, 
-                        data: null, 
-                        message: "route "+route+" already created", 
-                        routestatus:"exist",
-                        code: 200
-            });
-        }
-    }).sort({'lastModifiedDate':-1});
+       // }else{
+//            res.json({
+//                        success: true, 
+//                        data: null, 
+//                        message: "route "+route+" already created", 
+//                        routestatus:"exist",
+//                        code: 200
+//            });
+      //  }
+   // }).sort({'lastModifiedDate':-1});
 });
 
 /* API endpoint to be used by mobile device for iniviting friend for route */
