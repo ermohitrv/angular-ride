@@ -620,7 +620,7 @@ router.post('/product/insert', cpUpload, middleware.restrict, function(req, res)
                     product_size = item;
                 }
             }
-            console.log("sdsds : "+product_category);
+            console.log("sdsds : "+req.body.frm_product_featured);
             var productObj = new Products();
             productObj.product_permalink    = req.body.frm_product_permalink;
             productObj.product_title        = req.body.frm_product_title;

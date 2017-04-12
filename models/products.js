@@ -14,6 +14,7 @@ var productsSchema = mongoose.Schema({
     product_brand:          {type : Array, default : [] },
     product_size:           {type : Array, default : [] },
     product_weight:         {type : String, default : '' },
+    product_featured:       {type : Boolean, default : false },
     product_image:          {type : Array, default : [] }
 });
 
