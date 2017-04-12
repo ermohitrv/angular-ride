@@ -906,7 +906,7 @@ router.post('/checkout_action', function(req, res, next) {
                         
                             });
                             
-                       html += '<td><h4>Billing Address:</h4><table width="100%" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td><b>Name :</b></td><td>'+req.body.ship_firstname+' '+req.body.ship_lastname+'</td></tr><tr><td><b>Email :</b></td><td><a href="" target="_blank">'+req.body.ship_email+'</a></td></tr><tr><td><b>Address :</b></td><td>'+req.body.ship_addr1+' '+req.body.ship_city+' '+req.body.ship_state+' '+req.body.ship_country+','+req.body.ship_postcode+'</td></tr></tbody></table></td></tr></tbody></table></div>';     
+                       html += '<td><h4>Shipping Address:</h4><table width="100%" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td><b>Name :</b></td><td>'+req.body.ship_firstname+' '+req.body.ship_lastname+'</td></tr><tr><td><b>Email :</b></td><td><a href="" target="_blank">'+req.body.ship_email+'</a></td></tr><tr><td><b>Address :</b></td><td>'+req.body.ship_addr1+' '+req.body.ship_city+' '+req.body.ship_state+' '+req.body.ship_country+','+req.body.ship_postcode+'</td></tr></tbody></table></td></tr></tbody></table></div>';     
                      
                     }
                     
