@@ -1356,7 +1356,7 @@ router.post('/start-route', function (req, res) {
         
         if(email != "" && email != undefined){
            
-        RpRoutes.findOne({$and : [{ $or : [ { 'isRouteCompleted' : 'CREATED' }, { 'isRouteCompleted' : 'ONGOING'} ] },{ $or : [ { email : { $regex : new RegExp(email, "i")}}]}]}, function(err, getrproutes){
+        Rpstop-routeRoutes.findOne({$and : [{ $or : [ { 'isRouteCompleted' : 'CREATED' }, { 'isRouteCompleted' : 'ONGOING'} ] },{ $or : [ { email : { $regex : new RegExp(email, "i")}}]}]}, function(err, getrproutes){
           //RpRoutes.findOne({ 'email' :  { $regex : new RegExp(email, "i") },'isRouteCompleted': 'CREATED' }, function(err, getrproutes) {
             // if there are any errors, return the error
             if (err) {
@@ -1381,7 +1381,7 @@ router.post('/start-route', function (req, res) {
                     //function to calculate distance remaining to check whether route is completed or not
                     var distanceStarted = RouteFunction.calculateDistance(startlat,startlon,currentlat,currentlon);
                        
-                    var distInmeters = distanceStarted/1000;  // distance in meters
+                    var distInmeters = distanceStarted * 1000;  // distance in meters
                     var roundDist = Math.round(distInmeters);
 
                     if(roundDist <= globalConfig.nearbyDistance ){
@@ -1520,9 +1520,11 @@ router.post('/stop-route', function (req, res) {
                         var distanceRemaining = RouteFunction.calculateDistance(currentlat,currentlon,endlat,endlon);
                         // To calculate completed distance till now to calculate  points
                         var distanceCompleted = RouteFunction.calculateDistance(startLat,startLng,currentlat,currentlon);
+                        console.log("distanceRemaining : "+distanceRemaining);
                        
-                        var distInmeters = distanceRemaining/1000;  // distance in meters
+                        var distInmeters = distanceRemaining * 1000;  // distance in meters
                         var roundDist = Math.round(distInmeters);
+                        
                         console.log("distInmeters : "+distInmeters);
                         console.log("roundDist : "+roundDist);
                         
@@ -2643,7 +2645,7 @@ router.post('/send-location', function(req, res){
                     
                     
                         var diffDistance = totalDistance - distanceCompleted; //calculate near distance
-                        var distInmeters = diffDistance/1000;  // distance in meters
+                        var distInmeters = diffDistance * 1000;  // distance in meters
                         var roundDist = Math.round(distInmeters);
                         console.log("distancecompleted : "+distanceCompleted);
                         console.log("totaldistance : "+totalDistance);

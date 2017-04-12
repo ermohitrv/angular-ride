@@ -275,7 +275,9 @@ app.controller('profileController',['$scope', '$http', function ($scope, $http) 
 }]);
 
 /********************** product controller  **********************/
-app.controller('productController',['$scope', '$http','$sce', function ($scope, $http, $sce) {
+app.controller('productController',['$scope', '$http','$sce',function ($scope, $http, $sce) {
+    
+    
     /* function to render product detail */
     $scope.productDetail = function(productId){
         $http.get('/product/shop/products-detail/'+productId).success(function(view){
