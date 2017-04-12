@@ -377,6 +377,7 @@ app.controller('cartController',['$scope', '$http','$sce', function ($scope, $ht
     $scope.calculateTax = function(country,state){
         
         $scope.taxprice = "0.00";
+        $('#taxhiddenprice').val("0.00");
         var data = { 
             country: country, 
             state: state
@@ -388,10 +389,14 @@ app.controller('cartController',['$scope', '$http','$sce', function ($scope, $ht
         if(localUserUsername){
             $http.post('/get-tax',config).success(function (response, status, headers, config){
                 if(response != ""){
+                    
                 $scope.taxprice = response;
+                $('#taxhiddenprice').val(response);
                 
                 }else{
+                    
                     $scope.taxprice = "0.00";
+                    $('#taxhiddenprice').val(response);   
                     
                 }
 
@@ -406,6 +411,7 @@ app.controller('cartController',['$scope', '$http','$sce', function ($scope, $ht
     $scope.calculateShipping = function(country,state,weight){
         
         $scope.shippingprice = "0.00";
+        $('#shippinghiddenprice').val("0.00");
         var data = { 
             country: country, 
             state: state,
@@ -419,9 +425,11 @@ app.controller('cartController',['$scope', '$http','$sce', function ($scope, $ht
             $http.post('/get-shipping',config).success(function (response, status, headers, config){
                 if(response != ""){
                 $scope.shippingprice = response;
+                $('#shippinghiddenprice').val(response);
                 
                 }else{
                     $scope.shippingprice = "0.00";
+                    $('#shippinghiddenprice').val("0.00");
                    
                 }
                 $scope.calculateTotalPrice($scope.shippingprice);
@@ -441,6 +449,7 @@ app.controller('cartController',['$scope', '$http','$sce', function ($scope, $ht
         var  ordertotal = parseFloat(subtotal) + +parseFloat(taxcost) + +parseFloat(shippingcost);
         $('#ordertotal').text(ordertotal);
         $('#shiptotalamount').val(ordertotal);
+        $('#ordertotalhiddenprice').val(subtotal);
     }
     
      $scope.calculateCartAmount = function(productId,quantity,totalprice){

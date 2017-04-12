@@ -73,6 +73,7 @@ if(user){
                                 <div class="col-xs-12">
                                     <strong><b>Order Total</b></strong>
                                     <div class="pull-right"><b><span>$</span><span id="ordertotal"><%= (subtotal) %></span></b></div>
+
                                 </div>
                             </div>
                         </div>
@@ -134,6 +135,10 @@ if(user){
                                    country = "";
                             }%>
                             <input type="hidden" id="shiptotalamount" name="shiptotalamount" value="<%= (subtotal) %>" />
+                            <input type="hidden" id="shippinghiddenprice" name="shippinghiddenprice" value="{{shippingprice}}" />
+                            <input type="hidden" id="taxhiddenprice" name="taxhiddenprice" value="{{taxprice}}" />
+                            <input type="hidden" id="ordertotalhiddenprice" name="ordertotalhiddenprice" value="<%= (subtotal) %>" />
+
                             <div class="form-group" data-ng-init="renderCountry('<%= country %>')">
                                 <div class="col-md-12"><strong>Country:</strong></div>
                                 <div class="col-md-12">
@@ -544,6 +549,7 @@ $(document).ready(function() {
     var  ordertotal = parseFloat(subtotal) + +parseFloat(taxcost) + +parseFloat(shippingcost);
     $('#ordertotal').text(ordertotal);
     $('#shiptotalamount').val(ordertotal);
+    $('#ordertotalhiddenprice').val(subtotal);
   });
 });
 

@@ -3,6 +3,8 @@ var orderStatus       = 'Pending Processing Completed'.split(' ');
 
 var ordersSchema = mongoose.Schema({
         order_total                : {type: String, default: ''},
+        ship_cost                  : {type: String, default: ''},  
+        tax_cost                   : {type: String, default: ''},  
         order_email                : {type: String, default: ''},
         order_firstname            : {type: String, default: ''},
         order_lastname             : {type: String, default: ''},

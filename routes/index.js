@@ -612,12 +612,18 @@ router.post('/checkout_action', function(req, res, next) {
         res.redirect("/cart");
         return;
     }
-    console.log("Total amount"+req.session.total_cart_amount);
+    console.log("ordertotalhiddenprice : "+req.body.ordertotalhiddenprice);
+    console.log("taxhiddenprice : "+req.body.taxhiddenprice);
+    console.log("shippinghiddenprice : "+req.body.shippinghiddenprice);
     req.session.total_cart_amount = req.body.shiptotalamount;
-    console.log("ship email : "+req.body.ship_email);
+    var ordertotalprice = req.body.ordertotalhiddenprice;
+    var taxprice = req.body.taxhiddenprice;
+    var shippingprice = req.body.shippinghiddenprice;
     // new order doc
     var order_doc = { 
         order_total: req.session.total_cart_amount,
+        ship_cost: req.body.shippinghiddenprice,
+        tax_cost: req.body.taxhiddenprice,
         order_email: req.body.ship_email,
         order_firstname: req.body.ship_firstname,
         order_lastname: req.body.ship_lastname,
@@ -648,7 +654,9 @@ router.post('/checkout_action', function(req, res, next) {
         });*/
         
                 var newOrders                        = new Orders();
-                newOrders.order_total                = req.session.total_cart_amount;
+                newOrders.order_total                = ordertotalprice;
+                newOrders.ship_cost                  = shippingprice;
+                newOrders.tax_cost                   = taxprice;
                 newOrders.order_email                = req.user.local.email;
                 newOrders.order_firstname            = req.user.local.firstName;
                 newOrders.order_lastname             = req.user.local.lastName;    
@@ -706,7 +714,7 @@ router.post('/checkout_action', function(req, res, next) {
                             html += '<tr><td style="width:50%">'+req.session.cart[productid].title+'</td><td>$'+req.session.cart[productid].item_price+'</td><td>'+req.session.cart[productid].quantity+'</td><td>$'+req.session.cart[productid].total_item_price+'</td></tr>';
                         }
                         
-                            html += '<tr><td></td><td></td><td>Total</td><td>$'+req.session.total_cart_amount+'</td></tr></table>';
+                            html += '<tr><td></td><td></td><td>Sub Total</td><td>$'+ordertotalprice+'</td></tr><tr><td></td><td></td><td>Estimated Shipping</td><td>$'+shippingprice+'</td></tr><tr><td></td><td></td><td>Estimated Tax</td><td>$'+taxprice+'</td></tr><tr><td></td><td></td><td>Total</td><td>$'+req.session.total_cart_amount+'</td></tr></table>';
                             html += '<h4>Billing Address:</h4>';
                             html += '<table class="vieworder"><tr><td><b>Name :</b></td><td>'+req.user.local.firstName+' '+req.user.local.lastName+'</td></tr><tr><td><b>Email :</b></td><td>'+req.user.local.email+'</td></tr><tr><td><b>Address :</b></td><td>'+req.user.local.locationCity+' '+req.user.local.locationState+' '+req.user.local.locationCountry+' '+req.user.local.locationZipcode+'</td></tr></table>';
                     }
