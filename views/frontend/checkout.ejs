@@ -560,7 +560,6 @@ $( ".shipcountry" ).change(function() {
     
   var shipcountry = this.value;
   var shipstate = $('#ship_state').val();
-  
   var $scope = angular.element(document.getElementById("checkoutpage")).scope(); // get scope of chatController
   $scope.calculateTax(shipcountry,shipstate);
   $scope.calculateShipping(shipcountry,shipstate,'<%= totalweight %>');

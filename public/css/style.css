@@ -1169,7 +1169,7 @@ nav.navbar {
 	width: 100%;
 }
 .registration, .countdown {
-	display: none;
+	display: block;
 }
 .navbar-brand.logo {
   margin: 10px 15px;width:50px;
