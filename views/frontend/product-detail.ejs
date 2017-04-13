@@ -1,6 +1,9 @@
 <% layout('layout') -%>
 
 <div class="product_page" data-ng-controller="productController">
+<div id="page-loading">
+    <img style="display:block; margin:0 auto;" src="/public/images/ajax-loader.gif">
+</div>
     <div data-ng-init="productDetail('<%= productId %>')" data-ng-bind-html="productDetailView"></div>
 </div>
 <div class="related_product" data-ng-controller="productController">
@@ -140,6 +143,18 @@ $(document).on('click','.closezoombox',function(){
 
 $('body').on('click', function() {
         $('#modal-zoom').hide();
+});
+
+/*
+ * Show page loader till page loads completely
+ */
+document.addEventListener("DOMContentLoaded", function(event) {
+        /*VANILLA JAVASCRIPT*/
+        var element = document.getElementById("page-loading");
+        element.parentNode.removeChild(element);
+        /* OR WITH jQuery*/
+        $('#page-loading')
+            .fadeOut('slow');
 });
 
 </script>
