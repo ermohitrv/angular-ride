@@ -2881,3 +2881,8 @@ transition: all 0.5s ease 0s;
  border-color: #333;
 /* transform: translateY(-5px);*/
 }
+
+.btn-info a:focus, a:hover {
+    color: #23527c;
+    text-decoration: none;
+}
