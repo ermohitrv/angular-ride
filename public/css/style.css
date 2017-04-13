@@ -2865,3 +2865,8 @@ li#header_inbox_bar i.fa.fa-times {
  color: #fff;
  font-size: 14px;
 }
+
+.listing ul#nav {
+ padding: 0;
+ text-align: center;
+}
