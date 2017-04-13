@@ -448,7 +448,10 @@ app.controller('cartController',['$scope', '$http','$sce', function ($scope, $ht
         var taxcost = $('#taxcost').text();
         //var shippingcost = $('#shippingcost').text();
         var subtotal = $('#subtotalcheckout').text();
+        
+        //var  ordertotal = parseFloat(Math.round(subtotal * 100) / 100).toFixed(2) + +parseFloat(Math.round(taxcost * 100) / 100).toFixed(2) + +parseFloat(Math.round(shippingcost * 100) / 100).toFixed(2);
         var  ordertotal = parseFloat(subtotal) + +parseFloat(taxcost) + +parseFloat(shippingcost);
+        ordertotal = parseFloat(Math.round(ordertotal * 100) / 100).toFixed(2);
         $('#ordertotal').text(ordertotal);
         $('#shiptotalamount').val(ordertotal);
         $('#ordertotalhiddenprice').val(subtotal);

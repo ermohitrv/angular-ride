@@ -50,7 +50,7 @@
                                 <input style="width:70%" type="number" class="form-control quantitybox"  id="exampleInputquantity_<%= productid %>" min="1" value="<%= sessionCart[productid].quantity %>" >
                             </td>
                             <td class="col-sm-1 col-md-1 text-center">$<strong  id="itemprice_<%= productid %>"><%= sessionCart[productid].item_price %></strong></td>
-                            <td class="col-sm-1 col-md-1 text-center">$<strong class="subtotalitemprice" id="totalitemprice_<%= productid %>"><%= sessionCart[productid].total_item_price %></strong></td>
+                            <td class="col-sm-1 col-md-1 text-center">$<strong class="subtotalitemprice" id="totalitemprice_<%= productid %>"><%= parseFloat(Math.round(sessionCart[productid].total_item_price * 100) / 100).toFixed(2) %></strong></td>
                             <td class="col-sm-1 col-md-1">
                                     <button type="button" class="btn btn-danger removeproduct" id="<%= i %>" onclick="deleteRow(this.parentNode.parentNode.rowIndex,'<%= productid %>')">
                                     <span class="glyphicon glyphicon-remove"></span> Remove
@@ -83,7 +83,8 @@
                             <td>   </td>
                             <td>   </td>
                             <td class="text-center"><h3>Total</h3></td>
-                            <td class="text-right"><h3>$<strong id="final_total"><%= (subtotal) %></strong></h3></td>
+                            <%= parseFloat(Math.round(subtotal * 100) / 100).toFixed(2) %>
+                            <td class="text-right"><h3>$<strong id="final_total"><%= parseFloat(Math.round(subtotal * 100) / 100).toFixed(2) %></strong></h3></td>
                         </tr>
                         <tr>
                             <td><a href="/gear"><button type="button" class="btn btn-warning continue_shoping">

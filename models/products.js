@@ -3,7 +3,7 @@ var mongoose                = require('mongoose');
 var productsSchema = mongoose.Schema({
     product_title:          {type: String, default: ''},
     product_sku:            {type: String, default: ''},
-    product_price:          {type: Number, default: ''},
+    product_price:          {type: String, default: ''},
     product_published:      {type: String, default: ''},
     product_permalink:      {type: String, default: ''},
     product_short_description: {type: String, default: ''},

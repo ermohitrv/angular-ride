@@ -621,10 +621,11 @@ router.post('/product/insert', cpUpload, middleware.restrict, function(req, res)
                 }
             }
             console.log("sdsds : "+req.body.frm_product_featured);
+            var productPrice = parseFloat(Math.round(req.body.frm_product_price * 100) / 100).toFixed(2); 
             var productObj = new Products();
             productObj.product_permalink    = req.body.frm_product_permalink;
             productObj.product_title        = req.body.frm_product_title;
-            productObj.product_price        = req.body.frm_product_price;
+            productObj.product_price        = productPrice;
             productObj.product_description  = req.body.frm_product_description;
             productObj.product_short_description = req.body.frm_product_short_description;
             productObj.product_published    = req.body.frm_product_published;
@@ -773,6 +774,9 @@ router.post('/product/update',cpUploadEditProduct, middleware.restrict, function
         for(var i = 0; i < productimg.length; i++){
             productimages.push(productimg[i]);
         }
+        
+    var productPrice = parseFloat(Math.round(req.body.frm_product_edit_price * 100) / 100).toFixed(2); 
+
     var product_doc = {
                     product_title: req.body.frm_product_edit_title,
                     product_category: req.body.frm_product_edit_category,
@@ -783,7 +787,7 @@ router.post('/product/update',cpUploadEditProduct, middleware.restrict, function
                     product_short_description: req.body.frm_product_edit_shortdesc,
                     product_description: req.body.frm_product_edit_longdesc,
                     product_published: req.body.frm_product_edit_published,
-                    product_price: req.body.frm_product_edit_price,
+                    product_price: productPrice,
 //                   product_permalink: req.body.frm_product_edit_permalink,
                     product_featured: req.body.frm_product_edit_featured,
                     product_image:productimages
@@ -2001,6 +2005,8 @@ router.get('/get-order-list', middleware.restrict, function(req, res){
                             'order_status':1,
                             'order_email': 1,
                             'order_total':1,
+                            'ship_cost':1,
+                            'tax_cost':1,
                             "count": { $size:"$item.order_id"}, 
                              
                         } 
@@ -2496,6 +2502,8 @@ router.post('/view-order-detail', middleware.isAdminLoggedIn, function(req, res)
                             'order_postcode':1,
                             'order_total':1,
                             'order_date':1,
+                            'ship_cost':1,
+                            'tax_cost':1,
                             "count": { $size:"$item.order_id"}, 
                             'item1':"$item1",
                             'item':"$item",

@@ -616,9 +616,10 @@ router.post('/checkout_action', function(req, res, next) {
     console.log("taxhiddenprice : "+req.body.taxhiddenprice);
     console.log("shippinghiddenprice : "+req.body.shippinghiddenprice);
     req.session.total_cart_amount = req.body.shiptotalamount;
-    var ordertotalprice = req.body.ordertotalhiddenprice;
-    var taxprice = req.body.taxhiddenprice;
-    var shippingprice = req.body.shippinghiddenprice;
+    
+    var ordertotalprice = parseFloat(Math.round(req.body.ordertotalhiddenprice * 100) / 100).toFixed(2);
+    var taxprice = parseFloat(Math.round(req.body.taxhiddenprice * 100) / 100).toFixed(2);
+    var shippingprice = parseFloat(Math.round(req.body.shippinghiddenprice * 100) / 100).toFixed(2);
     // new order doc
     var order_doc = { 
         order_total: req.session.total_cart_amount,

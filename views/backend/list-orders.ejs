@@ -60,8 +60,10 @@
                                                 <td>
                                                     <span data-ng-bind="orders.count"></span>
                                                 </td>
+                                              
                                                 <td>
-                                                    <span>${{orders.order_total | number: 2}}</span>
+                                                    <!-- Addition of order total, ship cost, tax cost -->
+                                                    <span>${{ orders.order_total -- orders.tax_cost -- orders.ship_cost | number:2 }}</span>
                                                 </td>
                                                 <td>
                                                     <span data-ng-bind="orders.order_status"></span>

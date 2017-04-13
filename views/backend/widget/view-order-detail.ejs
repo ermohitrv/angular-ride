@@ -1,4 +1,3 @@
-<% var totalAmount = parseFloat(Math.round(result[0].order_total * 100) / 100).toFixed(2); %>
 <div class="col-md-6">
   <div class="box box-primary">
     <div class="box-body box-profile">
@@ -24,7 +23,10 @@
                 </td>
             </tr>
             <tr><td><b>Items Count :</b></td><td><%= result[0].count %></td></tr>
-            <tr><td><b>Amount :</b></td><td>$<%= totalAmount %></td></tr>
+            <tr><td><b>Order Total :</b></td><td>$<span id="ordertotal"><%= result[0].order_total %></span></td></tr>
+            <tr><td><b>Estimated Tax :</b></td><td>$<span id="taxcost"><%= result[0].tax_cost %></span></td></tr>
+            <tr><td><b>Estimated Shipping :</b></td><td>$<span id="shipcost"><%= result[0].ship_cost %></span></td></tr>
+            <tr><td><b>Amount :</b></td><td>$<span id="totalamount"></span></td></tr>
             <tr><td><b>Order Placed On :</b></td><td><Span id="orderdate"><span></td></tr>
 
         </table>
@@ -91,6 +93,15 @@
      var orderDate = '<%= result[0].order_date %>';
      var orderPlaceDate = moment(orderDate).format('YYYY-MM-DD hh:mm'); 
      $('#orderdate').text(orderPlaceDate);
+     
+     /* calculate total amount and set */
+     var orderTotal = '<%= result[0].order_total %>';
+     var shipCost = '<%= result[0].ship_cost %>';
+     var taxCost = '<%= result[0].tax_cost %>';
+     var  totalAmount = parseFloat(orderTotal) + +parseFloat(shipCost) + +parseFloat(taxCost);
+     totalAmount = parseFloat(Math.round(totalAmount * 100) / 100).toFixed(2);  
+     $('#totalamount').text(totalAmount);     
+     
   });
 </script>
  
