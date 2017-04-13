@@ -2844,7 +2844,7 @@ li#header_inbox_bar i.fa.fa-times {
     border-radius: 50%;
     width: 80px;
     height: 80px;
-    animation: spin 2s linear inf8inite;
+    animation: spin 2s linear infinite;
     margin-left:45%;
 }
 
