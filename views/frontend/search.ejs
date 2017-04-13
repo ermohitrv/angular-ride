@@ -75,7 +75,9 @@
                                     <div class="quickview">
                                         <a data-toggle="modal" class="btn btn-xs btn-quickview" href="/event?id={{eventresult._id}}" data-target="">Quick View</a>
                                     </div>     
-                                    <img style="display:inline-block" ng-src="{{eventresult.eventImage?('<%= pageurl %><%= page_url %>/'+ eventresult.eventImage):'http://placehold.it/240x240'}}" alt="img" class="img-responsive shopproductlistimg"/>
+                                    <!--<img style="display:inline-block" ng-src="{{eventresult.eventImage?('<%= pageurl %><%= page_url %>/'+ eventresult.eventImage):'http://placehold.it/240x240'}}" alt="img" class="img-responsive shopproductlistimg"/>-->
+                                    <img style="display:inline-block" ng-src="{{eventresult.eventImage? eventresult.eventImage :'http://placehold.it/240x240'}}" alt="img" class="img-responsive shopproductlistimg"/>
+
                                 </div>
                             <div class="description-wrap">
                             <div class="description">
@@ -280,7 +282,8 @@
                                                 <a data-toggle="modal" class="btn btn-xs btn-quickview" href="/event?id={{result._id}}" data-target="">Quick View</a>
                                             </div>     
                                             
-                                            <img style="display:inline-block" ng-src="{{result.eventImage?('<%= pageurl %><%= page_url %>/'+ result.eventImage):'http://placehold.it/240x240'}}" alt="img" class="img-responsive shopproductlistimg"/>
+<!--                                            <img style="display:inline-block" ng-src="{{result.eventImage?('<%= pageurl %><%= page_url %>/'+ result.eventImage):'http://placehold.it/240x240'}}" alt="img" class="img-responsive shopproductlistimg"/>-->
+                                            <img style="display:inline-block" ng-src="{{result.eventImage ? result.eventImage :'http://placehold.it/240x240'}}" alt="img" class="img-responsive shopproductlistimg"/>
 
                                             </div>
                                         <div class="description-wrap">
