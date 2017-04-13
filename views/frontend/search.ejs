@@ -34,7 +34,7 @@
                                         <a data-toggle="modal" class="btn btn-xs btn-quickview" href="/product/{{result.product_permalink}}" data-target="">Quick View</a>
                                     </div>     
 
-                                    <img style="display:inline-block" ng-src="{{result.product_image[0]?('<%= pageurl %><%= page_url %>/'+ result.product_image[0]):'http://placehold.it/240x240'}}" alt="img" class="img-responsive shopproductlistimg"/>
+                                    <img style="display:inline-block" ng-src="{{result.product_image[0]?('<%= pageurl %><%= page_url %>/public/uploads/'+ result.product_image[0]):'http://placehold.it/240x240'}}" alt="img" class="img-responsive shopproductlistimg"/>
                                 </div>
                                 <div class="description-wrap">
                                 <div class="description">
@@ -112,11 +112,8 @@
                                         <a data-toggle="modal" class="btn btn-xs btn-quickview" href="/profile/{{peopleresult.local.username}}" data-target="">Quick View</a>
                                     </div>     
                                     <!--<img style="display:inline-block" ng-src="{{peopleresult.local.profileImage == 'http://placehold.it/300?text='+peopleresult.local.firstName ? peopleresult.local.profileImage : '/public/uploads/'+peopleresult.local.profileImage }}" alt="img" class="img-responsive shopproductlistimg"/>-->
-                                    <img style="display:inline-block" ng-src="{{ peopleresult.facebook.email == undefined ?  peopleresult.local.profileImage == 'http://placehold.it/300?text='+peopleresult.local.firstName ? peopleresult.local.profileImage : peopleresult.local.profileImage :  '<%= pageurl %>'+peopleresult.local.profileImage }}" alt="img" class="img-responsive shopproductlistimg"/>
-
-<!--                                    <img style="display:inline-block" data-ng-if="peopleresult.local.profileImage == 'http://placehold.it/300?text='+peopleresult.local.firstName" src="{{peopleresult.local.profileImage}}" alt="img" class="img-responsive shopproductlistimg"/>
-                                    <img style="display:inline-block" data-ng-if="peopleresult.facebook.email != '' && peopleresult.facebook.email != 'undefined'" src="{{peopleresult.local.profileImage}}" alt="img" class="img-responsive shopproductlistimg"/>
-                                    <img style="display:inline-block" data-ng-if="peopleresult.local.profileImage != ''" src="/public/uploads/{{peopleresult.local.profileImage}}" alt="img" class="img-responsive shopproductlistimg"/>-->
+                                    <!--<img style="display:inline-block" ng-src="{{ peopleresult.facebook.email == undefined ?  peopleresult.local.profileImage == 'http://placehold.it/300?text='+peopleresult.local.firstName ? peopleresult.local.profileImage : '/public/uploads/'+peopleresult.local.profileImage :  '<%= pageurl %>'+peopleresult.local.profileImage }}" alt="img" class="img-responsive shopproductlistimg"/>-->
+                                    <img style="display:inline-block" ng-src="{{peopleresult.local.profileImage == 'http://placehold.it/300' ? peopleresult.local.profileImage : '<%= pageurl %><%= page_url %>'+peopleresult.local.profileImage }}" alt="img" class="img-responsive shopproductlistimg"/>
 
                                 </div>
                                 <div class="description-wrap">
@@ -370,7 +367,8 @@
                                                 <a data-toggle="modal" class="btn btn-xs btn-quickview" href="/profile/{{resultpeople.local.username}}" data-target="">Quick View</a>
                                             </div>     
                                             
-                                            <img style="display:inline-block" ng-src="{{ resultpeople.facebook.email == undefined ?  resultpeople.local.profileImage == 'http://placehold.it/300?text='+resultpeople.local.firstName ? resultpeople.local.profileImage : resultpeople.local.profileImage :  '<%= pageurl %>'+resultpeople.local.profileImage }}" alt="img" class="img-responsive shopproductlistimg"/>
+                                            <!--<img style="display:inline-block" ng-src="{{ resultpeople.facebook.email == undefined ?  resultpeople.local.profileImage == 'http://placehold.it/300?text='+resultpeople.local.firstName ? resultpeople.local.profileImage : '/public/uploads/'+resultpeople.local.profileImage :  '<%= pageurl %>'+resultpeople.local.profileImage }}" alt="img" class="img-responsive shopproductlistimg"/>-->
+                                            <img style="display:inline-block" ng-src="{{resultpeople.local.profileImage == 'http://placehold.it/300' ? resultpeople.local.profileImage : '<%= pageurl %><%= page_url %>'+resultpeople.local.profileImage }}" alt="img" class="img-responsive shopproductlistimg"/>
 
 
                                             </div>
