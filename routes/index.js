@@ -833,11 +833,11 @@ router.post('/checkout_action', function(req, res, next) {
                     }else{
                         req.session.order_id = orderdata._id;
                         var date = moment(orderdata.order_date).format('YYYY-MM-DD');
-                        html += 'Hello, '+req.user.local.firstName+' '+req.user.local.lastName;
+                        html += 'Hello '+req.user.local.firstName+' '+req.user.local.lastName+',';
                         html += '<h4>Order Details</h4>';
                         html += '<div><p>Order Id : '+orderdata._id+'</p><p>Placed On: '+date+'</p></div>';
                                                       
-                        html += '<div class="main"><table width="100%" cellspacing="0" cellpadding="0"><tbody><tr><th align="left" style="padding: 5px 5px">Products:</th><th align="left" style="padding: 5px 5px">Unit Price</th><th align="left" style="padding: 5px 5px">Quantity</th><th align="left" style="padding: 5px 5px">Total Price</th></tr>';
+                        html += '<table style="padding-top:20px; padding-bottom:25px;" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><th align="left" style="padding: 9px 8px;background-color: #f3f3f3;">Products:</th><th align="left" style="padding: 9px 8px;background-color: #f3f3f3;">Unit Price</th><th align="left" style="padding: 9px 8px;background-color: #f3f3f3;">Quantity</th><th align="left" style="padding: 9px 8px;background-color: #f3f3f3;">Total Price</th></tr>';
                         
                         if(req.user != ""){
                         for(var i = 0; i < req.session.productids.length; i++){ 
@@ -875,7 +875,7 @@ router.post('/checkout_action', function(req, res, next) {
                            html += '<tr><td style="padding: 5px 5px">&nbsp;</td><td style="padding: 5px 5px">&nbsp;</td><td style="padding: 5px 5px"><strong>Total</strong></td><td style="padding: 5px 5px">$'+req.session.total_cart_amount+'</td></tr></tbody></table>';
                         
                            
-                           html += '<table width="100%" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td><h4>Billing Address:</h4><table width="100%" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td><b>Name :</b></td><td>'+req.user.local.firstName+' '+req.user.local.lastName+'</td></tr><tr><td><b>Email :</b></td><td><a href="" target="_blank">'+req.user.local.email+'</a></td></tr><tr><td><b>Address :</b></td><td>'+req.user.local.locationCity+' '+req.user.local.locationState+' '+req.user.local.locationCountry+' '+req.user.local.locationZipcode+'</td></tr></tbody></table></td>';
+                           html += '<table style="padding-top:10px; border-top: 1px solid #ddd;" width="100%" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td style="padding-right:15px;"><h4>Billing Address:</h4><table width="100%" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td style="padding:5px 0;vertical-align: top;"><b>Name :</b></td><td style="padding:5px 0;vertical-align: top;">'+req.user.local.firstName+' '+req.user.local.lastName+'</td></tr><tr><td style="padding:5px 0;vertical-align: top;"><b>Email :</b></td><td style="padding:5px 0;vertical-align: top;"><a href="" target="_blank">'+req.user.local.email+'</a></td></tr><tr><td style="padding:5px 0;vertical-align: top;"><b>Address :</b></td><td style="padding:5px 0;vertical-align: top;">'+req.user.local.locationCity+' '+req.user.local.locationState+' '+req.user.local.locationCountry+' '+req.user.local.locationZipcode+'</td></tr></tbody></table></td>';
                            
                         
                     }
@@ -906,7 +906,7 @@ router.post('/checkout_action', function(req, res, next) {
                         
                             });
                             
-                       html += '<td><h4>Shipping Address:</h4><table width="100%" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td><b>Name :</b></td><td>'+req.body.ship_firstname+' '+req.body.ship_lastname+'</td></tr><tr><td><b>Email :</b></td><td><a href="" target="_blank">'+req.body.ship_email+'</a></td></tr><tr><td><b>Address :</b></td><td>'+req.body.ship_addr1+' '+req.body.ship_city+' '+req.body.ship_state+' '+req.body.ship_country+','+req.body.ship_postcode+'</td></tr></tbody></table></td></tr></tbody></table></div>';     
+                       html += '<td style="padding-left:15px;"><h4>Shipping Address:</h4><table width="100%" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td style="padding:5px 0;vertical-align: top;"><b>Name :</b></td><td style="padding:5px 0;vertical-align: top;">'+req.body.ship_firstname+' '+req.body.ship_lastname+'</td></tr><tr><td style="padding:5px 0;vertical-align: top;"><b>Email :</b></td><td style="padding:5px 0;vertical-align: top;"><a href="" target="_blank">'+req.body.ship_email+'</a></td></tr><tr><td style="padding:5px 0;vertical-align: top;"><b>Address :</b></td><td style="padding:5px 0;vertical-align: top;">'+req.body.ship_addr1+' '+req.body.ship_city+' '+req.body.ship_state+' '+req.body.ship_country+','+req.body.ship_postcode+'</td></tr></tbody></table></td></tr></tbody></table>';     
                      
                     }
                     
