@@ -2879,5 +2879,5 @@ transition: all 0.5s ease 0s;
 .listing ul#nav li.btn.btn-xs.btn-info.active {
  background-color: #333;
  border-color: #333;
- transform: translateY(-5px);
+/* transform: translateY(-5px);*/
 }
