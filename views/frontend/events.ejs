@@ -8,7 +8,7 @@
             <div class="title"><h1> Events </h1></div>
             <div class="listing">
                 <ul id="nav">
-			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap('all')"><a href="javascript:;">ALL</a></li>
+			<li class="btn btn-xs btn-info active" data-ng-click="drawEventsMap('all')"><a href="javascript:;">ALL</a></li>
 			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(1)"><a href="javascript:;">JAN</a></li>
 			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(2)"><a href="javascript:;">FEB</a></li>
 			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(3)"><a href="javascript:;">MAR</a></li>
@@ -69,5 +69,10 @@
         
     });
     
-
+   
+    $('.btn-info').click(function(){
+        $('.btn-info').removeClass('active');
+        $(this).addClass('active');
+    });
+    
 </script>    

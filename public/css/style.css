@@ -2870,3 +2870,8 @@ li#header_inbox_bar i.fa.fa-times {
  padding: 0;
  text-align: center;
 }
+
+.listing ul#nav li.btn.btn-xs.btn-info:hover, .listing ul#nav li.btn.btn-xs.btn-info:focus, .listing ul#nav li.btn.btn-xs.btn-info:active {
+ transform: translateY(-5px);
+transition: all 0.5s ease 0s;
+}
