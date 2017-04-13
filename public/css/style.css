@@ -2852,3 +2852,16 @@ li#header_inbox_bar i.fa.fa-times {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+.listing ul#nav li.btn.btn-xs.btn-info {
+ background-color: #ce0000;
+ border-color: #ce0000;
+ font-size: 14px;
+ line-height: normal;
+ padding: 10px;
+}
+
+.listing ul#nav li.btn.btn-xs.btn-info a {
+ color: #fff;
+ font-size: 14px;
+}
