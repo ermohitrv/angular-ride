@@ -1,11 +1,13 @@
 <% layout('layout') -%>
 
 <div class="product_page" data-ng-controller="productController">
-<div id="page-loading">
+<!--<div id="page-loading">
     <div class="loader"></div>
-    <!--<img style="display:block; margin:0 auto;" src="/public/images/ajax-loader.gif">-->
-</div>
-    <div data-ng-init="productDetail('<%= productId %>')" data-ng-bind-html="productDetailView"></div>
+    <img style="display:block; margin:0 auto;" src="/public/images/ajax-loader.gif">
+</div>-->
+    
+<div ng-if='productDetailView == ""'><div id="page-loading"><div class="loader"></div></div></div>
+    <div ng-if='productDetailView != ""' data-ng-init="productDetail('<%= productId %>')" data-ng-bind-html="productDetailView"></div>
 </div>
 <div class="related_product" data-ng-controller="productController">
     <div class="overlay_bg"></div>
@@ -149,14 +151,12 @@ $('body').on('click', function() {
 /*
  * Show page loader till page loads completely
  */
+/*
 document.addEventListener("DOMContentLoaded", function(event) {
-        /*VANILLA JAVASCRIPT*/
         var element = document.getElementById("page-loading");
         element.parentNode.removeChild(element);
-        /* OR WITH jQuery*/
         $('#page-loading')
             .fadeOut('slow');
 });
-
-
+*/
 </script>

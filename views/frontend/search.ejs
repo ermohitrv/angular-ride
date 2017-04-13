@@ -1,9 +1,7 @@
 <% layout('layout') -%>
 <% var pageurl = page_url+"/l/240x240/" %>
 <div class="search_result" id="searchresult_page" data-ng-controller="shopController" >
-    <div id="page-loading">
-    <div class="loader"></div>
-    </div>
+    <div ng-if='topproductresults == ""'><div id="page-loading"><div class="loader"></div></div></div>
     <div class="container">
         <div class="row search_listing">
            <div class="title"><h1> Search </h1></div>
@@ -17,7 +15,9 @@
 		</ul>
                 
             </div>
-            <section id="topresults" ng-init="searchResults('<%= searchkey %>','top')">
+           
+
+            <section ng-if='topproductresults != ""' id="topresults" ng-init="searchResults('<%= searchkey %>','top')">
                
                 <div class="col-lg-12 col-md-9 col-md-12" id="topproductresults" >
                     <div   class="col-lg-12 col-md-12 col-md-12 seeall">
@@ -545,15 +545,5 @@ function searchevents(){
 }
 
 
-/*
- * Show page loader till page loads completely
- */
-document.addEventListener("DOMContentLoaded", function(event) {
-        /*VANILLA JAVASCRIPT*/
-        var element = document.getElementById("page-loading");
-        element.parentNode.removeChild(element);
-        /* OR WITH jQuery*/
-        $('#page-loading')
-            .fadeOut('slow');
-});
+
 </script>

@@ -1,14 +1,13 @@
 <% layout('layout') -%>
 <style>.title h1{color:#3a3a3a}</style>
 <div class="product_page" data-ng-controller="shopController">
-    <div id="page-loading">
-    <div class="loader"></div>
-    </div>
+    
     <div class="container">
         <div class="row product_listing">
             <div class="title"><h1> Gear </h1></div>
             <div class="listing" data-ng-init="shopProductsList()">
-                <div ng-bind-html="shopProductsListView"></div>
+                <div ng-if='shopProductsListView == ""'><div id="page-loading"><div class="loader"></div></div></div>
+                <div ng-if='productDetailView != ""' ng-bind-html="shopProductsListView"></div>
             </div>
         </div>
     </div>

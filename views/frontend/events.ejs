@@ -1,9 +1,8 @@
 <% layout('layout') -%>
 <style>.title h1{color:#3a3a3a}</style>
 <div class="events_page" data-ng-controller="homeController" >
-    <div id="page-loading">
-    <div class="loader"></div>
-    </div>
+    <div ng-if='eventsList == ""'><div id="page-loading"><div class="loader"></div></div></div>
+
     <div class="container">
         <div class="row classified_listing">
             <div class="title"><h1> Events </h1></div>
@@ -23,8 +22,8 @@
 			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(11)"><a href="javascript:;">NOV</a></li>
 			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(12)"><a href="javascript:;">DEC</a></li>
 		</ul>
-                <section id="map">
-                    <div class="row4" data-ng-init="drawEventsMap('all')">
+                <section id="map" eventsList>
+                    <div class="row4"   data-ng-init="drawEventsMap('all')">
                         <!--<div class="row4" data-ng-init="drawEventsMap()">-->
                         <div id="map-canvas" style="width: 100%;height: 500px;"></div>
                     </div>
@@ -70,15 +69,5 @@
         
     });
     
- /*
- * Show page loader till page loads completely
- */
-document.addEventListener("DOMContentLoaded", function(event) {
-        /*VANILLA JAVASCRIPT*/
-        var element = document.getElementById("page-loading");
-        element.parentNode.removeChild(element);
-        /* OR WITH jQuery*/
-        $('#page-loading')
-            .fadeOut('slow');
-});
+
 </script>    
