@@ -2875,3 +2875,7 @@ li#header_inbox_bar i.fa.fa-times {
  transform: translateY(-5px);
 transition: all 0.5s ease 0s;
 }
+
+.listing ul#nav li.btn.btn-xs.btn-info.active {
+ transform: translateY(-5px);
+}
