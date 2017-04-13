@@ -2,7 +2,8 @@
 
 <div class="product_page" data-ng-controller="productController">
 <div id="page-loading">
-    <img style="display:block; margin:0 auto;" src="/public/images/ajax-loader.gif">
+    <div class="loader"></div>
+    <!--<img style="display:block; margin:0 auto;" src="/public/images/ajax-loader.gif">-->
 </div>
     <div data-ng-init="productDetail('<%= productId %>')" data-ng-bind-html="productDetailView"></div>
 </div>
