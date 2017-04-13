@@ -704,7 +704,7 @@ router.post('/checkout_action', function(req, res, next) {
                                 }
                         
                             });
-                            html += '<tr><td style="padding: 5px 5px">'+req.session.cart[productid].title+'</td><td style="padding: 5px 5px">$'+req.session.cart[productid].item_price+'</td><td style="padding: 5px 5px">'+req.session.cart[productid].quantity+'</td><td style="padding: 5px 5px">$'+req.session.cart[productid].total_item_price+'</td></tr>';
+                            html += '<tr><td style="padding: 5px 5px">'+req.session.cart[productid].title+'</td><td style="padding: 5px 5px">$'+req.session.cart[productid].item_price+'</td><td style="padding: 5px 5px">'+req.session.cart[productid].quantity+'</td><td style="padding: 5px 5px">$'+parseFloat(Math.round(req.session.cart[productid].total_item_price * 100) / 100).toFixed(2)+'</td></tr>';
                         }
                         
                            html += '<tr><td style="padding: 5px 5px">&nbsp;</td><td style="padding: 5px 5px">&nbsp;</td><td style="padding: 5px 5px"><strong>Sub Total</strong></td><td style="padding: 5px 5px">$'+ordertotalprice+'</td></tr>';

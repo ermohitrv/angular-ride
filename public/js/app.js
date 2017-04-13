@@ -391,12 +391,12 @@ app.controller('cartController',['$scope', '$http','$sce', function ($scope, $ht
         if(localUserUsername){
             $http.post('/get-tax',config).success(function (response, status, headers, config){
                 if(response != ""){
-                    
+                response = parseFloat(Math.round(response * 100) / 100).toFixed(2);    
                 $scope.taxprice = response;
                 $('#taxhiddenprice').val(response);
                 
                 }else{
-                    
+                    response = parseFloat(Math.round(response * 100) / 100).toFixed(2);   
                     $scope.taxprice = "0.00";
                     $('#taxhiddenprice').val(response);   
                     
@@ -426,10 +426,12 @@ app.controller('cartController',['$scope', '$http','$sce', function ($scope, $ht
         if(localUserUsername){
             $http.post('/get-shipping',config).success(function (response, status, headers, config){
                 if(response != ""){
+                response = parseFloat(Math.round(response * 100) / 100).toFixed(2);   
                 $scope.shippingprice = response;
                 $('#shippinghiddenprice').val(response);
                 
                 }else{
+                    response = parseFloat(Math.round(response * 100) / 100).toFixed(2);
                     $scope.shippingprice = "0.00";
                     $('#shippinghiddenprice').val("0.00");
                    
