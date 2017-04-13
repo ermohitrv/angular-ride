@@ -1,6 +1,9 @@
 <% layout('layout') -%>
 <% var pageurl = page_url+"/l/240x240/" %>
 <div class="search_result" id="searchresult_page" data-ng-controller="shopController" >
+    <div id="page-loading">
+    <div class="loader"></div>
+    </div>
     <div class="container">
         <div class="row search_listing">
            <div class="title"><h1> Search </h1></div>
@@ -540,4 +543,17 @@ function searchevents(){
     $scope.searchEvents(fromEventDate,toEventDate);
     
 }
+
+
+/*
+ * Show page loader till page loads completely
+ */
+document.addEventListener("DOMContentLoaded", function(event) {
+        /*VANILLA JAVASCRIPT*/
+        var element = document.getElementById("page-loading");
+        element.parentNode.removeChild(element);
+        /* OR WITH jQuery*/
+        $('#page-loading')
+            .fadeOut('slow');
+});
 </script>

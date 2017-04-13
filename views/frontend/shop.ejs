@@ -1,6 +1,9 @@
 <% layout('layout') -%>
 <style>.title h1{color:#3a3a3a}</style>
 <div class="product_page" data-ng-controller="shopController">
+    <div id="page-loading">
+    <div class="loader"></div>
+    </div>
     <div class="container">
         <div class="row product_listing">
             <div class="title"><h1> Gear </h1></div>
@@ -18,4 +21,15 @@ $(document).on('click','.product-add-to-cart',function(){
     angular.element(this).scope().addToCartfromshop(product_id,quantity_box);
 });
 
+/*
+ * Show page loader till page loads completely
+ */
+document.addEventListener("DOMContentLoaded", function(event) {
+        /*VANILLA JAVASCRIPT*/
+        var element = document.getElementById("page-loading");
+        element.parentNode.removeChild(element);
+        /* OR WITH jQuery*/
+        $('#page-loading')
+            .fadeOut('slow');
+});
 </script>
