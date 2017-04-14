@@ -3054,4 +3054,13 @@ margin:0px;
 .check-btn1 button, .check-btn2 button {
   width: 100%;
 }
+.flip-clock-wrapper ul {
+  display: inline-block;
+  float: none;
+}
+.flip-clock-divider {
+
+ float: none;
+ 
+}
 }
