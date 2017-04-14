@@ -3604,8 +3604,11 @@ router.post('/users-rank', function(req, res){
                     }
                 }
             },
+            {
+                $match: { 'isRouteCompleted' : 'ONGOING' }
+            }
             
-            ], 
+        ], 
         
         function(err, user){
             if(err){
