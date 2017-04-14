@@ -85,7 +85,7 @@ app.controller('homeController', ['$scope', '$http', function ($scope, $http) {
             console.log(eventsList);
             $scope.eventsList = eventsList;
             var widthScreen = $(document).width();
-            if (widthScreen > 768) {
+            //if (widthScreen > 768) {
                 
                 if (window.google && google.maps) {
                     // Map script is already loaded
@@ -93,7 +93,7 @@ app.controller('homeController', ['$scope', '$http', function ($scope, $http) {
                 } else {
                     initializeMap(eventsList,"eventsmap");
                 }
-            }
+            //}
         }).error(function(){
             console.log('Oops! Error listing get-events-list');
         });

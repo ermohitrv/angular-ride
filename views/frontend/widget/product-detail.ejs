@@ -93,7 +93,7 @@
 
             <div class="productFilter productFilterLook2">
                 <div class="row">
-                    <div class="col-lg-4 col-sm-6 col-xs-6">
+                    <div class="col-lg-4 col-sm-4 col-xs-4">
                         <div class="filterBox">
                             <select id="quantity_box" class="form-control select2-hidden-accessible" tabindex="-1" aria-hidden="true">
                                 <option value="" selected="">Quantity</option>
@@ -108,7 +108,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-sm-6 col-xs-6">
+                    <div class="col-lg-4 col-sm-4 col-xs-4">
                         <div class="filterBox">
                             <select id="size_box" class="form-control select2-hidden-accessible" tabindex="-1" aria-hidden="true">
                                 <option value="" selected="">Select Size</option>
@@ -121,7 +121,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-sm-6 col-xs-6">
+                    <div class="col-lg-4 col-sm-4 col-xs-4">
                         <div class="filterBox">
                             <select id="color_box" class="form-control select2-hidden-accessible" tabindex="-1" aria-hidden="true">
                                 <option value="" selected="">Select Color</option>
@@ -273,34 +273,21 @@
       <div class="modal-body">
           <label>Product added to cart successfully!</label>
 
-                    <div>
-                        <table class="table table-hover">
-                                    <tbody>
-                                        <tr></tr>
-                                        <tr>
-                                            <td><a href="/shop"><button type="button" class="btn btn-warning continue_shoping" data-dismiss="modal">
-                                                <span class="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
-                                                    </button></a></td>
-                                            <td>   </td>
-                                            <td>   </td>
-                                            <td>
-                                            </td>
-                                            <td></td>
-                                            <td>
-                                                <a  href="/cart"><button type="button" class="btn btn-success checkout_btn">
-                                                Checkout <span class="glyphicon glyphicon-play"></span>
-                                                </button></a></td>
-                                        </tr>
-                                    </tbody>
-                            </table>
+                    <div class="checkout-buttons-wrap">
+                    <div class="check-btn1">
+                        <a href="/gear"><button type="button" class="btn btn-warning continue_shoping">
+                                    <span class="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
+                                    </button></a>
                     </div>
-
-
+                    <div class="check-btn2">
+                        <a  href="/cart"><button type="button" class="btn btn-success checkout_btn">
+                                        Checkout <span class="glyphicon glyphicon-play"></span>
+                                </button></a>
+                    </div>
+                     </div>
 
         </div>
-<!--      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>-->
+
     </div>
 
   </div>
