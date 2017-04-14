@@ -3573,7 +3573,9 @@ router.post('/use-odometer', function(req, res){
 router.post('/users-rank', function(req, res){
 
      RpRoutes.aggregate([
-
+                {
+                    $match: { 'isRouteCompleted' : 'ONGOING' }
+                },
                 {
                     $lookup:
                             {
@@ -3604,9 +3606,7 @@ router.post('/users-rank', function(req, res){
                     }
                 }
             },
-            {
-                $match: { 'isRouteCompleted' : 'ONGOING' }
-            }
+            
             
         ], 
         
