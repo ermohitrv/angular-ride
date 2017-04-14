@@ -2389,7 +2389,9 @@ router.post('/respond-friend-request', function (req, res) {
                                                                     data: {
                                                                         friendRequestSentBy : friendRequestBy,
                                                                         friendRequestSentTo: friendRequestTo,
-                                                                        friendRequestStatus: friendReq.friendRequestApprovalStatus
+                                                                        friendRequestStatus: friendReq.friendRequestApprovalStatus,
+                                                                        name:userdata.local.firstName+" "+userdata.local.lastName,
+                                                                             
                                                                     }, 
                                                                     message: "friend request accepted", 
                                                                     code: 400
@@ -3565,6 +3567,68 @@ router.post('/use-odometer', function(req, res){
     
 });
 
+/*
+ * Show all users rank api
+ */
+router.post('/users-rank', function(req, res){
+
+     RpRoutes.aggregate([
+
+                {
+                    $lookup:
+                            {
+                                from: "users",
+                                localField: "email",
+                                foreignField: "local.email",
+                                as: "item"
+                    }
+                },
+            
+            { "$unwind": "$item" },
+           
+            {
+         
+                $project:   { 
+                    '_id':0,
+                    'firstName' : "$item.local.firstName",
+                    'lastName' :"$item.local.lastName",
+                    'email' : "$item.local.email",
+                    'locationCountry' : "$item.local.locationCountry",
+                    'locationState' :"$item.local.locationState",
+                    'locationCity' :"$item.local.locationCity",
+                    'profileImage' : "$item.local.profileImage",
+                    'points':1,
+                   
+                    name: { 
+                        $concat:    ["$item.local.firstName"," ","$item.local.lastName"]
+                    }
+                }
+            },
+            
+            ], 
+        
+        function(err, user){
+            if(err){
+                res.json({ 
+                    success: true,
+                    data: null, 
+                    message: "no record found!", 
+                    code: 200
+                });
+            }else{
+                res.json({
+                    success: true,
+                    data: {
+                        user : user
+                    }, 
+                    message: "users rank", 
+                    code: 200
+                });
+            }
+        });
+
+
+});
 
 // 32 character random string token
 function random_token(){

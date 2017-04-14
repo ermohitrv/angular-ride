@@ -17,7 +17,8 @@
             <file>file:/var/www/html/rideprix/models/routetools.js</file>
             <file>file:/var/www/html/rideprix/routes/admin.js</file>
             <file>file:/var/www/html/rideprix/models/rproutes.js</file>
-            <file>file:/var/www/html/rideprix/views/frontend/product-detail.ejs</file>
+            <file>file:/var/www/html/rideprix/views/frontend/partial/profile-nav.ejs</file>
+            <file>file:/var/www/html/rideprix/views/frontend/profile.ejs</file>
             <file>file:/var/www/html/rideprix/routes/api.js</file>
             <file>file:/var/www/html/rideprix/routes/routefunction.js</file>
             <file>file:/var/www/html/rideprix/public/css/style.css</file>
