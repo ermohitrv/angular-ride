@@ -1021,8 +1021,8 @@ router.post('/send-friend-request', function (req, res) {
    
 
     if ((friendRequestBy !== undefined && friendRequestBy !== null) && (friendRequestTo !== undefined && friendRequestTo !== null)) {
-        User.findOne({'local.email': friendRequestTo}, function (err, userdata) {
-        friends.findOne({'friendRequestSentBy': friendRequestBy, 'friendRequestSentTo': friendRequestTo}, function (err, friendReq) {
+        User.findOne({'local.email': { $regex : new RegExp(friendRequestTo, "i") }}, function (err, userdata) {
+        friends.findOne({'friendRequestSentBy': { $regex : new RegExp(friendRequestBy, "i") }, 'friendRequestSentTo': { $regex : new RegExp(friendRequestTo, "i") }}, function (err, friendReq) {
             if (friendReq) {
                 res.json(false);
             } else {
