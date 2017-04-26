@@ -2648,7 +2648,7 @@ router.post('/send-location', function(req, res){
 
         /* email code start */
         var html = 'currentLocationLat: '+currentLocationLat;
-        html+ = 'currentLocationLong: '+currentLocationLong;
+        html += 'currentLocationLong: '+currentLocationLong;
 
         var mailOptions = {
             from   : "Rideprix <no-reply@rideprix.com>",
