@@ -11,7 +11,7 @@ jQuery(function() {
                 }
             }
         });
-        
+
         clock2 = jQuery('.clock2').FlipClock({
             clockFace: 'DailyCounter',
             autoStart: false,
@@ -25,7 +25,7 @@ jQuery(function() {
         clock1.setTime(remtime1);
         clock1.setCountdown(true);
         clock1.start();
-        
+
         clock2.setTime(remtime1);
         clock2.setCountdown(true);
         clock2.start();
@@ -40,7 +40,7 @@ jQuery(function() {
             }
         },20);
     });
-    
+
     $(".btn-pricing").click(function(e) {
         $(".btn-pricing").attr('disabled','disabled');
         $(this).text('').append('Redirecting to PayPal <i class="fa fa-spinner fa-spin"></i>');
@@ -57,7 +57,7 @@ jQuery(function() {
             window.open(url, 'Social Share', 'toolbar=no, location=no, directories=no, status=no,' +
             ' menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
     });
-    
+
     $(document).on('click','.enable_disable_account',function(){
         angular.element(document.getElementById('enable_disable_account')).scope().enable_disable_account();
     });
@@ -101,7 +101,7 @@ jQuery(function() {
             }
          }
     });
-    
+
 jQuery.validator.addMethod("nodot", function(value, element) {
 	return this.optional(element) || /\./g.test(value);
 }, "No dot please");
@@ -135,7 +135,7 @@ jQuery('#forgot_form').validate({
 
                     }
                 }
-            
+
         }
     },
     messages:{
@@ -155,7 +155,7 @@ jQuery('#change_password_form').validate({
                 url: "/check-old-password",
                 type: "get",
                 data: {
-                    
+
                     old_password: function() {
                         var old_password = $("input[name=old_password]").val();
                         return old_password;
@@ -173,7 +173,7 @@ jQuery('#change_password_form').validate({
                         return false;
                     }
                 }
-            } 
+            }
         },
         new_password: {
             required: true,
@@ -252,7 +252,7 @@ jQuery('#change_password_form').validate({
 //            },
             gender: {
                 required: true
-            }, 
+            },
             city: {
                 required: true
             },
@@ -318,24 +318,24 @@ jQuery('#change_password_form').validate({
             var geocoder =  new google.maps.Geocoder();
             geocoder.geocode( { 'address': location}, function(results, status) {
                   if (status == google.maps.GeocoderStatus.OK) {
-                    console.log("location lat lng : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
+                    console.log("location lat lng : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng());
 
                     $('#usersignuploclat').val(results[0].geometry.location.lat());
                     $('#usersignuploclong').val(results[0].geometry.location.lng());
                     form.submit();
             }});
-             
-             
+
+
             //form.submit();
          }
-    }); 
-   
+    });
+
     /*Form Validations start here :: shipping form on checkout Page*/
     jQuery("#shipping_form").validate({
         rules: {
             ship_country: {
                 required: true,
-                
+
             },
             ship_firstname: {
                 required: true,
@@ -352,15 +352,15 @@ jQuery('#change_password_form').validate({
                 minlength: 5,
                 maxlength: 20,
                 letterswithbasicpunc:true,
-               
-                
+
+
             },
 
             ship_addr2: {
                 minlength: 5,
                 maxlength: 20,
                 letterswithbasicpunc:true,
-            }, 
+            },
             ship_state: {
                 required: true,
                 minlength: 5,
@@ -371,8 +371,8 @@ jQuery('#change_password_form').validate({
 //                required: true,
 //                minlength: 5,
 //                maxlength: 20,
-//               
-//              
+//
+//
 //            },
             ship_postcode: {
                 required: true,
@@ -388,29 +388,29 @@ jQuery('#change_password_form').validate({
             ship_email: {
                 required: true,
                 email:true,
-                
-            },   
-            
+
+            },
+
          },
-        
+
          submitHandler: function(form) {
-           
+
             if(localUserUsername){
             form.submit();
             }else{
                 var scrollPos =  $("#logincheckoutsection").offset().top;
                 $(window).scrollTop(scrollPos);
-                $('.logincheckout').css('display','block');  
+                $('.logincheckout').css('display','block');
             }
          }
-    }); 
-   
+    });
+
     /*Form Validations start here :: create event Page*/
     jQuery("#create-event").validate({
         rules: {
             eventName: {
                 required: true,
-                
+
             },
             eventType: {
                 required: true
@@ -427,33 +427,33 @@ jQuery('#change_password_form').validate({
             eventImage:{
                 required:true
             },
-           
+
         },
         messages: {
-           
+
         },
         submitHandler: function(form) {
-            
+
             var geocoder =  new google.maps.Geocoder();
             geocoder.geocode( { 'address': form.eventLocation.value}, function(results, status) {
                   if (status == google.maps.GeocoderStatus.OK) {
-                    console.log("location lat lng : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
+                    console.log("location lat lng : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng());
 
                     $('#eventlat').val(results[0].geometry.location.lat());
                     $('#eventlong').val(results[0].geometry.location.lng());
                     form.submit();
-                 
+
             }});
-           
+
         }
     });
-   
+
      /*Form Validations start here :: update event Page*/
    jQuery("#update-event").validate({
         rules: {
             eventName: {
                 required: true,
-                
+
             },
             eventType: {
                 required: true
@@ -467,43 +467,43 @@ jQuery('#change_password_form').validate({
             eventLocation: {
                 required: true
             },
-            
+
         },
         messages: {
-           
+
         },
         submitHandler: function(form) {
-            
+
             var geocoder =  new google.maps.Geocoder();
             geocoder.geocode( { 'address': form.eventLocation.value}, function(results, status) {
                   if (status == google.maps.GeocoderStatus.OK) {
-                    console.log("location lat lng : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
+                    console.log("location lat lng : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng());
 
                     $('#eventlat').val(results[0].geometry.location.lat());
                     $('#eventlong').val(results[0].geometry.location.lng());
                     form.submit();
-                 
+
             }});
-           
+
         }
     });
-    
-    
+
+
    /* review form */
    jQuery("#review-form").validate({
         rules: {
             addReview: {
                 required: true,
-                
+
             },
-           
+
         },
         messages: {
-           
+
          }
-       
+
     });
-   
+
    /*Form Validations start here :: Signup Page*/
     jQuery("#update-profile").validate({
         rules: {
@@ -516,10 +516,10 @@ jQuery('#change_password_form').validate({
             dob: {
                 required: true
             },
-           
+
             gender: {
                 required: true
-            }, 
+            },
             city: {
                 required: true
             },
@@ -538,7 +538,7 @@ jQuery('#change_password_form').validate({
             username: {
                 remote: "Sorry, our system has detected that an account with this username already exists!"
             },
-           
+
 
          },
          submitHandler: function(form) {
@@ -546,7 +546,7 @@ jQuery('#change_password_form').validate({
             var geocoder =  new google.maps.Geocoder();
             geocoder.geocode( { 'address': location}, function(results, status) {
                   if (status == google.maps.GeocoderStatus.OK) {
-                    console.log("location lat lng : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
+                    console.log("location lat lng : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng());
 
                     $('#userloclat').val(results[0].geometry.location.lat());
                     $('#userloclong').val(results[0].geometry.location.lng());
@@ -554,8 +554,8 @@ jQuery('#change_password_form').validate({
             }});
            // form.submit();
          }
-    }); 
-    
+    });
+
     /* validate contact form */
     jQuery("#contact_form").validate({
         rules: {
@@ -581,11 +581,11 @@ jQuery('#change_password_form').validate({
             },
 
         },
-        messages: { 
-            
+        messages: {
+
          }
     });
-   
+
    /* validate suggestion form */
     jQuery("#suggestion_form").validate({
         rules: {
@@ -598,7 +598,7 @@ jQuery('#change_password_form').validate({
                 required: true,
                 email:true
             },
-           
+
             suggestionPhone: {
                 required: true,
                 maxlength: 12,
@@ -609,12 +609,12 @@ jQuery('#change_password_form').validate({
             },
 
         },
-        messages: { 
-            
+        messages: {
+
          }
     });
-    
-    
+
+
     //code to make ajax request to check if username exists or not
     var checkUsernameSuccess = function(response){
         switch (response) {
@@ -632,7 +632,7 @@ jQuery('#change_password_form').validate({
         }
         return false;
     };
-    
+
     //code to make ajax request to check if email exists or not
     var checkEmailSuccess = function(response) {
         switch (response) {
@@ -665,7 +665,7 @@ function initialize(userData,maptype) {
     };
     map = new google.maps.Map(document.getElementById('map-canvas'),
             mapOptions);
-    if(maptype == "usermap"){        
+    if(maptype == "usermap"){
     setMarkers(userData);
     }
     else if(maptype == "eventsmap"){
@@ -677,10 +677,10 @@ function initialize(userData,maptype) {
 
 function setMarkers(userData) {
     //console.log('userData: '+JSON.stringify(userData));
-   // console.log(JSON.stringify(userData));  
+   // console.log(JSON.stringify(userData));
     var data = JSON.stringify(userData.data.users);
     var parsedata =  JSON.parse(data);
-    console.log(parsedata); 
+    console.log(parsedata);
     var locations = [{  "lat":"57.015727",
                         "lon":"-106.498029",
                         "html":"<img src=\"http:\/\/placehold.it\/350x150\"  style=\"height: 35px;width: 35px;float:left; border: 1px solid;\" class=\"img-circle\"><a href=\"history.php?userId=29\"><h5 style=\"margin: 0;padding-left: 40px;\">Paul Joseph<\/h5><\/a><small style=\"margin: 0;padding-left: 5px;\">Canada<\/small>",
@@ -702,22 +702,22 @@ function setMarkers(userData) {
     var icon = new google.maps.MarkerImage("/images/maps-and-flags.png");
     $.each(parsedata, function (index, markerData) {
         if(markerData.local.firstName != "" && markerData.local.firstName != undefined && markerData.local.locationLat != "" && markerData.local.locationLat != undefined && markerData.local.locationLng != "" && markerData.local.locationLng != undefined){
-        
+
         var profileimageplacehold = "http://placehold.it/300?text="+markerData.local.firstName;
         var imagepath = markerData.local.profileImage;
         //var facebookimage = markerData.local.profileImage;
-//        if(markerData.local.profileImage == profileimageplacehold){            
+//        if(markerData.local.profileImage == profileimageplacehold){
 //            imagepath = markerData.local.profileImage;
 //        }
-//        else{        
+//        else{
 //            if(facebookimage.indexOf('https://') !== -1){
 //                imagepath = markerData.local.profileImage;
 //            }
 //            else{
 //                imagepath = "/public/uploads/"+markerData.local.profileImage;
-//            }        
+//            }
 //        }
-        
+
         var name = markerData.local.firstName;
         var lat = markerData.local.locationLat;
         var long = markerData.local.locationLng;
@@ -743,10 +743,10 @@ function setMarkers(userData) {
 }
 
 function seteventsMarkers(userData) {
-    console.log(JSON.stringify(userData));  
+    console.log(JSON.stringify(userData));
     var data = JSON.stringify(userData.data.events);
     var parsedata =  JSON.parse(data);
-    console.log(parsedata);  
+    console.log(parsedata);
     var markersArray = [];
     var infowindow = new google.maps.InfoWindow({content: "temo"});
     var i = 0;
@@ -757,10 +757,10 @@ function seteventsMarkers(userData) {
         var geocoder =  new google.maps.Geocoder();
             geocoder.geocode( { 'address': markerData.eventLocation}, function(results, status) {
                   if (status == google.maps.GeocoderStatus.OK) {
-                    console.log("location lat lng : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
+                    console.log("location lat lng : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng());
                     locLat = results[0].geometry.location.lat();
                     locLon = results[0].geometry.location.lng();
-            
+
             var id = markerData._id;
             var encodename = encodeURI(markerData.eventName);
             var fun = "joinevent('"+id+"','"+encodename+"')";
@@ -794,19 +794,19 @@ function seteventsMarkers(userData) {
                 infowindow.setContent(content);
                 infowindow.open(map, this);
             });
-            } 
+            }
             else{
                         console.log("Something got wrong " + status);
                 }
             });
             i++;
-        
+
     });
 }
 
 
 function initializeMap(userData,maptype) {
-    
+
     initialize(userData,maptype);
 }
 
@@ -814,7 +814,7 @@ function initializeMap(userData,maptype) {
 function show_notification(msg, type, reload_page){
     // defaults to false
     reload_page = reload_page || false;
-   
+
     $("#notify_message").removeClass();
     $("#notify_message").addClass('alert-' + type);
     $("#notify_message").html(msg);
@@ -829,7 +829,7 @@ function show_notification(msg, type, reload_page){
 // autocomplete search at header
 //    $( "#search-box" ).autocomplete({
 //    source: '/autocomplete-search',
-//   
+//
 //    }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
 //    ul.addClass('search-product-list');
 //    return $( "<li>" )
@@ -837,20 +837,20 @@ function show_notification(msg, type, reload_page){
 //    //.append( "<a>" + item.label + "<br>" + item.image + "</a>" )
 //    .appendTo( ul );
 //    };
+if( $("#search-box-frnd").length > 0 ){
+  $( "#search-box-frnd" ).autocomplete({
+                      source: '/autocomplete-search-friend',
 
-    $( "#search-box-frnd" ).autocomplete({
-                        source: '/autocomplete-search-friend',
-
-        }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-                var profilelink = "/profile/"+item.username;
-                ul.addClass('search-friend-list');
-                return $( "<li>" )
-                .append( '<a href='+profilelink+'><span>'+item.username+'</span></a>' )
-                .appendTo( ul );
-    };
-        
+      }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+              var profilelink = "/profile/"+item.username;
+              ul.addClass('search-friend-list');
+              return $( "<li>" )
+              .append( '<a href='+profilelink+'><span>'+item.username+'</span></a>' )
+              .appendTo( ul );
+  };
+}
 function joinevent(eventid,eventname){
-    
+
     if(localUserUsername != ""){
         jQuery.ajax({
            type  : "POST",
@@ -884,7 +884,7 @@ function joinevent(eventid,eventname){
 }
 
 function initializeContactMap(){
-       
+
         var myLatLng = {lat: -25.363, lng: 131.044};
         var content = '<div style="width:300px"><h5 style="margin: 0;padding-left: 40px;">Woodford, Woodford Green IG8 0PY, UK<\/h5></div>';
 
@@ -899,11 +899,9 @@ function initializeContactMap(){
           map: map,
           title: 'Organisation Location'
         });
-        
+
         google.maps.event.addListener(marker, 'click', function () {
                 infowindow.setContent(content);
                 infowindow.open(map, this);
         });
 }
-
-
