@@ -318,7 +318,15 @@ router.post('/login', function(req, res){
                                             rideExperience  :user.rideExperience,
                                             rideCategory    :user.rideCategory,
                                             rproputeInviteLink:globalConfig.websiteUrl+"/invite/"+user.local.username,
-                                            fcmToken        :fcmToken,
+                                            fcmToken         :fcmToken,
+                                            rideVisibility   :user.rideSettings.rideVisibility,
+                                            rideShowDistance :user.rideSettings.rideShowDistance,
+                                            rideShowOnline   :user.rideSettings.rideShowOnline,
+                                            ridePublicSearch :user.rideSettings.ridePublicSearch,
+                                            rideMessage      :user.rideSettings.rideMessage,
+                                            rideBumped       :user.rideSettings.rideBumped,
+                                            rideAlerts       :user.rideNotification.rideAlerts,
+                                            rideContestNews  :user.rideNotification.rideContestNews
                                         },
                                         message: "success",
                                         code: 200
@@ -2646,19 +2654,6 @@ router.post('/send-location', function(req, res){
         locationarray.push(parseFloat(currentLocationLat));
         locationarray.push(parseFloat(currentLocationLong));
 
-        /* email code start */
-        var html = 'currentLocationLat: '+currentLocationLat;
-        html += 'currentLocationLong: '+currentLocationLong;
-
-        var mailOptions = {
-            from   : "Rideprix <no-reply@rideprix.com>",
-            to     : "nitin_mittal@rvtechnologies.co.in, mohit@rvtechnologies.co.in",
-            subject: "API Hit : send-location",
-            html   : html
-        };
-
-        nodemailer.mail(mailOptions);
-        /* email code end */
 
         var isRouteCompleted = "ONGOING";
         /* Find ongoing route of user */
