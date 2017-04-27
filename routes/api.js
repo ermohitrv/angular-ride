@@ -884,10 +884,7 @@ router.post('/change-password', function(req, res){
 
 /* API endpoint to be used by mobile device for updating profile details */
 router.post('/update-profile', function(req, res){
-    console.log("sdsdsd");
     var email = req.body.email;
-    console.log('**** **** email: '+email);
-
     if( email != "" && email != undefined ){
 
         var firstName       = req.body.firstName;
@@ -1202,8 +1199,7 @@ router.post('/facebook-create-user', function (req, res) {
                     message: err,
                     code: 400
                 });
-            }
-            else{
+            }else{
 
                 if(user){   // if user exist with that email
                 User.update({
