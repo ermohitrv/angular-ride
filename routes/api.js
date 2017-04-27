@@ -257,7 +257,7 @@ router.post('/login', function(req, res){
     //var fcmToken   = "test";
 
     console.log("fcmToken : "+fcmToken);
-    if( ( email != "" && email != undefined ) && ( password != "" && password != undefined ) ){
+    if( ( email != "" && email != undefined ) && ( password != "" && password != undefined ) && ( fcmToken != "" && fcmToken != undefined ) ){
         User.findOne({ 'local.email' :  { $regex : new RegExp(email, "i") } }, function(err, user) {
 
             if (err){
@@ -319,14 +319,23 @@ router.post('/login', function(req, res){
                                             rideCategory    :user.rideCategory,
                                             rproputeInviteLink:globalConfig.websiteUrl+"/invite/"+user.local.username,
                                             fcmToken         :fcmToken,
+
+                                            //rideSettings fields
                                             rideVisibility   :user.rideSettings.rideVisibility,
                                             rideShowDistance :user.rideSettings.rideShowDistance,
                                             rideShowOnline   :user.rideSettings.rideShowOnline,
                                             ridePublicSearch :user.rideSettings.ridePublicSearch,
                                             rideMessage      :user.rideSettings.rideMessage,
                                             rideBumped       :user.rideSettings.rideBumped,
+
+                                            //rideNotification fields
                                             rideAlerts       :user.rideNotification.rideAlerts,
-                                            rideContestNews  :user.rideNotification.rideContestNews
+                                            rideContestNews  :user.rideNotification.rideContestNews,
+
+                                            //ridePrivacy fields
+                                            ridePublicSearch :user.ridePrivacy.ridePublicSearch,
+                                            rideShowOnline   :user.ridePrivacy.rideShowOnline,
+                                            rideShowDistance :user.ridePrivacy.rideShowDistance
                                         },
                                         message: "success",
                                         code: 200

@@ -19,21 +19,21 @@ router.get('/:productslug', function (req, res) {
     var productslug = req.params.productslug;
     if(productslug){
         res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-        res.render('product-detail', { 
+        res.render('product-detail', {
             user : req.user,
             title:productslug
         });
     }else{
-        
+
     }
-});  
+});
 */
 
 // show an individual product
 router.get('/:id', function(req, res) {
     console.log('id: '+req.params.id);
-    res.render('product-detail', { 
-        title: " Product Detail", 
+    res.render('product-detail', {
+        title: " Product Detail",
         user: req.user,
         productId : req.params.id,
         session: req.session
@@ -57,16 +57,16 @@ router.get('/shop/products-detail/:id', function (req, res){
     console.log('id: '+req.params.id);
     Products.findOne({ product_permalink: req.params.id }, function (err, result) {
          Reviews.find({ productId: result._id }, function (err, reviews) {
-            
+
          Reviews.find({ productId: result._id,ReviewStatus:'APPROVED' }, function (err, approvedreviews) {
         if(result == null || result.product_published == "false"){
             res.send('error product detail page: '+err);
         }else{
-            
-           
+
+
             res.header('Content-Type', 'text/html');
             res.render('widget/product-detail',{
-                title: result.product_title, 
+                title: result.product_title,
                 result: result,
                 reviews:reviews,
                 approvedreviews:approvedreviews,
@@ -85,13 +85,13 @@ router.get('/shop/products-detail/:id', function (req, res){
 
 /* shop route to render related products list called by angular function */
 router.get('/shop/related-products-list', function (req, res){
-    
+
     Products.find({product_published:'true'},function (err, results) {
         if(err){
             res.send(err);
         }
         else{
-            
+
             res.header('Content-Type', 'text/html');
             res.render('widget/related-products',{
                 user: req.user,
@@ -106,7 +106,7 @@ router.get('/shop/related-products-list', function (req, res){
 });
 
 // Admin section
-router.post('/addtocart', function(req, res, next) {	
+router.post('/addtocart', function(req, res, next) {
     var _ = require('underscore');
     //var product_qty = req.body.product_quantity;
     //var product_quantity = req.body.product_quantity ? parseInt(product_qty): 1;
@@ -120,12 +120,12 @@ router.post('/addtocart', function(req, res, next) {
     if(!req.session.cart){
         req.session.cart = {};
         req.session.productids = [];
-        
+
     }
-    
+
     console.log('product_quantity: '+product_id);
     console.log('product_id: '+product_id);
-    
+
     Products.findOne({_id: product_id}).exec(function (err, product) {
         if(product){
             var product_price = parseFloat(product.product_price).toFixed(2);
@@ -136,7 +136,7 @@ router.post('/addtocart', function(req, res, next) {
             }else{
                 // Doesnt exist so we add to the cart session
                 req.session.cart_total_items = req.session.cart_total_items + product_quantity;
-                
+
                 // new product deets
                 var product_obj = {};
                 product_obj.title = product.product_title;
@@ -153,7 +153,7 @@ router.post('/addtocart', function(req, res, next) {
                 }else{
                     product_obj.link = product._id;
                 }
-                
+
                 // new product id
                 var cart_obj = {};
                 cart_obj[product._id] = product_obj;
@@ -161,19 +161,19 @@ router.post('/addtocart', function(req, res, next) {
                 // merge into the current cart
                 _.extend(req.session.cart, cart_obj);
                 //console.log(cart_obj);
-                
+
                   req.session.productids.push(product._id);
                   console.log(req.session.productids);
             }
-            
+
             // update total cart amount
             middleware.update_total_cart_amount(req, res);
-            
+
             // update how many products in the shopping cart
             req.session.cart_total_items = Object.keys(req.session.cart).length;
-           
-            
-            
+
+
+
             res.status(200).json({message: 'Cart successfully updated', "total_cart_items": Object.keys(req.session.cart).length,"session":req.session});
         }else{
             res.status(400).json({message: 'Error updating cart. Please try again. '+err});
@@ -182,7 +182,7 @@ router.post('/addtocart', function(req, res, next) {
 });
 
 /*Remove product from cart*/
-router.get('/removefromcart/:productId', function(req, res, next) {	
+router.get('/removefromcart/:productId', function(req, res, next) {
        var productid = req.params.productId
        delete req.session.cart[productid];
        delete req.session.productids[productid];
@@ -191,22 +191,22 @@ router.get('/removefromcart/:productId', function(req, res, next) {
             req.session.productids.splice(index, 1);
         }
         req.session.cart_total_items = Object.keys(req.session.cart).length;
-        console.log(req.session.cart);
+        //console.log(req.session.cart);
         //res.send(true);
         res.status(200).json({"total_cart_items": Object.keys(req.session.cart).length});
 });
 
 /*update product in cart header*/
-router.post('/cartproducts', function(req, res, next) {	   
+router.post('/cartproducts', function(req, res, next) {
      if(!req.session.cart){
         res.status(200).json({"total_cart_items":'0'});
     }else{
         req.session.cart_total_items = Object.keys(req.session.cart).length;
         res.status(200).json({"total_cart_items": Object.keys(req.session.cart).length});
-    }    
+    }
 });
 
-router.post('/imageresize', function(req, res, next) {	   
+router.post('/imageresize', function(req, res, next) {
 
 //        var sharp = require('sharp');
 //        var transformer = sharp("/public/uploads/fb-pc.jpg")
@@ -220,22 +220,22 @@ router.post('/imageresize', function(req, res, next) {
 
     var processImage = require('express-processimage');
     var root = 'http://localhost:2286/public/uploads/1welcome-img.jpg';
-   
+
     express()
     .use(processImage({root: root}))
     .use(express.static(root));
-   
+
 
     res.status(200).json({"success": "image resize"});
 });
 
 
 router.post('/get-categories-list',  function(req, res){
-    
+
     //res.send(true);
     Categories.aggregate([{$sort: {'category_added_date': 1}}], function (err, categoryList) {
         if(categoryList){
-           
+
             res.json(categoryList);
         }else{
             res.json({});
@@ -246,11 +246,11 @@ router.post('/get-categories-list',  function(req, res){
 
 
 router.post('/get-brands-list',  function(req, res){
-    
+
     //res.send(true);
     Brands.aggregate([{$sort: {'category_added_date': 1}}], function (err, brandsList) {
         if(brandsList){
-           
+
             res.json(brandsList);
         }else{
             res.json({});
@@ -261,10 +261,10 @@ router.post('/get-brands-list',  function(req, res){
 
 
 router.post('/search/searchfilter',  function(req, res){
-    
+
     //console.log("category search product"+req.body.params.categoryTitle);
     //res.send(true);
-    
+
         var searchtype = req.body.params.searchtype;
         var searchterm = req.body.params.Title;
     if(searchtype == 'category' || searchtype == 'brand' || searchtype == 'searchkeyword'){
@@ -291,9 +291,9 @@ router.post('/search/searchfilter',  function(req, res){
 
             }
         });
-    
+
     }
-    
+
     if(searchtype == 'categorycheckbox' ||  searchtype == 'brandcheckbox'){
         var checkboxObj = req.body.params.checkboxObj;
         var optRegexpbrand = [];
@@ -305,7 +305,7 @@ router.post('/search/searchfilter',  function(req, res){
             });
 
         console.log(optRegexpcat);
-        
+
         Products.find({$or :[{'product_category': { $in: optRegexpcat }},{'product_brand': { $in: optRegexpcat }}]}, function(err, productResults){
 
             if(!err){
@@ -318,25 +318,25 @@ router.post('/search/searchfilter',  function(req, res){
 
             }
         });
-        
+
     }
-    
-    
+
+
 });
 
 
 
 router.post('/get-events-list',  function(req, res){
-    
+
     //res.send(true);
     Events.aggregate([
-        
+
         {$match: {'userEmail': req.user.local.email}},
         {$sort: {'start': 1}}
-    
+
     ], function (err, eventsList) {
         if(eventsList){
-           
+
             res.json(eventsList);
         }else{
             res.json({});
@@ -344,7 +344,7 @@ router.post('/get-events-list',  function(req, res){
     });
 });
 
-router.post('/calculate-cartamount', function(req, res, next) {	
+router.post('/calculate-cartamount', function(req, res, next) {
        var productid = req.body.params.productId;
        req.session.cart[productid].quantity = req.body.params.quantity;
        req.session.cart[productid].total_item_price = req.body.params.totalprice;

@@ -334,67 +334,58 @@ jQuery('#change_password_form').validate({
     jQuery("#shipping_form").validate({
         rules: {
             ship_country: {
-                required: true,
-
+                required: true
             },
             ship_firstname: {
                 required: true,
                 minlength: 3,
-                maxlength: 20,
+                maxlength: 20
             },
             ship_lastname: {
                 required: true,
                 minlength: 3,
-                maxlength: 20,
+                maxlength: 20
             },
             ship_addr1: {
                 required: true,
                 minlength: 5,
                 maxlength: 20,
-                letterswithbasicpunc:true,
-
-
+                letterswithbasicpunc:true
             },
-
             ship_addr2: {
                 minlength: 5,
                 maxlength: 20,
-                letterswithbasicpunc:true,
+                letterswithbasicpunc:true
             },
             ship_state: {
                 required: true,
                 minlength: 5,
                 maxlength: 20,
-                letterswithbasicpunc:true,
+                letterswithbasicpunc:true
             },
 //            ship_postcode: {
 //                required: true,
 //                minlength: 5,
-//                maxlength: 20,
-//
-//
+//                maxlength: 20
 //            },
             ship_postcode: {
                 required: true,
                 //minlength: 5,
                 //maxlength: 20,
-                ZipCode: true,
+                ZipCode: true
             },
             phone_number: {
                 required: true,
                 minlength: 5,
                 maxlength: 20,
+                number: true
             },
             ship_email: {
                 required: true,
-                email:true,
-
-            },
-
+                email:true
+            }
          },
-
          submitHandler: function(form) {
-
             if(localUserUsername){
             form.submit();
             }else{
@@ -562,28 +553,25 @@ jQuery('#change_password_form').validate({
             contactName: {
                 required: true,
                 minlength: 5,
-                maxlength: 20,
+                maxlength: 20
             },
             contactEmail: {
                 required: true,
                 email:true
             },
             contactLocation: {
-                required: true,
+                required: true
             },
             contactPhone: {
                 required: true,
                 maxlength: 12,
+                number:true
             },
             contactDescription: {
                 required: true,
-                maxlength: 200,
+                maxlength: 200
             },
-
-        },
-        messages: {
-
-         }
+        }
     });
 
    /* validate suggestion form */
@@ -598,20 +586,16 @@ jQuery('#change_password_form').validate({
                 required: true,
                 email:true
             },
-
             suggestionPhone: {
                 required: true,
                 maxlength: 12,
+                number:true
             },
             suggestionDescription: {
                 required: true,
                 maxlength: 200,
-            },
-
-        },
-        messages: {
-
-         }
+            }
+        }
     });
 
 
@@ -904,4 +888,13 @@ function initializeContactMap(){
                 infowindow.setContent(content);
                 infowindow.open(map, this);
         });
+}
+
+function shownewrequests(){
+    $('#friendrequests').css('display','block');
+    $('#friends').css('display','none');
+}
+function showfriends(){
+    $('#friendrequests').css('display','none');
+    $('#friends').css('display','block');
 }
