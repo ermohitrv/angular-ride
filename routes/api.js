@@ -325,12 +325,14 @@ router.post('/login', function(req, res){
                                             rideShowDistance :user.rideSettings.rideShowDistance,
                                             rideShowOnline   :user.rideSettings.rideShowOnline,
                                             ridePublicSearch :user.rideSettings.ridePublicSearch,
-                                            rideMessage      :user.rideSettings.rideMessage,
-                                            rideBumped       :user.rideSettings.rideBumped,
 
                                             //rideNotification fields
+                                            rideMessage      :user.rideNotification.rideMessage,
+                                            rideBumped       :user.rideNotification.rideBumped,
                                             rideAlerts       :user.rideNotification.rideAlerts,
-                                            rideContestNews  :user.rideNotification.rideContestNews,
+
+                                            //rideNews fields 
+                                            rideContestNews  :user.rideNews.rideContestNews,
 
                                             //ridePrivacy fields
                                             ridePublicSearch :user.ridePrivacy.ridePublicSearch,
