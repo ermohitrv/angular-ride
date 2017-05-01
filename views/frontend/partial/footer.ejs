@@ -69,6 +69,27 @@
         </div>
     </div>
 </section>
+<!-- The actual modal template, just a bit o bootstrap -->
+ <script type="text/ng-template" id="addtocart.html">
+     <div class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" ng-click="close('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Add to Cart</h4>
+          </div>
+          <div class="modal-body">
+            <p class="cartMessage"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" ng-click="close('Yes')" data-dismiss="modal">Continue Shopping</button>
+            <a class="btn btn-primary" ng-click="close('Yes')" href="/cart">Checkout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+ </script>
+
 <!--=============================fOOTEr eND===============================================-->
 <section id="copyright">
     <div class="container">
@@ -96,5 +117,6 @@
 <script type="text/javascript" src="/js/front.js"></script><!-- Validations -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.4.0/ui-bootstrap-tpls.min.js"></script>
 <script type="text/javascript" src="/js/angular-sanitize.js"></script><!-- Website Angular Interface -->
+<script src="https://rawgit.com/dwmkerr/angular-modal-service/master/dst/angular-modal-service.js"></script>
 <script type="text/javascript" src="/js/app.js"></script><!-- Website Angular Interface -->
 <script src="/js/moment.min.js"></script>

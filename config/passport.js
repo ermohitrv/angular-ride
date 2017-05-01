@@ -45,7 +45,7 @@ module.exports = function(passport) {
             }else{
                 console.log("err case 2: " + err);
             }
-            
+
             // check to see if theres already a user with that email
             if (user) {
                 return done(null, false, req.flash('signupMessage', globalConfig.emailExists),req.flash('signupMessageSuccess', ''));
@@ -73,7 +73,7 @@ module.exports = function(passport) {
                 newUser.local.profileImage      = "http://placehold.it/300";
                 newUser.local.locationLat       = req.body.usersignuploclat;
                 newUser.local.locationLng       = req.body.usersignuploclong;
-                
+
         	// save the user
                 newUser.save(function(err){
                     if (err){
@@ -82,28 +82,43 @@ module.exports = function(passport) {
                     }
                     // Sending signup mail
                     var nodemailer      = require("nodemailer");
-                    var EmailTemplate   = require('email-templates').EmailTemplate;
-                    var path            = require('path');
-                    var templateDir     = path.join(__dirname, '../views/templates', 'signup');
-                    var signUpEmail     = new EmailTemplate(templateDir)
-                    var data = { base_url: req.headers.host }
-                    
-//                    signUpEmail.render(data, function (err, result) {
-//                      nodemailer.mail({
-//                          from   : "BlogTv <no-reply@blogtv.ca>", 
-//                          //to     : req.body.email,
-//                          to     : 'mohit@rvtechnologies.co.in',
-//                          subject: globalConfig.signupEmailSubject,
-//                          html   : result.html
-//                      });
-//                    });
-                    return done(null, newUser, req.flash('signupMessage', ''),req.flash('signupMessageSuccess', globalConfig.successRegister));
+
+                    var htmlC = globalConfig.emailHtmlHead+'<div style="width:580px;margin:0 auto;border:12px solid #f0f1f2;color:#696969;font:14px Arial,Helvetica,sans-serif"><table align="center" width="100%" height="auto" style="position:relative" cellpadding="0" cellspacing="0"> <tbody> <tr> <td> <center><img src="http://rideprix.com/img/paris.jpg" border="0" width="100%" height="200" class="CToWUd a6T" tabindex="0"> <img src="http://rideprix.com:2286/images/logo.png" style="width: 35%;position: absolute;top: 150px;left: 10px;"><div class="a6S" dir="ltr" style="opacity: 0.01; left: 641px; top: 270px;"></div></center> </td> </tr> </tbody></table>	<div class="content-container" style="padding:18px;">';
+
+                    htmlC = '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>RidePrix Registration</title></head><body><div style="width:580px;margin:0 auto;border:12px solid #f0f1f2;position:relative;color:#696969;font:14px Arial,Helvetica,sans-serif"><table align="center" width="100%" height="auto" style="position:relative" cellpadding="0" cellspacing="0"> <tbody> <tr> <td> <center><img src="http://rideprix.com/img/paris.jpg" border="0" width="100%" height="200" class="CToWUd a6T" tabindex="0"> <img src="http://rideprix.com:2286/images/logo.png" style="width: 35%;position: absolute;top: 150px;left: 10px;"><div class="a6S" dir="ltr" style="opacity: 0.01; left: 641px; top: 270px;"></div></center> </td> </tr> </tbody></table>	<div class="content-container" style="padding:18px;">';
+                    htmlC += '<h3>Welcome to Ride Prix!</h3><p>Good Day To You, Thank you for registering to Ride Prix!</p>';
+                    htmlC += '<p>Ride Prix is a platform which bridges the gap between the motorcycle rider and social relevance. </p>';
+                    htmlC += '<p>Please tell all of your friends in the motorcycle community about us, we promise not to get mad. </p>';
+                    htmlC += '<p>To keep up with all the latest events at Ride Prix please follow us on:</p>';
+                    htmlC += '<p><table width="100%" align="center"> <tbody> <tr> <td align="center"> <br> <a href="https://www.facebook.com/rideprix" target="_blank" style="text-decoration:none;"> <img src="https://image.flaticon.com/icons/png/128/145/145802.png" border="0" hspace="3" width="34" height="32" style="border-radius: 20px;"> </a> <a href="https://twitter.com/rideprix" target="_blank" style="text-decoration:none;"> <img src="https://image.flaticon.com/icons/png/128/145/145812.png" border="0" hspace="3" width="34" height="32" style="border-radius: 20px;"> </a> <a href="https://www.instagram.com/rideprix/" target="_blank" style="text-decoration:none;"> <img src="https://image.flaticon.com/icons/png/128/187/187207.png" border="0" hspace="3" width="34" height="32" style="border-radius: 20px;"> </a></td> </tr> </tbody> </table></p>';
+                    htmlC += '<p>P.S.- Kindly keep an eye on your junk mail folder.</p>';
+        	          htmlC += '<p>We thank you,</p>';
+                    htmlC += '<p>Team Ride Prix</p></div><table width="100%" align="center"><tbody> <tr> <td align="center"> <br> <a href="http://rideprix.com/unsubscribe/" target="_blank" style="font-size:10px;color:#666666;">Unsubscribe</a> | <a href="http://rideprix.com/contact/" target="_blank" style="font-size:10px;color:#666666;">Contact Us</a> </td> </tr> </tbody> </table></div>'+globalConfig.emailHtmlFoot;
+
+                    // create reusable transport method (opens pool of SMTP connections)
+                   var smtpTransport = nodemailer.createTransport("SMTP",{
+                       service: "Gmail",
+                       auth: {
+                           user: globalConfig.gmailEmail,
+                           pass: globalConfig.gmailPassword
+                       }
+                   });
+
+                    var mailOptionsC = {
+              	        from   : "RidePrix.com <info@rideprix.com>",
+              	        to     : req.body.email,
+              	        subject: "Welcome to Ride Prix!",
+              	        html   : htmlC
+              	    };
+                    smtpTransport.sendMail(mailOptionsC, function(error, response){
+                      return done(null, newUser, req.flash('signupMessage', ''),req.flash('signupMessageSuccess', globalConfig.successRegister));
+                    });
                 });
             }
         });
     }));
-    
-    
+
+
     passport.use('local-login', new LocalStrategy({
         // by default, local strategy uses username and password, we will override with email
         usernameField : 'email',
@@ -115,22 +130,22 @@ module.exports = function(passport) {
         // we are checking to see if the user trying to login already exists
         User.findOne({ 'local.email' :  { $regex :  new RegExp(email, "i") }  }, function(err, user) {
             // if there are any errors, return the error before anything else
-            
+
             if (err){
                 return done(err);
             // if no user is found, return the message
             }else if (user == null){
-                
-                return done(null, false, req.flash('loginMessage', globalConfig.noUserFound)); 
+
+                return done(null, false, req.flash('loginMessage', globalConfig.noUserFound));
             // if the user is found but the password is wrong
             }else if (!user.validPassword(password)){
-                
-                return done(null, false, req.flash('loginMessage', globalConfig.wrongPassword)); 
+
+                return done(null, false, req.flash('loginMessage', globalConfig.wrongPassword));
                 // all is well, return successful user
             }else if (user != undefined && user != null){
-                
+
                 if(user.local.userActive === 'INACTIVE'){
-                    return done(null, false, req.flash('loginMessage', globalConfig.inActiveAccount)); 
+                    return done(null, false, req.flash('loginMessage', globalConfig.inActiveAccount));
                     req.logout();
                 }
                 if(user.local.userLevel === 'ADMIN'){
@@ -144,12 +159,12 @@ module.exports = function(passport) {
             }else{
                 console.log('*** *** Error 5 : ');
             }
-            
+
             return done(null, user);
         });
     }));
-    
-    
+
+
     // =========================================================================
     // FACEBOOK ================================================================
     // =========================================================================
@@ -184,9 +199,9 @@ module.exports = function(passport) {
                     } else {
                         // if there is no user found with that facebook id, create them
                         //console.log('** ** ** profile: '+JSON.stringify(profile));
-                        
+
                         var newUser            = new User();
-                        
+
                         // set all of the facebook information in our user model
                         newUser.facebook.id = profile.id;
                         newUser.facebook.token = token;
@@ -205,7 +220,7 @@ module.exports = function(passport) {
                         newUser.local.userActive= 'ACTIVE';    //default to ACTIVE
                         newUser.local.token    = globalConfig.randomString;
                         newUser.facebookURL    = "https://www.facebook.com/profile.php?id="+profile.id;
-                        
+
                         // save our user to the database
                         newUser.save(function(err) {
                             if (err){
@@ -221,6 +236,6 @@ module.exports = function(passport) {
 
                 });
             });
-        
+
     }));
 }

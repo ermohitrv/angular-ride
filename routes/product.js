@@ -120,11 +120,7 @@ router.post('/addtocart', function(req, res, next) {
     if(!req.session.cart){
         req.session.cart = {};
         req.session.productids = [];
-
     }
-
-    console.log('product_quantity: '+product_id);
-    console.log('product_id: '+product_id);
 
     Products.findOne({_id: product_id}).exec(function (err, product) {
         if(product){
@@ -160,23 +156,17 @@ router.post('/addtocart', function(req, res, next) {
                 //cart_obj = product_obj;
                 // merge into the current cart
                 _.extend(req.session.cart, cart_obj);
-                //console.log(cart_obj);
-
                   req.session.productids.push(product._id);
-                  console.log(req.session.productids);
             }
 
             // update total cart amount
             middleware.update_total_cart_amount(req, res);
-
             // update how many products in the shopping cart
             req.session.cart_total_items = Object.keys(req.session.cart).length;
-
-
-
-            res.status(200).json({message: 'Cart successfully updated', "total_cart_items": Object.keys(req.session.cart).length,"session":req.session});
+            res.status(200).json({message: globalConfig.addToCartProductAddedSuccess, "total_cart_items": Object.keys(req.session.cart).length,"session":req.session});
+            //res.status(200).json({message: globalConfig.addToCartProductAddedSuccess, "total_cart_items": Object.keys(req.session.cart).length,"session":req.session});
         }else{
-            res.status(400).json({message: 'Error updating cart. Please try again. '+err});
+            res.status(400).json({message: globalConfig.addToCartProductAddedFailed});
         }
     });
 });

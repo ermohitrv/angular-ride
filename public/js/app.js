@@ -1,4 +1,4 @@
-var app = angular.module('ridePrixApp', ['ngSanitize']);
+var app = angular.module('ridePrixApp', ['ngSanitize','angularModalService']);
 
 
 app.filter('to_trusted', ['$sce', function ($sce) {
@@ -225,7 +225,7 @@ app.controller('profileController',['$scope', '$http', function ($scope, $http) 
 }]);
 
 /********************** product controller  **********************/
-app.controller('productController',['$scope', '$http','$sce',function ($scope, $http, $sce) {
+app.controller('productController',['$scope', '$http','$sce','ModalService',function ($scope, $http, $sce, ModalService) {
 
     /* function to render product detail */
     $scope.productDetail = function(productId){
@@ -261,11 +261,17 @@ app.controller('productController',['$scope', '$http','$sce',function ($scope, $
             headers : {'Accept' : 'application/json'}
         };
         $http.post('/product/addtocart',config).success(function (response, status, headers, config){
-
             $("#cart-badge").html(response.total_cart_items);
-            //alert(response.message);
-            console.log(response);
-
+            ModalService.showModal({
+                templateUrl: 'addtocart.html',
+                controller: "shopController"
+            }).then(function(modal) {
+                modal.element.modal();
+                $(".cartMessage").text(response.message);
+                modal.close.then(function(result) {
+                    $scope.message = "You said " + result;
+                });
+            });
         }).error(function(err){
            console.log('Oops! Error occur'+err);
         });
@@ -407,8 +413,6 @@ app.controller('cartController',['$scope', '$http','$sce', function ($scope, $ht
     }
 
      $scope.calculateCartAmount = function(productId,quantity,totalprice){
-
-
         var data = {
             productId: productId,
             quantity: quantity,
@@ -418,24 +422,20 @@ app.controller('cartController',['$scope', '$http','$sce', function ($scope, $ht
             params: data,
             headers : {'Accept' : 'application/json'}
         };
-
         $http.post('/product/calculate-cartamount',config).success(function (response, status, headers, config){
-
-
         }).error(function(err){
                console.log('Oops! Error occur'+err);
         });
-
-
     };
 }]);
 
 /********************** shop controller  **********************/
-app.controller('shopController',['$scope', '$http', '$sce',function ($scope, $http,$sce) {
+app.controller('shopController',['$scope', '$http', '$sce', 'ModalService',function ($scope, $http,$sce,ModalService) {
     /* function to render all published products into shop section */
     $scope.shopProductsList = function(){
         $http.get('/product/shop/products-list').success(function(view){
             var text = $sce.trustAsHtml(view);
+            //$scope.myVal = '<button ng-click=\'buttonClick()\'>I\'m button</button>';
             $scope.shopProductsListView = text;
             //$scope.shopProductsListView = view;
         }).error(function(){
@@ -443,7 +443,8 @@ app.controller('shopController',['$scope', '$http', '$sce',function ($scope, $ht
         });
     };
 
-     $scope.addToCartfromshop = function(productId,quantity_box){
+    $scope.addToCartfromshop = function(productId,quantity_box){
+      console.log('productId: '+productId);
 
         var data = {
             product_id: productId,
@@ -454,15 +455,27 @@ app.controller('shopController',['$scope', '$http', '$sce',function ($scope, $ht
             headers : {'Accept' : 'application/json'}
         };
         $http.post('/product/addtocart',config).success(function (response, status, headers, config){
-
             $("#cart-badge").html(response.total_cart_items);
-            //alert(response.message);
-            console.log(response);
+            ModalService.showModal({
+                templateUrl: 'addtocart.html',
+                controller: "shopController"
+            }).then(function(modal) {
+                modal.element.modal();
+                console.log(response.message);
+                $(".cartMessage").text(response.message);
+                modal.close.then(function(result) {
+                    $scope.message = "You said " + result;
+                });
+            });
 
         }).error(function(err){
            console.log('Oops! Error occur'+err);
         });
     };
+    $scope.close = function(result) {
+     close(result, 500); // close, but give 500ms for bootstrap to animate
+    };
+
     /* get categories list on search page */
     $scope.getCategoriesListonsearch = function(){
 
@@ -1242,6 +1255,20 @@ app.controller('friendsController',['$scope', '$http', function ($scope, $http, 
     };
 }]);
 
+app.directive('compileTemplate', function($compile, $parse){
+    return {
+        link: function(scope, element, attr){
+            var parsed = $parse(attr.ngBindHtml);
+            function getStringValue() { return (parsed(scope) || '').toString(); }
+
+            //Recompile if the template changes
+            scope.$watch(getStringValue, function() {
+                $compile(element, null, -9999)(scope);  //The -9999 makes it skip directives so that we do not recompile ourselves
+            });
+        }
+    }
+});
+
 app.directive('bindUnsafeHtml', ['$compile', function ($compile) {
       return function(scope, element, attrs) {
           scope.$watch(
@@ -1290,6 +1317,17 @@ app.directive('googleplace', function() {
     };
 });
 
+app.directive('dir', function($compile, $parse) {
+  return {
+    restrict: 'E',
+    link: function(scope, element, attr) {
+      scope.$watch(attr.content, function() {
+        element.html($parse(attr.content)(scope));
+        $compile(element.contents())(scope);
+      }, true);
+    }
+  }
+})
 
 app.directive('googleplacesearch', function() {
     return {

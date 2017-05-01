@@ -1049,7 +1049,7 @@ router.get('/create-event', csrfProtection, middleware.isLoggedIn, function (req
 
 });
 
-/* Save event */
+/* Route to create new event */
 var cpUploadinserevent = upload.fields([{name: 'eventImage', maxCount: 1}]);
 router.post('/save-event',cpUploadinserevent, parseForm, csrfProtection, middleware.isLoggedIn, function (req, res){
 
@@ -1080,13 +1080,11 @@ router.post('/save-event',cpUploadinserevent, parseForm, csrfProtection, middlew
                 objEvents.endTime       = req.body.eventendTime;
                 objEvents.userEmail     = req.user.local.email;
                 objEvents.eventImage    = imagepath;
-                objEvents.eventlocationLat    = req.body.eventlat;
-                objEvents.eventlocationLong    = req.body.eventlong;
-
+                objEvents.eventlocationLat  = req.body.eventlat;
+                objEvents.eventlocationLong = req.body.eventlong;
 
                 objEvents.save(function (err) {
                     if (err) {
-
                         res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
                         res.render('create-events.ejs', {
                             user: user,
@@ -1097,18 +1095,44 @@ router.post('/save-event',cpUploadinserevent, parseForm, csrfProtection, middlew
                         });
                     } else {
 
-                             req.flash('messageSuccess', 'Event created successfully!');
-                             res.redirect('/list-events');
+                      // Sending signup mail
+                      var nodemailer      = require("nodemailer");
+                      var htmlC = globalConfig.emailHtmlHead+'<div style="width:580px;margin:0 auto;border:12px solid #f0f1f2;color:#696969;font:14px Arial,Helvetica,sans-serif"><table align="center" width="100%" height="auto" style="position:relative" cellpadding="0" cellspacing="0"> <tbody> <tr> <td> <center><img src="http://rideprix.com/img/paris.jpg" border="0" width="100%" height="200" class="CToWUd a6T" tabindex="0"> <img src="http://rideprix.com:2286/images/logo.png" style="width: 35%;position: absolute;top: 150px;left: 10px;"><div class="a6S" dir="ltr" style="opacity: 0.01; left: 641px; top: 270px;"></div></center> </td> </tr> </tbody></table>	<div class="content-container" style="padding:18px;">';
 
+                      htmlC = '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>RidePrix Registration</title></head><body><div style="width:580px;margin:0 auto;border:12px solid #f0f1f2;position:relative;color:#696969;font:14px Arial,Helvetica,sans-serif"><table align="center" width="100%" height="auto" style="position:relative" cellpadding="0" cellspacing="0"> <tbody> <tr> <td> <center><img src="http://rideprix.com/img/paris.jpg" border="0" width="100%" height="200" class="CToWUd a6T" tabindex="0"> <img src="http://rideprix.com:2286/images/logo.png" style="width: 35%;position: absolute;top: 150px;left: 10px;"><div class="a6S" dir="ltr" style="opacity: 0.01; left: 641px; top: 270px;"></div></center> </td> </tr> </tbody></table>	<div class="content-container" style="padding:18px;">';
+                      htmlC += '<h3>Congrats, You have successfully created an event "'+req.body.eventName+'" on Ride Prix!</h3>';
+                      htmlC += '<p>Please invite your friends and colleagues for your event. You can also share your event on social network.</p>';
+                      htmlC += '<p>To keep up with all the latest events at Ride Prix please follow us on:</p>';
+                      htmlC += '<p><table width="100%" align="center"> <tbody> <tr> <td align="center"> <br> <a href="https://www.facebook.com/rideprix" target="_blank" style="text-decoration:none;"> <img src="https://image.flaticon.com/icons/png/128/145/145802.png" border="0" hspace="3" width="34" height="32" style="border-radius: 20px;"> </a> <a href="https://twitter.com/rideprix" target="_blank" style="text-decoration:none;"> <img src="https://image.flaticon.com/icons/png/128/145/145812.png" border="0" hspace="3" width="34" height="32" style="border-radius: 20px;"> </a> <a href="https://www.instagram.com/rideprix/" target="_blank" style="text-decoration:none;"> <img src="https://image.flaticon.com/icons/png/128/187/187207.png" border="0" hspace="3" width="34" height="32" style="border-radius: 20px;"> </a></td> </tr> </tbody> </table></p>';
+                      htmlC += '<p>We thank you,</p>';
+                      htmlC += '<p>Team Ride Prix</p></div><table width="100%" align="center"><tbody> <tr> <td align="center"> <br> <a href="http://rideprix.com/unsubscribe/" target="_blank" style="font-size:10px;color:#666666;">Unsubscribe</a> | <a href="http://rideprix.com/contact/" target="_blank" style="font-size:10px;color:#666666;">Contact Us</a> </td> </tr> </tbody> </table></div>'+globalConfig.emailHtmlFoot;
+
+                        // create reusable transport method (opens pool of SMTP connections)
+                       var smtpTransport = nodemailer.createTransport("SMTP",{
+                           service: "Gmail",
+                           auth: {
+                               user: globalConfig.gmailEmail,
+                               pass: globalConfig.gmailPassword
+                           }
+                       });
+
+                        var mailOptionsC = {
+                            from   : "RidePrix.com <info@rideprix.com>",
+                            to     : req.user.local.email,
+                            subject: "Event Created on Ride Prix!",
+                            html   : htmlC
+                        };
+                        smtpTransport.sendMail(mailOptionsC, function(error, response){
+                          req.flash('messageSuccess', 'Event created successfully!');
+                          res.redirect('/list-events');
+                        });
                     }
                 });
             }
         });
     }else{
-
-          res.redirect('/list-events');
+      res.redirect('/list-events');
     }
-
 });
 
 router.get('/list-events', csrfProtection, middleware.isLoggedIn, function (req, res){
@@ -1516,17 +1540,13 @@ router.post('/join-event', middleware.isLoggedIn, function (req, res){
 });
 
 router.get('/latestevents',  function (req, res){
-
-    Events.find({'eventLocationType':'public' },function (err, latesteventsList) {
+    Events.find({'eventLocationType':'public' },{_id:0},function (err, latesteventsList) {
         if(!err){
-
             res.json(latesteventsList);
-
         }else{
             res.json({});
         }
     }).sort({'startDate':1}).limit(3);
-
 });
 
 router.post('/sendreview',  function (req, res){

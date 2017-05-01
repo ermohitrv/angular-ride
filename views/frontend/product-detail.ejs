@@ -5,13 +5,13 @@
     <div class="loader"></div>
     <img style="display:block; margin:0 auto;" src="/public/images/ajax-loader.gif">
 </div>-->
-    
-<div ng-if='productDetailView == ""'><div id="page-loading"><div class="loader"></div></div></div>
-    <div ng-if='productDetailView != ""' data-ng-init="productDetail('<%= productId %>')" data-ng-bind-html="productDetailView"></div>
+
+<div ng-show='productDetailView == ""'><div id="page-loading"><div class="loader"></div></div></div>
+    <div ng-show='productDetailView != ""' data-ng-init="productDetail('<%= productId %>')" data-ng-bind-html="productDetailView" compile-template></div>
 </div>
 <div class="related_product" data-ng-controller="productController">
     <div class="overlay_bg"></div>
-    <div data-ng-init="relatedProducts()" data-ng-bind-html="relatedProductsView"></div>
+    <div data-ng-init="relatedProducts()" data-ng-bind-html="relatedProductsView" compile-template></div>
 </div>
 <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
 <!--<link href="/css/magnify.css" rel="stylesheet" type="text/css">-->
@@ -22,54 +22,23 @@
 h1 { margin-top:150px; text-align:center;}
 </style>
 <script>
-
-$(document).on('click','.product-add-to-cart',function(){
-    
-    var product_id = $("#product_id").val();
-    var quantity_box = $("#quantity_box").val();
-    var size_box = $("#size_box").val();
-    var color_box = $("#color_box").val();
-    
-    angular.element(this).scope().addToCart(product_id,quantity_box,size_box,color_box);
-});
-
 $(document).on('click','.smallimageuploaded',function(){
       var smallimageid = this.id;
       var smallimgsrc = document.getElementById(smallimageid).src;
       $('.largeimageuploaded').attr('src',smallimgsrc);
       $('.largeimageuploaded').attr('data-magnify-src',smallimgsrc);
-     
-      
 });
-
-//
-//$(document).ready(function() {
-// // $('.zoom').magnify();
-//   $('.zoom').magnify({
-//    speed: 200,
-//    src: '/public/images/error_bg.jpg'
-//  });
-//});
 
 $(document).on('click','.zoom',function(){
    var largeimgsrc = document.getElementById('large_image').src;
    var page_url = document.getElementById('url').value;
-   
    $('#modal-zoom').css('display','block');
    $('#zoomimage').attr('src',page_url+"/l/600x600/"+largeimgsrc);
    //$('#zoomimage').attr('src',"http://localhost:2286/public/images/error_bg.jpg");
-   
-   //$('.zoom').magnify();
-//   $('.zoom').magnify({
-//    speed: 200,
-//    src: largeimgsrc,
-//   
-//  });
-    //angular.element(this).scope().imageResize(largeimgsrc);
 });
 
 function submitReview(){
-    
+
     var reviewdesc = $('#addReview').val();
     var productId  = $('#productId').val();
     if(reviewdesc == ""){
@@ -94,7 +63,7 @@ function submitReview(){
             }
         },
         error : function(err){
-            //alert( 'err: '+JSON.stringify(err) );           
+            //alert( 'err: '+JSON.stringify(err) );
             //$(".result_del").html('<div class="alert alert-success">User Deleted Successfully!</div>');
         }
     });
@@ -103,18 +72,18 @@ function submitReview(){
 
 
 $(document).on('click','.closereviewresponse',function(){
-    
+
     $('#modal-reviewresponse').css('display','none');
 });
 
 
 
 $(document).on('click','.productrating',function(){
-    
+
     var starid = this.id;
     var starrate = $('#'+starid).val();
     var starproductId  = $('#starproductId').val();
-    
+
     jQuery.ajax({
         type  : "POST",
         url   : "/rating-product",
@@ -132,14 +101,14 @@ $(document).on('click','.productrating',function(){
             }
         },
         error : function(err){
-           
+
         }
     });
-    
+
 });
 
 $(document).on('click','.closezoombox',function(){
-    
+
     $('#modal-zoom').css('display','none');
 });
 
