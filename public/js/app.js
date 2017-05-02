@@ -79,18 +79,19 @@ app.controller('homeController', ['$scope', '$http', function ($scope, $http) {
     $scope.drawEventsMap = function(eventmonth){
         $scope.deleteEvents();
         $http.get('/draw-events-map/'+eventmonth).success(function(eventsList){
-            console.log(eventsList);
             $scope.eventsList = eventsList;
             var widthScreen = $(document).width();
-            //if (widthScreen > 768) {
-
-                if (window.google && google.maps) {
-                    // Map script is already loaded
-                    initializeMap(eventsList,"eventsmap");
-                } else {
-                    initializeMap(eventsList,"eventsmap");
-                }
-            //}
+            if(eventsList.data.events.length == 0){
+              $('.event-message').html('<div class="alert alert-danger">Apologies, but no events were found for the requested month.</div>');
+            }else{
+              $('.event-message').html('');
+            }
+            if (window.google && google.maps) {
+                // Map script is already loaded
+                initializeMap(eventsList,"eventsmap");
+            } else {
+                initializeMap(eventsList,"eventsmap");
+            }
         }).error(function(){
             console.log('Oops! Error listing get-events-list');
         });
@@ -999,22 +1000,17 @@ app.controller('friendsController',['$scope', '$http', function ($scope, $http, 
             headers : {'Accept' : 'application/json'}
         };
         $http.post('/friendstatus',config).success(function (response, status, headers, config){
-            console.log(response);
             $scope.friendstatus = response;
-
-
         }).error(function(err){
            console.log('Oops! Error occur'+err);
         });
     };
 
     $scope.getFriendrequestsList = function(){
-
         var config = {
             headers : {'Accept' : 'application/json'}
         };
         $http.post('/get-friendrequests-list',config).success(function(response, status, headers, config){
-            console.log(response);
             $scope.friendrequestslist = response;
         }).error(function(){
             console.log('Oops! Error listing get-friends-list on friends page');
@@ -1031,13 +1027,9 @@ app.controller('friendsController',['$scope', '$http', function ($scope, $http, 
             headers : {'Accept' : 'application/json'}
         };
         $http.post('/unfriend',config).success(function (response, status, headers, config){
-
-            console.log(response);
             if(response.status == "success"){
-
                 $scope.friendStatus(profileuseremail);
             }
-
         }).error(function(err){
            console.log('Oops! Error occur'+err);
         });
@@ -1049,7 +1041,6 @@ app.controller('friendsController',['$scope', '$http', function ($scope, $http, 
             headers : {'Accept' : 'application/json'}
         };
         $http.post('/get-friends-list',config).success(function(response, status, headers, config){
-            console.log(response);
             $scope.friendslist = response;
         }).error(function(){
             console.log('Oops! Error listing get-friends-list on friends page');
@@ -1243,11 +1234,11 @@ app.controller('friendsController',['$scope', '$http', function ($scope, $http, 
                 }else if(response.countfriends > 1){
                     $scope.totalFriends = response.countfriends+" Friends";
                 }else{
-                    $scope.totalFriends = "You have "+response.countfriends+" Friends";
+                    $scope.totalFriends = response.countfriends+" Friends";
                 }
             }
             if(response.status == "success" && counttype == "followers"){
-                $scope.totalFollowers = response.countfollowers;
+                $scope.totalFollowers = response.countfollowers+" Followers";
             }
         }).error(function(err){
                console.log('Oops! Error occur'+err);

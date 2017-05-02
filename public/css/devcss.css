@@ -50,7 +50,7 @@ div#clock-details {display: none;}
     width: auto;
 }
 .brdr-all{border: 1px solid #bce8f1;}
-.panel-info { border:1px solid #232F40;}
+/*.panel-info { border:1px solid #232F40;}*/
 .cart-icon-top i{position: relative;font-size: 17px;}
 .cart-icon-top #cart-badge {
     font-size: 14px;
@@ -123,3 +123,16 @@ div#clock-details {display: none;}
 .skin-blue .treeview-menu>li.active>a{color: #f39c12!important;}
 .product-title{text-align: left;}
 #cart_checkoutpage .continue_shoping,#cart_checkoutpage .checkout_btn{color: #fff;}
+.date-joined{text-align: left;
+    display: inline-block;
+    font-size: 11px;
+    top: -6px;
+    position: relative;
+    margin-left: 1px;
+    margin-right: 4px;}
+#friendrequests .friend-req-actions a{ color: #fff}
+.friends-list{padding: 0px;}
+.pull-right-author-name p:first-child{font-size: 16px;font-weight: bold;}
+.pull-right-author-name p{display: block;margin-left: 10px;    padding: 0;font-size: 13px;
+    margin-left: 10px;
+    margin-bottom: 0;}

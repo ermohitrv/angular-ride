@@ -10,23 +10,32 @@
          </ol>
          <!-- end:breadcrumb -->
          <div class="row" id="home-content">
-                <div class="title">
-                    <h1 style="color:#3c3c3c">Friends</h1>
-                    <hr style="">
-                </div>
                   <!-- left column -->
                   <div class="col-md-3">
-                    <ul class="list-group ">
-                        <li id="new-friend-request-count"  class="list-group-item text-left">
-                            <span><strong><a href="javascript:void(0)" onclick="shownewrequests()">New Request <span class="badge"></span></a></strong></span>
-                        </li>
-                        <li class="list-group-item text-left">
-                            <span><strong><a href="javascript:void(0)" onclick="showfriends()">Friends</a></strong></span>
-                        </li>
-                    </ul>
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <ul class="list-group ">
+                            <li id="new-friend-request-count"  class="list-group-item text-left">
+                                <span><strong><a href="javascript:void(0)" onclick="shownewrequests()">New Request <span class="badge"></span></a></strong></span>
+                            </li>
+                            <li class="list-group-item text-left">
+                                <span><strong><a href="javascript:void(0)" onclick="showfriends()">Friends</a></strong></span>
+                            </li>
+                        </ul>
+                      </div>
+                    </div>
                   </div>
                   <!-- event form column -->
-                  <div class="col-md-9 personal-info">
+                  <div class="col-md-9">
+                    <div class="panel data-panel">
+                      <div class="panel-body" style="border:0px;margin-left:0px;">
+                      <div class="panel panel-info">
+                      <div class="panel-heading">
+                          <h1 class="panel-title">
+                              <strong>Friend Requests</strong>
+                          </h1>
+                      </div>
+                      <div class="panel-body" style="border:0px;margin-left:0px;">
                     <div class="result_del"></div>
                     <% if (message.length > 0) { %>
                         <div class="alert alert-danger"><%= message %></div>
@@ -34,27 +43,24 @@
                     <% if (messageSuccess.length > 0) { %>
                         <div class="alert alert-success"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a><%= messageSuccess %></div>
                     <% } %>
-                    <div id="friendrequests" class="panel panel-info" ng-init="getFriendrequestsList()" style="display:block">
+                    <div id="friendrequests"  ng-init="getFriendrequestsList()" style="display:block">
                         <div class="row">
                           <div class="col-sm-12">
-                              <h3>
-                                  <div class="pull-left"></div>
-                                  <!--<div class="pull-right"><input data-ng-model="search_user.eventName" type="text" class="form-control" placeholder="Search event name"></div>-->
-                                  <div class="clearfix"></div>
-                              </h3>
                               <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
-                                  <thead>
-                                      <tr role="row">
-                                          <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"></th>
-                                          <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Name</th>
-                                          <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Action</th>
-                                      </tr>
-                                  </thead>
                                   <tbody>
                                       <tr data-ng-if="friendrequestslist.length > 0" data-ng-repeat="friendrequests in friendrequestslist" id="{{ friends._id }}" role="row" class="odd">
-                                          <td><img class="friendimage" src="/public/uploads/{{friendrequests.profileImage}}"/></td>
-                                          <td data-ng-bind="friendrequests.FirstName+' '+friendrequests.LastName"></td>
                                           <td>
+                                            <ul class="friends-list">
+                                              <li>
+                                                <section class="pull-left"><img class="friendimage" src="{{friendrequests.profileImage}}"/></section>
+                                                <section class="pull-right-author-name friends-info">
+                                                  <p data-ng-bind="friendrequests.FirstName+' '+friendrequests.LastName"></p>
+                                                  <p class="friend-info-location"><i class="fa fa-map-marker"></i> {{friendrequests.AddressCity}}, {{friendrequests.AddressState}}, {{friendrequests.AddressCountry}}</p>
+                                                </section>
+                                              </li>
+                                            </ul>
+                                          </td>
+                                          <td class="friend-req-actions">
                                               <a href="/friendrequestaction?friendstatus=accept&friendrequestsentby={{friendrequests.friendRequestSentBy}}" class="btn btn-primary">Accept</a>
                                               <a href="/friendrequestaction?friendstatus=reject&friendrequestsentby={{friendrequests.friendRequestSentBy}}" class="btn btn-primary">Reject</a>
                                           </td>
@@ -100,7 +106,10 @@
                     </div>
                   </div>
                </div>
-            <hr>
+               </div>
+         </div>
+         </div>
+         </div>
          </div>
       </div>
     </div>

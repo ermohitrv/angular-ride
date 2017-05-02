@@ -2,7 +2,7 @@
       <div class="overlay">
          <div class="container">
             <ul class="nav navbar-nav navbar-right top-menu">
-                <li class="friendsearchbox"> 
+                <li class="friendsearchbox">
                     <form class="navbar-form" id="searchfriends" role="search" method="get" action="">
                         <div class="input-group">
                             <input  class="form-control search-friend" placeholder="Search Friends" name="searchfrnd" id="search-box-frnd">
@@ -38,14 +38,14 @@
                             <span class="message" data-ng-if="notification.notificationType == 'follow'"><b>{{ notification.FirstName }}&nbsp;{{ notification.LastName }}</b> started following you.</span>
                             <span class="message" data-ng-if="notification.notificationType == 'acceptrequest'"><b>{{ notification.FirstName }}&nbsp;{{ notification.LastName }}</b> accepted your friend request.</span>
                             <span class="message" data-ng-if="notification.notificationType == 'eventjoined'"><b>{{ notification.FirstName }}&nbsp;{{ notification.LastName }}</b> accepted your event invitation.</span>
- 
+
                             <span class="subject">
                                 <!--<span class="time" ng-bind="notification.addedOn | date:'yyyy-MM-dd'"></span>-->
                                 <!--<span class="time" ng-init="showtime(notification.addedOn)">{{ stopwatch }}</span>-->
 
                             </span>
                         </a>
-                        
+
                      </li>
 <!--                     <li>
                         <a href="#">
@@ -76,36 +76,36 @@
                      </li>-->
                   </ul>
                </li>
-                <% 
+                <%
                     if(user){
                             var imagepath = user.local.profileImage;
                             var profileimageplacehold = "http://placehold.it/300";
-                            if(user.local.profileImage == profileimageplacehold){ 
+                            if(user.local.profileImage == profileimageplacehold){
                                     imagepath = user.local.profileImage+"?text="+user.local.firstName;
                             }
 
                         }
-                    
+
                 %>
                <!-- user login dropdown start-->
                <li class="dropdown">
                   <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                   
+
                   <img style="width: 30px;" class="img-circle" src="<%= imagepath %>">
-                  
+
                   <span class="username"><%= user.local.firstName+' '+user.local.lastName %></span>
                   <b class="caret"></b>
                   </a>
                   <ul class="dropdown-menu">
                      <div class="log-arrow-up"></div>
                      <% if (user.local.userLevel == "ADMIN") {  %>
-                     <li><a href="/admin"><i class="fa fa-user" data-original-title="" title=""></i> Admin Dashboard</a></li>
+                     <li><a href="/admin"><i class="fa fa-suitcase" data-original-title="" title=""></i> Admin Dashboard</a></li>
                      <% } %>
                      <li><a href="/profile"><i class="fa fa-user" data-original-title="" title=""></i> Profile</a></li>
-                     <li><a href="/update-profile"><i class=" fa fa-suitcase" data-original-title="" title="Update Profile"></i>Update Profile</a></li>
-                     <li><a href="/list-events"><i class="fa fa-user" data-original-title="" title=""></i>Events</a></li>
-                     <li><a href="/friends"><i class="fa fa-user" data-original-title="" title=""></i>Friends</a></li>
-                     <li><a href="/logout"><i class="fa fa-key" data-original-title="" title=""></i> Log Out</a></li>
+                     <li><a href="/update-profile"><i class=" fa fa-pencil" data-original-title="" title="Update Profile"></i>Update Profile</a></li>
+                     <li><a href="/list-events"><i class="fa fa-calendar" data-original-title="" title=""></i>Events</a></li>
+                     <li><a href="/friends"><i class="fa fa-users" data-original-title="" title=""></i>Friends</a></li>
+                     <li><a href="/logout"><i class="fa fa-sign-out" data-original-title="" title=""></i> Log Out</a></li>
                   </ul>
                </li>
             </ul>
@@ -118,7 +118,7 @@
                   <strong>MENU</strong>
                   </button>
                </div>
-               
+
 <!--                <div class="collapse navbar-collapse navbar-ex1-collapse">
                             <ul class="nav navbar-nav">
                                 <li class="active">
@@ -176,4 +176,3 @@
          </nav>
       </div>
     </div>
-   

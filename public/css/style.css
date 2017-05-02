@@ -622,9 +622,18 @@ input {
 	margin: 0;
 	line-height: .9;
 }
-.event_info {
+.event_info{
 	color: #fff;
 	display: table;
+}
+.friends-info {
+	display: table;
+}
+.friends-info h6 {
+	text-transform: uppercase;
+	margin-top: 0;
+	font-size: 16px;
+	font-weight: normal;
 }
 .event_info h6 {
 	color: #fff;
@@ -632,6 +641,9 @@ input {
 	margin-top: 0;
 	font-size: 16px;
 	font-weight: normal;
+}
+.event_info p {
+	margin-bottom: 15px;
 }
 #footer .event_info p {
 	margin-bottom: 15px;
@@ -987,13 +999,14 @@ li#header_inbox_bar i {
 	border: 5px solid #bdc3c7;
 	max-width: 120px;
 }
-#home-content #author i.fa {
+#home-content #author .sosmed-author i.fa {
 	border: 2px solid #95a5a6;
 	color: #95a5a6;
 	width: 30px;
 	height: 30px;
 	padding-top: 7px;
 }
+.info-block__headline{margin-top: 15px;}
 .data-panel .panel-header {
 	width: 150px;
 	position: absolute;
@@ -1158,7 +1171,7 @@ div#author a:hover i {
 .header_top {
 	line-height: 35px;
 }.follow_us li {
-  
+
   margin-top: 0;
 }
 nav.navbar {
@@ -1272,20 +1285,20 @@ section#copyright {
 	margin: 0;
 }
 .navbar-nav > li > a {
-  
+
   margin-right: 0;
 
 }.navbar-nav > li:hover > a,.navbar-nav > li > a {
- 
+
   border-bottom: medium none;
 
 }#conntdown .team {
   margin-top: 25px;
 }#conntdown {
- 
+
   display: inline-block;
   float: none;
- 
+
 }.android_app{
 margin:0px;
 }
@@ -1340,17 +1353,17 @@ section#copyright {
 }
 }
  @media (max-width:580px) {
-	 
+
 	 .newsletter_form input[type="email"],.newsletter_form input[type="submit"]{
-		 
-		width:100%; 
+
+		width:100%;
 	 }.newsletter_form input[type="submit"]:hover {
   box-shadow: none;
 }
-	 
+
  }
- 
- 
+
+
 /******************************************************************cart********************************************/
 .cart_page, .checkout_page {
     float: left;
@@ -1376,7 +1389,7 @@ section#copyright {
     margin-right: 10px;
     padding: 0;
 }
-.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, 
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th,
 .table > thead > tr > td, .table > thead > tr > th {
     border-top: 1px solid #cccccc;
 }
@@ -1495,7 +1508,7 @@ button.continue_shoping, button.checkout_btn {
     .btn-submit-fix{
         width:100%;
     }
-    
+
 }
 /***********************************************************************product page************************/
 .product_page{
@@ -1858,7 +1871,7 @@ button.continue_shoping, button.checkout_btn {
   width: 100%;
   font-family: 'Open Sans', sans-serif;
   position: relative;
-  
+
 }
 .listing{
   float: left;
@@ -2654,7 +2667,7 @@ li#header_inbox_bar i.fa.fa-times {
     display:block;
 }
 
-.approval{   
+.approval{
     cursor: pointer;
     color: black;
     padding: 5px 0px;
@@ -2667,13 +2680,13 @@ li#header_inbox_bar i.fa.fa-times {
 }
 /****** Style Star Rating Widget *****/
 
-.rating { 
+.rating {
   border: none;
   float: left;
 }
 
-.rating > input { display: none; } 
-.rating > label:before { 
+.rating > input { display: none; }
+.rating > label:before {
   margin: 5px;
   font-size: 1.25em;
   font-family: FontAwesome;
@@ -2681,14 +2694,14 @@ li#header_inbox_bar i.fa.fa-times {
   content: "\f005";
 }
 
-.rating > .half:before { 
+.rating > .half:before {
   content: "\f089";
   position: absolute;
 }
 
-.rating > label { 
-  color: #ddd; 
- float: right; 
+.rating > label {
+  color: #ddd;
+ float: right;
 }
 
 .hours span.flip-clock-label {
@@ -2704,7 +2717,7 @@ li#header_inbox_bar i.fa.fa-times {
 .rating > input:checked + label:hover, /* hover current star when changing rating */
 .rating > input:checked ~ label:hover,
 .rating > label:hover ~ input:checked ~ label, /* lighten current selection */
-.rating > input:checked ~ label:hover ~ label { color: #FFED85;  } 
+.rating > input:checked ~ label:hover ~ label { color: #FFED85;  }
 
 @media (min-width: 768px){
 .modal-dialog {
@@ -2777,9 +2790,9 @@ li#header_inbox_bar i.fa.fa-times {
   margin-bottom: 10px;font-size:14px;
 }
 .item .description-wrap h4 a {
- 
+
   font-size: 14px;
-  
+
 }
 .searchpagelocation {
  margin-bottom: 10px;
@@ -2943,33 +2956,33 @@ li.mob-menu {
 .flip-clock-divider {
 
   height: 50px;
- 
+
 }
 #conntdown .flip-clock-wrapper ul {
   width: 15px !important;
 }
 .flip-clock-wrapper ul {
- 
+
   font-size: 16px;
   margin: 5px 2px;
   height: 40px;
   line-height: 40px;
- 
+
   padding: 13px;
 }
 .flip-clock-wrapper ul li {
- 
+
   line-height: 40px;
-  
+
 }
 .flip-clock-wrapper ul li a div {
   font-size: 16px;
- 
+
 }
 .flip-clock-wrapper ul li a div div.inn {
 
   font-size:16px;
-  
+
 }
 .flip-clock-divider .flip-clock-label {
 
@@ -3043,7 +3056,7 @@ margin:0px;
 }
 .testi_slide ul li {
   display: block;
-  
+
 }
 .check-btn1, .check-btn2 {
   display: inline-block;
@@ -3061,6 +3074,6 @@ margin:0px;
 .flip-clock-divider {
 
  float: none;
- 
+
 }
 }

@@ -893,8 +893,10 @@ function initializeContactMap(){
 function shownewrequests(){
     $('#friendrequests').css('display','block');
     $('#friends').css('display','none');
+    $('.panel-heading .panel-title strong').text('Friends Requests');
 }
 function showfriends(){
     $('#friendrequests').css('display','none');
     $('#friends').css('display','block');
+    $('.panel-heading .panel-title strong').text('Friends List');
 }

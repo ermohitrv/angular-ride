@@ -2,26 +2,30 @@
 <style>.title h1{color:#3a3a3a}</style>
 <div class="events_page" data-ng-controller="homeController" >
     <div ng-if='eventsList == ""'><div id="page-loading"><div class="loader"></div></div></div>
-
     <div class="container">
         <div class="row classified_listing">
             <div class="title"><h1> Events </h1></div>
+            <p>Ride Prix is an action packed festival that will get your wheels spinning.</p>
+            <p>Ride Prix is an inclusive, community festival that offers something for everyone. So whether you ride a little, a lot or not at all, there’s an event for you!</p>
+            <p>Keep watching this space as we add more events to the Calendar! To have your bike friendly event featured on the Calendar, submit the details via the Event Register page.
+
             <div class="listing">
                 <ul id="nav">
-			<li class="btn btn-xs btn-info active" data-ng-click="drawEventsMap('all')"><a href="javascript:;">ALL</a></li>
-			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(1)"><a href="javascript:;">JAN</a></li>
-			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(2)"><a href="javascript:;">FEB</a></li>
-			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(3)"><a href="javascript:;">MAR</a></li>
-			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(4)"><a href="javascript:;">APR</a></li>
-			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(5)"><a href="javascript:;">MAY</a></li>
-			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(6)"><a href="javascript:;">JUN</a></li>
-			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(7)"><a href="javascript:;">JUL</a></li>
-			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(8)"><a href="javascript:;">AUG</a></li>
-			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(9)"><a href="javascript:;">SEP</a></li>
-			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(10)"><a href="javascript:;">OCT</a></li>
-			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(11)"><a href="javascript:;">NOV</a></li>
-			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(12)"><a href="javascript:;">DEC</a></li>
-		</ul>
+            			<li class="btn btn-xs btn-info active" data-ng-click="drawEventsMap('all')"><a href="javascript:;">ALL</a></li>
+            			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(1)"><a href="javascript:;">JAN</a></li>
+            			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(2)"><a href="javascript:;">FEB</a></li>
+            			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(3)"><a href="javascript:;">MAR</a></li>
+            			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(4)"><a href="javascript:;">APR</a></li>
+            			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(5)"><a href="javascript:;">MAY</a></li>
+            			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(6)"><a href="javascript:;">JUN</a></li>
+            			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(7)"><a href="javascript:;">JUL</a></li>
+            			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(8)"><a href="javascript:;">AUG</a></li>
+            			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(9)"><a href="javascript:;">SEP</a></li>
+            			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(10)"><a href="javascript:;">OCT</a></li>
+            			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(11)"><a href="javascript:;">NOV</a></li>
+            			<li class="btn btn-xs btn-info" data-ng-click="drawEventsMap(12)"><a href="javascript:;">DEC</a></li>
+            		</ul>
+                <div class="event-message text-center"></div>
                 <section id="map" eventsList>
                     <div class="row4"   data-ng-init="drawEventsMap('all')">
                         <!--<div class="row4" data-ng-init="drawEventsMap()">-->
@@ -32,7 +36,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="modal fade in" id="eventsmodal" role="dialog" aria-labelledby="eventsmodal" aria-hidden="true">
     <div class="modal-dialog">
@@ -50,29 +53,17 @@
         </div>
     </div>
 </div>
-
 <script>
-    $(document).ready(function(){
-       
-        $('#modalbtnok').click(function(){
-          
-           $('#eventsmodal').hide();
-           
-        });
-       
-        $('#modalbtnclose').click(function(){
-          
-           $('#eventsmodal').hide();
-           
-       });
-       
-        
+$(document).ready(function(){
+    $('#modalbtnok').click(function(){
+       $('#eventsmodal').hide();
     });
-    
-   
-    $('.btn-info').click(function(){
-        $('.btn-info').removeClass('active');
-        $(this).addClass('active');
-    });
-    
-</script>    
+    $('#modalbtnclose').click(function(){
+       $('#eventsmodal').hide();
+   });
+});
+$('.btn-info').click(function(){
+    $('.btn-info').removeClass('active');
+    $(this).addClass('active');
+});
+</script>

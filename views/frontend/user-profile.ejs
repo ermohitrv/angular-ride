@@ -1,13 +1,13 @@
 <% layout('layout') -%>
-<% 
+<%
     if(userprofile){
         var imagepath = userprofile.local.profileImage;
         var profileimageplacehold = "http://placehold.it/300";
-        if(userprofile.local.profileImage == profileimageplacehold){ 
+        if(userprofile.local.profileImage == profileimageplacehold){
                 imagepath = userprofile.local.profileImage+"?text="+userprofile.local.firstName;
         }
 
-    }               
+    }
 %>
 <section id="profile">
   <% if(user){ %>
@@ -16,14 +16,14 @@
   <div id="user-profile" class="container" ng-controller="friendsController" ng-init="friendStatus('<%= userprofile.local.email %>')">
       <div id="main" style="margin-top:-15px">
          <!-- start:breadcrumb -->
-     
+
          <ol class="breadcrumb">
             <li><a href="/">Home</a></li>
             <li class="active">Profile</li>
             <li class="active"><%= userprofile.local.firstName+' '+userprofile.local.lastName %></li>
 
          </ol>
-         <!-- end:breadcrumb -->   
+         <!-- end:breadcrumb -->
          <div class="row" id="home-content">
             <div class="col-lg-8">
                <!-- start:state overview -->
@@ -32,7 +32,7 @@
                      <center>
                         <a href="#">
                             <img class="media-object data-profile-pic" src="<%= imagepath %>">
-                        </a>    
+                        </a>
                      </center>
                   </div>
                   <div class="panel-body">
@@ -85,7 +85,7 @@
                      <center>
                         <a href="#">
                         <img class="media-object data-profile-pic" src="<%= imagepath %>">
-                        </a>    
+                        </a>
                      </center>
                   </div>
                   <div class="panel-body">
@@ -97,32 +97,27 @@
                <!-- end:timeline -->
             </div>
             <div class="col-lg-4">
-     
-               <!-- start:user info -->
                <div class="panel panel-default">
                     <div class="panel-heading" style="border-bottom:none;height:40px">
                      <header class="panel-title">
                         <div class="text-center">
-
-                        <% 
+                        <%
                         if(user){
-                        if(user.local.username != userprofile.local.username){ %>   
+                        if(user.local.username != userprofile.local.username){ %>
                         <div>
-                        <li class="active friendsul"  id="addfriend"  data-ng-if="friendstatus.friendRequestApprovalStatus != 'accept' && friendstatus.friendRequestApprovalStatus != 'pending'"><a href="javascript:void(0);" ng-click="sendRequest('<%= userprofile.local.email %>')" class="btn btn-primary">Add Friend</a></li>
-                        <li class="active friendsul"  id="requestsent"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending' && friendstatus.friendRequestSentBy == '<%= user.local.email %>'"><a href="javascript:void(0)" class="btn btn-primary" >Request Sent</a></li>         
-                       
-                        <li class="friendsmenuli friendsul" data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending' && friendstatus.friendRequestSentTo == '<%= user.local.email %>'"><a class="alisting btn btn-primary">Pending Approval<b class="caret"></b></a>
-                             <ul class="friendssubmenu">
-                                <li  class="active friendsul approval"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending' && friendstatus.friendRequestSentTo == '<%= user.local.email %>'"><a ng-click="requestactionfromProfile('accept','<%= userprofile.local.email %>')">Accept</a></li>         
-                                <li  class="active friendsul approval"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending' && friendstatus.friendRequestSentTo == '<%= user.local.email %>'"><a ng-click="requestactionfromProfile('reject','<%= userprofile.local.email %>')"  >Reject</a></li>         
-                             </ul>
-                        </li>
-                        <li class="active friendsul"  id="friends" ng-mouseenter="changeFriendButtonText('enter')" ng-mouseleave="changeFriendButtonText('leave')" data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept'"><a href="javascript:void(0)" ng-click="unFriendprofile('<%= userprofile.local.email %>','<%= user.local.email %>')"  class="btn btn-success" id="friendtext">Friends</a></li>
+                          <li class="active friendsul"  id="addfriend"  data-ng-if="friendstatus.friendRequestApprovalStatus != 'accept' && friendstatus.friendRequestApprovalStatus != 'pending'"><a href="javascript:void(0);" ng-click="sendRequest('<%= userprofile.local.email %>')" class="btn btn-primary">Add Friend</a></li>
+                          <li class="active friendsul"  id="requestsent"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending' && friendstatus.friendRequestSentBy == '<%= user.local.email %>'"><a href="javascript:void(0)" class="btn btn-primary" >Request Sent</a></li>
+                          <li class="friendsmenuli friendsul" data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending' && friendstatus.friendRequestSentTo == '<%= user.local.email %>'"><a class="alisting btn btn-primary">Pending Approval<b class="caret"></b></a>
+                               <ul class="friendssubmenu">
+                                  <li  class="active friendsul approval"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending' && friendstatus.friendRequestSentTo == '<%= user.local.email %>'"><a ng-click="requestactionfromProfile('accept','<%= userprofile.local.email %>')">Accept</a></li>
+                                  <li  class="active friendsul approval"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending' && friendstatus.friendRequestSentTo == '<%= user.local.email %>'"><a ng-click="requestactionfromProfile('reject','<%= userprofile.local.email %>')"  >Reject</a></li>
+                               </ul>
+                          </li>
+                          <li class="active friendsul"  id="friends" ng-mouseenter="changeFriendButtonText('enter')" ng-mouseleave="changeFriendButtonText('leave')" data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept'"><a href="javascript:void(0)" ng-click="unFriendprofile('<%= userprofile.local.email %>','<%= user.local.email %>')"  class="btn btn-success" id="friendtext">Friends</a></li>
                         </div>
                         <div ng-init="followStatus('<%= userprofile.local.email %>')">
                             <li class="active friendsul" data-ng-if="followstatus == 0"  id="follow"><a href="javascript:void(0);" ng-click="followUser('<%= userprofile.local.email %>')" class="btn btn-primary">Follow</a></li>
                             <li class="active friendsul" data-ng-if="followstatus == 1" ng-mouseenter="changeFollowButtonText('enter')" ng-mouseleave="changeFollowButtonText('leave')"  id="follow"><a href="javascript:void(0);"  ng-click="unFollow('<%= userprofile.local.email %>','<%= user.local.email %>')" class="btn btn-primary" id="followtext">Following<!--&nbsp;&nbsp;<i id="followingtick" class="fa fa-check" aria-hidden="true"></i>--></a></li>
-
                         </div>
                         <div data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept' && eventsinviteList.length > 0"><li  data-ng-click="listEventsInvite('<%= userprofile.local.email %>')" class="active friendsul"><a href="javascript:void(0);" class="btn btn-primary" data-ng-click="" data-toggle="modal" data-target="#eventsinvitemodal">Invite</a></li></div>
                          <% }} %>
@@ -140,20 +135,23 @@
                      <div class="text-center" id="author">
                         <img src="<%= imagepath %>">
                         <h3><%= userprofile.local.firstName+' '+userprofile.local.lastName %></h3>
-                        <small class="label label-warning"><%= userprofile.local.locationCity %>,&nbsp;<%= userprofile.local.locationState %>,&nbsp;<%= userprofile.local.locationCountry %></small>
-                        <p><%= userprofile.userBio  %></p>
-                        <p data-ng-init="countFriendsFollowers('<%= userprofile.local.email %>','friends')"><span>{{totalFriends}}</span></p>
-                        <p data-ng-init="countFriendsFollowers('<%= userprofile.local.email %>','followers')">Followed by <span>{{totalFollowers}}</span> people</p>
+                        <p> <small class="label label-warning"><i class="fa fa-map-marker" aria-hidden="true"></i> <%= userprofile.local.locationCity %>,&nbsp;<%= userprofile.local.locationState %>,&nbsp;<%= userprofile.local.locationCountry %></small></p>
+                        <p><span data-ng-init="countFriendsFollowers('<%= userprofile.local.email %>','friends')"><i class="fa fa-users" aria-hidden="true"></i> {{totalFriends}}</span> &nbsp;&nbsp;<span data-ng-init="countFriendsFollowers('<%= userprofile.local.email %>','followers')"><i class="fa fa-users" aria-hidden="true"></i> {{totalFollowers}}</span></p>
+                        <% if(userprofile.userBio != undefined && userprofile.userBio != ""){ %>
+                          <p class="info-block__headline"><i class="fa fa-quote-left"></i> <%= userprofile.userBio %> <i class="fa fa-quote-right"></i></p>
+                        <% } %>
                         <p class="sosmed-author">
-                           <% if(userprofile.facebookURL) { %><a href="#"><i class="fa fa-facebook" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook"></i></a><% } %>
-                           <% if(userprofile.twitterURL) { %><a href="#"><i class="fa fa-twitter" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"></i></a><% } %>
-                           <!--<a href="#"><i class="fa fa-google-plus" data-toggle="tooltip" data-placement="top" title="" data-original-title="Google Plus"></i></a>-->
-                           <!--<a href="#"><i class="fa fa-snapchat" data-toggle="tooltip" data-placement="top" title="" data-original-title="Linkedin"></i></a>-->
+                           <a href="<%= userprofile.facebookURL %>" target="_blank"><i class="fa fa-facebook" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook"></i></a>
+                           <a href="<%= userprofile.facebookURL %>" target="_blank"><i class="fa fa-twitter" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"></i></a>
+                           <a href="<%= userprofile.youtubeURL %>" target="_blank"><i class="fa fa-youtube" data-toggle="tooltip" data-placement="top" title="" data-original-title="Youtube"></i></a>
+                           <a href="<%= userprofile.instagramURL %>" target="_blank"><i class="fa fa-instagram" data-toggle="tooltip" data-placement="top" title="" data-original-title="Instagram"></i></a>
+                           <a href="<%= userprofile.skypeUsername %>" target="_blank"><i class="fa fa-skype" data-toggle="tooltip" data-placement="top" title="" data-original-title="Skype"></i></a>
+                           <a href="<%= userprofile.websiteURL %>" target="_blank"><i class="fa fa-wpexplorer" data-toggle="tooltip" data-placement="top" title="" data-original-title="Website"></i></a>
                         </p>
                      </div>
                   </div>
                </div>
-               <!-- end:user info -->              
+               <!-- end:user info -->
                <!-- start:user info table -->
 <!--               <section class="panel">
                   <table class="table table-hover personal-task">
@@ -193,9 +191,9 @@
             </div>
          </div>
       </div>
-        <% 
+        <%
         if(user){
-        if(user.local.username != userprofile.local.username){ %>   
+        if(user.local.username != userprofile.local.username){ %>
         <div class="modal fade in" id="eventsinvitemodal" role="dialog" aria-labelledby="eventsinvitemodal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -212,23 +210,23 @@
                                                 <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Select All&nbsp;&nbsp;<input ng-model="all" class="selectalleventcheckbox"type="checkbox" id="selectallevent" name="selectallevent"  /></th>
                                             </tr>
                                         </thead>
-                                       
+
                                         <tbody>
                                             <tr data-ng-if="eventsinviteList.length > 0" data-ng-repeat="eventsinvite in eventsinviteList" id="{{ eventsinvite._id }}" role="row" class="odd">
-                                                
+
                                                 <td><img class="eventimage" src="/{{eventsinvite.eventImage}}"/></td>
-                                                <td data-ng-bind="eventsinvite.eventName"></td>                                               
+                                                <td data-ng-bind="eventsinvite.eventName"></td>
                                                 <td>
                                                   <input data-ng-if="eventsinvite.isInvited == 0" ng-checked="all" ng-model="selected[eventsinvite._id]" type="checkbox" id="selectevent" name="selectevent" class="selecteventcheckbox"   value="{{ eventsinvite._id }}" />
                                                   <label data-ng-if="eventsinvite.isInvited > 0">Invited</label>
                                                 </td>
-                                               
-                                            </tr>                                           
+
+                                            </tr>
                                         </tbody>
                                 </table>
                             </div>
                             <div class="modal-footer">
-       
+
                           <button type="button" class="btn btn-primary" data-dismiss="modal" id="modalbtnok" data-ng-click="inviteFriend('<%= userprofile.local.email %>')">Send Invitation</button>
                     </div>
                 </div>

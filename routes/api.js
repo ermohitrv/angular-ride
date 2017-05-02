@@ -331,7 +331,7 @@ router.post('/login', function(req, res){
                                             rideBumped       :user.rideNotification.rideBumped,
                                             rideAlerts       :user.rideNotification.rideAlerts,
 
-                                            //rideNews fields 
+                                            //rideNews fields
                                             rideContestNews  :user.rideNews.rideContestNews,
 
                                             //ridePrivacy fields
@@ -651,7 +651,7 @@ router.post('/init-add-route', function(req, res){
                     });
                 }else {
                     /*
-                    * Nails, Patches are unlocked on route 1 for signup user
+                    * Nails, Patches are unlocked on route 1 for  user
                     */
                     if(routeCreateInfo.route == 1){
 

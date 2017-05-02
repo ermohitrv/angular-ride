@@ -79,7 +79,7 @@ router.post('/signup', parseForm, csrfProtection, passport.authenticate('local-s
 /* Profile route to render logged in user to profile area */
 router.get('/profile', middleware.isLoggedIn, function (req, res){
     res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-    res.render('profile.ejs', {user: req.user,title:'Profile'});
+    res.render('profile.ejs', {user: req.user,title:'Profile',moment:moment });
 });
 
 /* Profile route to render logged in user to profile area */
@@ -1291,84 +1291,42 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
     //console.log("event month"+req.params.eventmonth);
     var eventmonth = req.params.eventmonth;
 
-    console.log("eventmonth "+eventmonth);
-
     if(eventmonth != "" && eventmonth != undefined){
         if(eventmonth !== 'all'){
             eventmonth = parseInt(eventmonth);
-            /*Events.find({ "$where": "this.startDate.getMonth() === "+eventmonth ,'eventLocationType':'public'}, function (err, eventsList) {
-            if (err) {
-
-                res.json({
-                    success: true,
-                    data:null,
-                    message: "error",
-                    code: 400
-                });
-            }
-            else{
-                res.json({
-                    success: true,
-                    data: {
-                        events : eventsList
-                    },
-                    message: "success",
-                    code: 200
-                });
-            }
-
-            });*/
 
         Events.aggregate(
                 [
-
-
-                    {
-                        $lookup:
-                                {
-                                    from: "joinevents",
-                                    localField: "_id",
-                                    foreignField: "eventId",
-                                    as: "item"
-                         }
-                    },
-                    {
-                        $project : {
-                            '_id':1,
-                            'eventName': 1,
-                            'eventLocation':1,
-                            'eventLocationType':1,
-                            'eventHost':1,
-                            'startDate':1,
-                            'endDate':1,
-                            'startTime':1,
-                            'endTime':1,
-                            'userEmail':1,
-                            "eventid": "$item.eventId",
-                            "eventImage":1,
-                            "count": { $size:"$item.eventId"},
-                             month: { $month: "$startDate" }
-
-
-                        }
-                    },
-
-                    {
-                        $match:{'eventLocationType': 'public', month : eventmonth }
+                  {
+                    $project : {
+                        '_id': 0,
+                        'eventName': 1,
+                        'eventLocation':1,
+                        'eventLocationType':1,
+                        'eventHost':1,
+                        'startDate':1,
+                        'endDate':1,
+                        'startTime':1,
+                        'endTime':1,
+                        'userEmail':1,
+                        "eventid": "$item.eventId",
+                        "eventImage":1,
+                         month: { $month: "$startDate" }
                     }
-
+                  },
+                  {
+                      $match : {'eventLocationType': 'public', month : eventmonth }
+                  }
                 ]
                 ,function (err, eventsList) {
                 if(err){
                        res.json({
                         success: true,
-                        data:null,
+                        data:{events:null},
                         message: "error",
                         code: 400
                      });
-                }
-                else{
-
+                }else{
                     res.json({
                     success: true,
                     data: {
@@ -1382,68 +1340,29 @@ router.get('/draw-events-map/:eventmonth', function (req, res) {
 
     }else{
 
-            /*Events.find({'eventLocationType':'public'}, function (err, eventsList) {
-            if (err) {
-
-                res.json({
-                    success: true,
-                    data:null,
-                    message: "error",
-                    code: 400
-                });
-            }
-            else{
-                res.json({
-                    success: true,
-                    data: {
-                        events : eventsList
-                    },
-                    message: "success",
-                    code: 200
-                });
-            }
-
-            });*/
-
-
             Events.aggregate(
-                [
-                    {
-                        $match:{'eventLocationType': 'public' }
-                    },
-
-                    {
-                        $lookup:
-                                {
-                                    from: "joinevents",
-                                    localField: "_id",
-                                    foreignField: "eventId",
-                                    as: "item"
-                         }
-                    },
-                    {
-                        $project : {
-                            '_id':1,
-                            'eventName': 1,
-                            'eventLocation':1,
-                            'eventLocationType':1,
-                            'eventHost':1,
-                            'startDate':1,
-                            'endDate':1,
-                            'startTime':1,
-                            'endTime':1,
-                            'userEmail':1,
-                            "eventid": "$item.eventId",
-                            "eventImage":1,
-                            "count": { $size:"$item.eventId"},
-
-
-                        }
-                    },
-
-
-
-                ]
+            [
+              {
+                $project : {
+                    '_id': 0,
+                    'eventName': 1,
+                    'eventLocation':1,
+                    'eventLocationType':1,
+                    'eventHost':1,
+                    'startDate':1,
+                    'endDate':1,
+                    'startTime':1,
+                    'endTime':1,
+                    'userEmail':1,
+                    "eventid": "$item.eventId",
+                    "eventImage":1,
+                     month: { $month: "$startDate" }
+                }
+              },
+              {
+                  $match : {'eventLocationType': 'public' }
+              }
+            ]
                 ,function (err, eventsList) {
                 if(err){
                        res.json({
@@ -1669,8 +1588,10 @@ router.post('/get-friendrequests-list',middleware.isLoggedIn, function(req, res)
                      "FirstName": "$item.local.firstName",
                      "LastName": "$item.local.lastName",
                      "profileImage": "$item.local.profileImage",
+                     "AddressCountry": "$item.local.locationCountry",
+                     "AddressState": "$item.local.locationState",
+                     "AddressCity": "$item.local.locationCity",
                      "friendRequestSentBy": 1,
-
                 }
             }
         ]
@@ -1734,86 +1655,39 @@ router.get('/friendrequestaction',middleware.isLoggedIn, function(req, res){
 */
 router.post('/get-friends-list',middleware.isLoggedIn, function(req, res){
 
-      /*Friends.aggregate(
-        [
-            {
-                   $match:{$and : [{ $or : [ { 'friendRequestSentTo' : req.user.local.email }, { 'friendRequestSentBy' : req.user.local.email} ] },{ $or : [ { 'friendRequestApprovalStatus' : 'accept'}]}]}
-            },
-
-            {
-                        $lookup:
-                                {
-                                    from: "users",
-                                    localField: "friendRequestSentBy",
-                                    foreignField: "local.email",
-                                    as: "item"
-                        }
-            },
-
-            { "$unwind": "$item" },
-
-            {
-                        $project:
-                                {
-                                     "FirstName": "$item.local.firstName",
-                                     "LastName": "$item.local.lastName",
-                                     "profileImage": "$item.local.profileImage",
-                                     "friendRequestSentTo": 1,
-                                     "friendRequestSentBy": 1,
-
-                                }
-            }
-
-        ]
-        ,function (err, friendsdata) {
-            console.log(friendsdata);
-        if(!err){
-            res.json(friendsdata);
-        }else{
-            res.json({});
-        }
-    });*/
-
-
     Friends.aggregate(
         [
             {
-                   $match:{$and : [{ $or : [ { 'friendRequestSentTo' : req.user.local.email }, { 'friendRequestSentBy' : req.user.local.email} ] },{ $or : [ { 'friendRequestApprovalStatus' : 'accept'}]}]}
-            },
-
-            {
-                        $lookup:
-                                {
-                                    from: "users",
-                                    localField: "friendRequestSentTo",
-                                    foreignField: "local.email",
-                                    as: "item1"
-                        }
+               $match:{$and : [{ $or : [ { 'friendRequestSentTo' : req.user.local.email }, { 'friendRequestSentBy' : req.user.local.email} ] },{ $or : [ { 'friendRequestApprovalStatus' : 'accept'}]}]}
             },
             {
-                        $lookup:
-                                {
-                                    from: "users",
-                                    localField: "friendRequestSentBy",
-                                    foreignField: "local.email",
-                                    as: "item2"
-                        }
+                $lookup: {
+                    from: "users",
+                    localField: "friendRequestSentTo",
+                    foreignField: "local.email",
+                    as: "item1"
+                }
             },
-
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "friendRequestSentBy",
+                    foreignField: "local.email",
+                    as: "item2"
+                }
+            },
             { "$unwind": "$item1" },
             { "$unwind": "$item2" },
-
             {
-                        $project:
-                                {
-                                     "FirstName":  { $cond: [  { $eq : [ req.user.local.email, "$friendRequestSentTo" ] }, "$item2.local.firstName", "$item1.local.firstName" ]},
-                                     "LastName": { $cond: [ { $eq : [ req.user.local.email, "$friendRequestSentTo" ] }, "$item2.local.lastName", "$item1.local.lastName" ]},
-                                     "profileImage": { $cond: [ { $eq : [ req.user.local.email, "$friendRequestSentTo" ] }, "$item2.local.profileImage", "$item1.local.profileImage" ]},
-                                     "friendRequestSentTo": 1,
-                                     "friendRequestSentBy": 1,
-                                }
+                $project: {
+                     "FirstName":  { $cond: [  { $eq : [ req.user.local.email, "$friendRequestSentTo" ] }, "$item2.local.firstName", "$item1.local.firstName" ]},
+                     "LastName": { $cond: [ { $eq : [ req.user.local.email, "$friendRequestSentTo" ] }, "$item2.local.lastName", "$item1.local.lastName" ]},
+                     "profileImage": { $cond: [ { $eq : [ req.user.local.email, "$friendRequestSentTo" ] }, "$item2.local.profileImage", "$item1.local.profileImage" ]},
+                     "addressCountry": req.user.local.email,
+                     "friendRequestSentTo": 1,
+                     "friendRequestSentBy": 1,
+                }
             }
-
         ]
         ,function (err, friendsdata) {
         if(!err){

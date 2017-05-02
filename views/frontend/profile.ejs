@@ -128,7 +128,6 @@
                <!-- end:timeline -->
             </div>
             <div class="col-lg-4">
-               <!-- start:user info -->
                <div class="panel panel-default">
                   <div class="panel-heading">
                      <header class="panel-title">
@@ -141,57 +140,57 @@
                      <div class="text-center" id="author">
                         <img src="<%= imagepath %>">
                         <h3><%= user.local.firstName+' '+user.local.lastName %></h3>
-                        <small class="label label-warning"><%= user.local.locationCity %>,&nbsp;<%= user.local.locationState %>,&nbsp;<%= user.local.locationCountry %></small>
-                        <p><%= user.userBio %></p>
-                        <p data-ng-init="countFriendsFollowers('<%= user.local.email %>','friends')"><span>{{totalFriends}}</span></p>
-                        <p data-ng-init="countFriendsFollowers('<%= user.local.email %>','followers')">Followed by <span>{{totalFollowers}}</span> people</p>
-
+                        <p> <span class="date-joined">Member Since <%= moment(user.accountCreationDate).format("MMM Do, YYYY") %></span></p>
+                        <p> <span class="user-gender-age"><%= user.local.gender %> / <%= moment( moment("1990/08/16").format("MM/DD/YYYY"), "MM/DD/YYYY").month(0).from(moment().month(0)) %> </span></p> 
+                        <p> <small class="label label-warning"><i class="fa fa-map-marker" aria-hidden="true"></i> <%= user.local.locationCity %>,&nbsp;<%= user.local.locationState %>,&nbsp;<%= user.local.locationCountry %></small></p>
+                        <p><span data-ng-init="countFriendsFollowers('<%= user.local.email %>','friends')"><i class="fa fa-users" aria-hidden="true"></i> {{totalFriends}}</span> &nbsp;&nbsp;<span data-ng-init="countFriendsFollowers('<%= user.local.email %>','followers')"><i class="fa fa-users" aria-hidden="true"></i> {{totalFollowers}}</span></p>
+                        <% if(user.userBio != undefined && user.userBio != ""){ %>
+                          <p class="info-block__headline"><i class="fa fa-quote-left"></i> <%= user.userBio %> <i class="fa fa-quote-right"></i></p>
+                        <% } %>
                         <p class="sosmed-author">
-                           <% if(user.facebookURL) { %><a href="#"><i class="fa fa-facebook" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook"></i></a><% } %>
-                           <% if(user.twitterURL) { %><a href="#"><i class="fa fa-twitter" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"></i></a><% } %>
-                           <!--<a href="#"><i class="fa fa-google-plus" data-toggle="tooltip" data-placement="top" title="" data-original-title="Google Plus"></i></a>-->
-                           <!--<a href="#"><i class="fa fa-snapchat" data-toggle="tooltip" data-placement="top" title="" data-original-title="Linkedin"></i></a>-->
+                           <% if(user.facebookURL) { %><a href="<%= user.facebookURL %>" target="_blank"><i class="fa fa-facebook" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook"></i></a><% } %>
+                           <% if(user.twitterURL) { %><a href="<%= user.facebookURL %>" target="_blank"><i class="fa fa-twitter" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"></i></a><% } %>
+                           <% if(user.youtubeURL) { %><a href="<%= user.youtubeURL %>" target="_blank"><i class="fa fa-youtube" data-toggle="tooltip" data-placement="top" title="" data-original-title="Youtube"></i></a><% } %>
+                           <% if(user.instagramURL) { %><a href="<%= user.instagramURL %>" target="_blank"><i class="fa fa-instagram" data-toggle="tooltip" data-placement="top" title="" data-original-title="Instagram"></i></a><% } %>
+                           <% if(user.skypeUsername) { %><a href="<%= user.skypeUsername %>" target="_blank"><i class="fa fa-skype" data-toggle="tooltip" data-placement="top" title="" data-original-title="Skype"></i></a><% } %>
+                           <% if(user.websiteURL) { %><a href="<%= user.websiteURL %>" target="_blank"><i class="fa fa-wpexplorer" data-toggle="tooltip" data-placement="top" title="" data-original-title="Website"></i></a><% } %>
                         </p>
                      </div>
                   </div>
                </div>
-               <!-- end:user info -->
-               <!-- start:user info table -->
-<!--               <section class="panel">
+              <section class="panel">
                   <table class="table table-hover personal-task">
                      <tbody>
+                       <% if(user.rideCategory) { %>
                         <tr>
                            <td>
-                              <i class=" fa fa-tasks" data-original-title="" title=""></i>
+                              <i class="fa fa-tag" aria-hidden="true"></i>
                            </td>
-                           <td>New Task Issued</td>
-                           <td> 02</td>
+                           <td>Ride Category</td>
+                           <td><%= user.rideCategory %></td>
                         </tr>
+                        <% } %>
+                        <% if(user.rideType) { %>
                         <tr>
                            <td>
-                              <i class="fa fa-exclamation-triangle" data-original-title="" title=""></i>
+                              <i class="fa fa-tasks"></i>
                            </td>
-                           <td>Task Pending</td>
-                           <td> 14</td>
+                           <td>Ride Type</td>
+                           <td><%= user.rideType %></td>
                         </tr>
+                        <% } %>
+                        <% if(user.rideExperience) { %>
                         <tr>
                            <td>
-                              <i class="fa fa-envelope" data-original-title="" title=""></i>
+                              <i class="fa fa-envelope"></i>
                            </td>
-                           <td>Inbox</td>
-                           <td> 45</td>
+                           <td>Ride Experience</td>
+                           <td><%= user.rideExperience %></td>
                         </tr>
-                        <tr>
-                           <td>
-                              <i class=" fa fa-bell-o" data-original-title="" title=""></i>
-                           </td>
-                           <td>New Notification</td>
-                           <td> 09</td>
-                        </tr>
+                        <% } %>
                      </tbody>
                   </table>
-               </section>-->
-               <!-- end:user info table -->
+               </section>
             </div>
          </div>
       </div>
