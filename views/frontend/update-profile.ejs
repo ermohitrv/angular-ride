@@ -16,12 +16,22 @@
             <li class="active">Update Profile</li>
          </ol>
          <!-- end:breadcrumb -->
-         <div class="row" id="home-content">
-                  <!-- <div class="title">
-                      <h1 style="color:#3c3c3c">Update Profile</h1>
-                      <hr style="">
-                  </div> -->
-                  <!-- left column -->
+         <div id="exTab2">
+        		<ul class="nav nav-tabs">
+        			<li class="active"><a  href="#1" data-toggle="tab">Personal Information</a></li>
+              <li><a href="#4" data-toggle="tab">Rider Options</a></li>
+              <li><a href="#2" data-toggle="tab">Password</a></li>
+              <li><a href="#3" data-toggle="tab">Account</a></li>
+        		</ul>
+        		<div class="tab-content ">
+              <% if (message.length > 0) { %>
+                  <div class="alert alert-danger"><%= message %></div>
+              <% } %>
+              <% if (messageSuccess.length > 0) { %>
+                  <div class="alert alert-success"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a><%= messageSuccess %></div>
+              <% } %>
+                <!-- personal info tab -->
+        		  	<div class="tab-pane active" id="1">
                   <div class="col-md-3">
                     <div class="panel panel-default">
                       <div class="panel-heading">
@@ -41,16 +51,7 @@
                       </div>
                     </div>
                   </div>
-                  <!-- edit form column -->
                   <div class="col-md-9">
-                    <div class="panel data-panel">
-                      <div class="panel-body" style="border:0px;margin-left:0px;">
-                    <% if (message.length > 0) { %>
-                        <div class="alert alert-danger"><%= message %></div>
-                    <% } %>
-                    <% if (messageSuccess.length > 0) { %>
-                        <div class="alert alert-success"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a><%= messageSuccess %></div>
-                    <% } %>
                     <div class="panel panel-info">
                         <div class="panel-heading">
                             <h1 class="panel-title">
@@ -395,66 +396,119 @@
                                 </div>
                                 <div class="form-group">
                                   <div class="col-md-8">
-                                    <input type="submit" class="btn btn-primary" value="Update Changes">
+                                    <input type="submit" class="btn btn-primary" value="Update Personal Changes">
                                   </div>
                                 </div>
                             </form>
                         </div>
                     </div>
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            <h1 class="panel-title">
-                                <strong>Change Password</strong>
-                            </h1>
-                        </div>
-                        <div class="panel-body" style="border:0px;margin-left:0px;">
-                            <form class="form-horizontal" action="/change-password" method="post" name="change_password_form" id="change_password_form" >
-                                <div class="form-group">
-                                    <div class="col-md-4 col-xs-12">
-                                        <label>Old Password</label>
-                                        <input type="password" placeholder="Please enter old password" class="form-control" name="old_password" id="old_password">
-                                    </div>
+                  </div>
+        			</div>
+              <!-- password tab -->
+        			<div class="tab-pane" id="2">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h1 class="panel-title">
+                            <strong>Change Password</strong>
+                        </h1>
+                    </div>
+                    <div class="panel-body" style="border:0px;margin-left:0px;">
+                        <form class="form-horizontal" action="/change-password" method="post" name="change_password_form" id="change_password_form" >
+                            <div class="form-group">
+                                <div class="col-md-4 col-xs-12">
+                                    <label>Old Password</label>
+                                    <input type="password" placeholder="Please enter old password" class="form-control" name="old_password" id="old_password">
+                                </div>
 
-                                    <div class="col-md-4 col-xs-12">
-                                        <label>New Password</label>
-                                        <input type="password" placeholder="Please enter new password" class="form-control" id="new_password" name="new_password">
-                                    </div>
-                                    <div class="col-md-4 col-xs-12">
-                                        <label>Confirm Password</label>
-                                        <input type="password" placeholder="Please confirm new password" class="form-control" id="confirm_password" name="confirm_password">
-                                    </div>
+                                <div class="col-md-4 col-xs-12">
+                                    <label>New Password</label>
+                                    <input type="password" placeholder="Please enter new password" class="form-control" id="new_password" name="new_password">
                                 </div>
-                                <div class="form-group">
-                                  <div class="col-md-8">
-                                    <input type="hidden" name="username" value="<%= user.local.username  %>" />
-                                    <input type="submit" class="btn btn-primary" value="Change Password">
-                                  </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            <h1 class="panel-title">
-                                <strong>Activate/Deactivate Account</strong>
-                            </h1>
-                        </div>
-                        <div class="panel-body" style="border:0px;margin-left:0px;">
-                            <div class="row">
-                                <div class="col-md-2"><label class="left">Account</label></div>
-                                <div class="col-md-10">
-                                    <div id="enable_disable_account" class="checkbox enable_disable_account">
-                                        <label><input data-on="Enable" data-off="Disable" data-toggle="toggle" <% if(user.enableAccount === true) { %> checked <% } %>  type="checkbox"></label>
-                                    </div>
+                                <div class="col-md-4 col-xs-12">
+                                    <label>Confirm Password</label>
+                                    <input type="password" placeholder="Please confirm new password" class="form-control" id="confirm_password" name="confirm_password">
                                 </div>
                             </div>
-                        </div>
+                            <div class="form-group">
+                              <div class="col-md-8">
+                                <input type="hidden" name="username" value="<%= user.local.username  %>" />
+                                <input type="submit" class="btn btn-primary" value="Change Password">
+                              </div>
+                            </div>
+                        </form>
                     </div>
-               </div>
-            <hr>
-         </div>
-         </div>
-         </div>
+                </div>
+        			</div>
+              <!-- account tab -->
+          		<div class="tab-pane" id="3">
+                  <div class="panel panel-info">
+                      <div class="panel-heading">
+                          <h1 class="panel-title">
+                              <strong>Activate/Deactivate Account</strong>
+                          </h1>
+                      </div>
+                      <div class="panel-body" style="border:0px;margin-left:0px;">
+                          <div class="row">
+                              <div class="col-md-2"><label class="left">Account</label></div>
+                              <div class="col-md-10">
+                                  <div id="enable_disable_account" class="checkbox enable_disable_account">
+                                      <label><input data-on="Enable" data-off="Disable" data-toggle="toggle" <% if(user.enableAccount === true) { %> checked <% } %>  type="checkbox"></label>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+        			</div>
+              <!-- account tab -->
+              <!-- rider options tab -->
+              <div class="tab-pane" id="4">
+                  <div class="panel panel-info">
+                      <div class="panel-heading">
+                          <h1 class="panel-title">
+                              <strong>Rider Options</strong>
+                          </h1>
+                      </div>
+                      <div class="panel-body" style="border:0px;margin-left:0px;">
+                          <div class="form-group">
+                              <div class="col-md-4 col-xs-12">
+                                  <label>Ride Type</label>
+                                  <select class="form-control" name="gender">
+                                      <option value="">Select</option>
+                                      <option <% if( user.local.gender == "MALE" ){ %> selected <% } %> value="MALE">Male</option>
+                                      <option <% if( user.local.gender == "FEMALE" ){ %> selected <% } %> value="FEMALE">Female</option>
+                                      <option <% if( user.local.gender == "OTHER" ){ %> selected <% } %> value="OTHER">Other</option>
+                                  </select>
+                              </div>
+                              <div class="col-md-4 col-xs-12">
+                                  <label>Ride Experience</label>
+                                  <select class="form-control" name="gender">
+                                      <option value="">Select</option>
+                                      <option <% if( user.local.gender == "MALE" ){ %> selected <% } %> value="MALE">Male</option>
+                                      <option <% if( user.local.gender == "FEMALE" ){ %> selected <% } %> value="FEMALE">Female</option>
+                                  </select>
+                              </div>
+                              <div class="col-md-4 col-xs-12">
+                                  <label>Ride Type</label>
+                                  <select class="form-control" name="gender">
+                                      <option value="">Select</option>
+                                      <option <% if( user.local.gender == "MALE" ){ %> selected <% } %> value="MALE">Male</option>
+                                      <option <% if( user.local.gender == "FEMALE" ){ %> selected <% } %> value="FEMALE">Female</option>
+                                      <option <% if( user.local.gender == "OTHER" ){ %> selected <% } %> value="OTHER">Other</option>
+                                  </select>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <div class="col-md-8">
+                                <br><input type="submit" class="btn btn-primary" value="Update Rider Changes">
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+                  </div>
+        			</div>
+              <!-- rider options tab -->
+        		</div>
+      	 </div>
       </div>
     </div>
 </section>

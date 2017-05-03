@@ -5,7 +5,7 @@ var router    = express.Router();
 
 var bodyParser  = require('body-parser');
 var csrf        = require('csurf');
-// setup route middlewares 
+// setup route middlewares
 var csrfProtection  = csrf({ cookie: true })
 var parseForm       = bodyParser.urlencoded({ extended: true })
 var middleware      = require('./middleware');
@@ -63,10 +63,10 @@ router.get('/list-users', middleware.isAdminLoggedIn, function(req, res){
 
 /* Route for List Products */
 router.get('/list-products', middleware.isAdminLoggedIn, function(req, res){
-    res.render('list-products', { 
+    res.render('list-products', {
         message : req.flash('message'),
         message_type : req.flash('message_type'),
-        user : req.user, 
+        user : req.user,
         title:'Admin | List Products',
         active:'list-products'
     });
@@ -74,10 +74,10 @@ router.get('/list-products', middleware.isAdminLoggedIn, function(req, res){
 
 /* Route for List Brands */
 router.get('/list-brands', middleware.isAdminLoggedIn, function(req, res){
-    res.render('list-brands', { 
+    res.render('list-brands', {
         message : req.flash('message'),
         message_type : req.flash('message_type'),
-        user : req.user, 
+        user : req.user,
         title:'Admin | List Brands',
         active:'list-brands'
     });
@@ -86,8 +86,8 @@ router.get('/list-brands', middleware.isAdminLoggedIn, function(req, res){
 /* Route for viewing user details */
 router.get('/view-user/:id', middleware.isAdminLoggedIn, function(req, res){
     var userId = req.params.id;
-    res.render('view-user', { 
-        user : req.user, 
+    res.render('view-user', {
+        user : req.user,
         userId : userId,
         title:'Admin | View User',
         active:'view-user'
@@ -113,7 +113,7 @@ router.get('/list-suggestions', middleware.isAdminLoggedIn, function(req, res){
 // =========================================================================
 // ======================== ANGULAR RELATED ROUTES =========================
 // =========================================================================
-   
+
 /* Route for List Suggestions */
 router.get('/get-users-list', middleware.isAdminLoggedIn, function(req, res){
     User.aggregate([{$sort: {'local.username': 1}}], function (err, usersList) {
@@ -147,9 +147,9 @@ router.post('/view-user-detail', middleware.isAdminLoggedIn, function(req, res){
         Followers.count({'followedBy': req.user.local.username }, function(err, followedbycount){
         Followers.count({'followedTo': req.user.local.username }, function(err, followedtocount){
             if(user){
-                
+
                 res.render('widget/view-user-detail',{result: user,count:friendsdata,followedbycount:followedbycount,followedtocount:followedtocount});
-           
+
             }else{
                 res.send(err);
             }
@@ -228,7 +228,7 @@ router.post('/delete-user/', middleware.isAdminLoggedIn, function (req, res) {
                 } else {
                     res.send('error');
                 }
-            }); // end 
+            }); // end
         }
     });
 });
@@ -237,14 +237,14 @@ router.post('/delete-user/', middleware.isAdminLoggedIn, function (req, res) {
 // =========================================================================
 // ======================== SHOP ROUTES =========================
 // =========================================================================
-  
+
 // Admin section
 router.get('/orders', middleware.check_login, function(req, res, next) {
     // Top 10 products
     req.db.orders.find({}).limit(10).sort({"order_date": -1}).exec(function (err, orders) {
-        res.render('orders', { 
-            title: 'Cart', 
-            orders: orders, 
+        res.render('orders', {
+            title: 'Cart',
+            orders: orders,
             config: req.config.get('application'),
             session: req.session,
             message: middleware.clear_session_value(req.session, "message"),
@@ -259,10 +259,10 @@ router.get('/orders', middleware.check_login, function(req, res, next) {
 router.get('/order/view/:id', middleware.restrict, function(req, res) {
 
 	req.db.orders.findOne({_id: req.params.id}, function (err, result) {
-		res.render('order', { 
-			title: 'View order', 
-			"result": result,    
-            config: req.config.get('application'),      
+		res.render('order', {
+			title: 'View order',
+			"result": result,
+            config: req.config.get('application'),
 			session: req.session,
 			message: middleware.clear_session_value(req.session, "message"),
 			message_type: middleware.clear_session_value(req.session, "message_type"),
@@ -282,14 +282,14 @@ router.get('/orders/filter/:search', middleware.restrict, function(req, res, nex
 	orders_index.search(search_term).forEach(function(id) {
 		lunr_id_array.push(id.ref);
 	});
-	
+
 	// we search on the lunr indexes
 	req.db.orders.find({ _id: { $in: lunr_id_array}}, function (err, orders) {
-		res.render('orders', { 
-			title: 'Order results', 
-            orders: orders, 
+		res.render('orders', {
+			title: 'Order results',
+            orders: orders,
             config: req.config.get('application'),
-			session: req.session, 
+			session: req.session,
 			search_term: search_term,
 			message: middleware.clear_session_value(req.session, "message"),
 			message_type: middleware.clear_session_value(req.session, "message_type"),
@@ -304,13 +304,13 @@ router.get('/orders/filter/:search', middleware.restrict, function(req, res, nex
 router.get('/order/delete/:id', middleware.restrict, function(req, res) {
   	var db = req.db;
 	var orders_index = req.orders_index;
-	
+
 	// remove the article
 	db.orders.remove({_id: req.params.id}, {}, function (err, numRemoved) {
-		
+
 		// remove the index
 		orders_index.remove({id: req.params.id}, false);
-        
+
 		// redirect home
 		req.session.message = "Order successfully deleted";
 		req.session.message_type = "success";
@@ -322,7 +322,7 @@ router.get('/order/delete/:id', middleware.restrict, function(req, res) {
 router.post('/order/statusupdate', middleware.restrict, function(req, res) {
     var orderId = req.body.orderId;
     console.log("orderId : "+orderId);
-    
+
     Orders.findOne({_id: orderId},  function (err, order) {
     Orders.update({_id: orderId},{$set: {order_status: req.body.frm_orderstatus} }, { multi: false }, function (err, orderInfo) {
         if(err){
@@ -345,16 +345,16 @@ router.post('/order/statusupdate', middleware.restrict, function(req, res) {
             var html = 'Hello '+firstName+',<br><br/><b>Your order with id "'+orderId+'" has been '+orderstatus+'.</b><br><br>';
                                     html += '<br>Thank you, Team Motorcycle';
             var emailBody = EmailTemplate.emailMessage(html);
-            
+
             var mailOptions = {
-                                    from   : "Motorcycle <no-reply@motorcycle.com>", 
+                                    from   : "Motorcycle <no-reply@motorcycle.com>",
                                     to     :  email,
                                     subject: "Order Status",
                                     html   : emailBody
             };
-                        
+
             nodemailer.mail(mailOptions);
-            
+
             req.flash('message', 'Status Successfully Updated!');
             req.flash('message_type','success');
             res.redirect('/admin/list-orders');
@@ -367,12 +367,12 @@ router.post('/order/statusupdate', middleware.restrict, function(req, res) {
 router.post('/product/addtocart', function(req, res, next) {
     var _ = require('underscore');
     var product_quantity = req.body.product_quantity ? parseInt(req.body.product_quantity): 1;
-    
+
     // setup cart object if it doesn't exist
     if(!req.session.cart){
         req.session.cart = {};
     }
-    
+
 	req.db.products.findOne({_id: req.body.product_id}).exec(function (err, product) {
         if(product){
             var product_price = parseFloat(product.product_price).toFixed(2);
@@ -383,7 +383,7 @@ router.post('/product/addtocart', function(req, res, next) {
             }else{
                 // Doesnt exist so we add to the cart session
                 req.session.cart_total_items = req.session.cart_total_items + product_quantity;
-                
+
                 // new product deets
                 var product_obj = {};
                 product_obj.title = product.product_title;
@@ -394,18 +394,18 @@ router.post('/product/addtocart', function(req, res, next) {
                 }else{
                     product_obj.link = product._id;
                 }
-                
+
                 // new product id
                 var cart_obj = {};
                 cart_obj[product._id] = product_obj;
-                
+
                 // merge into the current cart
                 _.extend(req.session.cart, cart_obj);
             }
-            
+
             // update total cart amount
             middleware.update_total_cart_amount(req, res);
-            
+
             // update how many products in the shopping cart
             req.session.cart_total_items = Object.keys(req.session.cart).length;
             res.status(200).json({message: 'Cart successfully updated', "total_cart_items": Object.keys(req.session.cart).length});
@@ -416,15 +416,15 @@ router.post('/product/addtocart', function(req, res, next) {
 });
 
 // Updates a single product quantity
-router.post('/product/updatecart', function(req, res, next) {	
+router.post('/product/updatecart', function(req, res, next) {
     var product_quantity = req.body.product_quantity ? req.body.product_quantity: 1;
-    
+
     if(product_quantity == 0){
         // quantity equals zero so we remove the item
-        delete req.session.cart[req.body.product_id]; 
-        
+        delete req.session.cart[req.body.product_id];
+
         // update total cart amount
-        middleware.update_total_cart_amount(req, res);       
+        middleware.update_total_cart_amount(req, res);
         res.status(200).json({message: 'Cart successfully updated', "total_cart_items": Object.keys(req.session.cart).length});
     }else{
         req.db.products.findOne({_id: req.body.product_id}).exec(function (err, product) {
@@ -433,7 +433,7 @@ router.post('/product/updatecart', function(req, res, next) {
                 if(req.session.cart[req.body.product_id]){
                     req.session.cart[req.body.product_id]["quantity"] = product_quantity;
                     req.session.cart[req.body.product_id]["total_item_price"] = product_price * product_quantity;
-                    
+
                     // update total cart amount
                     middleware.update_total_cart_amount(req, res);
                     res.status(200).json({message: 'Cart successfully updated', "total_cart_items": Object.keys(req.session.cart).length});
@@ -448,19 +448,19 @@ router.post('/product/updatecart', function(req, res, next) {
 });
 
 // Remove single product from cart
-router.post('/product/removefromcart', function(req, res, next) {	
-    delete req.session.cart[req.body.product_id]; 
-    
+router.post('/product/removefromcart', function(req, res, next) {
+    delete req.session.cart[req.body.product_id];
+
     // update total cart amount
     middleware.update_total_cart_amount(req, res);
     res.status(200).json({message: 'Product successfully removed', "total_cart_items": 0});
 });
 
 // Totally empty the cart
-router.post('/product/emptycart', function(req, res, next) {	
+router.post('/product/emptycart', function(req, res, next) {
     delete req.session.cart;
     delete req.session.order_id;
-    
+
     // update total cart amount
     middleware.update_total_cart_amount(req, res);
     res.status(200).json({message: 'Cart successfully emptied', "total_cart_items": 0});
@@ -476,14 +476,14 @@ router.get('/products/filter/:search', middleware.restrict, function(req, res, n
 	products_index.search(search_term).forEach(function(id) {
 		lunr_id_array.push(id.ref);
 	});
-	
+
 	// we search on the lunr indexes
 	Products.find({ _id: { $in: lunr_id_array}}, function (err, results) {
-		res.render('products', { 
-			title: 'Results', 
-			"results": results, 
+		res.render('products', {
+			title: 'Results',
+			"results": results,
             config: req.config.get('application'),
-			session: req.session, 
+			session: req.session,
 			search_term: search_term,
 			message: middleware.clear_session_value(req.session, "message"),
 			message_type: middleware.clear_session_value(req.session, "message_type"),
@@ -495,14 +495,14 @@ router.get('/products/filter/:search', middleware.restrict, function(req, res, n
 
 // insert product form
 router.get('/product/new', middleware.restrict, function(req, res) {
-    
+
     //var catarray = [];
     Categories.find({ }, function (err, catresults) {
-    
-        Brands.find({ }, function (err, brandresults) {   
-    
+
+        Brands.find({ }, function (err, brandresults) {
+
             res.render('product_new', {
-                title: 'New product', 
+                title: 'New product',
                 session: req.session,
                 catresults:catresults,
                 brandresults:brandresults,
@@ -519,19 +519,19 @@ router.get('/product/new', middleware.restrict, function(req, res) {
         });
     });
 });
-router.post('/product/removefromcart', function(req, res, next) {	
-    delete req.session.cart[req.body.product_id]; 
-    
+router.post('/product/removefromcart', function(req, res, next) {
+    delete req.session.cart[req.body.product_id];
+
     // update total cart amount
     middleware.update_total_cart_amount(req, res);
     res.status(200).json({message: 'Product successfully removed', "total_cart_items": 0});
 });
 
 // Totally empty the cart
-router.post('/product/emptycart', function(req, res, next) {	
+router.post('/product/emptycart', function(req, res, next) {
     delete req.session.cart;
     delete req.session.order_id;
-    
+
     // update total cart amount
     middleware.update_total_cart_amount(req, res);
     res.status(200).json({message: 'Cart successfully emptied', "total_cart_items": 0});
@@ -547,14 +547,14 @@ router.get('/products/filter/:search', middleware.restrict, function(req, res, n
 	products_index.search(search_term).forEach(function(id) {
 		lunr_id_array.push(id.ref);
 	});
-	
+
 	// we search on the lunr indexes
 	Products.find({ _id: { $in: lunr_id_array}}, function (err, results) {
-		res.render('products', { 
-			title: 'Results', 
-			"results": results, 
+		res.render('products', {
+			title: 'Results',
+			"results": results,
             config: req.config.get('application'),
-			session: req.session, 
+			session: req.session,
 			search_term: search_term,
 			message: middleware.clear_session_value(req.session, "message"),
 			message_type: middleware.clear_session_value(req.session, "message_type"),
@@ -567,7 +567,7 @@ router.get('/products/filter/:search', middleware.restrict, function(req, res, n
 // insert product form
 //router.get('/product/new', middleware.restrict, function(req, res) {
 //    res.render('product_new', {
-//        title: 'New product', 
+//        title: 'New product',
 //        session: req.session,
 //        product_title: middleware.clear_session_value(req.session, "product_title"),
 //        product_description: middleware.clear_session_value(req.session, "product_description"),
@@ -606,8 +606,8 @@ router.post('/product/insert', cpUpload, middleware.restrict, function(req, res)
             // redirect to insert
             res.redirect('/admin/insert');
         }else{
-            
-            var product_category,product_brand,product_size = ""; 
+
+            var product_category,product_brand,product_size = "";
             for (var key in req.body) {
                 item = req.body[key];
                 if(key.indexOf('frm_product_category') != -1){
@@ -621,7 +621,7 @@ router.post('/product/insert', cpUpload, middleware.restrict, function(req, res)
                 }
             }
             console.log("sdsds : "+req.body.frm_product_featured);
-            var productPrice = parseFloat(Math.round(req.body.frm_product_price * 100) / 100).toFixed(2); 
+            var productPrice = parseFloat(Math.round(req.body.frm_product_price * 100) / 100).toFixed(2);
             var productObj = new Products();
             productObj.product_permalink    = req.body.frm_product_permalink;
             productObj.product_title        = req.body.frm_product_title;
@@ -638,9 +638,9 @@ router.post('/product/insert', cpUpload, middleware.restrict, function(req, res)
             productObj.product_size         = product_size;
             productObj.product_image        = productimages;
             productObj.product_weight       = req.body.frm_product_weight;
-            
+
             console.log('productObj: '+productObj);
-            
+
             productObj.save(function (err) {
                 if(err){
                     console.error("Error inserting document: " + err);
@@ -668,14 +668,14 @@ router.get('/product/edit/:id', middleware.restrict, function(req, res) {
         Products.findOne({_id: req.params.id}, function (err, result) {
             Categories.find({ }, function (err, catresults) {
 
-                Brands.find({ }, function (err, brandresults) {   
+                Brands.find({ }, function (err, brandresults) {
                     console.log(result);
-                    res.render('product_edit', { 
-                        title: 'Edit product', 
+                    res.render('product_edit', {
+                        title: 'Edit product',
                         "result": result,
                         "catresults":catresults,
                         "brandresults":brandresults,
-                       // images: images,          
+                       // images: images,
                         session: req.session,
                         message: middleware.clear_session_value(req.session, "message"),
                         message_type: middleware.clear_session_value(req.session, "message_type"),
@@ -693,20 +693,20 @@ router.get('/product/edit/:id', middleware.restrict, function(req, res) {
 //router.post('/product/update', middleware.restrict, function(req, res) {
 //  	var db = req.db;
 //	var products_index = req.products_index;
-// 
+//
 // 	Products.count({'product_permalink': req.body.frm_product_permalink, $not: { _id: req.body.frm_product_id }}, function (err, product) {
 //		if(product > 0 && req.body.frm_product_permalink != ""){
 //			// permalink exits
 //			req.session.message = "Permalink already exists. Pick a new one.";
 //			req.session.message_type = "danger";
-//			
+//
 //			// keep the current stuff
 //			req.session.product_title = req.body.frm_product_title;
 //			req.session.product_description = req.body.frm_product_description;
 //			req.session.product_price = req.body.frm_product_price;
 //			req.session.product_permalink = req.body.frm_product_permalink;
 //            req.session.product_featured = req.body.frm_product_featured;
-//				
+//
 //			// redirect to insert
 //			res.redirect('/edit/' + req.body.frm_product_id);
 //		}else{
@@ -720,7 +720,7 @@ router.get('/product/edit/:id', middleware.restrict, function(req, res) {
 //                    product_permalink: req.body.frm_product_permalink,
 //                    product_featured: req.body.frm_product_featured
 //                }
-//                
+//
 //                // if no featured image
 //                if(!product_doc.product_image){
 //                    if(images.length > 0){
@@ -729,7 +729,7 @@ router.get('/product/edit/:id', middleware.restrict, function(req, res) {
 //                        product_doc["product_image"] = "/uploads/placeholder.png";
 //                    }
 //                }
-//                
+//
 //                Products.update({_id: req.body.frm_product_id},{ $set: product_doc}, {},  function (err, numReplaced) {
 //                    if(err){
 //                        console.error("Failed to save product: " + err)
@@ -738,15 +738,15 @@ router.get('/product/edit/:id', middleware.restrict, function(req, res) {
 //                        res.redirect('/edit/' + req.body.frm_product_id);
 //                    }else{
 //                        // create lunr doc
-//                        var lunr_doc = { 
+//                        var lunr_doc = {
 //                            product_title: req.body.frm_product_title,
 //                            product_description: req.body.frm_product_description,
 //                            id: req.body.frm_product_id
 //                        };
-//                        
+//
 //                        // update the index
 //                        products_index.update(lunr_doc, false);
-//                        
+//
 //                        req.session.message = "Successfully saved";
 //                        req.session.message_type = "success";
 //                        res.redirect('/admin/product/edit/' + req.body.frm_product_id);
@@ -757,7 +757,7 @@ router.get('/product/edit/:id', middleware.restrict, function(req, res) {
 //	});
 //});
 /*
- * Update product 
+ * Update product
  */
 var cpUploadEditProduct = upload.fields([{name: 'product_edit_upload_file', maxCount: 10}]);
 router.post('/product/update',cpUploadEditProduct, middleware.restrict, function(req, res) {
@@ -774,8 +774,8 @@ router.post('/product/update',cpUploadEditProduct, middleware.restrict, function
         for(var i = 0; i < productimg.length; i++){
             productimages.push(productimg[i]);
         }
-        
-    var productPrice = parseFloat(Math.round(req.body.frm_product_edit_price * 100) / 100).toFixed(2); 
+
+    var productPrice = parseFloat(Math.round(req.body.frm_product_edit_price * 100) / 100).toFixed(2);
 
     var product_doc = {
                     product_title: req.body.frm_product_edit_title,
@@ -792,21 +792,21 @@ router.post('/product/update',cpUploadEditProduct, middleware.restrict, function
                     product_featured: req.body.frm_product_edit_featured,
                     product_image:productimages
     }
-   
+
     Products.update({_id: req.body.frm_product_edit_id},{ $set: product_doc}, {},  function (err, numReplaced) {
     if(err){
             console.error("Failed to save product: " + err)
             req.session.message = "Failed to save. Please try again";
             req.session.message_type = "danger";
             res.redirect('/admin/product/edit/' + req.body.frm_product_edit_id);
-    }else{                     
+    }else{
             req.flash('message', 'Product Updated Successfully!');
             req.flash('message_type','success');
-            res.redirect('/admin/list-products');            
+            res.redirect('/admin/list-products');
         }
     });
     });
-		
+
 });
 
 // delete product
@@ -814,25 +814,25 @@ router.get('/product/delete', middleware.restrict, function(req, res) {
       console.log("id: "+req.query.id);
       //res.send(true);
 	// remove the article
-	Products.remove({_id: req.query.id}, function (err, numRemoved) {      
+	Products.remove({_id: req.query.id}, function (err, numRemoved) {
             if(err){
                 req.flash('message', '');
                 req.flash('message_type','success');
-                res.redirect('/admin/list-products'); 
+                res.redirect('/admin/list-products');
             }else{
                 // remove the index
                 // redirect home
                 req.flash('message', 'Product Deleted Successfully!');
                 req.flash('message_type','success');
-                res.redirect('/admin/list-products'); 
-            }   
+                res.redirect('/admin/list-products');
+            }
         });
 });
 
 // insert brand form
 router.get('/brand/new', middleware.restrict, function(req, res) {
     res.render('brand_new', {
-        title: 'New brand', 
+        title: 'New brand',
         session: req.session,
         brand_title: middleware.clear_session_value(req.session, "brand_title"),
         brand_description: middleware.clear_session_value(req.session, "brand_description"),
@@ -855,7 +855,7 @@ router.post('/brand/insert',cpUploadinsertbrand, middleware.restrict, function(r
         console.log(imagearray[0].filename);
         imagename = imagearray[0].filename;
     }
-    
+
     Brands.count({'brand_permalink': req.body.frm_brand_permalink}, function (err, brand) {
         if(brand > 0 && req.body.frm_brand_permalink != ""){
             req.flash('message', globalConfig.brandExists);
@@ -868,7 +868,7 @@ router.post('/brand/insert',cpUploadinsertbrand, middleware.restrict, function(r
             brandObj.brand_image        = imagename;
             brandObj.brand_description  = req.body.frm_brand_description;
             brandObj.brand_added_date   = new Date();
-            
+
             console.log('brandObj: '+brandObj);
             brandObj.save(function (err) {
                 if(err){
@@ -889,7 +889,7 @@ router.post('/brand/insert',cpUploadinsertbrand, middleware.restrict, function(r
 // users
 router.get('/users', middleware.restrict, function(req, res) {
 	req.db.users.find({}, function (err, users) {
-		res.render('users', { 
+		res.render('users', {
 		  	title: 'Users',
 			users: users,
 			config: req.config.get('application'),
@@ -905,7 +905,7 @@ router.get('/users', middleware.restrict, function(req, res) {
 // edit user
 router.get('/user/edit/:id', middleware.restrict, function(req, res) {
 	req.db.users.findOne({_id: req.params.id}, function (err, user) {
-      
+
         // if the user we want to edit is not the current logged in user and the current user is not
         // an admin we render an access denied message
         if(user.user_email != req.session.user && req.session.is_admin == "false"){
@@ -914,8 +914,8 @@ router.get('/user/edit/:id', middleware.restrict, function(req, res) {
             res.redirect('/Users/');
             return;
         }
-        
-		res.render('user_edit', { 
+
+		res.render('user_edit', {
 		  	title: 'User edit',
 			user: user,
 			session: req.session,
@@ -931,9 +931,9 @@ router.get('/user/edit/:id', middleware.restrict, function(req, res) {
 router.post('/user/update', middleware.restrict, function(req, res) {
   	var db = req.db;
 	var bcrypt = req.bcrypt;
-    
+
     var is_admin = req.body.user_admin == 'on' ? "true" : "false";
-    
+
     // get the user we want to update
     req.db.users.findOne({_id: req.body.user_id}, function (err, user) {
         // if the user we want to edit is not the current logged in user and the current user is not
@@ -944,7 +944,7 @@ router.post('/user/update', middleware.restrict, function(req, res) {
             res.redirect('/admin/users/');
             return;
         }
-        
+
         // create the update doc
         var update_doc = {};
         update_doc.is_admin = is_admin;
@@ -952,10 +952,10 @@ router.post('/user/update', middleware.restrict, function(req, res) {
         if(req.body.user_password){
             update_doc.user_password = bcrypt.hashSync(req.body.user_password);
         }
-        
-        db.users.update({ _id: req.body.user_id }, 
-            { 
-                $set:  update_doc 
+
+        db.users.update({ _id: req.body.user_id },
+            {
+                $set:  update_doc
             }, { multi: false }, function (err, numReplaced) {
             if(err){
                 console.error("Failed updating user: " + err);
@@ -976,7 +976,7 @@ router.post('/user/update', middleware.restrict, function(req, res) {
 router.post('/user/insert', middleware.restrict, function(req, res) {
 	var bcrypt = req.bcrypt;
 	var url = require('url');
-	
+
 	// set the account to admin if using the setup form. Eg: First user account
 	var url_parts = url.parse(req.header('Referer'));
 
@@ -984,18 +984,18 @@ router.post('/user/insert', middleware.restrict, function(req, res) {
 	if(url_parts.path == "/setup"){
 		is_admin = "true";
 	}
-	
-	var doc = { 
+
+	var doc = {
         users_name: req.body.users_name,
         user_email: req.body.user_email,
 		user_password: bcrypt.hashSync(req.body.user_password),
 		is_admin: is_admin
 	};
-	
+
     // check for existing user
     req.db.users.findOne({'user_email': req.body.user_email}, function (err, user) {
         if(user){
-            // user already exists with that email address    
+            // user already exists with that email address
             console.error("Failed to insert user, possibly already exists: " + err);
             req.session.message = "A user with that email address already exists";
             req.session.message_type = "danger";
@@ -1013,7 +1013,7 @@ router.post('/user/insert', middleware.restrict, function(req, res) {
                 }else{
                     req.session.message = "User account inserted";
                     req.session.message_type = "success";
-                    
+
                     // if from setup we add user to session and redirect to login.
                     // Otherwise we show users screen
                     if(url_parts.path == "/setup"){
@@ -1033,7 +1033,7 @@ router.post('/user/insert', middleware.restrict, function(req, res) {
 // users
 router.get('/user/new', middleware.restrict, function(req, res) {
     req.db.users.findOne({_id: req.params.id}, function (err, user) {
-		res.render('user_new', { 
+		res.render('user_new', {
 		  	title: 'User - New',
 			user: user,
 			session: req.session,
@@ -1050,7 +1050,7 @@ router.get('/user/delete/:id', middleware.restrict, function(req, res) {
 
 	// remove the article
 	if(req.session.is_admin == "true"){
-		req.db.users.remove({_id: req.params.id}, {}, function (err, numRemoved) {			
+		req.db.users.remove({_id: req.params.id}, {}, function (err, numRemoved) {
 			req.session.message = "User deleted.";
 			req.session.message_type = "success";
 			res.redirect("/admin/users");
@@ -1075,10 +1075,10 @@ router.post('/api/validate_permalink', function(req, res){
 
 	Products.count(query, function (err, products) {
 		if(products > 0){
-			res.writeHead(400, { 'Content-Type': 'application/text' }); 
+			res.writeHead(400, { 'Content-Type': 'application/text' });
 			res.end('Permalink already exists');
 		}else{
-			res.writeHead(200, { 'Content-Type': 'application/text' }); 
+			res.writeHead(200, { 'Content-Type': 'application/text' });
 			res.end('Permalink validated successfully');
 		}
 	});
@@ -1089,20 +1089,20 @@ router.post('/product/published_state', middleware.restrict, function(req, res) 
 	Products.update({ _id: req.body.id}, { $set: { product_published: req.body.state} }, { multi: false }, function (err, numReplaced) {
 		if(err){
 			console.error("Failed to update the published state: " + err);
-			res.writeHead(400, { 'Content-Type': 'application/text' }); 
+			res.writeHead(400, { 'Content-Type': 'application/text' });
 			res.end('Published state not updated');
 		}else{
-			res.writeHead(200, { 'Content-Type': 'application/text' }); 
+			res.writeHead(200, { 'Content-Type': 'application/text' });
 			res.end('Published state updated');
 		}
 	});
-});	
+});
 
 // set as main product image
 router.post('/product/setasmainimage', middleware.restrict, function(req, res) {
     var fs = require('fs');
     var path = require('path');
-    
+
     // update the product_image to the db
     Products.update({ _id: req.body.product_id}, { $set: { product_image: req.body.product_image} }, { multi: false }, function (err, numReplaced) {
         if(err){
@@ -1118,7 +1118,7 @@ router.post('/product/setasmainimage', middleware.restrict, function(req, res) {
 router.post('/product/deleteimage', middleware.restrict, function(req, res) {
     var fs = require('fs');
     var path = require('path');
-    
+
     // get the product_image from the db
     Products.findOne({_id: req.body.product_id}, function (err, product) {
         if(req.body.product_image == product.product_image){
@@ -1152,14 +1152,14 @@ var upload = multer({ dest: 'public/uploads/' });
 router.post('/file/upload', middleware.restrict, upload.single('upload_file'), function (req, res, next) {
 	var fs = require('fs');
     var path = require('path');
-	
+
 	if(req.file){
 		// check for upload select
 		var upload_dir = path.join("public/uploads", req.body.directory);
-		
+
         // Check directory and create (if needed)
         middleware.check_directory_sync(upload_dir);
-		
+
 		var file = req.file;
 		var source = fs.createReadStream(file.path);
 		var dest = fs.createWriteStream(path.join(upload_dir, file.originalname.replace(/ /g,"_")));
@@ -1170,11 +1170,11 @@ router.post('/file/upload', middleware.restrict, upload.single('upload_file'), f
 
 		// delete the temp file.
 		fs.unlink(file.path, function (err) {});
-	
+
         // get the product form the DB
         Products.findOne({_id: req.body.directory}, function (err, product) {
             var image_path = path.join("/uploads", req.body.directory, file.originalname.replace(/ /g,"_"));
-            
+
             // if there isn't a product featured image, set this one
             if(!product.product_image){
                 Products.update({_id: req.body.directory},{$set: {product_image: image_path}}, { multi: false }, function (err, numReplaced) {
@@ -1198,18 +1198,18 @@ router.post('/file/upload', middleware.restrict, upload.single('upload_file'), f
 // delete a file via ajax request
 router.post('/file/delete', middleware.restrict, function(req, res) {
 	var fs = require('fs');
-	
+
 	req.session.message = null;
 	req.session.message_type = null;
 
 	fs.unlink("public/" + req.body.img, function (err) {
 		if(err){
 			console.error("File delete error: "+ err);
-			res.writeHead(400, { 'Content-Type': 'application/text' }); 
+			res.writeHead(400, { 'Content-Type': 'application/text' });
             res.end('Failed to delete file: ' + err);
 		}else{
-			
-			res.writeHead(200, { 'Content-Type': 'application/text' }); 
+
+			res.writeHead(200, { 'Content-Type': 'application/text' });
             res.end('File deleted successfully');
 		}
 	});
@@ -1218,20 +1218,20 @@ router.post('/file/delete', middleware.restrict, function(req, res) {
 router.get('/files', middleware.restrict, function(req, res) {
 	var glob = require("glob");
 	var fs = require("fs");
-	
+
 	// loop files in /public/uploads/
 	glob("public/uploads/**", {nosort: true}, function (er, files) {
-		
+
 		// sort array
 		files.sort();
-		
+
 		// declare the array of objects
 		var file_list = new Array();
 		var dir_list = new Array();
-		
+
 		// loop these files
 		for (var i = 0; i < files.length; i++) {
-			
+
 			// only want files
 			if(fs.lstatSync(files[i]).isDirectory() == false){
 				// declare the file object and set its values
@@ -1239,7 +1239,7 @@ router.get('/files', middleware.restrict, function(req, res) {
 					id: i,
 					path: files[i].substring(6)
 				};
-				
+
 				// push the file object into the array
 				file_list.push(file);
 			}else{
@@ -1247,15 +1247,15 @@ router.get('/files', middleware.restrict, function(req, res) {
 					id: i,
 					path: files[i].substring(6)
 				};
-				
+
 				// push the dir object into the array
 				dir_list.push(dir);
 			}
 		}
-		
+
 		// render the files route
 		res.render('files', {
-			title: 'Files', 
+			title: 'Files',
 			files: file_list,
 			dirs: dir_list,
 			session: req.session,
@@ -1269,7 +1269,7 @@ router.get('/files', middleware.restrict, function(req, res) {
 /* category form */
 router.get('/category/new', middleware.restrict, function(req, res) {
     res.render('category_new', {
-        title: 'New category', 
+        title: 'New category',
         session: req.session,
         message: middleware.clear_session_value(req.session, "message"),
         message_type: middleware.clear_session_value(req.session, "message_type"),
@@ -1290,15 +1290,15 @@ router.post('/category/insert',  middleware.restrict, function(req, res) {
             // redirect to insert
             res.redirect('/admin/insert');
         }else{
-            
-            
-            
+
+
+
            var categoryObj = new Categories();
             categoryObj.category_title        = req.body.frm_category_title;
             categoryObj.category_description  = req.body.frm_category_description;
             categoryObj.category_short_description = req.body.frm_category_short_description;
             categoryObj.category_added_date   = new Date();
-           
+
             categoryObj.save(function (err) {
                 if(err){
                     console.error("Error inserting document: " + err);
@@ -1335,14 +1335,14 @@ router.get('/get-categories-list', middleware.restrict, function(req, res){
                                     'category_short_description':1,
                                     'category_description':1,
                                     'category_added_date': 1,
-                                    "count": { $size:"$item.product_category"}, 
-                                } 
+                                    "count": { $size:"$item.product_category"},
+                                }
                             },
                             {
                                 $sort: {'category_added_date': 1}
                             }
                         ], function (err, categoryList) {
-                            
+
                         if(categoryList){
                             console.log(categoryList);
                             res.json(categoryList);
@@ -1353,10 +1353,10 @@ router.get('/get-categories-list', middleware.restrict, function(req, res){
 });
 
 router.get('/list-categories', middleware.restrict, function(req, res){
-    res.render('list-categories', { 
+    res.render('list-categories', {
         message : req.flash('message'),
         message_type : req.flash('message_type'),
-        user : req.user, 
+        user : req.user,
         title:'Admin | List Categories',
         active:'list-category'
     });
@@ -1366,10 +1366,10 @@ router.get('/list-categories', middleware.restrict, function(req, res){
 
 /* Points management*/
 router.get('/list-rproutespoints', middleware.restrict, function(req, res){
-    res.render('list-rproutespoints', { 
+    res.render('list-rproutespoints', {
         message : req.flash('message'),
         message_type : req.flash('message_type'),
-        user : req.user, 
+        user : req.user,
         title:'Admin | List Rproutes Points',
         active:'list-rproutepoint'
     });
@@ -1387,7 +1387,7 @@ router.get('/get-points-list', middleware.restrict, function(req, res){
 
 router.get('/add-rproutespoints', middleware.restrict, function(req, res) {
     res.render('rproutepoints_new', {
-        title: 'New Rproute Points', 
+        title: 'New Rproute Points',
         session: req.session,
         message: middleware.clear_session_value(req.session, "message"),
         message_type: middleware.clear_session_value(req.session, "message_type"),
@@ -1408,8 +1408,8 @@ router.post('/rproutepoints/insert',  middleware.restrict, function(req, res) {
             // redirect to insert
             res.redirect('/admin/insert');
         }else{
-            
-            
+
+
             var pointsObj = new Points();
             pointsObj.route                   = req.body.frm_point_route;
             pointsObj.numberofroutes          = req.body.frm_point_numberofroutes;
@@ -1426,8 +1426,8 @@ router.post('/rproutepoints/insert',  middleware.restrict, function(req, res) {
             pointsObj.carExtrapoints          = req.body.frm_point_carExtrapoints;
             pointsObj.policecarStealingpoints = req.body.frm_point_policecarStealingpoints;
             pointsObj.policecarExtrapoints    = req.body.frm_point_policecarExtrapoints;
-            
-            
+
+
             pointsObj.save(function (err) {
                 if(err){
                     console.error("Error inserting document: " + err);
@@ -1446,7 +1446,7 @@ router.post('/rproutepoints/insert',  middleware.restrict, function(req, res) {
 
 /* delete category from admin */
 router.post('/delete-category/', middleware.restrict, function(req, res) {
-     
+
 	// remove the article
 	 Categories.remove({ _id: req.body.uid } ,function(err, status){
             if(err){
@@ -1456,17 +1456,17 @@ router.post('/delete-category/', middleware.restrict, function(req, res) {
                 status = "success";
             }
             res.send(status);
-          
+
         });
 });
 
 /* Route to show update category page */
 router.get('/updatecategory', middleware.restrict, function(req, res) {
     //res.send(true);
-    
+
     Categories.findOne({'_id': req.query.id}, function (err, categorydata) {
         if(categorydata){
-            
+
             res.render('category_update', {
                 title: 'Update category',
                 categorydata : categorydata,
@@ -1490,29 +1490,29 @@ router.get('/updatecategory', middleware.restrict, function(req, res) {
  * Route to update category in database
  */
 router.post('/category/update', middleware.restrict, function(req, res) {
-    
-   
+
+
     Categories.findOne({'_id': req.body.frm_category_id}, function (err, categorydata) {
-        
+
         if(categorydata) {
-        Categories.update({ 
+        Categories.update({
                                 '_id': req.body.frm_category_id
                             },
-                            { 
-                                $set:   { 
+                            {
+                                $set:   {
                                             'category_title': req.body.frm_category_title ,
                                             'category_short_description': req.body.frm_category_short_description ,
                                             'category_description':req.body.frm_category_description,
-                                        } 
+                                        }
                             },
                             { multi: true },
                 function(err, categoryinfo){
 
                      if (err){
-                       
+
                     }else{
                         /* Update category title in product table */
-                        if(req.body.frm_category_title != req.body.frm_hidden_category_title){ 
+                        if(req.body.frm_category_title != req.body.frm_hidden_category_title){
                         Products.update({ 'product_category': { $regex : new RegExp(req.body.frm_hidden_category_title, "i") } },{  $set:   {  'product_category': req.body.frm_category_title }},{ multi: true },function(err, productInfo){
                             if(err){
                                 req.flash('message', '');
@@ -1530,15 +1530,15 @@ router.post('/category/update', middleware.restrict, function(req, res) {
                             req.flash('message_type','success');
                             res.redirect('/admin/list-categories');
 
-                        }                       
+                        }
                     }
                 });
         }
-        else{    
+        else{
             console.log("error");
         }
     });
-   
+
 });
 
 
@@ -1546,7 +1546,7 @@ router.post('/category/update', middleware.restrict, function(req, res) {
 router.get('/updatebrand', middleware.restrict, function(req, res) {
     console.log("sdasdsd"+req.query.id);
     //res.send(true);
-    
+
     Brands.findOne({'_id': req.query.id}, function (err, branddata) {
         if(branddata){
             console.log("qwqwffdf");
@@ -1570,13 +1570,13 @@ router.get('/updatebrand', middleware.restrict, function(req, res) {
 });
 
 /*
- * 
+ *
  * Route to  update brand in database
  */
 var cpUploadupdatebrand = upload.fields([{name: 'frm_brand_image', maxCount: 1}]);
 router.post('/brand/update', cpUploadupdatebrand, middleware.restrict, function(req, res) {
-   
-    
+
+
     var imagename="";
     if(req.files['frm_brand_image']){
         var imagearray = req.files['frm_brand_image'];
@@ -1584,49 +1584,49 @@ router.post('/brand/update', cpUploadupdatebrand, middleware.restrict, function(
         console.log(imagearray[0].filename);
         imagename = imagearray[0].filename;
     }
-    
-    
-    
+
+
+
     Brands.findOne({'_id': req.body.frm_brand_id}, function (err, branddata) {
-        
+
         if(branddata) {
-        Brands.update({ 
+        Brands.update({
                                 '_id': req.body.frm_brand_id
                             },
-                            { 
-                                $set:   { 
+                            {
+                                $set:   {
                                             'brand_featured': req.body.frm_brand_featured ,
                                             'brand_description':req.body.frm_brand_description,
                                             'brand_image':imagename
-                                        } 
+                                        }
                             },
                             { multi: true },
                 function(err, brandinfo){
 
                      if (err){
-                       
+
                     }else{
-                        
-                        
-                        
+
+
+
                         console.log('update brands');
-                        res.render('list-brands', { 
+                        res.render('list-brands', {
                             message : 'Brands Updated Successfully!',
                             message_type : 'success',
-                            user : req.user, 
+                            user : req.user,
                             title:'Admin | List Brands',
                             active:'list-brands'
                         });
-                        
-                        
+
+
                     }
                 });
         }
         else{
-            
+
             console.log("error");
         }
-       
+
 
     });
 
@@ -1634,7 +1634,7 @@ router.post('/brand/update', cpUploadupdatebrand, middleware.restrict, function(
 
 /* delete brand */
 router.post('/delete-brand/', middleware.restrict, function(req, res) {
-        
+
 	// remove the article
 	 Brands.remove({ _id: req.body.uid } ,function(err, status){
             if(err){
@@ -1644,7 +1644,7 @@ router.post('/delete-brand/', middleware.restrict, function(req, res) {
                 status = "success";
             }
             res.send(status);
-          
+
         });
 });
 
@@ -1661,10 +1661,10 @@ router.get('/get-eventtypes-list', middleware.restrict, function(req, res){
 
 /* Points management*/
 router.get('/list-eventtypes', middleware.restrict, function(req, res){
-    res.render('list-eventtypes', { 
+    res.render('list-eventtypes', {
         message : req.flash('message'),
         message_type : req.flash('message_type'),
-        user : req.user, 
+        user : req.user,
         title:'Admin | List Event Types',
         active:'list-eventtypes'
     });
@@ -1675,7 +1675,7 @@ router.get('/list-eventtypes', middleware.restrict, function(req, res){
  */
 router.get('/add-eventtype', middleware.restrict, function(req, res) {
     res.render('eventtype_new', {
-        title: 'New event type', 
+        title: 'New event type',
         session: req.session,
         message: middleware.clear_session_value(req.session, "message"),
         message_type: middleware.clear_session_value(req.session, "message_type"),
@@ -1686,11 +1686,11 @@ router.get('/add-eventtype', middleware.restrict, function(req, res) {
 });
 
 /*
- * Route to insert new event type 
+ * Route to insert new event type
  */
 router.post('/eventtype/insert', middleware.restrict, function(req, res) {
-    
-    
+
+
     EventTypes.count({'event_type': req.body.frm_event_type}, function (err, eventtype) {
         if(eventtype > 0 && req.body.frm_event_type != ""){
             req.flash('message', "Event Type already exists");
@@ -1701,7 +1701,7 @@ router.post('/eventtype/insert', middleware.restrict, function(req, res) {
             eventtypeObj.event_type             = req.body.frm_event_type;
             eventtypeObj.eventtype_description  = req.body.frm_eventtype_description;
             eventtypeObj.eventtype_added_date   = new Date();
-            
+
             console.log('eventtypeObj: '+eventtypeObj);
             eventtypeObj.save(function (err) {
                 if(err){
@@ -1725,8 +1725,8 @@ router.post('/eventtype/insert', middleware.restrict, function(req, res) {
 router.get('/updateeventtype',  middleware.restrict, function(req, res) {
     console.log("Update event type id : "+req.query.id);
     //res.send(true);
-    
-    
+
+
             EventTypes.findOne({'_id': req.query.id  },function (err, eventtype) {
                 if(!err){
                     res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
@@ -1744,7 +1744,7 @@ router.get('/updateeventtype',  middleware.restrict, function(req, res) {
                     console.log("Error while listing event type");
                 }
             });
-        
+
 
     });
 
@@ -1752,41 +1752,41 @@ router.get('/updateeventtype',  middleware.restrict, function(req, res) {
  * Route to update event type page
  */
 router.post('/eventtype/update',  middleware.restrict, function (req, res){
-    
+
         EventTypes.findOne({'_id': req.body.frm_event_type_id }, function (err, eventtypeinfo) {
             if (!eventtypeinfo) {
-                
+
                 res.redirect('/admin/updateeventtype');
-                
+
             } else {
-                
+
                 eventtypeinfo.event_type     = req.body.frm_event_type;
                 eventtypeinfo.eventtype_description     = req.body.frm_eventtype_description;
-               
+
                 eventtypeinfo.save(function (err) {
                     if (err) {
-                        
+
                          res.redirect('/list-eventtypes');
-                         
+
                     } else {
-                            
+
                         req.flash('message', 'Event Type updated successfully!');
                         req.flash('message_type','success');
                         res.redirect('/admin/list-eventtypes');
-                            
+
                     }
                 });
             }
         });
-    
-    
+
+
 });
 
 /*
- * Route to delete event type 
+ * Route to delete event type
  */
 router.post('/delete-eventtype/', middleware.restrict, function(req, res) {
-        
+
 	// remove the article
 	 EventTypes.remove({ _id: req.body.uid } ,function(err, status){
             if(err){
@@ -1796,7 +1796,7 @@ router.post('/delete-eventtype/', middleware.restrict, function(req, res) {
                 status = "success";
             }
             res.send(status);
-          
+
         });
 });
 
@@ -1804,16 +1804,16 @@ router.post('/delete-eventtype/', middleware.restrict, function(req, res) {
  * Route to show list reviews page
  */
 router.get('/list-reviews', middleware.restrict, function(req, res){
-    res.render('list-reviews', { 
+    res.render('list-reviews', {
         message : req.flash('message'),
         message_type : req.flash('message_type'),
-        user : req.user, 
+        user : req.user,
         title:'Admin | List Reviews',
         active:'list-reviews'
     });
 });
 
-/* 
+/*
  * Route to get reviews from database to show on list reviews page
  */
 router.get('/get-reviews-list', middleware.restrict, function(req, res){
@@ -1830,39 +1830,39 @@ router.get('/get-reviews-list', middleware.restrict, function(req, res){
  * Route to update review in database
  */
 router.get('/updatereview',  middleware.restrict, function (req, res){
-    
+
         Reviews.findOne({'_id': req.query.id }, function (err, reviewinfo) {
             if (!reviewinfo) {
-                
+
                 res.redirect('/admin/list-reviews');
-                
+
             } else {
-                
+
                 reviewinfo.ReviewStatus = "APPROVED";
-               
+
                 reviewinfo.save(function (err) {
                     if (err) {
-                        
+
                          res.redirect('/list-reviews');
-                         
+
                     } else {
-                            
+
                         req.flash('message', 'Review approved!');
                         req.flash('message_type','success');
                         res.redirect('/admin/list-reviews');
-                            
+
                     }
                 });
             }
         });
-    
+
 });
 
 /*
  * Route to delete review from database
  */
 router.post('/delete-review/', middleware.restrict, function(req, res) {
-        
+
 	// remove the article
 	 Reviews.remove({ _id: req.body.uid } ,function(err, status){
             if(err){
@@ -1872,7 +1872,7 @@ router.post('/delete-review/', middleware.restrict, function(req, res) {
                 status = "success";
             }
             res.send(status);
-          
+
         });
 });
 
@@ -1880,7 +1880,7 @@ router.post('/delete-review/', middleware.restrict, function(req, res) {
  * Route to show update user page in admin
  */
 router.get('/update-user',  middleware.restrict, function(req, res) {
-    
+
             User.findOne({'_id': req.query.id  },function (err, userdata) {
                 if(!err){
                     res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
@@ -1904,19 +1904,19 @@ router.get('/update-user',  middleware.restrict, function(req, res) {
  * Route to update user and save in collection from admin
  */
 router.post('/userupdate',  middleware.restrict, function (req, res){
-        
+
         var accountenable = "";
         if(req.body.frm_user_accountenable == "true"){
             var accounttrue = true;
         }else if(req.body.frm_user_accountenable == "false"){
             var accounttrue = false;
         }
-       
+
         User.findOne({'_id': req.body.frm_user_id }, function (err, userinfo) {
             if (!userinfo) {
                 console.log("ssdfsf");
                 res.redirect('/admin/list-users');
-                
+
             } else {
                 accountenable = userinfo.enableAccount;
                 userinfo.local.firstName     = req.body.frm_user_firstname;
@@ -1925,17 +1925,17 @@ router.post('/userupdate',  middleware.restrict, function (req, res){
                 userinfo.local.userLevel     = req.body.frm_user_userlevel;
                 userinfo.local.userActive    = req.body.frm_user_useractive;
                 userinfo.enableAccount       = req.body.frm_user_accountenable;
-              
-               
+
+
                 userinfo.save(function (err,updateuserinfo) {
                     if (err) {
-                        
+
                         res.redirect('/admin/list-users');
-                         
+
                     } else {
-                       
+
                         if(accountenable != accounttrue){
-                           
+
                             var accountstatus = "";
                             if(updateuserinfo.enableAccount == true){
                                 accountstatus = "Activated"
@@ -1943,33 +1943,33 @@ router.post('/userupdate',  middleware.restrict, function (req, res){
                                 accountstatus = "Deactivated"
                             }
                             var html = 'Hello '+userinfo.local.firstName+', <br><br><b>Your rideprix account is '+accountstatus+'.</b><br>';
-                            
+
                             html += '<br>Thank you, Team Motorcycle';
                             var emailBody = EmailTemplate.emailMessage(html);
                             var mailOptions = {
-                                from   : "Motorcycle <no-reply@motorcycle.com>", 
+                                from   : "Motorcycle <no-reply@motorcycle.com>",
                                 to     :  userinfo.local.email,
                                 subject: "Rideprix Account "+accountstatus,
                                 html   : emailBody
                             };
 
                             nodemailer.mail(mailOptions); //send account status email to user
-                        }    
+                        }
                         req.flash('message', 'User updated successfully!');
                         req.flash('message_type','success');
                         res.redirect('/admin/list-users');
-                            
+
                     }
                 });
             }
         });
-    
-    
+
+
 });
-    
+
 /*
  * Route to get all contacts requests
- */    
+ */
 router.get('/get-contacts-list', middleware.restrict, function(req, res){
     Contact.find({},function (err, contactList) {
         if(contactList){
@@ -1985,9 +1985,9 @@ router.get('/get-contacts-list', middleware.restrict, function(req, res){
 router.get('/get-order-list', middleware.restrict, function(req, res){
 
        Orders.aggregate(
-                [   
-                   
-                    
+                [
+
+
                     {
                         $lookup:
                                 {
@@ -2007,32 +2007,29 @@ router.get('/get-order-list', middleware.restrict, function(req, res){
                             'order_total':1,
                             'ship_cost':1,
                             'tax_cost':1,
-                            "count": { $size:"$item.order_id"}, 
-                             
-                        } 
+                            "count": { $size:"$item.order_id"},
+
+                        }
                     }
-                      
+
                 ]
                 ,function (err, orderList) {
                 if(orderList){
-                       
+
                        res.json(orderList);
                 }
                 else{
-                   
+
                    res.json({});
-                
+
                 }
             });
-
-
-
 });
 
 /* route to add tax */
 router.get('/add-tax', middleware.restrict, function(req, res) {
     res.render('tax_new', {
-        title: 'Tax', 
+        title: 'Tax',
         session: req.session,
         message: '',
         message_type: '',
@@ -2042,12 +2039,135 @@ router.get('/add-tax', middleware.restrict, function(req, res) {
     });
 });
 
+/* route to add rider categories */
+router.get('/ridercategory/new', middleware.restrict, function(req, res) {
+    res.render('ridercategory_new', {
+        title: 'New Rider Category',
+        session: req.session,
+        message: "",
+        message_type: "",
+        editor: true,
+        user:req.user,
+        active:'add-ridercategories'
+    });
+});
+
+/*
+* Route to insert new rider category in collection
+*/
+router.post('/ridercategory/insert', middleware.restrict, function(req, res) {
+    var Ridercategory    = require('../models/ridercategory');
+    Ridercategory.count({'categoryName': req.body.rider_category_name}, function (err, category) {
+        if(category > 0 && req.body.rider_category_name != ""){
+            req.flash('message', "Rider category name '"+req.body.rider_category_name+"' already exists");
+            req.flash('message_type','danger');
+            res.redirect('/admin/list-ridercategories'); // redirect to insert
+        }else{
+            var catObj          = new Ridercategory();
+            catObj.categoryName = req.body.rider_category_name;
+            catObj.save(function (err) {
+                if(err){
+                    req.flash('message', err);
+                    req.flash('message_type','danger');
+                    res.redirect('/admin/add-ridercategories');
+                }else{
+                    req.flash('message', 'Rider category created successfully!');
+                    req.flash('message_type','success');
+                    res.redirect('/admin/list-ridercategories');
+                }
+            });
+        }
+    });
+});
+
+/*
+* Route to insert new rider category in collection
+*/
+router.post('/riderexperience/insert', middleware.restrict, function(req, res) {
+    var Riderexperience    = require('../models/riderexperience');
+    Riderexperience.count({'experienceName': req.body.rider_experience_name}, function (err, experience) {
+        if(experience > 0 && req.body.rider_experience_name != ""){
+            req.flash('message', "Rider experience name '"+req.body.rider_experience_name+"' already exists");
+            req.flash('message_type','danger');
+            res.redirect('/admin/list-riderexperiences'); // redirect to insert
+        }else{
+            var expObj          = new Riderexperience();
+            expObj.experienceName = req.body.rider_experience_name;
+            expObj.save(function (err) {
+                if(err){
+                    req.flash('message', err);
+                    req.flash('message_type','danger');
+                    res.redirect('/admin/add-riderexperiences');
+                }else{
+                    req.flash('message', 'Rider experience created successfully!');
+                    req.flash('message_type','success');
+                    res.redirect('/admin/list-riderexperiences');
+                }
+            });
+        }
+    });
+});
+
+/*
+* Route to insert new rider category in collection
+*/
+router.post('/ridertype/insert', middleware.restrict, function(req, res) {
+    var Ridertype    = require('../models/ridertype');
+    Ridertype.count({'typeName': req.body.rider_type_name}, function (err, type) {
+        if(type > 0 && req.body.rider_type_name != ""){
+            req.flash('message', "Rider type name '"+req.body.rider_type_name+"' already exists");
+            req.flash('message_type','danger');
+            res.redirect('/admin/list-ridertypes'); // redirect to insert
+        }else{
+            var expObj          = new Ridertype();
+            expObj.typeName = req.body.rider_type_name;
+            expObj.save(function (err) {
+                if(err){
+                    req.flash('message', err);
+                    req.flash('message_type','danger');
+                    res.redirect('/admin/add-ridertype');
+                }else{
+                    req.flash('message', 'Rider type created successfully!');
+                    req.flash('message_type','success');
+                    res.redirect('/admin/list-ridertypes');
+                }
+            });
+        }
+    });
+});
+
+/* route to add rider experience */
+router.get('/riderexperience/new', middleware.restrict, function(req, res) {
+    res.render('riderexperience_new', {
+        title: 'New Rider Experience',
+        session: req.session,
+        message: "",
+        message_type: "",
+        editor: true,
+        user:req.user,
+        active:'add-riderexperience'
+    });
+});
+
+/* route to add rider type */
+router.get('/ridertype/new', middleware.restrict, function(req, res) {
+    res.render('ridertype_new', {
+        title: 'New Rider Type',
+        session: req.session,
+        message: "",
+        message_type: "",
+        editor: true,
+        user:req.user,
+        active:'add-ridertype'
+    });
+});
+
 /*
  * Route to insert new tax rule in collection
  */
 router.post('/tax/insert', middleware.restrict, function(req, res) {
-    
-    
+
+
     Tax.count({'tax_country': req.body.frm_tax_country,'tax_state':req.body.frm_tax_state}, function (err, tax) {
         if(tax > 0 && req.body.frm_event_type != ""){
             req.flash('message', "Tax already exists");
@@ -2059,7 +2179,7 @@ router.post('/tax/insert', middleware.restrict, function(req, res) {
             taxObj.tax_state              = req.body.frm_tax_state;
             taxObj.tax_price              = req.body.frm_tax;
             taxObj.addded_on              = new Date();
-            
+
             console.log('taxObj: '+taxObj);
             taxObj.save(function (err) {
                 if(err){
@@ -2081,12 +2201,51 @@ router.post('/tax/insert', middleware.restrict, function(req, res) {
  * Route to show list tax page in admin
  */
 router.get('/list-tax', middleware.restrict, function(req, res){
-    res.render('list-tax', { 
+    res.render('list-tax', {
         message : req.flash('message'),
         message_type : req.flash('message_type'),
-        user : req.user, 
+        user : req.user,
         title:'Admin | List Tax',
         active:'list-tax'
+    });
+});
+
+/*
+ * Route to show list rider category page in admin
+ */
+router.get('/list-ridercategories', middleware.restrict, function(req, res){
+    res.render('list-ridercategories', {
+        message : req.flash('message'),
+        message_type : req.flash('message_type'),
+        user : req.user,
+        title:'Admin | List Rider category',
+        active:'list-ridercategories'
+    });
+});
+
+/*
+ * Route to show list rider experiences page in admin
+ */
+router.get('/list-riderexperiences', middleware.restrict, function(req, res){
+    res.render('list-riderexperiences', {
+        message : req.flash('message'),
+        message_type : req.flash('message_type'),
+        user : req.user,
+        title:'Admin | List Rider Experiences',
+        active:'list-riderexperiences'
+    });
+});
+
+/*
+ * Route to show list rider ty page in admin
+ */
+router.get('/list-ridertypes', middleware.restrict, function(req, res){
+    res.render('list-ridertypes', {
+        message : req.flash('message'),
+        message_type : req.flash('message_type'),
+        user : req.user,
+        title:'Admin | List Rider Types',
+        active:'list-ridertypes'
     });
 });
 
@@ -2102,91 +2261,175 @@ router.get('/get-tax-list', middleware.restrict, function(req, res){
         }
     });
 });
+
 /*
- * Route to show update tax info 
+ * Route to get rider categories list in admin
+ */
+router.get('/get-rider-categories-list', middleware.restrict, function(req, res){
+    var Ridercategory    = require('../models/ridercategory');
+    Ridercategory.find({},function (err, catList) {
+        if(catList){
+            res.json(catList);
+        }else{
+            res.json({});
+        }
+    });
+});
+
+/*
+ * Route to get rider experiences list in admin
+ */
+router.get('/get-rider-experiences-list', middleware.restrict, function(req, res){
+    var Riderexperience = require('../models/riderexperience');
+    Riderexperience.find({},function (err, expList) {
+        if(expList){
+            res.json(expList);
+        }else{
+            res.json({});
+        }
+    });
+});
+
+/*
+ * Route to get rider type list in admin
+ */
+router.get('/get-rider-types-list', middleware.restrict, function(req, res){
+    var Ridertype = require('../models/ridertype');
+    Ridertype.find({},function (err, typeList) {
+        if(typeList){
+            res.json(typeList);
+        }else{
+            res.json({});
+        }
+    });
+});
+
+/*
+ * Route to show update tax info
  */
 router.get('/updatetax',  middleware.restrict, function(req, res) {
-    console.log("Update tax id : "+req.query.id);
-    //res.send(true);
-    
-    
-            Tax.findOne({'_id': req.query.id  },function (err, tax) {
-                if(!err){
-                    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-                    res.render('tax_update', {
-                        title: 'Update Tax',
-                        tax : tax,
-                        session: req.session,
-                        message: '',
-                        messageSuccess: '',
-                        editor: true,
-                        user:req.user,
-                        active:'update-tax'
-                    });
-                }else{
-                    console.log("Error while listing tax");
-                }
+    Tax.findOne({'_id': req.query.id  },function (err, tax) {
+        if(!err){
+            res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+            res.render('tax_update', {
+                title: 'Update Tax',
+                tax : tax,
+                session: req.session,
+                message: '',
+                messageSuccess: '',
+                editor: true,
+                user:req.user,
+                active:'update-tax'
             });
-        
-
+        }else{
+            console.log("Error while listing tax");
+        }
+    });
 });
-    
+
 /*
  * Route to update tax from admin in collection
- */    
+ */
 router.post('/tax/update',  middleware.restrict, function (req, res){
-    
-        Tax.findOne({'_id': req.body.frm_tax_id }, function (err, taxinfo) {
-            if (!taxinfo) {
-                
-                res.redirect('/admin/updatetax');
-                
-            } else {
-                
-                taxinfo.tax_country     = req.body.frm_tax_country;
-                taxinfo.tax_state     = req.body.frm_tax_state;
-                taxinfo.tax_price     = req.body.frm_tax;
-               
-                taxinfo.save(function (err) {
-                    if (err) {
-                        
-                         res.redirect('/list-tax');
-                         
-                    } else {
-                            
-                        req.flash('message', 'Tax updated successfully!');
-                        req.flash('message_type','success');
-                        res.redirect('/admin/list-tax');
-                            
-                    }
-                });
-            }
-        });
-    
-    
+    Tax.findOne({'_id': req.body.frm_tax_id }, function (err, taxinfo) {
+        if (!taxinfo) {
+            res.redirect('/admin/updatetax');
+        } else {
+            taxinfo.tax_country     = req.body.frm_tax_country;
+            taxinfo.tax_state     = req.body.frm_tax_state;
+            taxinfo.tax_price     = req.body.frm_tax;
+            taxinfo.save(function (err) {
+                if (err) {
+                     res.redirect('/list-tax');
+                } else {
+                    req.flash('message', 'Tax updated successfully!');
+                    req.flash('message_type','success');
+                    res.redirect('/admin/list-tax');
+                }
+            });
+        }
+    });
 });
 /*
  * Route to delete tax from collection
  */
 router.post('/delete-tax', middleware.restrict, function(req, res) {
-        
-	// remove the article
 	 Tax.remove({ _id: req.body.uid } ,function(err, status){
-            if(err){
-              status = "error";
-            }
-            else{
-                status = "success";
-            }
-            res.send(status);
-          
-        });
+        if(err){
+          status = "error";
+        }else{
+            status = "success";
+        }
+        res.send(status);
+    });
 });
+
+/*
+ * Route to show update tax info
+ */
+router.get('/update-rider-experience',  middleware.restrict, function(req, res) {
+    var Riderexperience = require('../models/riderexperience');
+    Riderexperience.findOne({'_id': req.query.id  },function (err, exp) {
+        if(!err){
+            res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+            res.render('riderexperience_update', {
+                title: 'Update Rider Experience',
+                exp : exp,
+                session: req.session,
+                message: '',
+                messageSuccess: '',
+                editor: true,
+                user:req.user,
+                active:'update-rider-experience'
+            });
+        }else{
+            console.log("Error while listing rider experiences");
+        }
+    });
+});
+
+/*
+ * Route to update tax from admin in collection
+ */
+router.post('/rider-experience/update',  middleware.restrict, function (req, res){
+    var Riderexperience = require('../models/riderexperience');
+    Riderexperience.findOne({'_id': req.body.frm_exp_id }, function (err, expinfo) {
+        if (!expinfo) {
+            res.redirect('/admin/update-rider-experience');
+        } else {
+            expinfo.experienceName = req.body.frm_exp_name;
+            expinfo.save(function (err) {
+                if (err) {
+                     res.redirect('/list-riderexperiences');
+                } else {
+                    req.flash('message', 'Experience updated successfully!');
+                    req.flash('message_type','success');
+                    res.redirect('/admin/list-riderexperiences');
+                }
+            });
+        }
+    });
+});
+/*
+ * Route to delete tax from collection
+ */
+router.post('/delete-rider-experience', middleware.restrict, function(req, res) {
+  var Riderexperience = require('../models/riderexperience');
+	 Riderexperience.remove({ _id: req.body.uid } ,function(err, status){
+        if(err){
+          status = "error";
+        }else{
+          status = "success";
+        }
+        res.send(status);
+    });
+});
+
 
 /* Route to add shipping */
 router.get('/add-shipping', middleware.restrict, function(req, res) {
     res.render('shipping_new', {
-        title: 'Shipping', 
+        title: 'Shipping',
         session: req.session,
         message: '',
         message_type: '',
@@ -2200,8 +2443,8 @@ router.get('/add-shipping', middleware.restrict, function(req, res) {
  * Route to insert new shipping rule  in collection
  */
 router.post('/shipping/insert', middleware.restrict, function(req, res) {
-    
-    
+
+
     Shipping.count({'shipping_country': req.body.frm_shipping_country,'shipping_state':req.body.frm_shipping_state,'shipping_weightfrom':req.body.frm_shipping_weightfrom,'shipping_weightto':req.body.frm_shipping_weightto}, function (err, tax) {
         if(tax > 0 && req.body.frm_event_type != ""){
             req.flash('message', "Shipping already exists");
@@ -2214,7 +2457,7 @@ router.post('/shipping/insert', middleware.restrict, function(req, res) {
             shippingObj.shipping_price         = req.body.frm_shipping_cost;
             shippingObj.shipping_weightfrom    = req.body.frm_shipping_weightfrom;
             shippingObj.shipping_weightto      = req.body.frm_shipping_weightto;
-            
+
             console.log('shippingObj: '+shippingObj);
             shippingObj.save(function (err) {
                 if(err){
@@ -2236,10 +2479,10 @@ router.post('/shipping/insert', middleware.restrict, function(req, res) {
  * Route to list shipping page in admin
  */
 router.get('/list-shipping', middleware.restrict, function(req, res){
-    res.render('list-shipping', { 
+    res.render('list-shipping', {
         message : req.flash('message'),
         message_type : req.flash('message_type'),
-        user : req.user, 
+        user : req.user,
         title:'Admin | List Shipping',
         active:'list-shipping'
     });
@@ -2263,8 +2506,8 @@ router.get('/get-shipping-list', middleware.restrict, function(req, res){
 router.get('/updateshipping',  middleware.restrict, function(req, res) {
     console.log("Update shipping id : "+req.query.id);
     //res.send(true);
-    
-    
+
+
             Shipping.findOne({'_id': req.query.id  },function (err, shipping) {
                 if(!err){
                     res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
@@ -2282,52 +2525,52 @@ router.get('/updateshipping',  middleware.restrict, function(req, res) {
                     console.log("Error while listing shipping");
                 }
             });
-        
+
 
 });
-    
+
 /*
  * Route to update shipping and save into database
- */    
+ */
 router.post('/shipping/update',  middleware.restrict, function (req, res){
-    
+
         Shipping.findOne({'_id': req.body.frm_shipping_id }, function (err, shippinginfo) {
             if (!shippinginfo) {
-                
+
                 res.redirect('/admin/updateshipping');
-                
+
             } else {
-                
+
                 shippinginfo.shipping_country    = req.body.frm_shipping_country;
                 shippinginfo.shipping_state     = req.body.frm_shipping_state;
                 shippinginfo.shipping_price     = req.body.frm_shipping_cost;
                 shippinginfo.shipping_weightfrom   = req.body.frm_shipping_weightfrom;
                 shippinginfo.shipping_weightto     = req.body.frm_shipping_weightto;
-               
+
                 shippinginfo.save(function (err) {
                     if (err) {
-                        
+
                          res.redirect('/list-shipping');
-                         
+
                     } else {
-                            
+
                         req.flash('message', 'Shipping updated successfully!');
                         req.flash('message_type','success');
                         res.redirect('/admin/list-shipping');
-                            
+
                     }
                 });
             }
         });
-    
-    
+
+
 });
 
 /*
  * Route to delete shipping
  */
 router.post('/delete-shipping', middleware.restrict, function(req, res) {
-        
+
 	// remove the article
 	 Shipping.remove({ _id: req.body.uid } ,function(err, status){
             if(err){
@@ -2337,7 +2580,7 @@ router.post('/delete-shipping', middleware.restrict, function(req, res) {
                 status = "success";
             }
             res.send(status);
-          
+
         });
 });
 
@@ -2359,7 +2602,7 @@ router.get('/get-suggestions-list', middleware.restrict, function(req, res){
 router.post('/respond-contact', middleware.restrict, function(req, res) {
         var contactRespondMessage = req.body.contactRespondMessage;
         var status = "";
-        
+
 	Contact.findOne({ _id: req.body.contactId } ,function(err, contactInfo){
             if(err){
               status = "error";
@@ -2374,16 +2617,16 @@ router.post('/respond-contact', middleware.restrict, function(req, res) {
                                         html += '<br>Thank you, Team Motorcycle';
                             var emailBody = EmailTemplate.emailMessage(html);
                             var mailOptions = {
-                                        from   : "Motorcycle <no-reply@motorcycle.com>", 
+                                        from   : "Motorcycle <no-reply@motorcycle.com>",
                                         to     : contactInfo.contactEmail,
                                         subject: "Response from Rideprix",
                                         html   : emailBody
                             };
-                          
+
                         nodemailer.mail(mailOptions); //send response email to customer from admin
                     }
                     });
-                
+
                 // status = "success";
                 // res.send(status);
                 req.flash('message', 'Your message has been sent successfully!');
@@ -2391,7 +2634,7 @@ router.post('/respond-contact', middleware.restrict, function(req, res) {
                 res.redirect('/admin/list-contact-requests');
             }
             //res.send(status);
-          
+
         });
 });
 
@@ -2401,14 +2644,14 @@ router.post('/respond-contact', middleware.restrict, function(req, res) {
 router.post('/respond-suggestion', middleware.restrict, function(req, res) {
         var suggestionRespondMessage = req.body.suggestionRespondMessage;
         var status = "";
-        
+
 	Suggestion.findOne({ _id: req.body.suggestionId } ,function(err, suggestionInfo){
             if(err){
               status = "error";
             }
             else{
-                
-                
+
+
                 Suggestion.update({ _id: req.body.suggestionId}, { $set: { respondStatus: 'respond'} }, { multi: false }, function (err, suggestionUpdate) {
                     if(err){
                          status = "error";
@@ -2417,36 +2660,36 @@ router.post('/respond-suggestion', middleware.restrict, function(req, res) {
                                     html += '<br>Thank you, Team Motorcycle';
                         var emailBody = EmailTemplate.emailMessage(html);
                         var mailOptions = {
-                                    from   : "Motorcycle <no-reply@motorcycle.com>", 
+                                    from   : "Motorcycle <no-reply@motorcycle.com>",
                                     to     :  suggestionInfo.suggestionEmail,
                                     subject: "Response from Rideprix",
                                     html   : emailBody
                         };
-                        
+
                         nodemailer.mail(mailOptions);
-                        
+
                     }
-     
+
                 });
-                
+
                 req.flash('message', 'Your message has been sent successfully!');
                 req.flash('message_type','success');
                 res.redirect('/admin/list-suggestions');
-                
-                
+
+
             }
-            
-          
+
+
         });
 });
 
 /*
- * View order detail page to show shipping and product info 
+ * View order detail page to show shipping and product info
  */
 router.get('/view-order-detail/:id', middleware.isAdminLoggedIn, function(req, res){
     var orderId = req.params.id;
-    res.render('view-orderdetail', { 
-        user : req.user, 
+    res.render('view-orderdetail', {
+        user : req.user,
         orderId : orderId,
         title:'Admin | View Order Detail',
         active:'view-orderdetail'
@@ -2454,19 +2697,19 @@ router.get('/view-order-detail/:id', middleware.isAdminLoggedIn, function(req, r
 });
 
 /*
- * get data for View order detail page shipping and product info 
+ * get data for View order detail page shipping and product info
  */
 router.post('/view-order-detail', middleware.isAdminLoggedIn, function(req, res){
     var order_id = req.body.params.order_id;
     console.log('order_id: '+order_id);
     if(order_id != ""){
-        
+
           Orders.aggregate(
-                [   
+                [
                     {
                         $match:{_id: mongoose.Types.ObjectId(order_id) }
                     },
-                    
+
                     {
                         $lookup:
                                 {
@@ -2504,47 +2747,47 @@ router.post('/view-order-detail', middleware.isAdminLoggedIn, function(req, res)
                             'order_date':1,
                             'ship_cost':1,
                             'tax_cost':1,
-                            "count": { $size:"$item.order_id"}, 
+                            "count": { $size:"$item.order_id"},
                             'item1':"$item1",
                             'item':"$item",
-                            
-                                                         
-                        } 
+
+
+                        }
                     },
-                    
+
                 ]
                 ,function (err, orderDetail) {
                 if(orderDetail){
                        console.log(JSON.stringify(orderDetail));
                         console.log(JSON.stringify(orderDetail[0].item));
-                       
+
                        res.render('widget/view-order-detail',{result: orderDetail,products:orderDetail[0].item});
                 }
                 else{
                    res.json({});
                 }
             });
-        
-        
-        
+
+
+
     }else{
         res.json({null:'0'});
     }
 });
 
 /*
- * Delete product image 
+ * Delete product image
  */
 router.post('/delete-productimage', middleware.isAdminLoggedIn, function(req, res){
-    
+
     console.log("image id : "+req.body.params.imageName);
     console.log("productId : "+req.body.params.productId);
-      
+
     Products.update({_id: req.body.params.productId},  { $pull: { 'product_image':req.body.params.imageName} }, {},  function (err, numReplaced) {
     if(err){
              res.json("error");
-           
-    }else{                     
+
+    }else{
            res.json("success");
         }
     });

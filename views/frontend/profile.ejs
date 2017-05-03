@@ -1,20 +1,14 @@
 <% layout('layout') -%>
-<%
-    if(user){
+<% if(user){
         var imagepath = user.local.profileImage;
         var profileimageplacehold = "http://placehold.it/300";
         if(user.local.profileImage == profileimageplacehold){
                 imagepath = user.local.profileImage+"?text="+user.local.firstName;
         }
-
     }
-
 %>
-
 <section id="profile">
       <% include partial/profile-nav.ejs %>
-
-
    <div class="container" ng-controller="friendsController">
       <div id="main">
          <!-- start:breadcrumb -->
@@ -23,41 +17,9 @@
             <li class="active">Profile</li>
          </ol>
          <!-- end:breadcrumb -->
+         
          <div class="row" id="home-content">
-
             <div class="col-lg-8">
-
-<!--                <div class="panel data-panel">
-                    <form>
-                    <div style="padding: 0px 30px 0px 30px;">
-                        <ul style="background: #ccc;padding: 10px;">
-                            <li style="float: left;padding-right: 5px;width: 8%;margin-right: 8px;border-right: 2px solid;">
-                                Photo
-                            </li>
-                            <li style="padding-left: 30px;width: 18%;border-right: 2px solid;">
-                                Video
-                            </li>
-                        </ul>
-
-                        <div class="comments-well-upper">
-                           <div class="comment-block">
-                              <div class="input-group">
-                                 <input type="hidden" id="mentions440823" value="">
-                                 <input type="text" class="form-control commentarea" id="commentbox440823" data-boxid="440823" placeholder="What's on your mind?">
-                                 <span class="input-group-btn">
-                                 <button class="btn btn-primary comment-now" type="button" data-boxid="440823" data-videoid="22806" data-profileid="11607">POST</button>
-                                 </span>
-                              </div>
-                           </div>
-
-                        </div>
-
-                    </div>
-                    </form>
-                </div>-->
-
-
-               <!-- start:state overview -->
                <div class="panel data-panel">
                   <div class="panel-header">
                      <center>
@@ -141,7 +103,7 @@
                         <img src="<%= imagepath %>">
                         <h3><%= user.local.firstName+' '+user.local.lastName %></h3>
                         <p> <span class="date-joined">Member Since <%= moment(user.accountCreationDate).format("MMM Do, YYYY") %></span></p>
-                        <p> <span class="user-gender-age"><%= user.local.gender %> / <%= moment( moment("1990/08/16").format("MM/DD/YYYY"), "MM/DD/YYYY").month(0).from(moment().month(0)) %> </span></p> 
+                        <p> <span class="user-gender-age"><%= user.local.gender %> / <%= user.local.dob %> / <%= moment( moment(user.local.dob).format("MM/DD/YYYY"), "MM/DD/YYYY").month(0).from(moment().month(0)) %> </span></p>
                         <p> <small class="label label-warning"><i class="fa fa-map-marker" aria-hidden="true"></i> <%= user.local.locationCity %>,&nbsp;<%= user.local.locationState %>,&nbsp;<%= user.local.locationCountry %></small></p>
                         <p><span data-ng-init="countFriendsFollowers('<%= user.local.email %>','friends')"><i class="fa fa-users" aria-hidden="true"></i> {{totalFriends}}</span> &nbsp;&nbsp;<span data-ng-init="countFriendsFollowers('<%= user.local.email %>','followers')"><i class="fa fa-users" aria-hidden="true"></i> {{totalFollowers}}</span></p>
                         <% if(user.userBio != undefined && user.userBio != ""){ %>

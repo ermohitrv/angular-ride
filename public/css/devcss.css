@@ -136,3 +136,5 @@ div#clock-details {display: none;}
 .pull-right-author-name p{display: block;margin-left: 10px;    padding: 0;font-size: 13px;
     margin-left: 10px;
     margin-bottom: 0;}
+#exTab2 .nav-tabs li a{text-transform: capitalize;}
+#exTab2 .nav-tabs>li.active>a{    background: #d9edf7;color: #31708f!important;letter-spacing:0px;}

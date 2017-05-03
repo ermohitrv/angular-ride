@@ -1,0 +1,37 @@
+<% layout('layoutAdmin') -%>
+<div class="content-wrapper">
+    <section class="content-header">
+      <h1>Update Rider Experience</h1>
+      <ol class="breadcrumb">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Update Rider Experience</li>
+      </ol>
+    </section>
+    <section class="content" data-ng-controller="adminController">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="box">
+                    <div class="box-body">
+                        <form method="post" class="form-horizontal" id="insert_form" action="/admin/rider-experience/update" data-toggle="validator" >
+                            <input type="hidden" name="frm_exp_id" class="form-control" minlength="3" maxlength="200" value="<%= exp._id %>" />
+                            <div class="col-lg-12">
+                                <div class="page-header">
+                                    <div class="pull-right">
+                                        <button id="frm_edit_tax_save" class="btn btn-success" type="submit">Submit <i class="fa fa-plus"></i></button>
+                                    </div>
+                                    <h2>Update Rider Experience</h2>
+                                </div>
+                                <div class="form-group" id="editor-wrapper">
+                                    <label for="frm_tax_state" class="col-sm-2 control-label">Experience Name *</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="frm_exp_name" class="form-control" minlength="1" maxlength="20" value="<%= exp.experienceName %>" required/>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -828,6 +828,30 @@ app.controller('adminController',['$scope', '$http','$sce', function ($scope, $h
         });
     };
 
+    $scope.getRiderCategoriesList = function(){
+      $http.get('/admin/get-rider-categories-list').success(function(catList){
+          $scope.catList = catList;
+      }).error(function(err){
+          console.log('Oops! Error listing get-rider-categories-list');
+      });
+    }
+
+    $scope.getRiderExperiencesList = function(){
+      $http.get('/admin/get-rider-experiences-list').success(function(expList){
+          $scope.expList = expList;
+      }).error(function(err){
+          console.log('Oops! Error listing get-rider-experiences-list');
+      });
+    }
+
+    $scope.getRiderTypesList = function(){
+      $http.get('/admin/get-rider-types-list').success(function(typeList){
+          $scope.typeList = typeList;
+      }).error(function(err){
+          console.log('Oops! Error listing get-rider-types-list');
+      });
+    }
+
     $scope.renderCountry = function(country){
         $scope.selectedOption = country;
     };

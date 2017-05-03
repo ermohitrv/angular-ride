@@ -1,0 +1,130 @@
+<% layout('layoutAdmin') -%>
+<style>
+.modal-open { overflow: auto !important;}
+.modal-backdrop { position: relative !important;}
+</style>
+  <div class="content-wrapper">
+    <section class="content-header">
+      <h1>
+      List Rider Types
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Dashboard</li>
+      </ol>
+    </section>
+    <section class="content" data-ng-controller="adminController">
+        <div class="row" data-ng-init="getRiderTypesList()">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-body">
+                        <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                            <div class="row">
+                                <div class="col-sm-6"></div>
+                                <div class="col-sm-6"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h3>
+                                        <div class="pull-left">Rider Types</div>
+                                        <div class="clearfix"></div>
+                                    </h3>
+                                <div class="result_del"></div>
+                                <% if (message.length > 0) { %>
+                                    <% if (message_type == "success"){ %>
+                                        <div class="alert alert-success"><%= message %></div>
+                                    <% }else{ %>
+                                        <div class="alert alert-danger"><%= message %></div>
+                                    <% } %>
+                                <% } %>
+                                    <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
+                                        <thead>
+                                            <tr role="row">
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Type Name</th>
+                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr data-ng-if="typeList.length > 0" data-ng-repeat="type in typeList | filter: search_user" id="{{ type.typeName }}" role="row" class="odd">
+                                                <td>{{ type.typeName }}</td>
+                                                <td>
+                                                    <a title="Update" class="click_me_view btn" href="/admin/update-rider-type?id={{ type.typeName }}"><i class="fa fa-pencil"></i></a>
+                                                    <a data-toggle="modal" data-target="#confirmDelete_{{ type.typeName }}" title="Delete"  class="" href="javascript:;"><i class="fa fa-remove"></i></a>
+                                                    <div class="modal fade" id="confirmDelete_{{  type.typeName }}" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                              <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                <h4 class="modal-title">{{ type.typeName }}: Delete Type permanently</h4>
+                                                              </div>
+                                                              <div class="modal-body">
+                                                                <p>Are you sure you want to delete this Type ?</p>
+                                                              </div>
+                                                              <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                                                <a uid="{{ tax._id }}" href="javascript:;" class="btn btn-danger delete_this_tax btn" id="confirm">Delete</a>
+                                                              </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr  data-ng-if="catlist.length <= 0">
+                                                <td colspan="5" style="text-align: center">No results found</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                </div>
+                                <div class="col-sm-7">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+  </div>
+  <!-- /.content-wrapper -->
+  <script data-cfasync="false"  >
+$(function(){
+    $(document).on('click', 'a.delete_this_tax' ,function(){
+        var uid = $(this).attr('uid');
+
+        if(uid != undefined && uid != null){
+
+            delete_tax(uid);
+        }
+    });
+});
+
+function delete_tax(uid){
+
+    jQuery.ajax({
+        type  : "POST",
+        url   : "/admin/delete-tax",
+        data  : {'uid' : uid},
+        timeout: 3000,
+        success: function(data){
+             if(data === 'error'){
+                $(".result_del").html('<div class="alert alert-danger">Error Occured!</div>');
+            }else{
+                $('#confirmDelete_'+uid).hide();
+                //$('#confirmDelete_'+uid).modal('hide').on('hide.bs.modal', function(e){
+                  $("#"+uid).remove();
+                  $('.modal-backdrop.in').css('opacity','0');
+                //});
+                $(".result_del").html('<div class="alert alert-success">Tax Deleted Successfully!</div>');
+            }
+        },
+        error : function(err){
+            //alert( 'err: '+JSON.stringify(err) );
+            //$(".result_del").html('<div class="alert alert-success">User Deleted Successfully!</div>');
+        }
+    });
+}
+</script>
