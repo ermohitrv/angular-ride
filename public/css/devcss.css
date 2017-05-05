@@ -137,4 +137,15 @@ div#clock-details {display: none;}
     margin-left: 10px;
     margin-bottom: 0;}
 #exTab2 .nav-tabs li a{text-transform: capitalize;}
-#exTab2 .nav-tabs>li.active>a{    background: #d9edf7;color: #31708f!important;letter-spacing:0px;}
+#exTab2 .nav-tabs>li.active>a{background: #d9edf7;color: #31708f!important;letter-spacing:0px;}
+#exTab2 .nav-tabs>li a{letter-spacing:0px!important;}
+.publish-post{margin:0 0 10px 10px!important; }
+.button-blue{color: #fff;
+    background-color: #228DFF;
+    border: 2px solid #228DFF;text-transform: capitalize;}
+.publish-area {resize: none;}
+.ui-autocomplete .user-img-srch{width: 25px;
+    height: 25px;
+    border-radius: 25px;}
+.ui-autocomplete .ui-menu-item{padding: 1px;}
+.ui-autocomplete .ui-menu-item:hover,.ui-autocomplete .ui-menu-item a:hover{background: none;border: 0px;}

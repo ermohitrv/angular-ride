@@ -16,7 +16,7 @@
             <li class="active">Update Profile</li>
          </ol>
          <!-- end:breadcrumb -->
-         <div id="exTab2">
+         <div id="exTab2" data-ng-init="getRiderOptions('types'); getRiderOptions('experiences'); getRiderOptions('categories');">
         		<ul class="nav nav-tabs">
         			<li class="active"><a  href="#1" data-toggle="tab">Personal Information</a></li>
               <li><a href="#4" data-toggle="tab">Rider Options</a></li>
@@ -30,8 +30,8 @@
               <% if (messageSuccess.length > 0) { %>
                   <div class="alert alert-success"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a><%= messageSuccess %></div>
               <% } %>
-                <!-- personal info tab -->
-        		  	<div class="tab-pane active" id="1">
+              <!-- personal info tab -->
+      		  	<div class="tab-pane active" id="1">
                   <div class="col-md-3">
                     <div class="panel panel-default">
                       <div class="panel-heading">
@@ -96,7 +96,7 @@
                                     <div class="col-md-6 col-xs-12">
                                         <label>Email</label>
                                         <input value="<%= user.local.email %>" disabled type="email" placeholder="Please enter your email" class="form-control" name="email">
-                                        <input value="<%= user.local.email %>" type="hidden" name="email">
+                                        <input value="<%= user._id %>" type="hidden" name="unique">
                                     </div>
                                 </div>
                                 <div class="form-group" data-ng-init="renderCountry('<%= user.local.locationCountry %>')">
@@ -404,6 +404,45 @@
                     </div>
                   </div>
         			</div>
+              <!-- rider options tab -->
+              <div class="tab-pane" id="4">
+                <div class="panel panel-info">
+                  <div class="panel-heading">
+                      <h1 class="panel-title">
+                          <strong>Rider Options</strong>
+                      </h1>
+                  </div>
+                  <div class="panel-body" style="border:0px;margin-left:0px;">
+                    <form class="form-horizontal" id="update-rider-options" role="form" action="" method="post">
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                      <input value="<%= user._id %>" type="hidden" name="uniqueRiderOption">
+                      <span id="riderSelectedCat" style="display:none;"><%= user.rideCategory %></span>
+                      <span id="riderSelectedExp" style="display:none;"><%= user.rideExperience %></span>
+                      <span id="riderSelectedType" style="display:none;"><%= user.rideType %></span>
+                      <div class="form-group">
+                          <div class="col-md-4 col-xs-12">
+                              <label>Ride Category</label>
+                              <select ng-model="riderSelectedCat" ng-options="option.categoryName as option.categoryName for option in riderCategories.ridercategories track by option.categoryName" name="riderCategory" class="form-control"></select>
+                          </div>
+                          <div class="col-md-4 col-xs-12">
+                              <label>Ride Experience</label>
+                              <select name="riderExperience" class="form-control" ng-model="riderSelectedExp" ng-options="option.experienceName as option.experienceName for option in riderExperiences.riderexperiences track by option.experienceName"></select>
+                          </div>
+                          <div class="col-md-4 col-xs-12">
+                              <label>Ride Type</label>
+                              <select name="riderType" class="form-control" ng-model="riderSelectedType" ng-options="option.typeName as option.typeName for option in riderTypes.ridertypes track by option.typeName"></select>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="col-md-8">
+                            <input type="submit" class="btn btn-primary" value="Update Rider Changes">
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+              </div>
+              <!-- rider options tab -->
               <!-- password tab -->
         			<div class="tab-pane" id="2">
                 <div class="panel panel-info">
@@ -460,53 +499,9 @@
                   </div>
         			</div>
               <!-- account tab -->
-              <!-- rider options tab -->
-              <div class="tab-pane" id="4">
-                  <div class="panel panel-info">
-                      <div class="panel-heading">
-                          <h1 class="panel-title">
-                              <strong>Rider Options</strong>
-                          </h1>
-                      </div>
-                      <div class="panel-body" style="border:0px;margin-left:0px;">
-                          <div class="form-group">
-                              <div class="col-md-4 col-xs-12">
-                                  <label>Ride Type</label>
-                                  <select class="form-control" name="gender">
-                                      <option value="">Select</option>
-                                      <option <% if( user.local.gender == "MALE" ){ %> selected <% } %> value="MALE">Male</option>
-                                      <option <% if( user.local.gender == "FEMALE" ){ %> selected <% } %> value="FEMALE">Female</option>
-                                      <option <% if( user.local.gender == "OTHER" ){ %> selected <% } %> value="OTHER">Other</option>
-                                  </select>
-                              </div>
-                              <div class="col-md-4 col-xs-12">
-                                  <label>Ride Experience</label>
-                                  <select class="form-control" name="gender">
-                                      <option value="">Select</option>
-                                      <option <% if( user.local.gender == "MALE" ){ %> selected <% } %> value="MALE">Male</option>
-                                      <option <% if( user.local.gender == "FEMALE" ){ %> selected <% } %> value="FEMALE">Female</option>
-                                  </select>
-                              </div>
-                              <div class="col-md-4 col-xs-12">
-                                  <label>Ride Type</label>
-                                  <select class="form-control" name="gender">
-                                      <option value="">Select</option>
-                                      <option <% if( user.local.gender == "MALE" ){ %> selected <% } %> value="MALE">Male</option>
-                                      <option <% if( user.local.gender == "FEMALE" ){ %> selected <% } %> value="FEMALE">Female</option>
-                                      <option <% if( user.local.gender == "OTHER" ){ %> selected <% } %> value="OTHER">Other</option>
-                                  </select>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <div class="col-md-8">
-                                <br><input type="submit" class="btn btn-primary" value="Update Rider Changes">
-                              </div>
-                            </div>
-                          </div>
-                      </div>
-                  </div>
+
         			</div>
-              <!-- rider options tab -->
+
         		</div>
       	 </div>
       </div>

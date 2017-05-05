@@ -204,6 +204,21 @@ app.controller('menuController',['$scope', '$http', function ($scope, $http) {
             }
             $scope.stopwatch = time;
         }
+
+        // $scope.drawProfileUserMap = function(city,state,country){
+        //     console.log(city, state, country);
+        //     var location = city+" "+state+" "+country;
+        //     var lat = location.lat();
+        //     var lng = location.lng();
+        //     //initializeMap(usersList,"usermap");
+        //     var mapOptions = {
+        //         zoom: 3,
+        //         center: new google.maps.LatLng(lat, lng),
+        //         scrollwheel: false
+        //     };
+        //     map = new google.maps.Map(document.getElementById('map-canvas'),
+        //             mapOptions);
+        // };
 }]);
 
 /********************** profile controller  **********************/
@@ -223,6 +238,29 @@ app.controller('profileController',['$scope', '$http', function ($scope, $http) 
            console.log('Oops! Error occur'+err);
         });
     };
+
+    /* function to get rider options */
+    $scope.getRiderOptions = function(option){
+      //$scope.riderSelectedCat = {'categoryName' : 'Sport'};
+      $scope.riderSelectedCat  = {'categoryName' : $('#riderSelectedCat').text() };
+      $scope.riderSelectedExp  = {'experienceName' : $('#riderSelectedExp').text() };
+      $scope.riderSelectedType = {'typeName' : $('#riderSelectedType').text() };
+      if(option == 'types'){
+        $http.get('/api/get-rider-types').success(function(view){
+            $scope.riderTypes = view;
+        });
+      }else if(option == 'experiences'){
+        $http.get('/api/get-rider-experiences').success(function(view){
+            $scope.riderExperiences = view;
+        });
+      }else{
+        $http.get('/api/get-rider-categories').success(function(view){
+            $scope.riderCategories = view;
+        });
+      }
+    };
+
+
 }]);
 
 /********************** product controller  **********************/

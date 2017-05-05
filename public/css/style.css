@@ -984,7 +984,9 @@ li#header_inbox_bar i {
 }
 #profile .dropdown-menu.inbox li a .message {
 	display: block !important;
-	font-size: 14px;
+	font-size: 13px;
+	width: 100%;
+	white-space: normal;
 }
 .panel-default>.panel-heading {
 	color: #333;
@@ -2647,10 +2649,10 @@ div#modal-zoom {
 
 span.closeButton {
     position: absolute;
-    font-size: 12px;
+    font-size: 11px;
     padding: 0px 5px 0px 5px;
     right: 0;
-    color: red;
+    color: #ccc;
     /*background: #ccc;*/
     cursor: pointer;
 }

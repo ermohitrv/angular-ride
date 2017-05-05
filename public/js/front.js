@@ -507,7 +507,6 @@ jQuery('#change_password_form').validate({
             dob: {
                 required: true
             },
-
             gender: {
                 required: true
             },
@@ -522,30 +521,39 @@ jQuery('#change_password_form').validate({
             },
             zipcode: {
                 required: true
-            },
-
+            }
          },
          messages: {
             username: {
                 remote: "Sorry, our system has detected that an account with this username already exists!"
-            },
-
-
+            }
          },
          submitHandler: function(form) {
             var location = form.city.value+","+form.state.value+","+form.country.value;
             var geocoder =  new google.maps.Geocoder();
             geocoder.geocode( { 'address': location}, function(results, status) {
-                  if (status == google.maps.GeocoderStatus.OK) {
-                    console.log("location lat lng : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng());
-
+                if (status == google.maps.GeocoderStatus.OK) {
                     $('#userloclat').val(results[0].geometry.location.lat());
                     $('#userloclong').val(results[0].geometry.location.lng());
                     form.submit();
-            }});
-           // form.submit();
+                }
+            });
          }
     });
+    /*Form Validations start here :: Signup Page*/
+     jQuery("#update-rider-options").validate({
+         rules: {
+             riderCategory: {
+                 required: true
+             },
+             riderExperience: {
+                 required: true
+             },
+             riderType: {
+                 required: true
+             }
+          }
+     });
 
     /* validate contact form */
     jQuery("#contact_form").validate({
@@ -829,7 +837,7 @@ if( $("#search-box-frnd").length > 0 ){
               var profilelink = "/profile/"+item.username;
               ul.addClass('search-friend-list');
               return $( "<li>" )
-              .append( '<a href='+profilelink+'><span>'+item.username+'</span></a>' )
+              .append( '<a href='+profilelink+'><img class="user-img-srch" src="'+item.image+'"/> <span>'+item.username+'</span></a>' )
               .appendTo( ul );
   };
 }

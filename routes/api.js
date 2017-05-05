@@ -15,6 +15,7 @@ var RouteTools      = require("../models/routetools");
 var FCM             = require('fcm-node');
 var serverKey       = 'AAAAFYFV6mc:APA91bFB4RWwB7eaQL_AsyFvg1Dy_TWP-S4g9tWmn5XsaCcS-vR_MNMZbAjsHtziRxNtIZKHBF9bTFWOtvLhdXDJFjppLWf0_tYaktvMEuNzTciCUTpD8qTWuKee5bID0EP4pUo-EFuE';
 var fcm             = new FCM(serverKey);
+var middleware      = require('./middleware');
 
 /* API endpoint to be used by mobile device to see all users list */
 router.get('/listusers', function(req, res) {
@@ -3643,9 +3644,44 @@ router.post('/users-rank', function(req, res){
                 });
             }
         });
-
-
 });
+
+/*
+ * Route to get all rider types from database
+ */
+router.get('/get-rider-types', middleware.isLoggedIn, function (req, res){
+  var Ridertype = require('../models/ridertype');
+  Ridertype.find({},{'_id':0,'__v':0},function(err, ridertypes){
+    if(ridertypes){
+        res.json({'ridertypes':ridertypes});
+    }else{
+        res.json({'ridertypes':""});
+    }
+  });
+});
+
+router.get('/get-rider-categories', middleware.isLoggedIn, function (req, res){
+  var Ridercategory = require('../models/ridercategory');
+  Ridercategory.find({},{'_id':0,'__v':0},function(err, ridercategories){
+    if(ridercategories){
+        res.json({'ridercategories':ridercategories});
+    }else{
+        res.json({'ridercategories':""});
+    }
+  });
+});
+
+router.get('/get-rider-experiences', middleware.isLoggedIn, function (req, res){
+  var Riderexperience = require('../models/riderexperience');
+  Riderexperience.find({},{'_id':0,'__v':0},function(err, riderexperiences){
+    if(riderexperiences){
+        res.json({'riderexperiences':riderexperiences});
+    }else{
+        res.json({'riderexperiences':""});
+    }
+  });
+});
+
 
 // 32 character random string token
 function random_token(){

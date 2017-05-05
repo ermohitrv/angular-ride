@@ -16,11 +16,22 @@
             <li><a href="/">Home</a></li>
             <li class="active">Profile</li>
          </ol>
-         <!-- end:breadcrumb -->
-         
          <div class="row" id="home-content">
             <div class="col-lg-8">
                <div class="panel data-panel">
+                  <div class="panel-body publish-post">
+                    <form method="post" action="/api/posts">
+                      <textarea name="publish-post" rows="3" placeholder="What's on your mind ?" class="form-control publish-area"></textarea>
+                      <br>
+                      <div class="pull-left">
+                        <span class="fa fa-lg fa-camera">&nbsp;&nbsp;</span>
+                        <span class="fa fa-lg fa-video-camera"></span>
+                      </div>
+                      <div class="pull-right">
+                        <input type="submit" value="submit" id="post" class="button button-default button-sm button-blue pull-right">
+                      </div>
+                    </form>
+                  </div>
                   <div class="panel-header">
                      <center>
                         <a href="#">
@@ -103,19 +114,19 @@
                         <img src="<%= imagepath %>">
                         <h3><%= user.local.firstName+' '+user.local.lastName %></h3>
                         <p> <span class="date-joined">Member Since <%= moment(user.accountCreationDate).format("MMM Do, YYYY") %></span></p>
-                        <p> <span class="user-gender-age"><%= user.local.gender %> / <%= user.local.dob %> / <%= moment( moment(user.local.dob).format("MM/DD/YYYY"), "MM/DD/YYYY").month(0).from(moment().month(0)) %> </span></p>
+                        <p> <span class="user-gender-age"><%= user.local.gender %> / <%= moment([ moment(user.local.dob).format("YYYY, MM, DD") ]).fromNow(true) %> </span></p>
                         <p> <small class="label label-warning"><i class="fa fa-map-marker" aria-hidden="true"></i> <%= user.local.locationCity %>,&nbsp;<%= user.local.locationState %>,&nbsp;<%= user.local.locationCountry %></small></p>
                         <p><span data-ng-init="countFriendsFollowers('<%= user.local.email %>','friends')"><i class="fa fa-users" aria-hidden="true"></i> {{totalFriends}}</span> &nbsp;&nbsp;<span data-ng-init="countFriendsFollowers('<%= user.local.email %>','followers')"><i class="fa fa-users" aria-hidden="true"></i> {{totalFollowers}}</span></p>
                         <% if(user.userBio != undefined && user.userBio != ""){ %>
                           <p class="info-block__headline"><i class="fa fa-quote-left"></i> <%= user.userBio %> <i class="fa fa-quote-right"></i></p>
                         <% } %>
                         <p class="sosmed-author">
-                           <% if(user.facebookURL) { %><a href="<%= user.facebookURL %>" target="_blank"><i class="fa fa-facebook" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook"></i></a><% } %>
-                           <% if(user.twitterURL) { %><a href="<%= user.facebookURL %>" target="_blank"><i class="fa fa-twitter" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"></i></a><% } %>
-                           <% if(user.youtubeURL) { %><a href="<%= user.youtubeURL %>" target="_blank"><i class="fa fa-youtube" data-toggle="tooltip" data-placement="top" title="" data-original-title="Youtube"></i></a><% } %>
-                           <% if(user.instagramURL) { %><a href="<%= user.instagramURL %>" target="_blank"><i class="fa fa-instagram" data-toggle="tooltip" data-placement="top" title="" data-original-title="Instagram"></i></a><% } %>
-                           <% if(user.skypeUsername) { %><a href="<%= user.skypeUsername %>" target="_blank"><i class="fa fa-skype" data-toggle="tooltip" data-placement="top" title="" data-original-title="Skype"></i></a><% } %>
-                           <% if(user.websiteURL) { %><a href="<%= user.websiteURL %>" target="_blank"><i class="fa fa-wpexplorer" data-toggle="tooltip" data-placement="top" title="" data-original-title="Website"></i></a><% } %>
+                           <a href="<%= user.facebookURL %>" target="_blank"><i class="fa fa-facebook" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook"></i></a>
+                           <a href="<%= user.facebookURL %>" target="_blank"><i class="fa fa-twitter" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"></i></a>
+                           <a href="<%= user.youtubeURL %>" target="_blank"><i class="fa fa-youtube" data-toggle="tooltip" data-placement="top" title="" data-original-title="Youtube"></i></a>
+                           <a href="<%= user.instagramURL %>" target="_blank"><i class="fa fa-instagram" data-toggle="tooltip" data-placement="top" title="" data-original-title="Instagram"></i></a>
+                           <a href="<%= user.skypeUsername %>" target="_blank"><i class="fa fa-skype" data-toggle="tooltip" data-placement="top" title="" data-original-title="Skype"></i></a>
+                           <a href="<%= user.websiteURL %>" target="_blank"><i class="fa fa-wpexplorer" data-toggle="tooltip" data-placement="top" title="" data-original-title="Website"></i></a>
                         </p>
                      </div>
                   </div>

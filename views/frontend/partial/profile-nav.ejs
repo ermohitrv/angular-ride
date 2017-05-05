@@ -27,9 +27,8 @@
                         <a href="javascript:void(0)">
                             <span class="photo">
                                 <img alt="avatar" src="{{ notification.profileImage }}">
-
                             </span>
-<!--                            <span class="subject">
+                            <!--<span class="subject">
                                 <span class="from">{{ notification.notificationBy }}</span>
                                 <span class="time" ng-bind="notification.addedOn | date:'yyyy-MM-dd'"></span>
                             </span>-->
@@ -38,62 +37,27 @@
                             <span class="message" data-ng-if="notification.notificationType == 'follow'"><b>{{ notification.FirstName }}&nbsp;{{ notification.LastName }}</b> started following you.</span>
                             <span class="message" data-ng-if="notification.notificationType == 'acceptrequest'"><b>{{ notification.FirstName }}&nbsp;{{ notification.LastName }}</b> accepted your friend request.</span>
                             <span class="message" data-ng-if="notification.notificationType == 'eventjoined'"><b>{{ notification.FirstName }}&nbsp;{{ notification.LastName }}</b> accepted your event invitation.</span>
-
-                            <span class="subject">
-                                <!--<span class="time" ng-bind="notification.addedOn | date:'yyyy-MM-dd'"></span>-->
-                                <!--<span class="time" ng-init="showtime(notification.addedOn)">{{ stopwatch }}</span>-->
-
-                            </span>
-                        </a>
-
-                     </li>
-<!--                     <li>
-                        <a href="#">
-                            <span class="photo">
-                                <img alt="avatar" src="<%= user.local.profileImage %>">
-                            </span>
-                            <span class="subject">
-                                <span class="from"><%= user.local.firstName+' '+user.local.lastName %></span>
-                                <span class="time">Just now</span>
-                            </span>
-                            <span class="message">Hello, this is an example msg.</span>
-                        </a>
-                     </li>-->
-<!--                     <li>
-                        <a href="#">
-                        <span class="photo"><img alt="avatar" src="http://bootemplates.com/themes/srikandi/v2/img/avatar-mini.jpg"></span>
-                        <span class="subject">
-                        <span class="from"><%= user.local.firstName+' '+user.local.lastName %></span>
-                        <span class="time">Just now</span>
-                        </span>
-                        <span class="message">
-                        Hello, this is an example msg.
-                        </span>
+                            <!-- <span class="subject">
+                                <span class="time" ng-bind="notification.addedOn | date:'yyyy-MM-dd'"></span>
+                                <span class="time" ng-init="showtime(notification.addedOn)">{{ stopwatch }}</span>
+                            </span> -->
                         </a>
                      </li>
-                     <li>
-                        <a href="#">See all messages</a>
-                     </li>-->
                   </ul>
                </li>
-                <%
-                    if(user){
-                            var imagepath = user.local.profileImage;
-                            var profileimageplacehold = "http://placehold.it/300";
-                            if(user.local.profileImage == profileimageplacehold){
-                                    imagepath = user.local.profileImage+"?text="+user.local.firstName;
-                            }
-
-                        }
-
-                %>
-               <!-- user login dropdown start-->
+               <%
+                if(user){
+                    var imagepath = user.local.profileImage;
+                    var profileimageplacehold = "http://placehold.it/300";
+                    if(user.local.profileImage == profileimageplacehold){
+                        imagepath = user.local.profileImage+"?text="+user.local.firstName;
+                    }
+                }
+               %>
                <li class="dropdown">
                   <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-
                   <img style="width: 30px;" class="img-circle" src="<%= imagepath %>">
-
-                  <span class="username"><%= user.local.firstName+' '+user.local.lastName %></span>
+                  <span class="username"><% if(user){ %><%= user.local.firstName+' '+user.local.lastName %><% } %></span>
                   <b class="caret"></b>
                   </a>
                   <ul class="dropdown-menu">
@@ -112,66 +76,11 @@
          </div>
          <nav class="navbar" role="navigation">
             <div class="container">
-               <!-- Brand and toggle get grouped for better mobile display -->
                <div class="navbar-header">
                   <button type="button" class="btn-block btn-drop navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
                   <strong>MENU</strong>
                   </button>
                </div>
-
-<!--                <div class="collapse navbar-collapse navbar-ex1-collapse">
-                            <ul class="nav navbar-nav">
-                                <li class="active">
-                                    <a href="index.html">
-                                        <div class="text-center">
-                                            <i class="fa fa-user" aria-hidden="true"></i><br>
-                                            Profile
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="dropdown">
-                                    <a href="#">
-                                        <div class="text-center">
-                                            <i class="fa fa-video-camera" aria-hidden="true"></i><br>
-                                            Video's
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="dropdown">
-                                    <a href="#">
-                                        <div class="text-center">
-                                             <i class="fa fa-camera" aria-hidden="true"></i><br>
-                                            Photo's
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="dropdown">
-                                    <a href="#">
-                                        <div class="text-center">
-                                            <i class="fa fa-user" data-original-title="" title=""></i><br>
-                                            Friends
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="dropdown">
-                                    <a href="#">
-                                        <div class="text-center">
-                                            <i class="fa fa-user" data-original-title="" title=""></i><br>
-                                            Followers
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="dropdown">
-                                    <a href="#">
-                                        <div class="text-center">
-                                            <i class="fa fa-user" data-original-title="" title=""></i><br>
-                                            Following
-                                        </div>
-                                    </a>
-                                </li>
-
-                            </ul>
-                </div>-->
             </div>
          </nav>
       </div>

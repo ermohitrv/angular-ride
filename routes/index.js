@@ -86,11 +86,12 @@ router.get('/profile', middleware.isLoggedIn, function (req, res){
 router.get('/profile/:username', function (req, res){
     var profileusername = req.params.username;
     User.findOne({'local.username': new RegExp(["^", profileusername, "$"].join(""), "i")}, function (err, userprofile) {
-        if (err) {
-            res.redirect('/');
+        if(!err && userprofile != null && userprofile != undefined){
+          res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+          res.render('user-profile.ejs', { user: req.user, userprofile: userprofile, title:'User Profile',moment:moment });
+        }else{
+          res.redirect('/');
         }
-        res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-        res.render('user-profile.ejs', { user: req.user, userprofile: userprofile, title:'User Profile' });
     });
 });
 
@@ -199,14 +200,12 @@ router.get('/accountdeactivated', function(req, res){
 
 /* Update profile route to render logged in user to update profile area */
 router.post('/update-profile', parseForm, csrfProtection, middleware.isLoggedIn, function (req, res){
+    console.log('&& && && && && && && && uniqueRiderOption: '+req.body.uniqueRiderOption);
 
-
-    if (req.body.email != "" && req.body.email != undefined) {
-        User.findOne({'local.email': req.body.email}, function (err, user) {
+    if (req.body.unique != "" && req.body.unique != undefined) {
+        User.findOne({'_id': req.body.unique}, function (err, user) {
             if (!user) {
-
                 res.redirect('/update-profile');
-
             } else {
 
                 user.local.firstName    = req.body.firstName;
@@ -222,7 +221,6 @@ router.post('/update-profile', parseForm, csrfProtection, middleware.isLoggedIn,
                 user.websiteURL         = req.body.website_url;
                 user.youtubeURL         = req.body.youtube_url;
                 user.instagramURL       = req.body.instagram_username;
-                user.skypeUsername      = req.body.skype_username;
                 user.skypeUsername      = req.body.skype_username;
                 user.local.locationLat  = req.body.userloclat;
                 user.local.locationLng  = req.body.userloclong;
@@ -253,17 +251,46 @@ router.post('/update-profile', parseForm, csrfProtection, middleware.isLoggedIn,
                 });
             }
         });
-    }else{
-        res.send('email: '+req.user.local.email+' ,username: '+req.user.email);
-//        res.render('update-profile.ejs', {
-//            user: req.user,
-//            message: 'An Error Occured! Outer',
-//            csrfToken: req.csrfToken(),
-//            title:'Update Profile',
-//            messageSuccess: ''
-//        });
-    }
+    }else if (req.body.uniqueRiderOption != "" && req.body.uniqueRiderOption != undefined) {
 
+      User.findOne({'_id': req.body.uniqueRiderOption}, function (err, user) {
+          if (!user) {
+              res.redirect('/update-profile');
+          } else {
+            console.log('** ** ** riderCategory: '+req.body.riderCategory);
+            console.log('** ** ** riderExperience: '+req.body.riderExperience);
+            console.log('** ** ** riderType: '+req.body.riderType);
+
+            user.rideCategory       = req.body.riderCategory;
+            user.rideExperience     = req.body.riderExperience;
+            user.rideType           = req.body.riderType;
+            user.save(function (err) {
+                if (err) {
+                    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+                    res.render('update-profile.ejs', {
+                        user: user,
+                        message: 'An Error Occured!, '+err,
+                        messageSuccess: '',
+                        csrfToken: req.csrfToken(),
+                        title:'Update Profile'
+                    });
+                } else {
+                    req.flash('messageSuccess', 'Profile Updated!');
+                    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+                    res.render('update-profile.ejs', {
+                        user: user,
+                        message: '',
+                        csrfToken: req.csrfToken(),
+                        title:'Update Profile',
+                        messageSuccess: req.flash('messageSuccess')
+                    });
+                }
+          });
+        }
+      });
+    }else{
+        res.send('email: '+req.user.local.email+' , username: '+req.user.email);
+    }
 });
 
 /* Route to render user to Go Live page after login process */
@@ -1503,22 +1530,15 @@ router.post('/sendreview',  function (req, res){
 
 router.get('/autocomplete-search-friend',middleware.isLoggedIn, function(req, res){
   var term = req.query.term;
-
-
    User.find({$or :[{ 'local.firstName': new RegExp(term, 'i') }, {'local.lastName': new RegExp(term, 'i')},{'local.email': new RegExp(term, 'i')},{'local.username': new RegExp(term, 'i')}]}, function(err, users){
-
-  // Products.find({ 'product_title':  new RegExp(term, 'i')}, function(err, products){
     var usernamesarray = [];
     if(users.length > 0){
       users.forEach(function(users){
-
-        //usernames.push(user.local.username);
-        var dataObj = { 'username':  users.local.username};
+        //var dataObj = { 'username':  users.local.username};
+        var dataObj = { 'username-0': users.local.username,'username':  users.local.firstName+' '+users.local.lastName, 'image':  users.local.profileImage};
         usernamesarray.push(dataObj);
       });
     }
-
-
     res.json(usernamesarray);
   });
 });

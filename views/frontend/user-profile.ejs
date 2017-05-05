@@ -6,7 +6,6 @@
         if(userprofile.local.profileImage == profileimageplacehold){
                 imagepath = userprofile.local.profileImage+"?text="+userprofile.local.firstName;
         }
-
     }
 %>
 <section id="profile">
@@ -98,36 +97,36 @@
             </div>
             <div class="col-lg-4">
                <div class="panel panel-default">
-                    <div class="panel-heading" style="border-bottom:none;height:40px">
-                     <header class="panel-title">
-                        <div class="text-center">
-                        <%
-                        if(user){
+                    <%
+                      if(user){
                         if(user.local.username != userprofile.local.username){ %>
-                        <div>
-                          <li class="active friendsul"  id="addfriend"  data-ng-if="friendstatus.friendRequestApprovalStatus != 'accept' && friendstatus.friendRequestApprovalStatus != 'pending'"><a href="javascript:void(0);" ng-click="sendRequest('<%= userprofile.local.email %>')" class="btn btn-primary">Add Friend</a></li>
-                          <li class="active friendsul"  id="requestsent"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending' && friendstatus.friendRequestSentBy == '<%= user.local.email %>'"><a href="javascript:void(0)" class="btn btn-primary" >Request Sent</a></li>
-                          <li class="friendsmenuli friendsul" data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending' && friendstatus.friendRequestSentTo == '<%= user.local.email %>'"><a class="alisting btn btn-primary">Pending Approval<b class="caret"></b></a>
-                               <ul class="friendssubmenu">
-                                  <li  class="active friendsul approval"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending' && friendstatus.friendRequestSentTo == '<%= user.local.email %>'"><a ng-click="requestactionfromProfile('accept','<%= userprofile.local.email %>')">Accept</a></li>
-                                  <li  class="active friendsul approval"  data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending' && friendstatus.friendRequestSentTo == '<%= user.local.email %>'"><a ng-click="requestactionfromProfile('reject','<%= userprofile.local.email %>')"  >Reject</a></li>
-                               </ul>
-                          </li>
-                          <li class="active friendsul"  id="friends" ng-mouseenter="changeFriendButtonText('enter')" ng-mouseleave="changeFriendButtonText('leave')" data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept'"><a href="javascript:void(0)" ng-click="unFriendprofile('<%= userprofile.local.email %>','<%= user.local.email %>')"  class="btn btn-success" id="friendtext">Friends</a></li>
+                          <div class="panel-heading" style="border-bottom:none;height:40px">
+                           <header class="panel-title">
+                              <div class="text-center">
+                                <div>
+                                  <li class="active friendsul"  id="addfriend"  data-ng-show="friendstatus.friendRequestApprovalStatus != 'accept' && friendstatus.friendRequestApprovalStatus != 'pending'"><a href="javascript:void(0);" ng-click="sendRequest('<%= userprofile.local.email %>')" class="btn btn-primary">Add Friend</a></li>
+                                  <li class="active friendsul"  id="requestsent"  data-ng-show="friendstatus.friendRequestApprovalStatus == 'pending' && friendstatus.friendRequestSentBy == '<%= user.local.email %>'"><a href="javascript:void(0)" class="btn btn-primary" >Request Sent</a></li>
+                                  <li class="friendsmenuli friendsul" data-ng-if="friendstatus.friendRequestApprovalStatus == 'pending' && friendstatus.friendRequestSentTo == '<%= user.local.email %>'"><a class="alisting btn btn-primary">Pending Approval<b class="caret"></b></a>
+                                       <ul class="friendssubmenu">
+                                          <li  class="active friendsul approval"  data-ng-show="friendstatus.friendRequestApprovalStatus == 'pending' && friendstatus.friendRequestSentTo == '<%= user.local.email %>'"><a ng-click="requestactionfromProfile('accept','<%= userprofile.local.email %>')">Accept</a></li>
+                                          <li  class="active friendsul approval"  data-ng-show="friendstatus.friendRequestApprovalStatus == 'pending' && friendstatus.friendRequestSentTo == '<%= user.local.email %>'"><a ng-click="requestactionfromProfile('reject','<%= userprofile.local.email %>')"  >Reject</a></li>
+                                       </ul>
+                                  </li>
+                                  <li class="active friendsul"  id="friends" ng-mouseenter="changeFriendButtonText('enter')" ng-mouseleave="changeFriendButtonText('leave')" data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept'"><a href="javascript:void(0)" ng-click="unFriendprofile('<%= userprofile.local.email %>','<%= user.local.email %>')"  class="btn btn-success" id="friendtext">Friends</a></li>
+                                </div>
+                                <div ng-init="followStatus('<%= userprofile.local.email %>')">
+                                    <li class="active friendsul" data-ng-show="followstatus == 0"  id="follow"><a href="javascript:void(0);" ng-click="followUser('<%= userprofile.local.email %>')" class="btn btn-primary">Follow</a></li>
+                                    <li class="active friendsul" data-ng-show="followstatus == 1" ng-mouseenter="changeFollowButtonText('enter')" ng-mouseleave="changeFollowButtonText('leave')"  id="follow"><a href="javascript:void(0);"  ng-click="unFollow('<%= userprofile.local.email %>','<%= user.local.email %>')" class="btn btn-primary" id="followtext">Following<!--&nbsp;&nbsp;<i id="followingtick" class="fa fa-check" aria-hidden="true"></i>--></a></li>
+                                </div>
+                                <div data-ng-show="friendstatus.friendRequestApprovalStatus == 'accept' && eventsinviteList.length > 0"><li  data-ng-click="listEventsInvite('<%= userprofile.local.email %>')" class="active friendsul"><a href="javascript:void(0);" class="btn btn-primary" data-ng-click="" data-toggle="modal" data-target="#eventsinvitemodal">Invite</a></li></div>
+                              </div>
+                          </header>
                         </div>
-                        <div ng-init="followStatus('<%= userprofile.local.email %>')">
-                            <li class="active friendsul" data-ng-if="followstatus == 0"  id="follow"><a href="javascript:void(0);" ng-click="followUser('<%= userprofile.local.email %>')" class="btn btn-primary">Follow</a></li>
-                            <li class="active friendsul" data-ng-if="followstatus == 1" ng-mouseenter="changeFollowButtonText('enter')" ng-mouseleave="changeFollowButtonText('leave')"  id="follow"><a href="javascript:void(0);"  ng-click="unFollow('<%= userprofile.local.email %>','<%= user.local.email %>')" class="btn btn-primary" id="followtext">Following<!--&nbsp;&nbsp;<i id="followingtick" class="fa fa-check" aria-hidden="true"></i>--></a></li>
-                        </div>
-                        <div data-ng-if="friendstatus.friendRequestApprovalStatus == 'accept' && eventsinviteList.length > 0"><li  data-ng-click="listEventsInvite('<%= userprofile.local.email %>')" class="active friendsul"><a href="javascript:void(0);" class="btn btn-primary" data-ng-click="" data-toggle="modal" data-target="#eventsinvitemodal">Invite</a></li></div>
-                         <% }} %>
-                        </div>
-                     </header>
-                    </div>
+                  <% } } %>
                   <div class="panel-heading">
                      <header class="panel-title">
                         <div class="text-center">
-                           <strong></strong>
+                           <strong>Rider</strong>
                         </div>
                      </header>
                   </div>
@@ -135,6 +134,8 @@
                      <div class="text-center" id="author">
                         <img src="<%= imagepath %>">
                         <h3><%= userprofile.local.firstName+' '+userprofile.local.lastName %></h3>
+                        <p> <span class="date-joined">Member Since <%= moment(userprofile.accountCreationDate).format("MMM Do, YYYY") %></span></p>
+                        <p> <span class="user-gender-age"><%= userprofile.local.gender %> / <%= moment([ moment(userprofile.local.dob).format("YYYY, MM, DD") ]).fromNow(true) %> old</span></p>
                         <p> <small class="label label-warning"><i class="fa fa-map-marker" aria-hidden="true"></i> <%= userprofile.local.locationCity %>,&nbsp;<%= userprofile.local.locationState %>,&nbsp;<%= userprofile.local.locationCountry %></small></p>
                         <p><span data-ng-init="countFriendsFollowers('<%= userprofile.local.email %>','friends')"><i class="fa fa-users" aria-hidden="true"></i> {{totalFriends}}</span> &nbsp;&nbsp;<span data-ng-init="countFriendsFollowers('<%= userprofile.local.email %>','followers')"><i class="fa fa-users" aria-hidden="true"></i> {{totalFollowers}}</span></p>
                         <% if(userprofile.userBio != undefined && userprofile.userBio != ""){ %>
@@ -151,43 +152,50 @@
                      </div>
                   </div>
                </div>
-               <!-- end:user info -->
-               <!-- start:user info table -->
-<!--               <section class="panel">
-                  <table class="table table-hover personal-task">
-                     <tbody>
-                        <tr>
-                           <td>
-                              <i class=" fa fa-tasks" data-original-title="" title=""></i>
-                           </td>
-                           <td>New Task Issued</td>
-                           <td> 02</td>
-                        </tr>
-                        <tr>
-                           <td>
-                              <i class="fa fa-exclamation-triangle" data-original-title="" title=""></i>
-                           </td>
-                           <td>Task Pending</td>
-                           <td> 14</td>
-                        </tr>
-                        <tr>
-                           <td>
-                              <i class="fa fa-envelope" data-original-title="" title=""></i>
-                           </td>
-                           <td>Inbox</td>
-                           <td> 45</td>
-                        </tr>
-                        <tr>
-                           <td>
-                              <i class=" fa fa-bell-o" data-original-title="" title=""></i>
-                           </td>
-                           <td>New Notification</td>
-                           <td> 09</td>
-                        </tr>
-                     </tbody>
-                  </table>
-               </section>-->
-               <!-- end:user info table -->
+               <section class="panel">
+                   <table class="table table-hover personal-task">
+                      <tbody>
+                        <% if(userprofile.rideCategory) { %>
+                         <tr>
+                            <td>
+                               <i class="fa fa-tag" aria-hidden="true"></i>
+                            </td>
+                            <td>Ride Category</td>
+                            <td><%= userprofile.rideCategory %></td>
+                         </tr>
+                         <% } %>
+                         <% if(userprofile.rideType) { %>
+                         <tr>
+                            <td>
+                               <i class="fa fa-tasks"></i>
+                            </td>
+                            <td>Ride Type</td>
+                            <td><%= userprofile.rideType %></td>
+                         </tr>
+                         <% } %>
+                         <% if(userprofile.rideExperience) { %>
+                         <tr>
+                            <td>
+                               <i class="fa fa-envelope"></i>
+                            </td>
+                            <td>Ride Experience</td>
+                            <td><%= userprofile.rideExperience %></td>
+                         </tr>
+                         <% } %>
+                      </tbody>
+                   </table>
+                </section>
+                <section class="panel">
+                <div class="row4" data-ng-init="drawProfileUserMap('<%= userprofile.local.locationCity %>','<%= userprofile.local.locationState %>','<%= userprofile.local.locationCountry %>')">
+                      <iframe
+                        width="100%"
+                        height="200"
+                        frameborder="0" style="border:0"
+                        src="https://www.google.com/maps/embed/v1/place?key=AIzaSyC3I6_oSmoLFK_ZPfQ8IRJjbwRBVUuBq8E
+                          &q=<%= userprofile.local.locationZipcode %>" allowfullscreen>
+                      </iframe>
+                  </div>
+                </div>
             </div>
          </div>
       </div>
